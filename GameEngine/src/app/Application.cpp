@@ -1,7 +1,9 @@
 #pragma once
 
-#include "../core/DisplayManager.hpp"
-#include "../core/GUIManager.hpp"
+#include "DisplayManager.hpp"
+#include "GUIManager.hpp"
+#include "Model.hpp"
+#include "Renderer.hpp"
 
 int main()
 {
@@ -12,11 +14,64 @@ int main()
 	GUIManager guiManager;
 	guiManager.initializeGUI(displayManager.getWindow());
 
+	//Cube Vertices
+	float cube_vertices[] =
+	{
+		//positions         
+	   -0.5f, -0.5f, -0.5f,
+		0.5f, -0.5f, -0.5f,
+		0.5f,  0.5f, -0.5f,
+		0.5f,  0.5f, -0.5f,
+	   -0.5f,  0.5f, -0.5f,
+	   -0.5f, -0.5f, -0.5f,
+
+	   -0.5f, -0.5f,  0.5f,
+		0.5f, -0.5f,  0.5f,
+		0.5f,  0.5f,  0.5f,
+		0.5f,  0.5f,  0.5f,
+	   -0.5f,  0.5f,  0.5f,
+	   -0.5f, -0.5f,  0.5f,
+
+	   -0.5f,  0.5f,  0.5f,
+	   -0.5f,  0.5f, -0.5f,
+	   -0.5f, -0.5f, -0.5f,
+	   -0.5f, -0.5f, -0.5f,
+	   -0.5f, -0.5f,  0.5f,
+	   -0.5f,  0.5f,  0.5f,
+
+		0.5f,  0.5f,  0.5f,
+		0.5f,  0.5f, -0.5f,
+		0.5f, -0.5f, -0.5f,
+		0.5f, -0.5f, -0.5f,
+		0.5f, -0.5f,  0.5f,
+		0.5f,  0.5f,  0.5f,
+
+	   -0.5f, -0.5f, -0.5f,
+		0.5f, -0.5f, -0.5f,
+		0.5f, -0.5f,  0.5f,
+		0.5f, -0.5f,  0.5f,
+	   -0.5f, -0.5f,  0.5f,
+	   -0.5f, -0.5f, -0.5f,
+
+	   -0.5f,  0.5f, -0.5f,
+		0.5f,  0.5f, -0.5f,
+		0.5f,  0.5f,  0.5f,
+		0.5f,  0.5f,  0.5f,
+	   -0.5f,  0.5f,  0.5f,
+	   -0.5f,  0.5f, -0.5f
+	};
+
+	Model cube(cube_vertices, sizeof(cube_vertices));
+	Renderer renderer;
+
 	while (!displayManager.WindowShouldClose())
 	{
 		//Backgroundclearcolor
 		GLCall(glClearColor(0.070f, 0.098f, 0.427f, 1.0f));
 		GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
+
+		//Render Stuff
+		renderer.render(&cube);
 
 		//GUI Stuff
 		{

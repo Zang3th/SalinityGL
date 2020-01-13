@@ -23,5 +23,9 @@
     <ClInclude Include="src\vendor\imgui\imstb_textedit.h" />
     <ClInclude Include="src\vendor\imgui\imstb_truetype.h" />
     <ClInclude Include="src\vendor\stb_image\stb_image.h" />
+    <ClInclude Include="src\core\VertexArray.hpp" />
+    <ClInclude Include="src\core\VertexBuffer.hpp" />
+    <ClInclude Include="src\core\Model.hpp" />
+    <ClInclude Include="src\core\Renderer.hpp" />
   </ItemGroup>
 </Project>

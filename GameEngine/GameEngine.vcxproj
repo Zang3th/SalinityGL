@@ -99,7 +99,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLEW_STATIC;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>src\vendor;$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\GLEW\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src\core;src\vendor;$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\GLEW\include;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -153,7 +153,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\DisplayManager.hpp" />
+    <ClInclude Include="src\core\Renderer.hpp" />
+    <ClInclude Include="src\core\VertexArray.hpp" />
     <ClInclude Include="src\core\OpenGLErrorManager.hpp" />
+    <ClInclude Include="src\core\Model.hpp" />
+    <ClInclude Include="src\core\VertexBuffer.hpp" />
     <ClInclude Include="src\vendor\imgui\imconfig.h" />
     <ClInclude Include="src\vendor\imgui\imgui.h" />
     <ClInclude Include="src\vendor\imgui\imgui_impl_glfw.h" />

@@ -9,7 +9,7 @@ class DisplayManager
 {
 private:
 	int _width, _height;
-	GLFWwindow* _window;
+	GLFWwindow* _window = nullptr;
 
 public:
 	DisplayManager(int width, int height)
@@ -43,7 +43,7 @@ public:
 		//glfwSetCursorPosCallback(window, mouse_callback);
 		//glfwSetScrollCallback(window, scroll_callback);
 		//glfwSetMouseButtonCallback(window, mouse_button_callback);
-		//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL); //Set Standardmousecontrol to normal
+		//glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL); //Set Standardmousecontrol to normal
 		//GLCall(glEnable(GL_DEPTH_TEST)); //Depthtesting
 	}
 
@@ -67,5 +67,10 @@ public:
 	void closeDisplay()
 	{
 		glfwTerminate();
+	}
+
+	GLFWwindow* getWindow()
+	{
+		return _window;
 	}
 };

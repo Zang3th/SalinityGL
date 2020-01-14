@@ -7,68 +7,37 @@
 
 int main()
 {
+	//Display-Management
 	DisplayManager displayManager(1800, 1200);
 	displayManager.createDisplay();
 	displayManager.printVersion();
 
+	//GUI-Management
 	GUIManager guiManager;
 	guiManager.initializeGUI(displayManager.getWindow());
 
-	//Cube Vertices
-	float cube_vertices[] =
-	{
-		//positions         
-	   -0.5f, -0.5f, -0.5f,
-		0.5f, -0.5f, -0.5f,
-		0.5f,  0.5f, -0.5f,
-		0.5f,  0.5f, -0.5f,
-	   -0.5f,  0.5f, -0.5f,
-	   -0.5f, -0.5f, -0.5f,
-
-	   -0.5f, -0.5f,  0.5f,
-		0.5f, -0.5f,  0.5f,
-		0.5f,  0.5f,  0.5f,
-		0.5f,  0.5f,  0.5f,
-	   -0.5f,  0.5f,  0.5f,
-	   -0.5f, -0.5f,  0.5f,
-
-	   -0.5f,  0.5f,  0.5f,
-	   -0.5f,  0.5f, -0.5f,
-	   -0.5f, -0.5f, -0.5f,
-	   -0.5f, -0.5f, -0.5f,
-	   -0.5f, -0.5f,  0.5f,
-	   -0.5f,  0.5f,  0.5f,
-
-		0.5f,  0.5f,  0.5f,
-		0.5f,  0.5f, -0.5f,
-		0.5f, -0.5f, -0.5f,
-		0.5f, -0.5f, -0.5f,
-		0.5f, -0.5f,  0.5f,
-		0.5f,  0.5f,  0.5f,
-
-	   -0.5f, -0.5f, -0.5f,
-		0.5f, -0.5f, -0.5f,
-		0.5f, -0.5f,  0.5f,
-		0.5f, -0.5f,  0.5f,
-	   -0.5f, -0.5f,  0.5f,
-	   -0.5f, -0.5f, -0.5f,
-
-	   -0.5f,  0.5f, -0.5f,
-		0.5f,  0.5f, -0.5f,
-		0.5f,  0.5f,  0.5f,
-		0.5f,  0.5f,  0.5f,
-	   -0.5f,  0.5f,  0.5f,
-	   -0.5f,  0.5f, -0.5f
+	//Data
+	float vertices[] = {
+	 -0.5f,  0.5f, 0.0f,  // top right
+	 -0.5f, -0.5f, 0.0f,  // bottom right
+	  0.5f, -0.5f, 0.0f,  // bottom left
+	  0.5f,  0.5f, 0.0f   // top left 
 	};
-
-	Model cube(cube_vertices, sizeof(cube_vertices));
+	unsigned int indices[] = {  // note that we start from 0!
+		0, 1, 3,   // first triangle
+		1, 2, 3    // second triangle
+	};
+	
+	//Modelcreation
+	Model cube(vertices, sizeof(vertices), indices, sizeof(indices));
+	
+	//Renderer
 	Renderer renderer;
 
 	while (!displayManager.WindowShouldClose())
 	{
-		//Backgroundclearcolor
-		GLCall(glClearColor(0.070f, 0.098f, 0.427f, 1.0f));
-		GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
+		//Clear Buffer and prepare for rendering
+		renderer.prepare();
 
 		//Render Stuff
 		renderer.render(&cube);

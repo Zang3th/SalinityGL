@@ -5,9 +5,15 @@
 class Renderer
 {
 public:
+	void prepare()
+	{
+		GLCall(glClearColor(0.070f, 0.098f, 0.427f, 1.0f));
+		GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
+	}
+
 	void render(Model* model)
 	{
 		model->draw();
-		GLCall(glDrawArrays(GL_TRIANGLES, 0, 36));
+		GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
 	}
 };

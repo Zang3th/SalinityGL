@@ -27,5 +27,6 @@
     <ClInclude Include="src\core\VertexBuffer.hpp" />
     <ClInclude Include="src\core\Model.hpp" />
     <ClInclude Include="src\core\Renderer.hpp" />
+    <ClInclude Include="src\core\IndexBuffer.hpp" />
   </ItemGroup>
 </Project>

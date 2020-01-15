@@ -28,5 +28,10 @@
     <ClInclude Include="src\core\Model.hpp" />
     <ClInclude Include="src\core\Renderer.hpp" />
     <ClInclude Include="src\core\IndexBuffer.hpp" />
+    <ClInclude Include="src\core\Shader.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\shader\fragmentShader.glsl" />
+    <None Include="res\shader\vertexShader.glsl" />
   </ItemGroup>
 </Project>

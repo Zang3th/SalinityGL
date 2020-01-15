@@ -4,6 +4,7 @@
 #include "GUIManager.hpp"
 #include "Model.hpp"
 #include "Renderer.hpp"
+#include "Shader.hpp"
 
 int main()
 {
@@ -15,6 +16,9 @@ int main()
 	//GUI-Management
 	GUIManager guiManager;
 	guiManager.initializeGUI(displayManager.getWindow());
+
+	//Renderer
+	Renderer renderer;
 
 	//Data
 	float vertices[] = {
@@ -31,16 +35,18 @@ int main()
 	//Modelcreation
 	Model cube(vertices, sizeof(vertices), indices, sizeof(indices));
 	
-	//Renderer
-	Renderer renderer;
+	//Shaderstuff
+	Shader cube_shader("res/shader/vertexShader.glsl", "res/shader/fragmentShader.glsl");
 
 	while (!displayManager.WindowShouldClose())
 	{
 		//Clear Buffer and prepare for rendering
 		renderer.prepare();
-
+		
 		//Render Stuff
+		cube_shader.bind();
 		renderer.render(&cube);
+		cube_shader.unbind();
 
 		//GUI Stuff
 		{

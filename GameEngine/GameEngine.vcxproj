@@ -155,6 +155,7 @@
     <ClInclude Include="src\core\DisplayManager.hpp" />
     <ClInclude Include="src\core\IndexBuffer.hpp" />
     <ClInclude Include="src\core\Renderer.hpp" />
+    <ClInclude Include="src\core\Shader.hpp" />
     <ClInclude Include="src\core\VertexArray.hpp" />
     <ClInclude Include="src\core\OpenGLErrorManager.hpp" />
     <ClInclude Include="src\core\Model.hpp" />
@@ -168,6 +169,10 @@
     <ClInclude Include="src\vendor\imgui\imstb_textedit.h" />
     <ClInclude Include="src\vendor\imgui\imstb_truetype.h" />
     <ClInclude Include="src\vendor\stb_image\stb_image.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\shader\fragmentShader.glsl" />
+    <None Include="res\shader\vertexShader.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

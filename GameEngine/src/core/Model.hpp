@@ -51,4 +51,9 @@ public:
 	{
 		_vao->bind();
 	}
+
+	void undraw()
+	{
+		_vao->unbind();
+	}
 };

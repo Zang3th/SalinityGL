@@ -31,6 +31,7 @@
     <ClInclude Include="src\core\Shader.hpp" />
     <ClInclude Include="src\core\Texture.hpp" />
     <ClInclude Include="src\core\RawData.hpp" />
+    <ClInclude Include="src\core\Camera.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shader\fragmentShader.glsl" />

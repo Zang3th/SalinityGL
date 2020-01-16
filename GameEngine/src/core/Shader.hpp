@@ -5,6 +5,7 @@
 #include <string>
 #include <fstream>
 #include <sstream>
+#include <glm/glm.hpp>
 
 class Shader 
 {
@@ -118,5 +119,30 @@ public:
 	void unbind() const
 	{
 		GLCall(glUseProgram(0));
-	}	
+	}
+
+	void SetUniform1i(const std::string& name, int value)
+	{
+		GLCall(glUniform1i(GetUniformLocation(name), value));
+	}
+
+	void SetUniform1f(const std::string& name, float value)
+	{
+		GLCall(glUniform1f(GetUniformLocation(name), value));
+	}
+
+	void SetUniform4f(const std::string& name, float v0, float v1, float v2, float v3)
+	{
+		GLCall(glUniform4f(GetUniformLocation(name), v0, v1, v2, v3));
+	}
+
+	void SetUniformMat4f(const std::string& name, const glm::mat4& matrix)
+	{
+		GLCall(glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, &matrix[0][0]));
+	}
+
+	void SetUniformVec3(const std::string& name, const glm::vec3& vec)
+	{
+		GLCall(glUniform3fv(GetUniformLocation(name), 1, &vec[0]));
+	}
 };

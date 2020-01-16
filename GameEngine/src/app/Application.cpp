@@ -10,7 +10,7 @@
 int main()
 {
 	//Display-Management
-	DisplayManager displayManager(1800, 1200);
+	DisplayManager displayManager;
 	displayManager.createDisplay();
 	displayManager.printVersion();
 

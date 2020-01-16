@@ -14,7 +14,7 @@ public:
 	void render(Model* model)
 	{
 		model->draw();
-		GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
+		GLCall(glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, nullptr));
 		model->undraw();
 	}
 };

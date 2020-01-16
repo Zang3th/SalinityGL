@@ -39,7 +39,7 @@ public:
 		_vao->bind();
 
 		//Load Texture
-		_texture = new Texture("res/textures/Stone.jpg");
+		_texture = new Texture("res/textures/Brick.jpg");
 		_texture->bind(0); //Textureslot
 
 		//Erstellt VBO und konfiguriert VAO
@@ -57,7 +57,13 @@ public:
 
 	void draw()
 	{
+		glm::mat4 model = glm::mat4(1.0f);
+		glm::mat4 projection = glm::perspective(glm::radians(_camera->Zoom), (float)WIDTH / (float)HEIGHT, 0.1f, 1000.0f);
+		glm::mat4 view = _camera->GetViewMatrix();
 		_shader->bind();
+		_shader->SetUniformMat4f("model", model);
+		_shader->SetUniformMat4f("projection", projection);
+		_shader->SetUniformMat4f("view", view);
 		_vao->bind();
 	}
 

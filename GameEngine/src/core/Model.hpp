@@ -5,23 +5,21 @@
 #include "IndexBuffer.hpp"
 #include "Shader.hpp"
 #include "Texture.hpp"
+#include "RawData.hpp"
 
 class Model
 {
 private:
-	void* _vertices = nullptr;
-	void* _indices = nullptr;
-	int _vertice_size = 0;
-	int _indice_size = 0;
 	VertexArray* _vao = nullptr;
 	VertexBuffer* _vbo = nullptr;
 	IndexBuffer* _ib = nullptr;
 	Shader* _shader = nullptr;
 	Texture* _texture = nullptr;
+	RawData* _data = nullptr;
 
 public:
-	Model(void* vertice_data, int vertice_size, void* indice_data, int indice_size, Shader* shaderToUse)
-		: _vertices(vertice_data), _vertice_size(vertice_size), _indices(indice_data), _indice_size(indice_size), _shader(shaderToUse)
+	Model(RawData* dataToUse, Shader* shaderToUse)
+		: _data(dataToUse), _shader(shaderToUse)
 	{
 		this->initialize();
 	}
@@ -31,10 +29,11 @@ public:
 		delete _vao;
 		delete _vbo;
 		delete _ib;
+		delete _texture;
 	}
 
 	void initialize()
-	{		
+	{
 		//Erstellt und bindet VAO
 		_vao = new VertexArray();
 		_vao->bind();
@@ -44,12 +43,12 @@ public:
 		_texture->bind(0); //Textureslot
 
 		//Erstellt VBO und konfiguriert VAO
-		_vbo = new VertexBuffer(_vertices, _vertice_size);
+		_vbo = new VertexBuffer(_data->_verticeData, _data->_verticeSize);
 		_vao->DefineAttributes(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0); //Position attribute
 		_vao->DefineAttributes(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float))); //Texture attribute
 		
 		//Erstellt IB
-		_ib = new IndexBuffer(_indices, _indice_size);
+		_ib = new IndexBuffer(_data->_indiceData, _data->_indiceSize);
 
 		//Unbindet VAO und VBO
 		_vbo->unbind();

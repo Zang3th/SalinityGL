@@ -5,6 +5,7 @@
 #include "Model.hpp"
 #include "Renderer.hpp"
 #include "Shader.hpp"
+#include "RawData.hpp"
 
 int main()
 {
@@ -24,27 +25,17 @@ int main()
 	Shader cube_shader("res/shader/vertexShader.glsl", "res/shader/fragmentShader.glsl");
 
 	//Data
-	float vertices[] = 
-	{
-	 -0.5f,  0.5f, 0.0f, 0.0f, 0.0f, // top left
-	 -0.5f, -0.5f, 0.0f, 0.0f, 1.0f, // bottom left
-	  0.5f, -0.5f, 0.0f, 1.0f, 1.0f, // bottom right
-	  0.5f,  0.5f, 0.0f, 1.0f, 0.0f  // top right 
-	};
-	unsigned int indices[] = 
-	{ 
-		0, 1, 3,   // first triangle
-		1, 2, 3    // second triangle
-	};
-	
+	RawData cube_data;
+	cube_data.initializeCubeData();
+
 	//Modelcreation
-	Model cube(vertices, sizeof(vertices), indices, sizeof(indices), &cube_shader);
-	
+	Model cube(&cube_data, &cube_shader);
+
 	while (!displayManager.WindowShouldClose())
 	{
 		//Clear Buffer and prepare for rendering
 		renderer.prepare();
-		
+
 		//Render Stuff
 		renderer.render(&cube);
 

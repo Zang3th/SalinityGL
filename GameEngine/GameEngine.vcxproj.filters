@@ -30,6 +30,7 @@
     <ClInclude Include="src\core\IndexBuffer.hpp" />
     <ClInclude Include="src\core\Shader.hpp" />
     <ClInclude Include="src\core\Texture.hpp" />
+    <ClInclude Include="src\core\RawData.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shader\fragmentShader.glsl" />

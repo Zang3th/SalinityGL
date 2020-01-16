@@ -20,33 +20,33 @@ int main()
 	//Renderer
 	Renderer renderer;
 
+	//Shaderstuff
+	Shader cube_shader("res/shader/vertexShader.glsl", "res/shader/fragmentShader.glsl");
+
 	//Data
-	float vertices[] = {
-	 -0.5f,  0.5f, 0.0f,  // top right
-	 -0.5f, -0.5f, 0.0f,  // bottom right
-	  0.5f, -0.5f, 0.0f,  // bottom left
-	  0.5f,  0.5f, 0.0f   // top left 
+	float vertices[] = 
+	{
+	 -0.5f,  0.5f, 0.0f, 0.0f, 0.0f, // top left
+	 -0.5f, -0.5f, 0.0f, 0.0f, 1.0f, // bottom left
+	  0.5f, -0.5f, 0.0f, 1.0f, 1.0f, // bottom right
+	  0.5f,  0.5f, 0.0f, 1.0f, 0.0f  // top right 
 	};
-	unsigned int indices[] = {  // note that we start from 0!
+	unsigned int indices[] = 
+	{ 
 		0, 1, 3,   // first triangle
 		1, 2, 3    // second triangle
 	};
 	
 	//Modelcreation
-	Model cube(vertices, sizeof(vertices), indices, sizeof(indices));
+	Model cube(vertices, sizeof(vertices), indices, sizeof(indices), &cube_shader);
 	
-	//Shaderstuff
-	Shader cube_shader("res/shader/vertexShader.glsl", "res/shader/fragmentShader.glsl");
-
 	while (!displayManager.WindowShouldClose())
 	{
 		//Clear Buffer and prepare for rendering
 		renderer.prepare();
 		
 		//Render Stuff
-		cube_shader.bind();
 		renderer.render(&cube);
-		cube_shader.unbind();
 
 		//GUI Stuff
 		{

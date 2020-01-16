@@ -1,3 +1,5 @@
+#pragma once
+
 #include "OpenGLErrorManager.hpp"
 #include <iostream>
 #include <string>

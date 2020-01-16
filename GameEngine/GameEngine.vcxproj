@@ -156,6 +156,7 @@
     <ClInclude Include="src\core\IndexBuffer.hpp" />
     <ClInclude Include="src\core\Renderer.hpp" />
     <ClInclude Include="src\core\Shader.hpp" />
+    <ClInclude Include="src\core\Texture.hpp" />
     <ClInclude Include="src\core\VertexArray.hpp" />
     <ClInclude Include="src\core\OpenGLErrorManager.hpp" />
     <ClInclude Include="src\core\Model.hpp" />

@@ -26,7 +26,6 @@ int main()
 
 	//Data
 	RawData cube_data;
-	cube_data.initializeCubeData();	
 
 	//Modelcreation
 	std::vector<Model*> Models;

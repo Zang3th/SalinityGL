@@ -19,11 +19,11 @@ private:
 	glm::mat4 _model = glm::mat4(1.0f);
 	glm::mat4 _projection;
 	glm::mat4 _view;
-	unsigned int _numberOfVerticesForRender = 0;
+	unsigned int _verticesToRender = 0;
 
 public:
 	Model(RawData* dataToUse, Shader* shaderToUse)
-		: _data(dataToUse), _shader(shaderToUse), _numberOfVerticesForRender(dataToUse->_totalVerticesPerSide * dataToUse->_sides)
+		: _data(dataToUse), _shader(shaderToUse), _verticesToRender(dataToUse->_verticesToRender)
 	{
 		this->initialize();
 	}
@@ -47,12 +47,12 @@ public:
 		_texture->bind(0); //Textureslot
 
 		//Erstellt VBO und konfiguriert VAO
-		_vbo = new VertexBuffer(_data->_verticeData, _data->_verticeSize);
+		_vbo = new VertexBuffer(&_data->_vertices[0], _data->_verticeSize);
 		_vao->DefineAttributes(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0); //Position attribute
 		_vao->DefineAttributes(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float))); //Texture attribute
-		
+				
 		//Erstellt IB
-		_ib = new IndexBuffer(_data->_indiceData, _data->_indiceSize);
+		_ib = new IndexBuffer(&_data->_indices[0], _data->_indiceSize);
 
 		//Unbindet VAO und VBO
 		_vbo->unbind();
@@ -93,6 +93,6 @@ public:
 
 	unsigned int getNumberOfVertices()
 	{
-		return _numberOfVerticesForRender;
+		return _verticesToRender;
 	}
 };

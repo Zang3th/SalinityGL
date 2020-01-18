@@ -11,10 +11,13 @@ public:
 		GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 	}
 
-	void render(Model* model)
+	void render(const std::vector<Model*>& Models)
 	{
-		model->draw();
-		GLCall(glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, nullptr));
-		model->undraw();
+		for(Model* m : Models)
+		{
+			m->draw();
+			GLCall(glDrawElements(GL_TRIANGLES, m->getNumberOfVertices(), GL_UNSIGNED_INT, nullptr));
+			m->undraw();
+		}
 	}
 };

@@ -26,23 +26,38 @@ int main()
 
 	//Data
 	RawData cube_data;
-	cube_data.initializeCubeData();
+	cube_data.initializeCubeData();	
 
 	//Modelcreation
-	Model cube(&cube_data, &cube_shader);
+	std::vector<Model*> Models;
+
+	Model cube_1(&cube_data, &cube_shader);
+	cube_1.translate(glm::vec3(1.0f, 0.0f, 0.0f));
+	Models.push_back(&cube_1);
+
+	Model cube_2(&cube_data, &cube_shader);
+	cube_2.translate(glm::vec3(-1.0f, 0.0f, 0.0f));
+	Models.push_back(&cube_2);	
 
 	while (!displayManager.WindowShouldClose())
 	{
+		//Measure Frametime
+		displayManager.measureFrameTime();
+
 		//Clear Buffer and prepare for rendering
 		renderer.prepare();
 
-		//Render Stuff
-		renderer.render(&cube);
+		//Start GUI-Frame
+		guiManager.startFrame();
+
+		//Check Keyboard and Mouseinputs
+		displayManager.checkForInput();
+		
+		//Render Stuff		
+		renderer.render(Models);
 
 		//GUI Stuff
 		{
-			guiManager.startFrame();
-
 			//Neues Fenster mit FPS Counter rendern
 			guiManager.newWindow("General settings");
 			guiManager.printFPS();
@@ -55,6 +70,7 @@ int main()
 			displayManager.updateDisplay();
 		}
 	}
+	//CleanUP Stuff
 	guiManager.cleanUPGUI();
 	displayManager.closeDisplay();
 

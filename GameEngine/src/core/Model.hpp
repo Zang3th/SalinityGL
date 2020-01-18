@@ -16,10 +16,14 @@ private:
 	Shader* _shader = nullptr;
 	Texture* _texture = nullptr;
 	RawData* _data = nullptr;
+	glm::mat4 _model = glm::mat4(1.0f);
+	glm::mat4 _projection;
+	glm::mat4 _view;
+	unsigned int _numberOfVerticesForRender = 0;
 
 public:
 	Model(RawData* dataToUse, Shader* shaderToUse)
-		: _data(dataToUse), _shader(shaderToUse)
+		: _data(dataToUse), _shader(shaderToUse), _numberOfVerticesForRender(dataToUse->_totalVerticesPerSide * dataToUse->_sides)
 	{
 		this->initialize();
 	}
@@ -57,13 +61,12 @@ public:
 
 	void draw()
 	{
-		glm::mat4 model = glm::mat4(1.0f);
-		glm::mat4 projection = glm::perspective(glm::radians(_camera->Zoom), (float)WIDTH / (float)HEIGHT, 0.1f, 1000.0f);
-		glm::mat4 view = _camera->GetViewMatrix();
+		_projection = glm::perspective(glm::radians(_camera->Zoom), (float)WIDTH / (float)HEIGHT, 0.1f, 1000.0f);
+		_view = _camera->GetViewMatrix();
 		_shader->bind();
-		_shader->SetUniformMat4f("model", model);
-		_shader->SetUniformMat4f("projection", projection);
-		_shader->SetUniformMat4f("view", view);
+		_shader->SetUniformMat4f("model", _model);
+		_shader->SetUniformMat4f("projection", _projection);
+		_shader->SetUniformMat4f("view", _view);
 		_vao->bind();
 	}
 
@@ -71,5 +74,25 @@ public:
 	{
 		_shader->unbind();
 		_vao->unbind();
+	}
+
+	void translate(const glm::vec3& position)
+	{
+		_model = glm::translate(_model, position);
+	}
+
+	void rotate(const float& angle, const glm::vec3& axis)
+	{
+		_model = glm::rotate(_model, glm::radians(angle), axis); 
+	}
+
+	void scale(const glm::vec3& scalar)
+	{
+		_model = glm::scale(_model, scalar);
+	}
+
+	unsigned int getNumberOfVertices()
+	{
+		return _numberOfVerticesForRender;
 	}
 };

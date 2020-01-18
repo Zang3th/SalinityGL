@@ -2,9 +2,15 @@
 
 class RawData
 {
-public:
-	const unsigned int _numberOfVertices = 120;
-	const unsigned int _numberOfIndices = 36;
+public:	
+	const unsigned int _pos_coords = 3;
+	const unsigned int _tex_coords = 2;
+	const unsigned int _verticesPerSide = 4;
+	const unsigned int _totalVerticesPerSide = 6;
+	const unsigned int _sides = 6;
+	const unsigned int _triangles = 2 * _sides;
+	const unsigned int _numberOfVertices = (_pos_coords + _tex_coords) * _verticesPerSide * _sides;
+	const unsigned int _numberOfIndices = _triangles * 3;
 	float *_verticeData = nullptr;
 	unsigned int* _indiceData = nullptr;
 	int _verticeSize = 0;

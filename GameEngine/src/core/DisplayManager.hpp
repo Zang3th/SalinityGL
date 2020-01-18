@@ -96,7 +96,7 @@ public:
 			spdlog::error("GLFW INIT ERROR\n");
 
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 		_window = glfwCreateWindow(_width, _height, "GameEngine", NULL, NULL);
 	
@@ -107,7 +107,7 @@ public:
 		glfwSwapInterval(0);
 
 		if (glewInit() != GLEW_OK)
-			spdlog::error("GLFW WINDOW CREATION ERROR\n");
+			spdlog::error("GLEW INIT ERROR\n");
 
 		GLCall(glViewport(0, 0, _width, _height)); //Renderscreensize
 
@@ -129,13 +129,7 @@ public:
 	}
 
 	void updateDisplay()
-	{
-		//Measure deltaTime
-		float currentFrame = glfwGetTime();
-		deltaTime = currentFrame - lastFrame;
-		lastFrame = currentFrame;
-
-		processInput(_window);
+	{		
 		glfwSwapBuffers(_window);
 		glfwPollEvents();		
 	}
@@ -148,5 +142,18 @@ public:
 	GLFWwindow* getWindow()
 	{
 		return _window;
-	}	
+	}
+
+	void measureFrameTime()
+	{
+		//Measure deltaTime
+		float currentFrame = glfwGetTime();
+		deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
+	}
+
+	void checkForInput()
+	{
+		processInput(_window);
+	}
 };

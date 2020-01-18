@@ -154,7 +154,9 @@
   <ItemGroup>
     <ClInclude Include="src\core\Camera.hpp" />
     <ClInclude Include="src\core\DisplayManager.hpp" />
+    <ClInclude Include="src\core\GroundData.hpp" />
     <ClInclude Include="src\core\IndexBuffer.hpp" />
+    <ClInclude Include="src\core\RawCubeData.hpp" />
     <ClInclude Include="src\core\RawData.hpp" />
     <ClInclude Include="src\core\Renderer.hpp" />
     <ClInclude Include="src\core\Shader.hpp" />

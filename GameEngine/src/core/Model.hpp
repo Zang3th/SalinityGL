@@ -19,11 +19,12 @@ private:
 	glm::mat4 _model = glm::mat4(1.0f);
 	glm::mat4 _projection;
 	glm::mat4 _view;
-	unsigned int _verticesToRender = 0;
+	const char* _tex_filepath;
+	const unsigned int _tex_slot;
 
 public:
-	Model(RawData* dataToUse, Shader* shaderToUse)
-		: _data(dataToUse), _shader(shaderToUse), _verticesToRender(dataToUse->_verticesToRender)
+	Model(RawData* dataToUse, Shader* shaderToUse, const char* tex_filepath)
+		: _data(dataToUse), _shader(shaderToUse), _tex_filepath(tex_filepath), _tex_slot(0)
 	{
 		this->initialize();
 	}
@@ -43,8 +44,8 @@ public:
 		_vao->bind();
 
 		//Load Texture
-		_texture = new Texture("res/textures/Brick.jpg");
-		_texture->bind(0); //Textureslot
+		_texture = new Texture(_tex_filepath);
+		_texture->bind();
 
 		//Erstellt VBO und konfiguriert VAO
 		_vbo = new VertexBuffer(&_data->_vertices[0], _data->_verticeSize);
@@ -67,13 +68,15 @@ public:
 		_shader->SetUniformMat4f("model", _model);
 		_shader->SetUniformMat4f("projection", _projection);
 		_shader->SetUniformMat4f("view", _view);
+		_texture->bind();
 		_vao->bind();
 	}
 
 	void undraw()
 	{
 		_shader->unbind();
-		_vao->unbind();
+		_texture->unbind();
+		_vao->unbind();		
 	}
 
 	void translate(const glm::vec3& position)
@@ -93,6 +96,6 @@ public:
 
 	unsigned int getNumberOfVertices()
 	{
-		return _verticesToRender;
+		return _data->_verticesToRender;
 	}
 };

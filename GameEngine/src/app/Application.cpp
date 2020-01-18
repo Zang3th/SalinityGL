@@ -5,7 +5,8 @@
 #include "Model.hpp"
 #include "Renderer.hpp"
 #include "Shader.hpp"
-#include "RawData.hpp"
+#include "RawCubeData.hpp"
+#include "GroundData.hpp"
 
 int main()
 {
@@ -22,21 +23,26 @@ int main()
 	Renderer renderer;
 
 	//Shaderstuff
-	Shader cube_shader("res/shader/vertexShader.glsl", "res/shader/fragmentShader.glsl");
+	Shader standard_shader("res/shader/vertexShader.glsl", "res/shader/fragmentShader.glsl");
 
 	//Data
-	RawData cube_data;
+	RawCubeData cube_data;
+	GroundData ground_data(32);
 
 	//Modelcreation
 	std::vector<Model*> Models;
-
-	Model cube_1(&cube_data, &cube_shader);
+	
+	Model cube_1(&cube_data, &standard_shader, "res/textures/Brick.jpg");
 	cube_1.translate(glm::vec3(1.0f, 0.0f, 0.0f));
 	Models.push_back(&cube_1);
 
-	Model cube_2(&cube_data, &cube_shader);
+	Model cube_2(&cube_data, &standard_shader, "res/textures/Brick.jpg");
 	cube_2.translate(glm::vec3(-1.0f, 0.0f, 0.0f));
 	Models.push_back(&cube_2);	
+
+	Model ground(&ground_data, &standard_shader, "res/textures/Sand.jpg");
+	ground.translate(glm::vec3(0.0f, -5.0f, 0.0f));
+	Models.push_back(&ground);
 
 	while (!displayManager.WindowShouldClose())
 	{
@@ -70,8 +76,10 @@ int main()
 		}
 	}
 	//CleanUP Stuff
-	guiManager.cleanUPGUI();
-	displayManager.closeDisplay();
-
+	{
+		guiManager.cleanUPGUI();
+		displayManager.closeDisplay();
+	}
+	
 	return 0;
 }

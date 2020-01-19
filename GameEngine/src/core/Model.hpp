@@ -11,7 +11,8 @@ class Model
 {
 private:
 	VertexArray* _vao = nullptr;
-	VertexBuffer* _vbo = nullptr;
+	VertexBuffer* _vbo1 = nullptr;
+	VertexBuffer* _vbo2 = nullptr;
 	IndexBuffer* _ib = nullptr;
 	Shader* _shader = nullptr;
 	Texture* _texture = nullptr;
@@ -32,7 +33,8 @@ public:
 	~Model()
 	{
 		delete _vao;
-		delete _vbo;
+		delete _vbo1;
+		delete _vbo2;
 		delete _ib;
 		delete _texture;
 	}
@@ -48,15 +50,17 @@ public:
 		_texture->bind();
 
 		//Erstellt VBO und konfiguriert VAO
-		_vbo = new VertexBuffer(&_data->_vertices[0], _data->_verticeSize);
-		_vao->DefineAttributes(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0); //Position attribute
-		_vao->DefineAttributes(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float))); //Texture attribute
+		_vbo1 = new VertexBuffer(&_data->_vertices[0], _data->_verticeSize);
+		_vao->DefineAttributes(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0); //Position attribute
+		_vbo2 = new VertexBuffer(&_data->_texCoords[0], _data->_texCoordSize);
+		_vao->DefineAttributes(1, 2, GL_FLOAT, GL_FALSE, 0, (void*)0); //Texture attribute
 				
 		//Erstellt IB
 		_ib = new IndexBuffer(&_data->_indices[0], _data->_indiceSize);
 
 		//Unbindet VAO und VBO
-		_vbo->unbind();
+		_vbo1->unbind();
+		_vbo2->unbind();
 		_vao->unbind();
 	}
 

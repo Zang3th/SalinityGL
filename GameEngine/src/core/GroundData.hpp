@@ -29,11 +29,8 @@ public:
 				float y = _heightmap->getPixelValue(i, j, 3.0f);
 				//std::cout << y << std::endl;
 				float z = (float)j / ((float)_size / (_size * 5));
-				_vertices.push_back(x);
-				_vertices.push_back(y);
-				_vertices.push_back(z);
-				_vertices.push_back(x);
-				_vertices.push_back(z);
+				_vertices.emplace_back(glm::vec3(x, y, z));
+				_texCoords.emplace_back(glm::vec2(x, z));
 
 				if ((j != _size) && (i != _size))
 				{
@@ -41,14 +38,10 @@ public:
 					const int row2 = (j + 1) * (_size + 1);
 
 					// triangle 1
-					_indices.push_back(row1 + i);
-					_indices.push_back(row1 + i + 1);
-					_indices.push_back(row2 + i + 1);
+					_indices.emplace_back(glm::uvec3(row1 + i, row1 + i + 1, row2 + i + 1));
 
 					// triangle 2
-					_indices.push_back(row1 + i);
-					_indices.push_back(row2 + i + 1);
-					_indices.push_back(row2 + i);
+					_indices.emplace_back(glm::uvec3(row1 + i, row2 + i + 1, row2 + i));
 				}
 			}
 		}
@@ -57,8 +50,9 @@ public:
 
 	void setParameters() override
 	{
-		_verticeSize = _vertices.size() * sizeof(float);
-		_indiceSize = _indices.size() * sizeof(unsigned int);
-		_verticesToRender = _indices.size() * sizeof(unsigned int);
+		_verticeSize = _vertices.size() * sizeof(glm::vec3);
+		_indiceSize = _indices.size() * sizeof(glm::uvec3);
+		_texCoordSize = _texCoords.size() * sizeof(glm::vec2);
+		_verticesToRender = (GLsizei)_indices.size() * 3;
 	}
 };

@@ -32,9 +32,10 @@
     <ClInclude Include="src\core\Texture.hpp" />
     <ClInclude Include="src\core\RawData.hpp" />
     <ClInclude Include="src\core\Camera.hpp" />
-    <ClInclude Include="src\core\RawCubeData.hpp" />
     <ClInclude Include="src\core\GroundData.hpp" />
     <ClInclude Include="src\core\Heightmap.hpp" />
+    <ClInclude Include="src\core\OBJData.hpp" />
+    <ClInclude Include="src\core\Filemanager.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shader\fragmentShader.glsl" />

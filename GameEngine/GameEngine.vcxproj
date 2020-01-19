@@ -97,7 +97,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>GLEW_STATIC;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GLEW_STATIC;_MBCS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>src\core;src\vendor;$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\GLEW\include;$(OPENCV3_DIR)\include</AdditionalIncludeDirectories>
     </ClCompile>
@@ -154,10 +154,11 @@
   <ItemGroup>
     <ClInclude Include="src\core\Camera.hpp" />
     <ClInclude Include="src\core\DisplayManager.hpp" />
+    <ClInclude Include="src\core\Filemanager.hpp" />
     <ClInclude Include="src\core\GroundData.hpp" />
     <ClInclude Include="src\core\Heightmap.hpp" />
     <ClInclude Include="src\core\IndexBuffer.hpp" />
-    <ClInclude Include="src\core\RawCubeData.hpp" />
+    <ClInclude Include="src\core\OBJData.hpp" />
     <ClInclude Include="src\core\RawData.hpp" />
     <ClInclude Include="src\core\Renderer.hpp" />
     <ClInclude Include="src\core\Shader.hpp" />

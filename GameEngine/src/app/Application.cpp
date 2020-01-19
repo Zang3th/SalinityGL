@@ -5,8 +5,9 @@
 #include "Model.hpp"
 #include "Renderer.hpp"
 #include "Shader.hpp"
-#include "RawCubeData.hpp"
 #include "GroundData.hpp"
+#include "OBJData.hpp"
+#include "Filemanager.hpp"
 
 int main()
 {
@@ -17,7 +18,7 @@ int main()
 
 	//GUI-Management
 	GUIManager guiManager;
-	guiManager.initializeGUI(displayManager.getWindow());
+	guiManager.initializeGUI(displayManager.getWindow());	
 
 	//Renderer
 	Renderer renderer;
@@ -26,23 +27,32 @@ int main()
 	Shader standard_shader("res/shader/vertexShader.glsl", "res/shader/fragmentShader.glsl");
 
 	//Data
-	RawCubeData cube_data;
+	//RawCubeData cube_data;
 	GroundData ground_data(128);
+	OBJData cube_data("res/obj/cube.obj");	
+	//OBJData wall_data("res/obj/wall.obj");
 
 	//Modelcreation
 	std::vector<Model*> Models;
-	
-	Model cube_1(&cube_data, &standard_shader, "res/textures/Brick.jpg");
-	cube_1.translate(glm::vec3(1.0f, 0.0f, 0.0f));
-	Models.push_back(&cube_1);
 
-	Model cube_2(&cube_data, &standard_shader, "res/textures/Brick.jpg");
-	cube_2.translate(glm::vec3(-1.0f, 0.0f, 0.0f));
-	Models.push_back(&cube_2);	
+	Model cube(&cube_data, &standard_shader, "res/textures/Brick.jpg");
+	Models.push_back(&cube);
+
+	/*Model wall(&wall_data, &standard_shader,"res/textures/Brick.jpg");
+	Models.push_back(&wall);*/
 
 	Model ground(&ground_data, &standard_shader, "res/textures/Grass_1.jpg");
 	ground.translate(glm::vec3(0.0f, -5.0f, 0.0f));
 	Models.push_back(&ground);
+
+	//DEBUG
+	/*Filemanager filemanager;
+	filemanager.writeReadableToFile(wall_data._vertices, "res/data/wallvertices.data");
+	filemanager.writeReadableToFile(wall_data._texCoords, "res/data/walltexcoords.data");
+	filemanager.writeReadableToFile(wall_data._indices, "res/data/wallindices.data");*/
+	/*filemanager.writeReadableToFile(test_data._vertices, "res/data/testvertices.data");
+	filemanager.writeReadableToFile(test_data._texCoords, "res/data/testtexcoords.data");
+	filemanager.writeReadableToFile(test_data._indices, "res/data/testindices.data");*/
 
 	while (!displayManager.WindowShouldClose())
 	{

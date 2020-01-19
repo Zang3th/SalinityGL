@@ -7,7 +7,7 @@ class Renderer
 public:
 	void prepare()
 	{
-		GLCall(glClearColor(0.070f, 0.098f, 0.427f, 1.0f));
+		GLCall(glClearColor(0.368f, 0.721f, 0.811f, 1.0f));
 		GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 	}
 

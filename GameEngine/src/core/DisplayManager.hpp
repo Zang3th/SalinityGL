@@ -115,6 +115,7 @@ public:
 		glfwSetScrollCallback(_window, scroll_callback);
 		glfwSetMouseButtonCallback(_window, mouse_button_callback);
 		GLCall(glEnable(GL_DEPTH_TEST)); //Depthtesting
+		//GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
 	}
 
 	void printVersion()

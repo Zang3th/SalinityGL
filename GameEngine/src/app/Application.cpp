@@ -27,7 +27,7 @@ int main()
 
 	//Data
 	RawCubeData cube_data;
-	GroundData ground_data(32);
+	GroundData ground_data(128);
 
 	//Modelcreation
 	std::vector<Model*> Models;
@@ -40,7 +40,7 @@ int main()
 	cube_2.translate(glm::vec3(-1.0f, 0.0f, 0.0f));
 	Models.push_back(&cube_2);	
 
-	Model ground(&ground_data, &standard_shader, "res/textures/Sand.jpg");
+	Model ground(&ground_data, &standard_shader, "res/textures/Grass_1.jpg");
 	ground.translate(glm::vec3(0.0f, -5.0f, 0.0f));
 	Models.push_back(&ground);
 

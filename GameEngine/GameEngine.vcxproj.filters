@@ -34,8 +34,9 @@
     <ClInclude Include="src\core\Camera.hpp" />
     <ClInclude Include="src\core\GroundData.hpp" />
     <ClInclude Include="src\core\Heightmap.hpp" />
-    <ClInclude Include="src\core\OBJData.hpp" />
     <ClInclude Include="src\core\Filemanager.hpp" />
+    <ClInclude Include="src\core\AssimpLoader.hpp" />
+    <ClInclude Include="src\core\SimpleOBJParser.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shader\fragmentShader.glsl" />

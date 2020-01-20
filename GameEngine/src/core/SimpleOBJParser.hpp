@@ -5,18 +5,19 @@
 #include <vector>
 #include "RawData.hpp"
 
-class OBJData : public RawData
+class SimpleOBJParser : public RawData
 {
 private:
     const char* _path;
     unsigned int _faces;
+    std::vector<glm::vec3> temp_vertices;
 
 public:
-    OBJData(const char* filepath)
+    SimpleOBJParser(const char* filepath)
         : _path(filepath)
     {
         init();
-    }
+    }   
 
     void init() override
     {
@@ -53,7 +54,7 @@ public:
             }
         }
         setParameters();
-    }
+    }     
 
     void setParameters() override
     {

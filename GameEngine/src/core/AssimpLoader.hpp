@@ -19,7 +19,7 @@ public:
 	void init() override
 	{
 		Assimp::Importer importer;
-		const aiScene* scene = importer.ReadFile(_filepath, 0/*aiProcess_JoinIdenticalVertices | aiProcess_SortByPType*/);
+		const aiScene* scene = importer.ReadFile(_filepath, aiProcess_Triangulate);
 		if (!scene) 
 		{
 			fprintf(stderr, importer.GetErrorString());

@@ -36,10 +36,5 @@
     <ClInclude Include="src\core\Heightmap.hpp" />
     <ClInclude Include="src\core\Filemanager.hpp" />
     <ClInclude Include="src\core\AssimpLoader.hpp" />
-    <ClInclude Include="src\core\SimpleOBJParser.hpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="res\shader\fragmentShader.glsl" />
-    <None Include="res\shader\vertexShader.glsl" />
   </ItemGroup>
 </Project>

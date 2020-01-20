@@ -6,9 +6,9 @@
 #include "Renderer.hpp"
 #include "Shader.hpp"
 #include "GroundData.hpp"
-#include "SimpleOBJParser.hpp"
 #include "Filemanager.hpp"
 #include "AssimpLoader.hpp"
+#include "Texture.hpp"
 
 int main()
 {
@@ -25,39 +25,56 @@ int main()
 	Renderer renderer;
 
 	//Shaderstuff
-	Shader standard_shader("res/shader/vertexShader.glsl", "res/shader/fragmentShader.glsl");
+	Shader standard_shader("res/shader/standard_vs.glsl", "res/shader/standard_fs.glsl");
+	Shader ground_shader("res/shader/ground_vs.glsl", "res/shader/ground_fs.glsl");
 
 	//Data
 	GroundData ground_data(128);
-	SimpleOBJParser cube_data("res/obj/cube.obj");
-	AssimpLoader axe_data("res/obj/axe.obj");
-	AssimpLoader tree_data("res/obj/tree.obj");
+	AssimpLoader cube_data("res/obj/Shuttle.obj");
+	AssimpLoader axe_data("res/obj/Axe.obj");
+	AssimpLoader dolphin_data("res/obj/Dolphin.obj");
 
-	//Modelcreation
+	//Textures
+	Texture shuttle_tex("res/textures/shuttle.jpg");
+	Texture axe_tex("res/textures/Axe.jpg");
+	Texture bark_tex("res/textures/Bark.jpg");
+	Texture grass_tex("res/textures/Grass.jpg");
+	Texture dolphin_tex("res/textures/Dolphin.jpg");
+	shuttle_tex.bind(0);
+	axe_tex.bind(1);
+	bark_tex.bind(2);
+	grass_tex.bind(3);
+	dolphin_tex.bind(4);
+
+	//Modelmanager
 	std::vector<Model*> Models;
 
-	Model cube(&cube_data, &standard_shader, "res/textures/Brick.jpg");
-	cube.translate(glm::vec3(5.0f, 0.0f, 0.0f));
-	Models.push_back(&cube);
+	//Modelcreation
+	Model shuttle(&cube_data, &standard_shader, 0);
+	shuttle.translate(glm::vec3(5.0f, 0.0f, 0.0f));
+	Models.push_back(&shuttle);
 
-	Model axe(&axe_data, &standard_shader,"res/textures/Stone.jpg");
+	Model axe(&axe_data, &standard_shader, 1);
 	Models.push_back(&axe);
 
-	Model tree(&tree_data, &standard_shader, "res/textures/Bark.jpg");
-	Models.push_back(&tree);
+	Model dolphin(&dolphin_data, &standard_shader, 4);
+	Models.push_back(&dolphin);
 
-	Model ground(&ground_data, &standard_shader, "res/textures/Grass_1.jpg");
+	Model ground(&ground_data, &ground_shader, 3);
 	ground.translate(glm::vec3(0.0f, -5.0f, 0.0f));
 	Models.push_back(&ground);
 
-	//DEBUG
+	//DEBUG via files
 	Filemanager filemanager;
-	/*filemanager.writeReadableToFile(wall_data._vertices, "res/data/wallvertices.data");
-	filemanager.writeReadableToFile(wall_data._texCoords, "res/data/walltexcoords.data");
-	filemanager.writeReadableToFile(wall_data._indices, "res/data/wallindices.data");*/
-	/*filemanager.writeReadableToFile(test_data._vertices, "res/data/testvertices.data");
-	filemanager.writeReadableToFile(test_data._texCoords, "res/data/testtexcoords.data");
-	filemanager.writeReadableToFile(test_data._indices, "res/data/testindices.data");*/
+	{
+		/*filemanager.writeReadableToFile(wall_data._vertices, "res/data/wallvertices.data");
+		filemanager.writeReadableToFile(wall_data._texCoords, "res/data/walltexcoords.data");
+		filemanager.writeReadableToFile(wall_data._indices, "res/data/wallindices.data");*/
+		/*filemanager.writeReadableToFile(test_data._vertices, "res/data/testvertices.data");
+		filemanager.writeReadableToFile(test_data._texCoords, "res/data/testtexcoords.data");
+		
+		filemanager.writeReadableToFile(test_data._indices, "res/data/testindices.data");*/
+	}
 
 	while (!displayManager.WindowShouldClose())
 	{

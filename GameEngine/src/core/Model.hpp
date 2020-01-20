@@ -15,17 +15,15 @@ private:
 	VertexBuffer* _vbo2 = nullptr;
 	IndexBuffer* _ib = nullptr;
 	Shader* _shader = nullptr;
-	Texture* _texture = nullptr;
 	RawData* _data = nullptr;
 	glm::mat4 _model = glm::mat4(1.0f);
 	glm::mat4 _projection;
 	glm::mat4 _view;
-	const char* _tex_filepath;
-	const unsigned int _tex_slot;
+	unsigned int _texSlot;
 
 public:
-	Model(RawData* dataToUse, Shader* shaderToUse, const char* tex_filepath)
-		: _data(dataToUse), _shader(shaderToUse), _tex_filepath(tex_filepath), _tex_slot(0)
+	Model(RawData* dataToUse, Shader* shaderToUse,  unsigned int textureSlot)
+		: _data(dataToUse), _shader(shaderToUse), _texSlot(textureSlot)
 	{
 		this->initialize();
 	}
@@ -36,7 +34,6 @@ public:
 		delete _vbo1;
 		delete _vbo2;
 		delete _ib;
-		delete _texture;
 	}
 
 	void initialize()
@@ -44,11 +41,7 @@ public:
 		//Erstellt und bindet VAO
 		_vao = new VertexArray();
 		_vao->bind();
-
-		//Load Texture
-		_texture = new Texture(_tex_filepath);
-		_texture->bind();
-
+		
 		//Erstellt VBO und konfiguriert VAO
 		_vbo1 = new VertexBuffer(&_data->_vertices[0], _data->_verticeSize);
 		_vao->DefineAttributes(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0); //Position attribute
@@ -72,14 +65,13 @@ public:
 		_shader->SetUniformMat4f("model", _model);
 		_shader->SetUniformMat4f("projection", _projection);
 		_shader->SetUniformMat4f("view", _view);
-		_texture->bind();
+		_shader->SetUniform1i("textureSampler", _texSlot);
 		_vao->bind();
 	}
 
 	void undraw()
 	{
 		_shader->unbind();
-		_texture->unbind();
 		_vao->unbind();		
 	}
 

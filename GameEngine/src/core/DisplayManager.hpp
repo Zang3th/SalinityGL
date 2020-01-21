@@ -82,7 +82,7 @@ public:
 	DisplayManager()
 		: _width(WIDTH), _height(HEIGHT)
 	{
-		_camera = new Camera(glm::vec3(0.0f, 0.0f, 5.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		_camera = new Camera(glm::vec3(50.0f * 4, 0.0f, 50.0f * 4), glm::vec3(0.0f, 1.0f, 0.0f));
 	}
 
 	~DisplayManager()

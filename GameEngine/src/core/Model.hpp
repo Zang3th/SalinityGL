@@ -1,24 +1,13 @@
 #pragma once
 
-#include "VertexArray.hpp"
-#include "VertexBuffer.hpp"
-#include "IndexBuffer.hpp"
-#include "Shader.hpp"
-#include "Texture.hpp"
+#include "Basemodel.hpp"
 #include "RawData.hpp"
 
-class Model
+class Model : public Basemodel
 {
 private:
-	VertexArray* _vao = nullptr;
-	VertexBuffer* _vbo1 = nullptr;
-	VertexBuffer* _vbo2 = nullptr;
-	IndexBuffer* _ib = nullptr;
 	Shader* _shader = nullptr;
 	RawData* _data = nullptr;
-	glm::mat4 _model = glm::mat4(1.0f);
-	glm::mat4 _projection;
-	glm::mat4 _view;
 	unsigned int _texSlot;
 
 public:
@@ -36,7 +25,7 @@ public:
 		delete _ib;
 	}
 
-	void initialize()
+	void initialize() override
 	{
 		//Erstellt und bindet VAO
 		_vao = new VertexArray();
@@ -57,7 +46,7 @@ public:
 		_vao->unbind();
 	}
 
-	void draw()
+	void draw() override
 	{
 		_projection = glm::perspective(glm::radians(_camera->Zoom), (float)WIDTH / (float)HEIGHT, 0.1f, 1000.0f);
 		_view = _camera->GetViewMatrix();
@@ -69,28 +58,28 @@ public:
 		_vao->bind();
 	}
 
-	void undraw()
+	void undraw() override
 	{
 		_shader->unbind();
 		_vao->unbind();		
 	}
 
-	void translate(const glm::vec3& position)
+	void translate(const glm::vec3& position) override
 	{
 		_model = glm::translate(_model, position);
 	}
 
-	void rotate(const float& angle, const glm::vec3& axis)
+	void rotate(const float& angle, const glm::vec3& axis) override
 	{
 		_model = glm::rotate(_model, glm::radians(angle), axis); 
 	}
 
-	void scale(const glm::vec3& scalar)
+	void scale(const glm::vec3& scalar) override
 	{
 		_model = glm::scale(_model, scalar);
 	}
 
-	unsigned int getNumberOfVertices()
+	unsigned int getNumberOfVertices() override
 	{
 		return _data->_verticesToRender;
 	}

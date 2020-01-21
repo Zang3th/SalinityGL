@@ -36,5 +36,8 @@
     <ClInclude Include="src\core\Heightmap.hpp" />
     <ClInclude Include="src\core\Filemanager.hpp" />
     <ClInclude Include="src\core\AssimpLoader.hpp" />
+    <ClInclude Include="src\core\ModelManager.hpp" />
+    <ClInclude Include="src\core\Basemodel.hpp" />
+    <ClInclude Include="src\core\Groundmodel.hpp" />
   </ItemGroup>
 </Project>

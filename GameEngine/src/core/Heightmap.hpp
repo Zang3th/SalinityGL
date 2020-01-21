@@ -1,6 +1,5 @@
 #pragma once
 
-#include <cstdint>
 #include <string>
 #include <opencv2/opencv.hpp>
 #include <iostream>
@@ -13,39 +12,30 @@ private:
 	int m_channels;
 	double m_min_value;
 	double m_max_value;
-	cv::Scalar m_mean;
-	cv::Scalar m_stnd_devi;
 	cv::Mat m_img;
 	std::string m_filepath;
-	int m_flag;
-	int m_valOutOfBounds;
+	int m_flag;	
 
 public:
+	int m_valOutOfBounds;
+
 	Heightmap(std::string filepath, int flag)
 		: m_filepath(filepath), m_flag(flag), m_valOutOfBounds(0)
 	{
 		//Einlesen des Bildes
 		m_img = cv::imread(filepath, flag);
-		if (!m_img.data) {
-			std::cout << "Picture could not be found!\n";
-		}
+		if (!m_img.data)
+			spdlog::error("Heightmap: Picture could not be found\n!");
 
 		//Gewinnen der Bilddaten
 		m_height = m_img.rows;
 		m_width = m_img.cols;
-		m_channels = m_img.channels();
-		/*std::cout << "Picturesize: " << m_height << "x" << m_width << " with " << m_channels << " Channels" << std::endl;
-		std::cout << "Pixels: " << m_height * m_width << std::endl;*/
-
-		//Ermittlung von mittlerem Grauwert, Standardabweichung
-		/*meanStdDev(m_img, m_mean, m_stnd_devi);
-		std::cout << "Medium Greyvalue: " << m_mean.val[0] << std::endl;
-		std::cout << "Standard Deviation: " << m_stnd_devi.val[0] << std::endl;*/
+		m_channels = m_img.channels();	
+		
+		spdlog::info("Picture: {}", filepath);
 
 		//Ermittlung von Minimum und Maximum
 		minMaxLoc(m_img, &m_min_value, &m_max_value);
-		/*std::cout << "Lowest Greyvalue: " << m_min_value << std::endl;
-		std::cout << "Highest Greyvalue: " << m_max_value << std::endl << std::endl;*/
 	}
 
 	void display() const
@@ -57,7 +47,7 @@ public:
 	{
 		if ((x < m_width) && (z < m_height))
 		{
-			float greyvalue = m_img.at<uint8_t>(x, z);
+			float greyvalue = m_img.at<uchar>(x, z);
 			greyvalue -= m_max_value / 2;
 			greyvalue /= scale;
 			return greyvalue;
@@ -70,36 +60,74 @@ public:
 			if ((width_dif >= 0) && (height_dif >= 0))
 			{
 				m_valOutOfBounds++;
-				float greyvalue = m_img.at<uint8_t>(x - width_dif - 1, z - height_dif - 1);
+				float greyvalue = m_img.at<uchar>(x - width_dif - 1, z - height_dif - 1);
 				greyvalue -= m_max_value / 2;
-				//greyvalue /= scale;
+				greyvalue /= scale;
 				return greyvalue;
 			}
 
 			if (width_dif >= 0)
 			{
 				m_valOutOfBounds++;
-				float greyvalue = m_img.at<uint8_t>(x - width_dif - 1, z);
+				float greyvalue = m_img.at<uchar>(x - width_dif - 1, z);
 				greyvalue -= m_max_value / 2;
-				//greyvalue /= scale;
+				greyvalue /= scale;
 				return greyvalue;
 			}
 
 			if (height_dif >= 0)
 			{
 				m_valOutOfBounds++;
-				float greyvalue = m_img.at<uint8_t>(x, z - height_dif - 1);
+				float greyvalue = m_img.at<uchar>(x, z - height_dif - 1);
 				greyvalue -= m_max_value / 2;
-				//greyvalue /= scale;
+				greyvalue /= scale;
 				return greyvalue;
 			}
 		}
 	}
 
-	inline cv::Mat getObject() const { return m_img; }
-	inline double getMinValue() const { return m_min_value; }
-	inline double getMaxValue() const { return m_max_value; }
-	inline int getHeight() const { return m_height; }
-	inline int getWidth() const { return m_width; }
-	inline int getBadValues() const { return m_valOutOfBounds; }
+	glm::vec3 getColorValue(int x, int z)
+	{
+		if ((x < m_width) && (z < m_height))
+		{
+			float blue = m_img.at<cv::Vec3b>(x, z)[0];
+			float green = m_img.at<cv::Vec3b>(x, z)[1];
+			float red = m_img.at<cv::Vec3b>(x, z)[2];
+
+			if(blue > green)
+			{
+				if(blue > red)
+				{
+					blue = 255;
+					green = 0;
+					red = 0;
+				}
+			}
+
+			if(green > blue)
+			{
+				if(green > red)
+				{
+					green = 255;
+					blue = 0;
+					red = 0;
+				}
+			}
+
+			if(red > blue)
+			{
+				if(red > green)
+				{
+					red = 255;
+					blue = 0;
+					green = 0;
+				}
+			}
+
+			return glm::vec3(blue, green, red);
+
+		}
+		else 
+			return glm::vec3(0, 255, 0);
+	}
 };

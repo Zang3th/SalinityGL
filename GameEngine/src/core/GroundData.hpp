@@ -8,6 +8,7 @@ class GroundData : public RawData
 private:
 	unsigned int _size;
 	Heightmap* _heightmap = nullptr;
+	Heightmap* _terrainmap = nullptr;	
 
 public:
 	GroundData(int size)
@@ -18,19 +19,21 @@ public:
 
 	void init() override
 	{
-		_heightmap = new Heightmap("res/heightmaps/simple_noise_512.bmp", 0);
-		//_heightmap->display();
+		_heightmap = new Heightmap("res/heightmaps/simple_noise_128.jpg", 0);
+		_terrainmap = new Heightmap("res/heightmaps/terrain_map.jpg", 1);		
 
 		for (int j = 0; j <= _size; ++j)
 		{
 			for (int i = 0; i <= _size; ++i)
 			{
-				float x = (float)i / ((float)_size / (_size * 5));
-				float y = _heightmap->getPixelValue(i, j, 3.0f);
-				//std::cout << y << std::endl;
-				float z = (float)j / ((float)_size / (_size * 5));
+				float x = (float)i / ((float)_size / (_size * 6));
+				float y = _heightmap->getPixelValue(i, j, 1.0f);
+				float z = (float)j / ((float)_size / (_size * 6));
 				_vertices.emplace_back(glm::vec3(x, y, z));
 				_texCoords.emplace_back(glm::vec2(x, z));
+
+				glm::vec3 terrain_color = _terrainmap->getColorValue(i, j);
+				_terrainColors.push_back(terrain_color);
 
 				if ((j != _size) && (i != _size))
 				{
@@ -54,5 +57,6 @@ public:
 		_indiceSize = _indices.size() * sizeof(glm::uvec3);
 		_texCoordSize = _texCoords.size() * sizeof(glm::vec2);
 		_verticesToRender = (GLsizei)_indices.size() * 3;
+		_terrainColorSize = _terrainColors.size() * sizeof(glm::vec3);
 	}
 };

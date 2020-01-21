@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Model.hpp"
+#include "Basemodel.hpp"
 
 class Renderer
 {
@@ -11,9 +11,9 @@ public:
 		GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 	}
 
-	void render(const std::vector<Model*>& Models)
+	void render(const std::vector<Basemodel*>& Models)
 	{
-		for(Model* m : Models)
+		for(Basemodel* m : Models)
 		{
 			m->draw();
 			GLCall(glDrawElements(GL_TRIANGLES, m->getNumberOfVertices(), GL_UNSIGNED_INT, nullptr));

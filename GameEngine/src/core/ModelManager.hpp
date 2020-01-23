@@ -42,9 +42,9 @@ public:
 	void initData()
 	{
 		_ground_data = new GroundData(256, 2);
-		_house_data = new AssimpLoader("res/obj/Farmhouse.obj");
-		_wood_data = new AssimpLoader("res/obj/Wood.obj");
-		_axe_data = new AssimpLoader("res/obj/Axe.obj");
+		_house_data = new AssimpLoader("res/obj/houses/Farmhouse.obj");
+		_wood_data = new AssimpLoader("res/obj/vegetation/Wood.obj");
+		_axe_data = new AssimpLoader("res/obj/tools/Axe.obj");
 	}
 
 	void initTextures()
@@ -52,10 +52,10 @@ public:
 		_grass_tex = new Texture("res/textures/Grass.jpg");
 		_dirt_tex = new Texture("res/textures/Dirt.jpg");
 		_stone_tex = new Texture("res/textures/Stone_2.jpg");
-		_blendmap = new Texture("res/textures/blendmap_256_bold.jpg");
-		_house_tex = new Texture("res/textures/Farmhouse.jpg");
-		_wood_tex = new Texture("res/textures/Wood.jpg");
-		_axe_tex = new Texture("res/textures/Axe.jpg");
+		_blendmap = new Texture("res/maps/blendmap_256_bold.jpg");
+		_house_tex = new Texture("res/textures/models/Farmhouse.jpg");
+		_wood_tex = new Texture("res/textures/models/Wood.jpg");
+		_axe_tex = new Texture("res/textures/models/Axe.jpg");
 		_grass_tex->bind(0);
 		_dirt_tex->bind(1);
 		_stone_tex->bind(2);

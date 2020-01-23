@@ -18,7 +18,7 @@ public:
 
 	void init() override
 	{
-		_heightmap = new Heightmap("res/heightmaps/simple_noise_256.bmp", 0);
+		_heightmap = new Heightmap("res/maps/heightmap_256.bmp", 0);
 
 		int _forCounter = 0;
 

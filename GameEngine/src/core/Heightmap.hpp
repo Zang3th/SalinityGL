@@ -31,7 +31,7 @@ public:
 		m_width = m_img.cols;
 		m_channels = m_img.channels();	
 		
-		spdlog::info("Picture: {}", filepath);
+		spdlog::info("Heightmap: {}", filepath);
 
 		//Ermittlung von Minimum und Maximum
 		minMaxLoc(m_img, &m_min_value, &m_max_value);

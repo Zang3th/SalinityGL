@@ -8,12 +8,12 @@ class Groundmodel : public Basemodel
 private:
 	Shader* _shader = nullptr;
 	RawData* _data = nullptr;
-	unsigned int _texSlot0, _texSlot1, _texSlot2;
+	unsigned int _texSlot0, _texSlot1, _texSlot2, _texSlot3;
 	VertexBuffer* _vbo3 = nullptr;
 
 public:
-	Groundmodel(RawData* dataToUse, Shader* shaderToUse, unsigned int textureSlot0, unsigned int textureSlot1, unsigned int textureSlot2)
-		: _data(dataToUse), _shader(shaderToUse), _texSlot0(textureSlot0), _texSlot1(textureSlot1), _texSlot2(textureSlot2)
+	Groundmodel(RawData* dataToUse, Shader* shaderToUse, unsigned int textureSlot0, unsigned int textureSlot1, unsigned int textureSlot2, unsigned int textureSlot3)
+		: _data(dataToUse), _shader(shaderToUse), _texSlot0(textureSlot0), _texSlot1(textureSlot1), _texSlot2(textureSlot2), _texSlot3(textureSlot3)
 	{
 		this->initialize();
 	}
@@ -37,8 +37,8 @@ public:
 		_vao->DefineAttributes(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0); //Position attribute
 		_vbo2 = new VertexBuffer(&_data->_texCoords[0], _data->_texCoordSize);
 		_vao->DefineAttributes(1, 2, GL_FLOAT, GL_FALSE, 0, (void*)0); //Texture attribute
-		_vbo3 = new VertexBuffer(&_data->_terrainColors[0], _data->_terrainColorSize);
-		_vao->DefineAttributes(2, 3, GL_FLOAT, GL_FALSE, 0, (void*)0); //Terrain color
+		_vbo3 = new VertexBuffer(&_data->_blendmapCoords[0], _data->_blendmapCoordsSize);
+		_vao->DefineAttributes(2, 2, GL_FLOAT, GL_FALSE, 0, (void*)0); //Map coords
 
 		//Erstellt IB
 		_ib = new IndexBuffer(&_data->_indices[0], _data->_indiceSize);
@@ -58,7 +58,10 @@ public:
 		_shader->SetUniformMat4f("model", _model);
 		_shader->SetUniformMat4f("projection", _projection);
 		_shader->SetUniformMat4f("view", _view);
-		_shader->SetUniform1i("textureSampler", _texSlot0);
+		_shader->SetUniform1i("grassTexture", _texSlot0);
+		_shader->SetUniform1i("dirtTexture", _texSlot1);
+		_shader->SetUniform1i("stoneTexture", _texSlot2);
+		_shader->SetUniform1i("blendmap", _texSlot3);
 		_vao->bind();
 	}
 

@@ -6,16 +6,18 @@
 #include "Texture.hpp"
 #include "Filemanager.hpp"
 #include "Groundmodel.hpp"
+#include "AssimpLoader.hpp"
 
 class ModelManager
 {
 private:
 	Shader *_standard_shader, *_ground_shader;
 	GroundData *_ground_data;
-	Texture *_grass_tex;
+	AssimpLoader *_house_data, *_wood_data, *_axe_data;
+	Texture *_grass_tex, *_dirt_tex, *_stone_tex, *_blendmap, *_house_tex, * _wood_tex, *_axe_tex;
 	Basemodel *_ground;
-	Model* _gr;
-	Filemanager* _filemanager;
+	Model *_house, *_wood, *_axe;
+	Filemanager *_filemanager;
 
 public:
 	std::vector<Basemodel*> Models;
@@ -39,33 +41,63 @@ public:
 
 	void initData()
 	{
-		_ground_data = new GroundData(128);
+		_ground_data = new GroundData(256, 2);
+		_house_data = new AssimpLoader("res/obj/Farmhouse.obj");
+		_wood_data = new AssimpLoader("res/obj/Wood.obj");
+		_axe_data = new AssimpLoader("res/obj/Axe.obj");
 	}
 
 	void initTextures()
 	{
-		_grass_tex = new Texture("res/textures/Dirt.jpg");
+		_grass_tex = new Texture("res/textures/Grass.jpg");
+		_dirt_tex = new Texture("res/textures/Dirt.jpg");
+		_stone_tex = new Texture("res/textures/Stone_2.jpg");
+		_blendmap = new Texture("res/textures/blendmap_256_bold.jpg");
+		_house_tex = new Texture("res/textures/Farmhouse.jpg");
+		_wood_tex = new Texture("res/textures/Wood.jpg");
+		_axe_tex = new Texture("res/textures/Axe.jpg");
 		_grass_tex->bind(0);
+		_dirt_tex->bind(1);
+		_stone_tex->bind(2);
+		_blendmap->bind(3);
+		_house_tex->bind(4);
+		_wood_tex->bind(5);
+		_axe_tex->bind(6);
 	}
 
 	void createModels()
 	{
-		_ground = new Groundmodel(_ground_data, _ground_shader, 0, 1, 2);
+		_ground = new Groundmodel(_ground_data, _ground_shader, 0, 1, 2, 3);
+		_house = new Model(_house_data, _standard_shader, 4);
+		_wood = new Model(_wood_data, _standard_shader, 5);
+		_axe = new Model(_axe_data, _standard_shader, 6);
 	}
 
 	void transformModels()
 	{
 		_ground->translate(glm::vec3(0.0f, -40.0f, 0.0f));
+		_house->translate(glm::vec3(430, -45, 85));
+		_house->scale(glm::vec3(1.75f, 1.75f, 1.75f));
+		_house->rotate(45.0f, glm::vec3(0, 1, 0));
+		_house->rotate(-7.0f, glm::vec3(1, 0, 0));
+		_wood->translate(glm::vec3(425, -52, 115));
+		_wood->scale(glm::vec3(2.5f, 2.5f, 2.5f));
+		_axe->translate(glm::vec3(417, -39, 115));
+		_axe->scale(glm::vec3(0.6f, 0.6f, 0.6f));
+		_axe->rotate(-90.0f, glm::vec3(0, 1, 0));
+		_axe->rotate(-90.0f, glm::vec3(0, 0, 1));
 	}
 
 	void addModelsToRenderer()
 	{
 		Models.push_back(_ground);
+		Models.push_back(_house);
+		Models.push_back(_wood);
+		Models.push_back(_axe);
 	}
 
 	void debugVectors()
 	{
 		_filemanager = new Filemanager();		
-		_filemanager->writeReadableToFile(_ground_data->_terrainColors, "res/data/terrainColors.data");
 	}
 };

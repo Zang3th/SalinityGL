@@ -39,5 +39,6 @@
     <ClInclude Include="src\core\ModelManager.hpp" />
     <ClInclude Include="src\core\Basemodel.hpp" />
     <ClInclude Include="src\core\Groundmodel.hpp" />
+    <ClInclude Include="src\core\PlaneData.hpp" />
   </ItemGroup>
 </Project>

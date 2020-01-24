@@ -1,16 +1,14 @@
 #pragma once
 
 #include "RawData.hpp"
-#include "Heightmap.hpp"
 
-class GroundData : public RawData
+class PlaneData : public RawData
 {
 private:
 	unsigned int _size, _fieldmultiplier;
-	Heightmap* _heightmap = nullptr;
 
 public:
-	GroundData(int size, int fieldmultiplier)
+	PlaneData(int size, int fieldmultiplier)
 		: _size(size), _fieldmultiplier(fieldmultiplier)
 	{
 		init();
@@ -18,20 +16,17 @@ public:
 
 	void init() override
 	{
-		_heightmap = new Heightmap("res/maps/heightmap_256.bmp", 0);
-
-		for (int j = 0; j <= _size; ++j)
+		for (int j = 0; j <= _size - 30; ++j)
 		{
 			for (int i = 0; i <= _size; ++i)
 			{
 				float x = (float)i / ((float)_size / (_size * _fieldmultiplier));
-				float y = _heightmap->getPixelValue(i, j, 6.0f);
+				float y = 0;
 				float z = (float)j / ((float)_size / (_size * _fieldmultiplier));
-				_vertices.emplace_back(glm::vec3(x, y, z));
 
-				_blendmapCoords.emplace_back(glm::vec2(x / 512, z / 512));
-				_texCoords.emplace_back(glm::vec2(x, z));
-				
+				_vertices.emplace_back(glm::vec3(x, y, z));
+				_texCoords.emplace_back(glm::vec2(x, z));				
+
 				if ((j != _size) && (i != _size))
 				{
 					const int row1 = j * (_size + 1);
@@ -52,8 +47,7 @@ public:
 	{
 		_verticeSize = _vertices.size() * sizeof(glm::vec3);
 		_indiceSize = _indices.size() * sizeof(glm::uvec3);
-		_texCoordSize = _texCoords.size() * sizeof(glm::vec2);		
-		_blendmapCoordsSize = _blendmapCoords.size() * sizeof(glm::vec2);
+		_texCoordSize = _texCoords.size() * sizeof(glm::vec2);
 		_verticesToRender = (GLsizei)_indices.size() * 3;
 	}
 };

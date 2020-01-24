@@ -7,16 +7,18 @@
 #include "Filemanager.hpp"
 #include "Groundmodel.hpp"
 #include "AssimpLoader.hpp"
+#include "PlaneData.hpp"
 
 class ModelManager
 {
 private:
 	Shader *_standard_shader, *_ground_shader;
 	GroundData *_ground_data;
+	PlaneData* _water_data;
 	AssimpLoader *_house_data, *_wood_data, *_axe_data;
-	Texture *_grass_tex, *_dirt_tex, *_stone_tex, *_blendmap, *_house_tex, * _wood_tex, *_axe_tex;
+	Texture *_grass_tex, *_dirt_tex, *_stone_tex, *_blendmap, *_house_tex, * _wood_tex, *_axe_tex, *_water_tex;
 	Basemodel *_ground;
-	Model *_house, *_wood, *_axe;
+	Model *_house, *_wood, *_axe, * _water;
 	Filemanager *_filemanager;
 
 public:
@@ -45,6 +47,7 @@ public:
 		_house_data = new AssimpLoader("res/obj/houses/Farmhouse.obj");
 		_wood_data = new AssimpLoader("res/obj/vegetation/Wood.obj");
 		_axe_data = new AssimpLoader("res/obj/tools/Axe.obj");
+		_water_data = new PlaneData(128, 1);
 	}
 
 	void initTextures()
@@ -56,6 +59,7 @@ public:
 		_house_tex = new Texture("res/textures/models/Farmhouse.jpg");
 		_wood_tex = new Texture("res/textures/models/Wood.jpg");
 		_axe_tex = new Texture("res/textures/models/Axe.jpg");
+		_water_tex = new Texture("res/textures/Water.jpg");
 		_grass_tex->bind(0);
 		_dirt_tex->bind(1);
 		_stone_tex->bind(2);
@@ -63,6 +67,7 @@ public:
 		_house_tex->bind(4);
 		_wood_tex->bind(5);
 		_axe_tex->bind(6);
+		_water_tex->bind(7);
 	}
 
 	void createModels()
@@ -71,6 +76,7 @@ public:
 		_house = new Model(_house_data, _standard_shader, 4);
 		_wood = new Model(_wood_data, _standard_shader, 5);
 		_axe = new Model(_axe_data, _standard_shader, 6);
+		_water = new Model(_water_data, _standard_shader, 7);
 	}
 
 	void transformModels()
@@ -86,6 +92,8 @@ public:
 		_axe->scale(glm::vec3(0.6f, 0.6f, 0.6f));
 		_axe->rotate(-90.0f, glm::vec3(0, 1, 0));
 		_axe->rotate(-90.0f, glm::vec3(0, 0, 1));
+		_water->translate(glm::vec3(165, -51, 340));
+		_water->rotate(90.0f, glm::vec3(0.0f, 1.0f, 0.0f));
 	}
 
 	void addModelsToRenderer()
@@ -94,6 +102,7 @@ public:
 		Models.push_back(_house);
 		Models.push_back(_wood);
 		Models.push_back(_axe);
+		Models.push_back(_water);
 	}
 
 	void debugVectors()

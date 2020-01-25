@@ -40,5 +40,6 @@
     <ClInclude Include="src\core\Basemodel.hpp" />
     <ClInclude Include="src\core\Groundmodel.hpp" />
     <ClInclude Include="src\core\PlaneData.hpp" />
+    <ClInclude Include="src\core\Leafmodel.hpp" />
   </ItemGroup>
 </Project>

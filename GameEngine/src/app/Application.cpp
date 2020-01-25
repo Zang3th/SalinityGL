@@ -8,19 +8,20 @@
 int main()
 {
 	//Display-Management
+
 	DisplayManager displayManager;
 	displayManager.createDisplay();
 	displayManager.printVersion();
 
 	//GUI-Management
 	GUIManager guiManager;
-	guiManager.initializeGUI(displayManager.getWindow());	
+	guiManager.initializeGUI(displayManager.getWindow());
 
 	//Renderer
 	Renderer renderer;	
 
 	//Modelmanager
-	ModelManager modelManager;	
+	ModelManager modelManager(&displayManager);	
 
 	while (!displayManager.WindowShouldClose())
 	{

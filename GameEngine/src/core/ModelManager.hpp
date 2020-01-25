@@ -8,23 +8,29 @@
 #include "Groundmodel.hpp"
 #include "AssimpLoader.hpp"
 #include "PlaneData.hpp"
+#include "Leafmodel.hpp"
 
 class ModelManager
 {
 private:
-	Shader *_standard_shader, *_ground_shader;
+	Shader *_standard_shader, *_ground_shader, *_leaf_shader;
 	GroundData *_ground_data;
 	PlaneData* _water_data;
-	AssimpLoader *_house_data, *_wood_data, *_axe_data;
-	Texture *_grass_tex, *_dirt_tex, *_stone_tex, *_blendmap, *_house_tex, * _wood_tex, *_axe_tex, *_water_tex;
+	AssimpLoader *_house_data, *_wood_data, *_axe_data, * _tree_data, * _leaf_data;
+	Texture *_grass_tex, *_dirt_tex, *_stone_tex, 
+	*_blendmap, *_house_tex, * _wood_tex, *_axe_tex, 
+	*_water_tex, * _tree_tex, *_leaf_tex, * _leafMask_tex;
 	Basemodel *_ground;
-	Model *_house, *_wood, *_axe, * _water;
+	Model *_house, *_wood, *_axe, * _water, *_tree;
+	Leafmodel* _leaf;
 	Filemanager *_filemanager;
+	DisplayManager* _displayManager;
 
 public:
 	std::vector<Basemodel*> Models;
 
-	ModelManager()
+	ModelManager(DisplayManager* displayManager)
+		: _displayManager(displayManager)
 	{
 		initShader();
 		initData();
@@ -39,6 +45,7 @@ public:
 	{
 		_standard_shader = new Shader("res/shader/standard_vs.glsl", "res/shader/standard_fs.glsl");
 		_ground_shader = new Shader("res/shader/ground_vs.glsl", "res/shader/ground_fs.glsl");
+		_leaf_shader = new Shader("res/shader/leaf_vs.glsl", "res/shader/leaf_fs.glsl");
 	}
 
 	void initData()
@@ -48,6 +55,8 @@ public:
 		_wood_data = new AssimpLoader("res/obj/vegetation/Wood.obj");
 		_axe_data = new AssimpLoader("res/obj/tools/Axe.obj");
 		_water_data = new PlaneData(128, 1);
+		_tree_data = new AssimpLoader("res/obj/vegetation/MapleTree.obj");
+		_leaf_data = new AssimpLoader("res/obj/vegetation/MapleTreeLeaf.obj");
 	}
 
 	void initTextures()
@@ -60,6 +69,9 @@ public:
 		_wood_tex = new Texture("res/textures/models/Wood.jpg");
 		_axe_tex = new Texture("res/textures/models/Axe.jpg");
 		_water_tex = new Texture("res/textures/Water.jpg");
+		_tree_tex = new Texture("res/textures/models/MapleTreeBark.jpg");
+		_leaf_tex = new Texture("res/textures/models/MapleTreeLeaf.jpg");
+		_leafMask_tex = new Texture("res/textures/models/MapleTreeMask.jpg");
 		_grass_tex->bind(0);
 		_dirt_tex->bind(1);
 		_stone_tex->bind(2);
@@ -68,6 +80,9 @@ public:
 		_wood_tex->bind(5);
 		_axe_tex->bind(6);
 		_water_tex->bind(7);
+		_tree_tex->bind(8);
+		_leaf_tex->bind(9);
+		_leafMask_tex->bind(10);
 	}
 
 	void createModels()
@@ -77,6 +92,8 @@ public:
 		_wood = new Model(_wood_data, _standard_shader, 5);
 		_axe = new Model(_axe_data, _standard_shader, 6);
 		_water = new Model(_water_data, _standard_shader, 7);
+		_tree = new Model(_tree_data, _standard_shader, 8);
+		_leaf = new Leafmodel(_leaf_data, _leaf_shader, 9, 10, _displayManager);
 	}
 
 	void transformModels()
@@ -103,6 +120,8 @@ public:
 		Models.push_back(_wood);
 		Models.push_back(_axe);
 		Models.push_back(_water);
+		Models.push_back(_tree);
+		Models.push_back(_leaf);
 	}
 
 	void debugVectors()

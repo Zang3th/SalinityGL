@@ -161,6 +161,7 @@
     <ClInclude Include="src\core\Groundmodel.hpp" />
     <ClInclude Include="src\core\Heightmap.hpp" />
     <ClInclude Include="src\core\IndexBuffer.hpp" />
+    <ClInclude Include="src\core\Leafmodel.hpp" />
     <ClInclude Include="src\core\ModelManager.hpp" />
     <ClInclude Include="src\core\PlaneData.hpp" />
     <ClInclude Include="src\core\RawData.hpp" />

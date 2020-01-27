@@ -56,4 +56,9 @@ public:
 		_blendmapCoordsSize = _blendmapCoords.size() * sizeof(glm::vec2);
 		_verticesToRender = (GLsizei)_indices.size() * 3;
 	}
+
+	float getHeightValue(int x, int y, float scale)
+	{
+		return _heightmap->getPixelValue(x, y, scale);
+	}
 };

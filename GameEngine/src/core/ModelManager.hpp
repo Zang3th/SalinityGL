@@ -16,13 +16,14 @@ private:
 	Shader *_standard_shader, *_ground_shader, *_leaf_shader;
 	GroundData *_ground_data;
 	PlaneData* _water_data;
-	AssimpLoader *_house_data, *_wood_data, *_axe_data, * _tree_data, * _leaf_data;
+	AssimpLoader *_house_data, *_wood_data, *_axe_data, *_tree_data, *_leaf_data, *_grass_data;
 	Texture *_grass_tex, *_dirt_tex, *_stone_tex, 
-	*_blendmap, *_house_tex, * _wood_tex, *_axe_tex, 
-	*_water_tex, * _tree_tex, *_leaf_tex, * _leafMask_tex;
+	*_blendmap, *_house_tex, *_wood_tex, *_axe_tex, 
+	*_water_tex, *_tree_tex, *_leaf_tex, *_leafMask_tex,
+	*_grassModel_tex;
 	Basemodel *_ground;
-	Model *_house, *_wood, *_axe, * _water, *_tree;
-	Leafmodel* _leaf;
+	Model *_house, *_wood, *_axe, * _water, *_tree, *_grass;
+	Leafmodel *_leaf;
 	Filemanager *_filemanager;
 	DisplayManager* _displayManager;
 
@@ -57,6 +58,7 @@ public:
 		_water_data = new PlaneData(128, 1);
 		_tree_data = new AssimpLoader("res/obj/vegetation/MapleTree.obj");
 		_leaf_data = new AssimpLoader("res/obj/vegetation/MapleTreeLeaf.obj");
+		_grass_data = new AssimpLoader("res/obj/vegetation/LowGrass.obj");
 	}
 
 	void initTextures()
@@ -72,6 +74,7 @@ public:
 		_tree_tex = new Texture("res/textures/models/MapleTreeBark.jpg");
 		_leaf_tex = new Texture("res/textures/models/MapleTreeLeaf.jpg");
 		_leafMask_tex = new Texture("res/textures/models/MapleTreeMask.jpg");
+		_grassModel_tex = new Texture("res/textures/models/Grass.jpg");
 		_grass_tex->bind(0);
 		_dirt_tex->bind(1);
 		_stone_tex->bind(2);
@@ -83,6 +86,7 @@ public:
 		_tree_tex->bind(8);
 		_leaf_tex->bind(9);
 		_leafMask_tex->bind(10);
+		_grassModel_tex->bind(11);
 	}
 
 	void createModels()
@@ -92,8 +96,6 @@ public:
 		_wood = new Model(_wood_data, _standard_shader, 5);
 		_axe = new Model(_axe_data, _standard_shader, 6);
 		_water = new Model(_water_data, _standard_shader, 7);
-		_tree = new Model(_tree_data, _standard_shader, 8);
-		_leaf = new Leafmodel(_leaf_data, _leaf_shader, 9, 10, _displayManager);
 	}
 
 	void transformModels()
@@ -110,7 +112,7 @@ public:
 		_axe->rotate(-90.0f, glm::vec3(0, 1, 0));
 		_axe->rotate(-90.0f, glm::vec3(0, 0, 1));
 		_water->translate(glm::vec3(165, -51, 340));
-		_water->rotate(90.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+		_water->rotate(90.0f, glm::vec3(0.0f, 1.0f, 0.0f));		
 	}
 
 	void addModelsToRenderer()
@@ -120,9 +122,63 @@ public:
 		Models.push_back(_wood);
 		Models.push_back(_axe);
 		Models.push_back(_water);
-		Models.push_back(_tree);
-		Models.push_back(_leaf);
-	}
+		
+		for (int i = 0; i < 150; i++)
+		{
+			//Koordinatenberechnung
+			int grass_x = rand() % 256;
+			int grass_z = rand() % 256;
+			float grass_y = _ground_data->getHeightValue(grass_x, grass_z, 6.0) - 40.0f;
+			grass_x *= 2;
+			grass_z *= 2;
+
+			int tree_x = rand() % 256;
+			int tree_z = rand() % 256;
+			float tree_y = _ground_data->getHeightValue(tree_x, tree_z, 6.0) - 40.0f;
+			tree_x *= 2;
+			tree_z *= 2;
+
+			//Grass	
+			if(grass_x > 400 && grass_x < 460 && grass_z > 60 && grass_z < 110)
+			{
+				
+			}
+			else if(grass_x > 100 && grass_x < 200 && grass_z > 300 && grass_z < 380)
+			{
+				
+			}
+			else
+			{
+				_grass = new Model(_grass_data, _standard_shader, 11);
+				_grass->translate(glm::vec3(grass_x, grass_y, grass_z));
+				int size = rand() % 20;
+				_grass->scale(glm::vec3(size, size, size));
+				Models.push_back(_grass);
+			}			
+
+			//Tree
+			if(i % 3 == 0)
+			{			
+				if (tree_x > 400 && tree_x < 460 && tree_z > 60 && tree_z < 110)
+				{
+
+				}
+				else if (tree_x > 100 && tree_x < 200 && tree_z > 300 && tree_z < 380)
+				{
+
+				}
+				else
+				{
+					_tree = new Model(_tree_data, _standard_shader, 8);
+					_leaf = new Leafmodel(_leaf_data, _leaf_shader, 9, 10, _displayManager);
+					_tree->translate(glm::vec3(tree_x, tree_y, tree_z));
+					_leaf->translate(glm::vec3(tree_x, tree_y, tree_z));
+					Models.push_back(_tree);
+					Models.push_back(_leaf);
+				}				
+			}			
+		}		
+	}	
 
 	void debugVectors()
 	{

@@ -95,6 +95,7 @@ public:
 		if (!glfwInit())
 			spdlog::error("GLFW INIT ERROR\n");
 
+		glfwWindowHint(GLFW_SAMPLES, 4);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -115,7 +116,7 @@ public:
 		glfwSetScrollCallback(_window, scroll_callback);
 		glfwSetMouseButtonCallback(_window, mouse_button_callback);
 		GLCall(glEnable(GL_DEPTH_TEST)); //Depthtesting
-		
+		GLCall(glEnable(GL_MULTISAMPLE)); //Multisampling
 		//GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
 	}
 

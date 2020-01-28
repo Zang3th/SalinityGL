@@ -2,7 +2,6 @@
 
 #include "stb_image/stb_image.h"
 #include "OpenGLErrorManager.hpp"
-#include <iostream>
 
 class Texture
 { 
@@ -41,12 +40,12 @@ public:
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);*/
-
+			spdlog::info("Texture loaded successfully: {}", _Filepath);
 			stbi_image_free(_LocalBuffer);
 		}
 		else
 		{
-			std::cout << "Failed to load texture: " << _Filepath << std::endl;
+			spdlog::error("Texture failed to load: {}", _Filepath);
 			stbi_image_free(_LocalBuffer);
 		}
 	}

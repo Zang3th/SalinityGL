@@ -9,6 +9,7 @@
 #include "AssimpLoader.hpp"
 #include "PlaneData.hpp"
 #include "Leafmodel.hpp"
+#include "DisplayManager.hpp"
 
 class ModelManager
 {
@@ -16,13 +17,14 @@ private:
 	Shader *_standard_shader, *_ground_shader, *_leaf_shader;
 	GroundData *_ground_data;
 	PlaneData* _water_data;
-	AssimpLoader *_house_data, *_wood_data, *_axe_data, *_tree_data, *_leaf_data, *_grass_data;
+	AssimpLoader* _house_data, * _wood_data, * _axe_data, 
+	* _tree_data, * _leaf_data, * _grass_data, * _player_data;
 	Texture *_grass_tex, *_dirt_tex, *_stone_tex, 
 	*_blendmap, *_house_tex, *_wood_tex, *_axe_tex, 
 	*_water_tex, *_tree_tex, *_leaf_tex, *_leafMask_tex,
-	*_grassModel_tex;
+	*_grassModel_tex, *_player_tex;
 	Basemodel *_ground;
-	Model *_house, *_wood, *_axe, * _water, *_tree, *_grass;
+	Model* _house, * _wood, * _axe, * _water, * _tree, * _grass, * _player;
 	Leafmodel *_leaf;
 	Filemanager *_filemanager;
 	DisplayManager* _displayManager;
@@ -59,6 +61,7 @@ public:
 		_tree_data = new AssimpLoader("res/obj/vegetation/MapleTree.obj");
 		_leaf_data = new AssimpLoader("res/obj/vegetation/MapleTreeLeaf.obj");
 		_grass_data = new AssimpLoader("res/obj/vegetation/LowGrass.obj");
+		_player_data = new AssimpLoader("res/obj/humans/Chibi.obj");
 	}
 
 	void initTextures()
@@ -75,6 +78,7 @@ public:
 		_leaf_tex = new Texture("res/textures/models/MapleTreeLeaf.jpg");
 		_leafMask_tex = new Texture("res/textures/models/MapleTreeMask.jpg");
 		_grassModel_tex = new Texture("res/textures/models/Grass.jpg");
+		_player_tex = new Texture("res/textures/models/Chibi.jpg");
 		_grass_tex->bind(0);
 		_dirt_tex->bind(1);
 		_stone_tex->bind(2);
@@ -87,6 +91,7 @@ public:
 		_leaf_tex->bind(9);
 		_leafMask_tex->bind(10);
 		_grassModel_tex->bind(11);
+		_player_tex->bind(12);
 	}
 
 	void createModels()
@@ -96,6 +101,7 @@ public:
 		_wood = new Model(_wood_data, _standard_shader, 5);
 		_axe = new Model(_axe_data, _standard_shader, 6);
 		_water = new Model(_water_data, _standard_shader, 7);
+		_player = new Model(_player_data, _standard_shader, 12);
 	}
 
 	void transformModels()
@@ -112,7 +118,8 @@ public:
 		_axe->rotate(-90.0f, glm::vec3(0, 1, 0));
 		_axe->rotate(-90.0f, glm::vec3(0, 0, 1));
 		_water->translate(glm::vec3(165, -51, 340));
-		_water->rotate(90.0f, glm::vec3(0.0f, 1.0f, 0.0f));		
+		_water->rotate(90.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+		_player->translate(glm::vec3(250, 20, 200));
 	}
 
 	void addModelsToRenderer()
@@ -122,8 +129,9 @@ public:
 		Models.push_back(_wood);
 		Models.push_back(_axe);
 		Models.push_back(_water);
-		
-		for (int i = 0; i < 150; i++)
+		Models.push_back(_player);
+
+		for (int i = 0; i < 210; i++)
 		{
 			//Koordinatenberechnung
 			int grass_x = rand() % 256;
@@ -139,13 +147,13 @@ public:
 			tree_z *= 2;
 
 			//Grass	
-			if(grass_x > 400 && grass_x < 460 && grass_z > 60 && grass_z < 110)
+			if(grass_x > 160 && grass_x < 280 && grass_z > 200 && grass_z < 340)
 			{
-				
+				//Kollision mit der Wasserflaeche
 			}
-			else if(grass_x > 100 && grass_x < 200 && grass_z > 300 && grass_z < 380)
+			else if(grass_x > 380 && grass_x < 500 && grass_z > 40 && grass_z < 160)
 			{
-				
+				//Kollision mit dem Haus
 			}
 			else
 			{
@@ -159,13 +167,13 @@ public:
 			//Tree
 			if(i % 3 == 0)
 			{			
-				if (tree_x > 400 && tree_x < 460 && tree_z > 60 && tree_z < 110)
+				if (tree_x > 160 && tree_x < 280 && tree_z > 200 && tree_z < 340)
 				{
-
+					//Kollision mit der Wasserflaeche
 				}
-				else if (tree_x > 100 && tree_x < 200 && tree_z > 300 && tree_z < 380)
+				else if (tree_x > 380 && tree_x < 500 && tree_z > 40 && tree_z < 160)
 				{
-
+					//Kollision mit dem Haus
 				}
 				else
 				{

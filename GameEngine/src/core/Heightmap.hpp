@@ -24,14 +24,14 @@ public:
 		//Einlesen des Bildes
 		m_img = cv::imread(filepath, flag);
 		if (!m_img.data)
-			spdlog::error("Heightmap: Picture could not be found\n!");
+			spdlog::error("Heightmap failed to load: {}", filepath);
 
 		//Gewinnen der Bilddaten
 		m_height = m_img.rows;
 		m_width = m_img.cols;
 		m_channels = m_img.channels();	
 		
-		spdlog::info("Heightmap: {}", filepath);
+		spdlog::info("Heightmap loaded successfully: {}", filepath);
 
 		//Ermittlung von Minimum und Maximum
 		minMaxLoc(m_img, &m_min_value, &m_max_value);

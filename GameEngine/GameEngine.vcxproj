@@ -164,6 +164,7 @@
     <ClInclude Include="src\core\Leafmodel.hpp" />
     <ClInclude Include="src\app\ModelManager.hpp" />
     <ClInclude Include="src\core\PlaneData.hpp" />
+    <ClInclude Include="src\core\Player.hpp" />
     <ClInclude Include="src\core\RawData.hpp" />
     <ClInclude Include="src\core\Renderer.hpp" />
     <ClInclude Include="src\core\Shader.hpp" />

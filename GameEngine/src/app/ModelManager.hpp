@@ -1,5 +1,6 @@
 #pragma once
 
+#include "DisplayManager.hpp"
 #include "Model.hpp"
 #include "Shader.hpp"
 #include "GroundData.hpp"
@@ -9,7 +10,6 @@
 #include "AssimpLoader.hpp"
 #include "PlaneData.hpp"
 #include "Leafmodel.hpp"
-#include "DisplayManager.hpp"
 
 class ModelManager
 {
@@ -119,7 +119,7 @@ public:
 		_axe->rotate(-90.0f, glm::vec3(0, 0, 1));
 		_water->translate(glm::vec3(165, -51, 340));
 		_water->rotate(90.0f, glm::vec3(0.0f, 1.0f, 0.0f));
-		_player->translate(glm::vec3(250, 20, 200));
+		_player->translate(glm::vec3(300, -37, 70));
 	}
 
 	void addModelsToRenderer()
@@ -130,6 +130,7 @@ public:
 		Models.push_back(_axe);
 		Models.push_back(_water);
 		Models.push_back(_player);
+		_playerObject = new Player(_player);
 
 		for (int i = 0; i < 210; i++)
 		{

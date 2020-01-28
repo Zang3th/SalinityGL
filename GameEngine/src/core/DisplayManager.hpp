@@ -5,6 +5,7 @@
 #include <spdlog/spdlog.h>
 #include "OpenGLErrorManager.hpp"
 #include "Camera.hpp"
+#include "Player.hpp"
 
 const unsigned int WIDTH = 1800; //Global WIDTH-Setting
 const unsigned int HEIGHT = 1200; //Global HEIGHT-Setting
@@ -13,6 +14,7 @@ float lastFrame = 0.0f; //Time of last frame
 float lastX = WIDTH / 2.0f; //X-Coord of last frame
 float lastY = HEIGHT / 2.0f; //Y-Coord of last frame
 bool window_focused = false; //Is the window in focus?
+Player* _playerObject = nullptr; //Global player object. Needs to be global for callbacks and ModelManager.hpp
 Camera* _camera = nullptr; //Global camera object. Needs to be global for callbacks and Model.hpp
 
 void processInput(GLFWwindow* window)
@@ -32,6 +34,15 @@ void processInput(GLFWwindow* window)
 		_camera->ProcessKeyboard(UP, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
 		_camera->ProcessKeyboard(DOWN, deltaTime);
+
+	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+		_playerObject->ProcessKeyboard(P_FORWARD, deltaTime);
+	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+		_playerObject->ProcessKeyboard(P_BACKWARD, deltaTime);
+	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+		_playerObject->ProcessKeyboard(P_LEFT, deltaTime);
+	if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+		_playerObject->ProcessKeyboard(P_RIGHT, deltaTime);
 }
 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos)
@@ -76,7 +87,7 @@ class DisplayManager
 {
 private:
 	int _width, _height;	
-	GLFWwindow* _window = nullptr;	
+	GLFWwindow* _window = nullptr;		
 
 public:
 	DisplayManager()

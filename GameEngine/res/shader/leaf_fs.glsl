@@ -13,11 +13,8 @@ void main()
 	vec4 leafColor = texture(leafTexture, texCoords_out);
 	vec4 leafMaskColor = texture(leafMask, texCoords_out);
 	
-	if (leafMaskColor.x == 0.0) {
-		leafMaskColor.a = 0.0;
-	}
-	else {
-		leafMaskColor.a = 1.0;
+	if (leafColor.a < 0.5) {
+		discard;
 	}
 
 	fragColor = leafColor * leafMaskColor;;

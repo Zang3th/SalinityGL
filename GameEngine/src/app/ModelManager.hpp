@@ -132,7 +132,7 @@ public:
 		Models.push_back(_player);
 		_playerObject = new Player(_player);
 
-		for (int i = 0; i < 210; i++)
+		for (int i = 0; i < 240; i++)
 		{
 			//Koordinatenberechnung
 			int grass_x = rand() % 256;
@@ -160,7 +160,7 @@ public:
 			{
 				_grass = new Model(_grass_data, _standard_shader, 11);
 				_grass->translate(glm::vec3(grass_x, grass_y, grass_z));
-				int size = rand() % 20;
+				int size = rand() % 30;
 				_grass->scale(glm::vec3(size, size, size));
 				Models.push_back(_grass);
 			}			

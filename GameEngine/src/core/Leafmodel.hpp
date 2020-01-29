@@ -58,12 +58,10 @@ public:
 		_shader->SetUniform1i("leafTexture", _texSlot0);
 		_shader->SetUniform1i("leafMask", _texSlot1);
 		_vao->bind();
-		_myDisplayManager->setTransparencyRenderState();
 	}
 
 	void undraw() override
 	{
-		_myDisplayManager->setNormalRenderState();
 		_shader->unbind();
 		_vao->unbind();
 	}

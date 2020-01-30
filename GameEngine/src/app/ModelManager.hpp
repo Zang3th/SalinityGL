@@ -1,6 +1,5 @@
 #pragma once
 
-#include "DisplayManager.hpp"
 #include "Model.hpp"
 #include "Shader.hpp"
 #include "GroundData.hpp"
@@ -119,7 +118,10 @@ public:
 		_axe->rotate(-90.0f, glm::vec3(0, 0, 1));
 		_water->translate(glm::vec3(165, -51, 340));
 		_water->rotate(90.0f, glm::vec3(0.0f, 1.0f, 0.0f));
-		_player->translate(glm::vec3(300, -37, 70));
+		int x = 150;
+		int z = 35;
+		float y = _ground_data->getHeightValue(x, z, 6.0) - 40.0f;
+		_player->translate(glm::vec3(x * 2, y, z * 2));
 	}
 
 	void addModelsToRenderer()
@@ -130,7 +132,7 @@ public:
 		Models.push_back(_axe);
 		Models.push_back(_water);
 		Models.push_back(_player);
-		_playerObject = new Player(_player);
+		_displayManager->_player = new Player(_player, _ground_data);
 
 		for (int i = 0; i < 240; i++)
 		{

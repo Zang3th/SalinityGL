@@ -5,7 +5,6 @@
 #include <spdlog/spdlog.h>
 #include "OpenGLErrorManager.hpp"
 #include "Camera.hpp"
-#include "Player.hpp"
 
 const unsigned int WIDTH = 1800; //Global WIDTH-Setting
 const unsigned int HEIGHT = 1200; //Global HEIGHT-Setting
@@ -14,10 +13,12 @@ float lastFrame = 0.0f; //Time of last frame
 float lastX = WIDTH / 2.0f; //X-Coord of last frame
 float lastY = HEIGHT / 2.0f; //Y-Coord of last frame
 bool window_focused = false; //Is the window in focus?
-Player* _playerObject = nullptr; //Global player object. Needs to be global for callbacks and ModelManager.hpp
+
 Camera* _camera = nullptr; //Global camera object. Needs to be global for callbacks and Model.hpp
 
-void processInput(GLFWwindow* window)
+#include "Player.hpp" //Needs to be included last because Model.hpp needs global _camera object
+
+void processInput(GLFWwindow* window, Player* _playerObject)
 {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
@@ -87,11 +88,13 @@ class DisplayManager
 {
 private:
 	int _width, _height;	
-	GLFWwindow* _window = nullptr;		
+	GLFWwindow* _window = nullptr;			
 
-public:
-	DisplayManager()
-		: _width(WIDTH), _height(HEIGHT)
+public:	
+	Player* _player = nullptr;
+
+	DisplayManager(Player* player)
+		: _width(WIDTH), _height(HEIGHT), _player(player)
 	{
 		_camera = new Camera(glm::vec3(50.0f * 4, 0.0f, 50.0f * 4), glm::vec3(0.0f, 1.0f, 0.0f));
 	}
@@ -168,7 +171,7 @@ public:
 
 	void checkForInput()
 	{
-		processInput(_window);
+		processInput(_window, _player);
 	}
 
 	void setNormalRenderState()

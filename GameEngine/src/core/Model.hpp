@@ -8,11 +8,14 @@ class Model : public Basemodel
 private:
 	Shader* _shader = nullptr;
 	RawData* _data = nullptr;
-	unsigned int _texSlot;
+	unsigned int _texSlot;	
 
 public:
-	Model(RawData* dataToUse, Shader* shaderToUse,  unsigned int textureSlot)
-		: _data(dataToUse), _shader(shaderToUse), _texSlot(textureSlot)
+	glm::vec3 _position;
+	float _rotation;
+
+	Model(RawData* dataToUse, Shader* shaderToUse, unsigned int textureSlot)
+		: _data(dataToUse), _shader(shaderToUse), _texSlot(textureSlot), _position(glm::vec3(0, 0, 0))
 	{
 		this->initialize();
 	}
@@ -67,11 +70,13 @@ public:
 	void translate(const glm::vec3& position) override
 	{
 		_model = glm::translate(_model, position);
+		_position = position;
 	}
 
 	void rotate(const float& angle, const glm::vec3& axis) override
 	{
-		_model = glm::rotate(_model, glm::radians(angle), axis); 
+		_model = glm::rotate(_model, glm::radians(angle), axis);
+		_rotation = angle;
 	}
 
 	void scale(const glm::vec3& scalar) override

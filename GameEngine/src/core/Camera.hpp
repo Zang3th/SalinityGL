@@ -17,7 +17,7 @@ enum Camera_Movement
 //Default camera values
 const float YAW = 0.0f;
 const float PITCH = 0.0f;
-const float SPEED = 50.0f;
+const float SPEED = 40.0f;
 const float SENSITIVITY = 0.1f;
 const float ZOOM = 45.0f;
 
@@ -84,8 +84,6 @@ public:
 			Position += Up * velocity;
 		if (direction == DOWN)
 			Position -= Up * velocity;
-
-		//std::cout << Position.x << ", " << Position.y << ", " << Position.z << std::endl;
 	}
 
 	//Processes input received from a mouse input system. Expects the offset value in both the x and y direction.

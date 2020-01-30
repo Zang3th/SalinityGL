@@ -37,12 +37,7 @@ public:
 	{
 		ImGui::Begin(title);
 	}
-
-	void printFPS()
-	{
-		ImGui::Text("\nApplication average %.3f ms/frame (%.1f FPS)", 1000.f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-	}
-
+		
 	void exitWindow()
 	{
 		ImGui::End();

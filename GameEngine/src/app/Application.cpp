@@ -47,9 +47,9 @@ int main()
 			guiManager.newWindow("General stuff");
 			ImGui::Text("\nApplication average %.3f ms/frame (%.1f FPS)\n", 1000.f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 			ImGui::Text("Camera-Coords: X: %f, Y: %f, Z: %f", _camera->Position.x, _camera->Position.y, _camera->Position.z);
-			ImGui::Text("Camera: Yaw: %f, Pitch: %f", _camera->Yaw, _camera->Pitch);			
-			ImGui::Text("Player-Coords: X: %f, Y: %f, Z: %f", displayManager._player->_playermodel->_position.x, displayManager._player->_playermodel->_position.y, displayManager._player->_playermodel->_position.z);
-			ImGui::Text("Player-Rotation: %f", displayManager._player->_playermodel->_rotation),
+			ImGui::Text("Camera-Yaw: %f, Camera-Pitch: %f", _camera->Yaw, _camera->Pitch);			
+			ImGui::Text("Player-Coords: X: %f, Y: %f, Z: %f", displayManager._player->_position.x, displayManager._player->_position.y, displayManager._player->_position.z);
+			ImGui::Text("Player-Rotation: %f", displayManager._player->_yaw),
 			guiManager.exitWindow();
 		}
 

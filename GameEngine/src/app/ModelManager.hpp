@@ -118,10 +118,6 @@ public:
 		_axe->rotate(-90.0f, glm::vec3(0, 0, 1));
 		_water->translate(glm::vec3(165, -51, 340));
 		_water->rotate(90.0f, glm::vec3(0.0f, 1.0f, 0.0f));
-		int x = 150;
-		int z = 35;
-		float y = _ground_data->getHeightValue(x, z, 6.0) - 40.0f;
-		_player->translate(glm::vec3(x * 2, y, z * 2));
 	}
 
 	void addModelsToRenderer()

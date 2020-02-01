@@ -23,9 +23,13 @@ private:
 	float _currentSpeed = 0;
 	float _currentTurnSpeed = 0;
 	GroundData* _ground_data = nullptr;
+	
 
 public:
 	Model* _playermodel;
+	float _yaw = 0.0f;
+	glm::vec3 _front;
+	glm::vec3 _position;
 
 	Player(Model* player, GroundData* ground_data)
 		: _playermodel(player), _ground_data(ground_data)
@@ -35,7 +39,7 @@ public:
 	
 	//Processes input received from any keyboard-like input system. Accepts input parameter in the form of camera defined ENUM (to abstract it from windowing systems)
 	void ProcessKeyboard(Player_Movement direction, float deltaTime)
-	{	
+	{		
 		if (direction == P_FORWARD) 
 		{
 			_currentSpeed = P_SPEED;
@@ -55,18 +59,38 @@ public:
 		}
 		else if (direction == P_RIGHT) 
 		{
-			_currentTurnSpeed = -P_TURNSPEED;
+			_currentTurnSpeed = -P_TURNSPEED;			
 		}
 		else
 		{
-			_currentTurnSpeed = 0; 
+			_currentTurnSpeed = 0;
 		}
 
-		_playermodel->rotate(_currentTurnSpeed * deltaTime, glm::vec3(0, 1, 0));
-		float distance = _currentSpeed * deltaTime;
-		float dx = distance * glm::sin(glm::radians(_playermodel->_rotation));
-		float dz = distance * glm::cos(glm::radians(_playermodel->_rotation));
-		//float dy = _ground_data->getHeightValue(dx / 2, dz / 2, 6.0);
+		//Calculate direction and rotate player
+		float angle = _currentTurnSpeed * deltaTime;		
+		_playermodel->rotate(angle, glm::vec3(0, 1, 0));
+		_yaw += angle;
+		if(_yaw >= 360.0f)
+		{
+			_yaw = 0.0f;
+		}
+		if(_yaw <= -360.0f)
+		{
+			_yaw = 0.0f;
+		}
+
+		//Calculate dx/dz and keep track of player position
+		float velocity = _currentSpeed * deltaTime;
+		glm::vec3 front;
+		front.x = glm::sin(glm::radians(_yaw));
+		front.y = 0.0f;
+		front.z = glm::cos(glm::radians(_yaw));				
+		_front = glm::normalize(front) * velocity;
+		_position += _front;
+			   
+		//Translate the player
+		float dx = velocity * glm::sin(glm::radians(angle));
+		float dz = velocity * glm::cos(glm::radians(angle));
 		_playermodel->translate(glm::vec3(dx, 0, dz));
 	}
 };

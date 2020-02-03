@@ -135,7 +135,7 @@ public:
 			//Koordinatenberechnung
 			int grass_x = rand() % 256;
 			int grass_z = rand() % 256;
-			float grass_y = _ground_data->getHeightValue(grass_x, grass_z, 6.0) - 39.8f;
+			float grass_y = _ground_data->getHeightValue(grass_x, grass_z, 6.0) - 40.0f;
 			grass_x *= 2;
 			grass_z *= 2;
 
@@ -192,7 +192,7 @@ public:
 		//Create playerobject from model and translate it
 		float x = 330 / 2;
 		float z = 70 / 2;
-		float y = _ground_data->getHeightValue(x, z, 6.0) - 40.0f;
+		float y = _ground_data->getHeightValue(x, z, 6.0) - 39.8f;
 		x *= 2;
 		z *= 2;
 		_displayManager->_player = new Player(_player, _ground_data, glm::vec3(x, y, z));

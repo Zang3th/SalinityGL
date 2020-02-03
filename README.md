@@ -6,8 +6,7 @@ Objectives: - Little OpenGL-Wrapper with abstraction (no OpenGL-Code in main() e
             - For learning purposes (don't expect enterprise-level code or structuring of the project - but I'm always open for improvement suggestions).
             - Don't download versions before the 25th commit otherwise you have to include OpenCV yourself.
             
-Plans for future version: - Soundsystem with OpenAL
-                          - Verticepicking maybe via Raycasting
+Plans for future version: - Verticepicking maybe via Raycasting
                           - Improved Lighting
                           - AI
                           - Collisiondetection

@@ -4,6 +4,7 @@
 #include "GUIManager.hpp"
 #include "Renderer.hpp"
 #include "ModelManager.hpp"
+#include "AudioManager.hpp"
 
 int main()
 {
@@ -17,6 +18,10 @@ int main()
 	//GUI-Management
 	GUIManager guiManager;
 	guiManager.initializeGUI(displayManager.getWindow());
+
+	//Sound-Management
+	AudioManager audioManager;
+	audioManager.playSound2D("res/audio/music/TrueBlueSky.mp3", true);
 
 	//Renderer
 	Renderer renderer;	

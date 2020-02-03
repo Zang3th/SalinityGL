@@ -23,7 +23,7 @@ private:
 	float _currentSpeed = 0;
 	float _currentTurnSpeed = 0;
 	GroundData* _ground_data = nullptr;
-	
+	float new_height = 0, old_height = 0;
 
 public:
 	Model* _playermodel;
@@ -31,10 +31,10 @@ public:
 	glm::vec3 _front;
 	glm::vec3 _position;
 
-	Player(Model* player, GroundData* ground_data)
-		: _playermodel(player), _ground_data(ground_data)
+	Player(Model* player, GroundData* ground_data, glm::vec3 position)
+		: _playermodel(player), _ground_data(ground_data), _position(position)
 	{
-		
+		player->translate(_position);
 	}
 	
 	//Processes input received from any keyboard-like input system. Accepts input parameter in the form of camera defined ENUM (to abstract it from windowing systems)
@@ -87,10 +87,16 @@ public:
 		front.z = glm::cos(glm::radians(_yaw));				
 		_front = glm::normalize(front) * velocity;
 		_position += _front;
-			   
+
+		//Calculate new height (y-value)
+		old_height = _position.y;
+		new_height = _ground_data->getHeightValue(_position.x / 2, _position.z / 2, 6.0f) - 39.8f;
+		_position.y = new_height;
+
 		//Translate the player
 		float dx = velocity * glm::sin(glm::radians(angle));
 		float dz = velocity * glm::cos(glm::radians(angle));
-		_playermodel->translate(glm::vec3(dx, 0, dz));
+		float dy = new_height - old_height;
+		_playermodel->translate(glm::vec3(dx, dy, dz));
 	}
 };

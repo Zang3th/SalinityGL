@@ -40,6 +40,7 @@ public:
 		createModels();
 		transformModels();
 		addModelsToRenderer();
+		createPlayer();
 		//debugVectors();
 	}
 
@@ -128,14 +129,13 @@ public:
 		Models.push_back(_axe);
 		Models.push_back(_water);
 		Models.push_back(_player);
-		_displayManager->_player = new Player(_player, _ground_data);
 
 		for (int i = 0; i < 240; i++)
 		{
 			//Koordinatenberechnung
 			int grass_x = rand() % 256;
 			int grass_z = rand() % 256;
-			float grass_y = _ground_data->getHeightValue(grass_x, grass_z, 6.0) - 40.0f;
+			float grass_y = _ground_data->getHeightValue(grass_x, grass_z, 6.0) - 39.8f;
 			grass_x *= 2;
 			grass_z *= 2;
 
@@ -146,11 +146,11 @@ public:
 			tree_z *= 2;
 
 			//Grass	
-			if(grass_x > 160 && grass_x < 280 && grass_z > 200 && grass_z < 340)
+			if (grass_x > 160 && grass_x < 280 && grass_z > 200 && grass_z < 340)
 			{
 				//Kollision mit der Wasserflaeche
 			}
-			else if(grass_x > 380 && grass_x < 500 && grass_z > 40 && grass_z < 160)
+			else if (grass_x > 380 && grass_x < 500 && grass_z > 40 && grass_z < 160)
 			{
 				//Kollision mit dem Haus
 			}
@@ -161,11 +161,11 @@ public:
 				int size = rand() % 30;
 				_grass->scale(glm::vec3(size, size, size));
 				Models.push_back(_grass);
-			}			
+			}
 
 			//Tree
-			if(i % 3 == 0)
-			{			
+			if (i % 3 == 0)
+			{
 				if (tree_x > 160 && tree_x < 280 && tree_z > 200 && tree_z < 340)
 				{
 					//Kollision mit der Wasserflaeche
@@ -182,10 +182,21 @@ public:
 					_leaf->translate(glm::vec3(tree_x, tree_y, tree_z));
 					Models.push_back(_tree);
 					Models.push_back(_leaf);
-				}				
-			}			
+				}
+			}
 		}		
 	}	
+
+	void createPlayer()
+	{
+		//Create playerobject from model and translate it
+		float x = 330 / 2;
+		float z = 70 / 2;
+		float y = _ground_data->getHeightValue(x, z, 6.0) - 40.0f;
+		x *= 2;
+		z *= 2;
+		_displayManager->_player = new Player(_player, _ground_data, glm::vec3(x, y, z));
+	}
 
 	void debugVectors()
 	{

@@ -10,8 +10,6 @@ bool HolzHackenBool = false, wurdeGehackt = false;
 float x_startAngle = -10.0f, y_startAngle = -30.0f, z_startAngle = 30.0f;
 int hackCount = 0;
 
-float x_angle = 0.0f, y_angle = 0.0f, z_angle = 0.0f;
-
 int main()
 {
 	Player* _playerObject = nullptr; //Player object	

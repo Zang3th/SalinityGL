@@ -99,4 +99,24 @@ public:
 		float dy = new_height - old_height;
 		_playermodel->translate(glm::vec3(dx, dy, dz));
 	}
+
+	void setStart(float x_startAngle, float y_startAngle, float z_startAngle)
+	{
+		_playermodel->rotate(z_startAngle, glm::vec3(0, 0, 1));
+		_playermodel->rotate(y_startAngle, glm::vec3(0, 1, 0));
+		_playermodel->rotate(x_startAngle, glm::vec3(1, 0, 0));
+	}
+
+	void hackeHolz(int counter)
+	{
+		_playermodel->rotate(-glm::sin(counter * 0.05) * 0.7, glm::vec3(0, 0, 1));
+		_playermodel->rotate(glm::sin(counter * 0.05) * 1.4, glm::vec3(0, 1, 0));
+	}
+
+	void resetPosition()
+	{
+		_playermodel->_model = glm::mat4(1.0f);
+		_playermodel->translate(_position);
+		_playermodel->rotate(_yaw, glm::vec3(0, 1, 0));
+	}
 };

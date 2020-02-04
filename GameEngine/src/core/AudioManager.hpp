@@ -24,6 +24,9 @@ public:
 
 	void playSound2D(const char* filepath, bool loop)
 	{
-		_engine->play2D(filepath, loop);
+		irrklang::ISound* snd = _engine->play2D(filepath, loop, false, true);
+
+		if(snd)
+			snd->setVolume(0.3);
 	}
 };

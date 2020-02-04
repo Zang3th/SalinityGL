@@ -82,6 +82,8 @@ public:
 				greyvalue /= scale;
 				return greyvalue;
 			}
+
+			return 0;
 		}
 	}
 

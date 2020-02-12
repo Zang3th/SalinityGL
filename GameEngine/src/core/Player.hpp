@@ -26,7 +26,7 @@ private:
 	GroundData *_ground_data = nullptr;
 
 public:
-	Model *_playerModel, *_axeModel;
+	Model *_playerModel;
 	float _yaw = 0.0f;
 	glm::vec3 _front, _playerPosition;
 

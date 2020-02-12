@@ -17,5 +17,5 @@ void main()
 		discard;
 	}
 
-	fragColor = leafColor * leafMaskColor;;
+	fragColor = leafColor * leafMaskColor;
 }

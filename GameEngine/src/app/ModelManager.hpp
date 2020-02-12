@@ -195,7 +195,7 @@ public:
 		float y = _ground_data->getHeightValue(x, z, 6.0) - 39.8f;
 		x *= 2;
 		z *= 2;
-		_displayManager->_player = new Player(_player, _ground_data, glm::vec3(x, y, z));
+		_displayManager->_player = new Player(_player, glm::vec3(x, y, z), _ground_data);
 	}
 
 	void debugVectors()

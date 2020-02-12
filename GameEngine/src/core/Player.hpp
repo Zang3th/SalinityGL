@@ -21,20 +21,19 @@ class Player
 {
 private:	
 	float _currentSpeed = 0;
-	float _currentTurnSpeed = 0;
-	GroundData* _ground_data = nullptr;
+	float _currentTurnSpeed = 0;	
 	float new_height = 0, old_height = 0;
+	GroundData *_ground_data = nullptr;
 
 public:
-	Model* _playermodel;
+	Model *_playerModel, *_axeModel;
 	float _yaw = 0.0f;
-	glm::vec3 _front;
-	glm::vec3 _position;
+	glm::vec3 _front, _playerPosition;
 
-	Player(Model* player, GroundData* ground_data, glm::vec3 position)
-		: _playermodel(player), _ground_data(ground_data), _position(position)
+	Player(Model* player, glm::vec3 player_position, GroundData* ground_data)
+		: _playerModel(player), _playerPosition(player_position), _ground_data(ground_data)
 	{
-		player->translate(_position);
+		_playerModel->translate(_playerPosition);
 	}
 	
 	//Processes input received from any keyboard-like input system. Accepts input parameter in the form of camera defined ENUM (to abstract it from windowing systems)
@@ -68,7 +67,7 @@ public:
 
 		//Calculate direction and rotate player
 		float angle = _currentTurnSpeed * deltaTime;		
-		_playermodel->rotate(angle, glm::vec3(0, 1, 0));
+		_playerModel->rotate(angle, glm::vec3(0, 1, 0));
 		_yaw += angle;
 		if(_yaw >= 360.0f)
 		{
@@ -86,37 +85,17 @@ public:
 		front.y = 0.0f;
 		front.z = glm::cos(glm::radians(_yaw));				
 		_front = glm::normalize(front) * velocity;
-		_position += _front;
+		_playerPosition += _front;
 
 		//Calculate new height (y-value)
-		old_height = _position.y;
-		new_height = _ground_data->getHeightValue(_position.x / 2, _position.z / 2, 6.0f) - 39.8f;
-		_position.y = new_height;
+		old_height = _playerPosition.y;
+		new_height = _ground_data->getHeightValue(_playerPosition.x / 2, _playerPosition.z / 2, 6.0f) - 39.8f;
+		_playerPosition.y = new_height;
 
 		//Translate the player
 		float dx = velocity * glm::sin(glm::radians(angle));
 		float dz = velocity * glm::cos(glm::radians(angle));
-		float dy = new_height - old_height;
-		_playermodel->translate(glm::vec3(dx, dy, dz));
-	}
-
-	void setStart(float x_startAngle, float y_startAngle, float z_startAngle)
-	{
-		_playermodel->rotate(z_startAngle, glm::vec3(0, 0, 1));
-		_playermodel->rotate(y_startAngle, glm::vec3(0, 1, 0));
-		_playermodel->rotate(x_startAngle, glm::vec3(1, 0, 0));
-	}
-
-	void hackeHolz(int counter)
-	{
-		_playermodel->rotate(-glm::sin(counter * 0.05) * 0.7, glm::vec3(0, 0, 1));
-		_playermodel->rotate(glm::sin(counter * 0.05) * 1.4, glm::vec3(0, 1, 0));
-	}
-
-	void resetPosition()
-	{
-		_playermodel->_model = glm::mat4(1.0f);
-		_playermodel->translate(_position);
-		_playermodel->rotate(_yaw, glm::vec3(0, 1, 0));
+		float dy = new_height - old_height;		
+		_playerModel->translate(glm::vec3(dx, dy, dz));
 	}
 };

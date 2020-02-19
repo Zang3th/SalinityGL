@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Model.hpp"
 #include "Shader.hpp"
 #include "GroundData.hpp"
 #include "Texture.hpp"
@@ -8,27 +7,31 @@
 #include "Groundmodel.hpp"
 #include "AssimpLoader.hpp"
 #include "PlaneData.hpp"
+
 #include "Leafmodel.hpp"
+#include "Model.hpp"
 #include "AudioManager.hpp"
+#include "Cubemap.hpp"
 
 class ModelManager
 {
 private:
-	Shader *_standard_shader, *_ground_shader, *_leaf_shader;
+	Shader* _standard_shader, * _ground_shader, * _leaf_shader, *_cubeMap_shader;
 	GroundData *_ground_data;
-	PlaneData* _water_data;
-	AssimpLoader* _house_data, * _wood_data, * _axe_data, 
-	* _tree_data, * _leaf_data, * _grass_data, * _player_data;
+	PlaneData *_water_data;
+	AssimpLoader *_house_data, *_wood_data, *_axe_data, 
+	*_tree_data, *_leaf_data, *_grass_data, *_player_data, *_cubeMap_data;
 	Texture *_grass_tex, *_dirt_tex, *_stone_tex, 
 	*_blendmap, *_house_tex, *_wood_tex, *_axe_tex, 
 	*_water_tex, *_tree_tex, *_leaf_tex, *_leafMask_tex,
 	*_grassModel_tex, *_player_tex;
 	Basemodel *_ground;
-	Model* _house, * _wood, * _axe, * _water, * _tree, * _grass, * _player;
+	Model *_house, *_wood, *_axe, *_water, *_tree, *_grass, *_player, *_cubeMap;
 	Leafmodel *_leaf;
 	Filemanager *_filemanager;
-	DisplayManager* _displayManager;
-	AudioManager* _audioManager;
+	DisplayManager *_displayManager;
+	AudioManager *_audioManager;
+	Cubemap *_cubeMap_tex;
 
 public:
 	std::vector<Basemodel*> Models;
@@ -51,6 +54,7 @@ public:
 		_standard_shader = new Shader("res/shader/standard_vs.glsl", "res/shader/standard_fs.glsl");
 		_ground_shader = new Shader("res/shader/ground_vs.glsl", "res/shader/ground_fs.glsl");
 		_leaf_shader = new Shader("res/shader/leaf_vs.glsl", "res/shader/leaf_fs.glsl");
+		_cubeMap_shader = new Shader("res/shader/cubemap_vs.glsl", "res/shader/cubemap_fs.glsl");
 	}
 
 	void initData()
@@ -64,6 +68,7 @@ public:
 		_leaf_data = new AssimpLoader("res/obj/vegetation/MapleTreeLeaf.obj");
 		_grass_data = new AssimpLoader("res/obj/vegetation/LowGrass.obj");
 		_player_data = new AssimpLoader("res/obj/humans/Chibi.obj");
+		_cubeMap_data = new AssimpLoader("res/obj/geometry/cube_copy.obj");
 	}
 
 	void initTextures()
@@ -81,6 +86,7 @@ public:
 		_leafMask_tex = new Texture("res/textures/models/MapleTreeMask.jpg");
 		_grassModel_tex = new Texture("res/textures/models/Grass.jpg");
 		_player_tex = new Texture("res/textures/models/Chibi.jpg");
+		//_cubeMap_tex = new Texture("res/textures/skybox_texture.jpg");
 		_grass_tex->bind(0);
 		_dirt_tex->bind(1);
 		_stone_tex->bind(2);
@@ -94,6 +100,20 @@ public:
 		_leafMask_tex->bind(10);
 		_grassModel_tex->bind(11);
 		_player_tex->bind(12);
+		//_cubeMap_tex->bind(13);
+
+		std::vector<std::string> faces
+		{
+				"res/textures/cubeMap/xp.jpg",
+				"res/textures/cubeMap/xn.jpg",
+				"res/textures/cubeMap/yp.jpg",
+				"res/textures/cubeMap/yn.jpg",
+				"res/textures/cubeMap/zp.jpg",
+				"res/textures/cubeMap/zn.jpg"
+		};
+
+		_cubeMap_tex = new Cubemap(faces);
+		_cubeMap_tex->bind(13);
 	}
 
 	void createModels()
@@ -104,10 +124,13 @@ public:
 		_axe = new Model(_axe_data, _standard_shader, 6);
 		_water = new Model(_water_data, _standard_shader, 7);
 		_player = new Model(_player_data, _standard_shader, 12);
+		_cubeMap = new Model(_cubeMap_data, _cubeMap_shader, 13, false);
 	}
 
 	void transformModels()
 	{
+		_cubeMap->translate(glm::vec3(256.0f, 128.0f, 256.0f));
+		_cubeMap->scale(glm::vec3(256.0f, 256.0f, 256.0f));		
 		_ground->translate(glm::vec3(0.0f, -40.0f, 0.0f));
 		_house->translate(glm::vec3(430, -45, 85));
 		_house->scale(glm::vec3(1.75f, 1.75f, 1.75f));
@@ -125,6 +148,7 @@ public:
 
 	void addModelsToRenderer()
 	{
+		Models.push_back(_cubeMap);
 		Models.push_back(_ground);
 		Models.push_back(_house);
 		Models.push_back(_wood);

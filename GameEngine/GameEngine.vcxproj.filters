@@ -43,5 +43,7 @@
     <ClInclude Include="src\app\ModelManager.hpp" />
     <ClInclude Include="src\core\Player.hpp" />
     <ClInclude Include="src\core\AudioManager.hpp" />
+    <ClInclude Include="src\core\Cubemap.hpp" />
+    <ClInclude Include="src\core\RenderStateManager.hpp" />
   </ItemGroup>
 </Project>

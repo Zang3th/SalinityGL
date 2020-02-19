@@ -11,8 +11,10 @@ private:
 	unsigned int _texSlot;	
 
 public:
-	Model(RawData* dataToUse, Shader* shaderToUse, unsigned int textureSlot)
-		: _data(dataToUse), _shader(shaderToUse), _texSlot(textureSlot)
+	bool _isCubeMap;
+
+	Model(RawData* dataToUse, Shader* shaderToUse, unsigned int textureSlot, bool isCubeMap = false)
+		: _data(dataToUse), _shader(shaderToUse), _texSlot(textureSlot), _isCubeMap(isCubeMap)
 	{
 		this->initialize();
 	}
@@ -48,20 +50,45 @@ public:
 
 	void draw() override
 	{		
-		_projection = glm::perspective(glm::radians(_camera->Zoom), (float)WIDTH / (float)HEIGHT, 0.1f, 1000.0f);
-		_view = _camera->GetViewMatrix();
-		_shader->bind();
-		_shader->SetUniformMat4f("model", _model);
-		_shader->SetUniformMat4f("projection", _projection);
-		_shader->SetUniformMat4f("view", _view);
-		_shader->SetUniform1i("textureSampler", _texSlot);
-		_vao->bind();
+		if(!_isCubeMap)
+		{			
+			_projection = glm::perspective(glm::radians(_camera->Zoom), (float)WIDTH / (float)HEIGHT, 0.1f, 1000.0f);
+			_view = _camera->GetViewMatrix();
+			_shader->bind();
+			_shader->SetUniformMat4f("model", _model);
+			_shader->SetUniformMat4f("projection", _projection);
+			_shader->SetUniformMat4f("view", _view);
+			_shader->SetUniform1i("textureSampler", _texSlot);
+			_vao->bind();
+		}
+		else
+		{			
+			_RSM->deactivateDepthMask();
+			_projection = glm::perspective(glm::radians(_camera->Zoom), (float)WIDTH / (float)HEIGHT, 0.1f, 1000.0f);
+			_view = glm::mat4(glm::mat3(_camera->GetViewMatrix()));
+			_shader->bind();
+			_shader->SetUniformMat4f("model", _model);
+			_shader->SetUniformMat4f("projection", _projection);
+			_shader->SetUniformMat4f("view", _view);
+			_shader->SetUniform1i("textureSampler", _texSlot);
+			_vao->bind();
+			
+		}
 	}
 
 	void undraw() override
 	{
-		_shader->unbind();
-		_vao->unbind();		
+		if(!_isCubeMap)
+		{
+			_shader->unbind();
+			_vao->unbind();
+		}
+		else 
+		{
+			_RSM->activateDepthMask();
+			_shader->unbind();
+			_vao->unbind();
+		}
 	}
 
 	void translate(const glm::vec3& position) override

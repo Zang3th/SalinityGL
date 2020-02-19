@@ -4,7 +4,7 @@
 #include "GroundData.hpp"
 #include "AudioManager.hpp"
 
-class Model;
+//class Model;
 
 enum Player_Movement
 {

@@ -5,6 +5,7 @@
 #include <spdlog/spdlog.h>
 #include "OpenGLErrorManager.hpp"
 #include "Camera.hpp"
+#include "RenderStateManager.hpp"
 
 const unsigned int WIDTH = 1800; //Global WIDTH-Setting
 const unsigned int HEIGHT = 1200; //Global HEIGHT-Setting
@@ -15,7 +16,7 @@ float lastY = HEIGHT / 2.0f; //Y-Coord of last frame
 bool window_focused = false; //Is the window in focus?
 
 Camera* _camera = nullptr; //Global camera object. Needs to be global for callbacks and Model.hpp
-
+RenderStateManager* _RSM = nullptr;
 #include "Player.hpp" //Needs to be included last because Model.hpp needs global _camera object
 
 void processInput(GLFWwindow* window, Player* _playerObject)
@@ -96,12 +97,14 @@ public:
 	DisplayManager(Player* player)
 		: _width(WIDTH), _height(HEIGHT), _player(player)
 	{
-		_camera = new Camera(glm::vec3(50.0f * 4, 0.0f, 50.0f * 4), glm::vec3(0.0f, 1.0f, 0.0f));
+		_camera = new Camera(glm::vec3(50.0f * 4, 0.0f, 50.0f * 4), glm::vec3(0.0f, 1.0f, 0.0f));		
+		_RSM = new RenderStateManager();
 	}
 
 	~DisplayManager()
 	{
 		delete _camera;
+		delete _RSM;
 	}
 
 	void createDisplay()
@@ -172,18 +175,5 @@ public:
 	void checkForInput()
 	{
 		processInput(_window, _player);
-	}
-
-	void setNormalRenderState()
-	{
-		GLCall(glDisable(GL_BLEND));
-		GLCall(glEnable(GL_DEPTH_TEST));
-	}
-
-	void setTransparencyRenderState()
-	{
-		GLCall(glDisable(GL_DEPTH_TEST));
-		GLCall(glEnable(GL_BLEND));
-		GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
-	}
+	}	
 };

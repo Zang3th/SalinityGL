@@ -9,6 +9,7 @@
 #include "AssimpLoader.hpp"
 #include "PlaneData.hpp"
 #include "Leafmodel.hpp"
+#include "AudioManager.hpp"
 
 class ModelManager
 {
@@ -27,12 +28,13 @@ private:
 	Leafmodel *_leaf;
 	Filemanager *_filemanager;
 	DisplayManager* _displayManager;
+	AudioManager* _audioManager;
 
 public:
 	std::vector<Basemodel*> Models;
 
-	ModelManager(DisplayManager* displayManager)
-		: _displayManager(displayManager)
+	ModelManager(DisplayManager* displayManager, AudioManager* audioManager)
+		: _displayManager(displayManager), _audioManager(audioManager)
 	{
 		initShader();
 		initData();
@@ -195,7 +197,7 @@ public:
 		float y = _ground_data->getHeightValue(x, z, 6.0) - 39.8f;
 		x *= 2;
 		z *= 2;
-		_displayManager->_player = new Player(_player, glm::vec3(x, y, z), _ground_data);
+		_displayManager->_player = new Player(_player, glm::vec3(x, y, z), _ground_data, _audioManager);
 	}
 
 	void debugVectors()

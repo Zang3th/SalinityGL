@@ -2,6 +2,7 @@
 
 #include "Model.hpp"
 #include "GroundData.hpp"
+#include "AudioManager.hpp"
 
 class Model;
 
@@ -24,14 +25,15 @@ private:
 	float _currentTurnSpeed = 0;	
 	float new_height = 0, old_height = 0;
 	GroundData *_ground_data = nullptr;
-
+	AudioManager *_audioManager = nullptr;
+	
 public:
 	Model *_playerModel;
 	float _yaw = 0.0f;
 	glm::vec3 _front, _playerPosition;
 
-	Player(Model* player, glm::vec3 player_position, GroundData* ground_data)
-		: _playerModel(player), _playerPosition(player_position), _ground_data(ground_data)
+	Player(Model* player, glm::vec3 player_position, GroundData* ground_data, AudioManager* audio_manager)
+		: _playerModel(player), _playerPosition(player_position), _ground_data(ground_data), _audioManager(audio_manager)
 	{
 		_playerModel->translate(_playerPosition);
 	}
@@ -97,5 +99,15 @@ public:
 		float dz = velocity * glm::cos(glm::radians(angle));
 		float dy = new_height - old_height;		
 		_playerModel->translate(glm::vec3(dx, dy, dz));
+		
+
+		if(_audioManager->isPlaying("res/audio/sounds/Step.wav"))
+		{
+			
+		}
+		else
+		{
+			_audioManager->playSound3D("res/audio/sounds/Step.wav", &_playerPosition);
+		}
 	}
 };

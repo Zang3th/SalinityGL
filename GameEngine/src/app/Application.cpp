@@ -21,13 +21,13 @@ int main()
 
 	//Sound-Management
 	AudioManager audioManager;
-	//audioManager.playSound2D("res/audio/music/TrueBlueSky.mp3", true);
+	audioManager.playSound2D("res/audio/music/TrueBlueSky.mp3", true);
 
 	//Renderer
 	Renderer renderer;	
 
 	//Modelmanager
-	ModelManager modelManager(&displayManager);	
+	ModelManager modelManager(&displayManager, &audioManager);	
 
 	while (!displayManager.WindowShouldClose())
 	{
@@ -36,7 +36,7 @@ int main()
 
 		//Clear Buffer and prepare for rendering
 		renderer.prepare();
-
+		
 		//Start GUI-Frame
 		guiManager.startFrame();
 
@@ -60,6 +60,7 @@ int main()
 
 		//Update stuff
 		{
+			audioManager.updateListenerPosition(&_camera->Position, &_camera->Front, &_camera->Up);
 			guiManager.renderGUI();
 			displayManager.updateDisplay();
 		}		

@@ -52,13 +52,14 @@ public:
 	{		
 		if(!_isCubeMap)
 		{			
-			_projection = glm::perspective(glm::radians(_camera->Zoom), (float)WIDTH / (float)HEIGHT, 0.1f, 1000.0f);
+			_projection = glm::perspective(glm::radians(_camera->Zoom), (float)WIDTH / (float)HEIGHT, 0.1f, 10000.0f);
 			_view = _camera->GetViewMatrix();
 			_shader->bind();
 			_shader->SetUniformMat4f("model", _model);
 			_shader->SetUniformMat4f("projection", _projection);
 			_shader->SetUniformMat4f("view", _view);
 			_shader->SetUniform1i("textureSampler", _texSlot);
+			_shader->SetUniformVec3("skyColor", glm::vec3(0.611, 0.705, 0.752));
 			_vao->bind();
 		}
 		else
@@ -67,7 +68,6 @@ public:
 			_projection = glm::perspective(glm::radians(_camera->Zoom), (float)WIDTH / (float)HEIGHT, 0.1f, 1000.0f);
 			_view = glm::mat4(glm::mat3(_camera->GetViewMatrix()));
 			_shader->bind();
-			_shader->SetUniformMat4f("model", _model);
 			_shader->SetUniformMat4f("projection", _projection);
 			_shader->SetUniformMat4f("view", _view);
 			_shader->SetUniform1i("textureSampler", _texSlot);

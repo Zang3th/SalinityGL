@@ -52,7 +52,7 @@ public:
 
 	void draw() override
 	{
-		_projection = glm::perspective(glm::radians(_camera->Zoom), (float)WIDTH / (float)HEIGHT, 0.1f, 1000.0f);
+		_projection = glm::perspective(glm::radians(_camera->Zoom), (float)WIDTH / (float)HEIGHT, 0.1f, 10000.0f);
 		_view = _camera->GetViewMatrix();
 		_shader->bind();
 		_shader->SetUniformMat4f("model", _model);
@@ -62,6 +62,7 @@ public:
 		_shader->SetUniform1i("dirtTexture", _texSlot1);
 		_shader->SetUniform1i("stoneTexture", _texSlot2);
 		_shader->SetUniform1i("blendmap", _texSlot3);
+		_shader->SetUniformVec3("skyColor", glm::vec3(0.611, 0.705, 0.752));
 		_vao->bind();
 	}
 

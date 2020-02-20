@@ -57,6 +57,7 @@ public:
 		_shader->SetUniformMat4f("view", _view);
 		_shader->SetUniform1i("leafTexture", _texSlot0);
 		_shader->SetUniform1i("leafMask", _texSlot1);
+		_shader->SetUniformVec3("skyColor", glm::vec3(0.611, 0.705, 0.752));
 		_vao->bind();
 	}
 

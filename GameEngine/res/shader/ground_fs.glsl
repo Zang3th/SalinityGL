@@ -3,6 +3,7 @@
 in vec3 heightcolor_out;
 in vec2 texCoords_out;
 in vec2 blendmapCoords_out;
+in float visibility;
 
 out vec4 fragColor;
 
@@ -10,6 +11,7 @@ uniform sampler2D grassTexture;
 uniform sampler2D dirtTexture;
 uniform sampler2D stoneTexture;
 uniform sampler2D blendmap;
+uniform vec3 skyColor;
 
 void main()
 {
@@ -19,4 +21,5 @@ void main()
 	vec4 bTexture = texture(dirtTexture, texCoords_out) * blendmapColor.b;
 
 	fragColor = (rTexture + gTexture + bTexture);
+	fragColor = mix(vec4(skyColor, 1.0), fragColor, visibility);
 }

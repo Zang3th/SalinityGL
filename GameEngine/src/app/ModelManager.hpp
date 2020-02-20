@@ -68,7 +68,7 @@ public:
 		_leaf_data = new AssimpLoader("res/obj/vegetation/MapleTreeLeaf.obj");
 		_grass_data = new AssimpLoader("res/obj/vegetation/LowGrass.obj");
 		_player_data = new AssimpLoader("res/obj/humans/Chibi.obj");
-		_cubeMap_data = new AssimpLoader("res/obj/geometry/cube_copy.obj");
+		_cubeMap_data = new AssimpLoader("res/obj/geometry/cube.obj");
 	}
 
 	void initTextures()
@@ -86,7 +86,6 @@ public:
 		_leafMask_tex = new Texture("res/textures/models/MapleTreeMask.jpg");
 		_grassModel_tex = new Texture("res/textures/models/Grass.jpg");
 		_player_tex = new Texture("res/textures/models/Chibi.jpg");
-		//_cubeMap_tex = new Texture("res/textures/skybox_texture.jpg");
 		_grass_tex->bind(0);
 		_dirt_tex->bind(1);
 		_stone_tex->bind(2);
@@ -100,7 +99,6 @@ public:
 		_leafMask_tex->bind(10);
 		_grassModel_tex->bind(11);
 		_player_tex->bind(12);
-		//_cubeMap_tex->bind(13);
 
 		std::vector<std::string> faces
 		{
@@ -128,9 +126,7 @@ public:
 	}
 
 	void transformModels()
-	{
-		_cubeMap->translate(glm::vec3(256.0f, 128.0f, 256.0f));
-		_cubeMap->scale(glm::vec3(256.0f, 256.0f, 256.0f));		
+	{		
 		_ground->translate(glm::vec3(0.0f, -40.0f, 0.0f));
 		_house->translate(glm::vec3(430, -45, 85));
 		_house->scale(glm::vec3(1.75f, 1.75f, 1.75f));

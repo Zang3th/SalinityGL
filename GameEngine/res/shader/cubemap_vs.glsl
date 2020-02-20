@@ -6,10 +6,9 @@ out vec3 pos_out;
 
 uniform mat4 view;
 uniform mat4 projection;
-uniform mat4 model;
 
 void main()
 {
 	pos_out = position_in;
-	gl_Position = projection * view * model * vec4(position_in, 1.0);
+	gl_Position = projection * view * vec4(position_in, 1.0);
 }

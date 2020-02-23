@@ -15,13 +15,13 @@
 class ModelManager
 {
 private:
-	Shader *_standard_shader, *_ground_shader, *_leaf_shader, *_cubeMap_shader;
+	Shader *_standard_shader, *_ground_shader, *_leaf_shader, *_cubeMap_shader, *_lightbulb_shader;
 	GroundData *_ground_data;
 	PlaneData *_water_data;
-	AssimpLoader *_house_data, *_wood_data, *_axe_data, *_tree_data, *_leaf_data, *_grass_data, *_player_data, *_cubeMap_data, *_lantern_data;
-	Texture *_grass_tex, *_dirt_tex, *_stone_tex, *_blendmap, *_house_tex, *_wood_tex, *_axe_tex, *_water_tex, *_tree_tex, *_leaf_tex, *_leafMask_tex, *_grassModel_tex, *_player_tex, *_lantern_tex;
+	AssimpLoader *_house_data, *_wood_data, *_axe_data, *_tree_data, *_leaf_data, *_grass_data, *_player_data, *_cubeMap_data, *_lantern_data, *_lightbulb_data;
+	Texture *_grass_tex, *_dirt_tex, *_stone_tex, *_blendmap, *_house_tex, *_wood_tex, *_axe_tex, *_water_tex, *_tree_tex, *_leaf_tex, *_leafMask_tex, *_grassModel_tex, *_player_tex, *_lantern_tex, *_lightbulb_tex;
 	Basemodel *_ground;
-	Model *_house, *_wood, *_axe, *_water, *_tree, *_grass, *_player, *_cubeMap, *_lantern;
+	Model *_house, *_wood, *_axe, *_water, *_tree, *_grass, *_player, *_cubeMap, *_lantern, *_lightbulb;
 	Leafmodel *_leaf;
 	Filemanager *_filemanager;
 	DisplayManager *_displayManager;
@@ -51,6 +51,7 @@ public:
 		_ground_shader = new Shader("res/shader/ground_vs.glsl", "res/shader/ground_fs.glsl");
 		_leaf_shader = new Shader("res/shader/leaf_vs.glsl", "res/shader/leaf_fs.glsl");
 		_cubeMap_shader = new Shader("res/shader/cubemap_vs.glsl", "res/shader/cubemap_fs.glsl");
+		_lightbulb_shader = new Shader("res/shader/lightbulb_vs.glsl", "res/shader/lightbulb_fs.glsl");
 	}
 
 	void createContainer()
@@ -66,6 +67,7 @@ public:
 		_player_data = new AssimpLoader("res/obj/humans/Chibi.obj");
 		_cubeMap_data = new AssimpLoader("res/obj/geometry/cube.obj");
 		_lantern_data = new AssimpLoader("res/obj/lightsources/Parklight.obj");
+		_lightbulb_data = new AssimpLoader("res/obj/geometry/cylinder.obj");
 	}
 
 	void initData()
@@ -79,6 +81,7 @@ public:
 		_player_data->initWithUV();
 		_cubeMap_data->initWithUV();
 		_lantern_data->initWithUV();
+		_lightbulb_data->initWithUV();
 	}
 
 	void initTextures()
@@ -97,6 +100,7 @@ public:
 		_grassModel_tex = new Texture("res/textures/models/Grass.jpg");
 		_player_tex = new Texture("res/textures/models/Chibi.jpg");
 		_lantern_tex = new Texture("res/textures/models/Metal_2_dark.jpg");
+		_lightbulb_tex = new Texture("res/textures/models/White.jpg");
 
 		_grass_tex->bind(0);
 		_dirt_tex->bind(1);
@@ -112,6 +116,7 @@ public:
 		_grassModel_tex->bind(11);
 		_player_tex->bind(12);
 		_lantern_tex->bind(14);
+		_lightbulb_tex->bind(15);
 
 		std::vector<std::string> faces
 		{
@@ -137,6 +142,7 @@ public:
 		_player = new Model(_player_data, _standard_shader, 12);
 		_cubeMap = new Model(_cubeMap_data, _cubeMap_shader, 13, false);
 		_lantern = new Model(_lantern_data, _standard_shader, 14);
+		_lightbulb = new Model(_lightbulb_data, _lightbulb_shader, 15);
 	}
 
 	void transformModels()
@@ -155,7 +161,9 @@ public:
 		_water->translate(glm::vec3(165, -51, 340));
 		_water->rotate(90.0f, glm::vec3(0.0f, 1.0f, 0.0f));
 		_lantern->translate(glm::vec3(350.0f, -49.0f, 75.0f));
-		_lantern->scale(glm::vec3(3.0f, 3.0f, 3.0f));		
+		_lantern->scale(glm::vec3(3.0f, 3.0f, 3.0f));
+		_lightbulb->translate(glm::vec3(373.9f, -26.0f, 76.0f));
+		_lightbulb->scale(glm::vec3(0.5f, 0.5f, 0.5f));
 	}
 
 	void addModelsToRenderer()
@@ -168,6 +176,7 @@ public:
 		Models.push_back(_water);
 		Models.push_back(_player);
 		Models.push_back(_lantern);
+		Models.push_back(_lightbulb);
 
 		for (int i = 0; i < 240; i++)
 		{

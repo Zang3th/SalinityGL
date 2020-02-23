@@ -65,47 +65,5 @@ public:
 		_indiceSize = _indices.size() * sizeof(glm::uvec3);
 		_texCoordSize = _texCoords.size() * sizeof(glm::vec2);
 		_verticesToRender = (GLsizei)_indices.size() * 3;
-	}
-
-	void initWithoutUV()
-	{
-		Assimp::Importer importer;
-		const aiScene* scene = importer.ReadFile(_filepath, aiProcess_Triangulate);
-		if (!scene)
-		{
-			fprintf(stderr, importer.GetErrorString());
-			getchar();
-		}
-		const aiMesh* mesh = scene->mMeshes[0]; // In this simple example code we always use the 1rst mesh (in OBJ files there is often only one anyway)
-
-		// Fill vertices positions
-		_vertices.reserve(mesh->mNumVertices);
-		for (unsigned int i = 0; i < mesh->mNumVertices; i++) {
-			aiVector3D pos = mesh->mVertices[i];
-			_vertices.push_back(glm::vec3(pos.x, pos.y, pos.z));
-		}
-
-		// Fill vertices normals
-		/*normals.reserve(mesh->mNumVertices);
-		for (unsigned int i = 0; i < mesh->mNumVertices; i++) {
-			aiVector3D n = mesh->mNormals[i];
-			normals.push_back(glm::vec3(n.x, n.y, n.z));
-		}*/
-
-		// Fill face indices
-		_indices.reserve(3 * mesh->mNumFaces);
-		for (unsigned int i = 0; i < mesh->mNumFaces; i++) {
-			// Assume the model has only triangles.
-			_indices.emplace_back(glm::uvec3(mesh->mFaces[i].mIndices[0], mesh->mFaces[i].mIndices[1], mesh->mFaces[i].mIndices[2]));
-		}
-
-		setParametersWithUV();
-	}
-
-	void setParametersWithoutUV()
-	{
-		_verticeSize = _vertices.size() * sizeof(glm::vec3);
-		_indiceSize = _indices.size() * sizeof(glm::uvec3);
-		_verticesToRender = (GLsizei)_indices.size() * 3;
-	}
+	}	
 };

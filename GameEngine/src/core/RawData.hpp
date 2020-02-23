@@ -2,9 +2,8 @@
 
 #include <vector>
 
-class RawData
+struct RawData
 {
-public:
 	int _verticeSize = 0;
 	int _indiceSize = 0;
 	int _texCoordSize = 0;	
@@ -15,7 +14,4 @@ public:
 	std::vector<glm::uvec3> _indices;		
 	std::vector<glm::vec2> _texCoords;	
 	std::vector<glm::vec2> _blendmapCoords;
-
-	void virtual init() = 0;
-	void virtual setParameters() = 0;
 };

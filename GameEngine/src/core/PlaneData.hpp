@@ -14,7 +14,7 @@ public:
 		init();
 	}
 
-	void init() override
+	void init()
 	{
 		for (int j = 0; j <= _size - 30; ++j)
 		{
@@ -43,7 +43,7 @@ public:
 		setParameters();
 	}
 
-	void setParameters() override
+	void setParameters()
 	{
 		_verticeSize = _vertices.size() * sizeof(glm::vec3);
 		_indiceSize = _indices.size() * sizeof(glm::uvec3);

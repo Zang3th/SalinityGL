@@ -16,7 +16,7 @@ public:
 		init();
 	}
 
-	void init() override
+	void init()
 	{
 		_heightmap = new Heightmap("res/maps/heightmap_256.bmp", 0);
 
@@ -48,7 +48,7 @@ public:
 		setParameters();
 	}
 
-	void setParameters() override
+	void setParameters()
 	{
 		_verticeSize = _vertices.size() * sizeof(glm::vec3);
 		_indiceSize = _indices.size() * sizeof(glm::uvec3);

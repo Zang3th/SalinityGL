@@ -7,7 +7,6 @@
 #include "Groundmodel.hpp"
 #include "AssimpLoader.hpp"
 #include "PlaneData.hpp"
-
 #include "Leafmodel.hpp"
 #include "Model.hpp"
 #include "AudioManager.hpp"
@@ -16,17 +15,13 @@
 class ModelManager
 {
 private:
-	Shader* _standard_shader, * _ground_shader, * _leaf_shader, *_cubeMap_shader;
+	Shader *_standard_shader, *_ground_shader, *_leaf_shader, *_cubeMap_shader;
 	GroundData *_ground_data;
 	PlaneData *_water_data;
-	AssimpLoader *_house_data, *_wood_data, *_axe_data, 
-	*_tree_data, *_leaf_data, *_grass_data, *_player_data, *_cubeMap_data;
-	Texture *_grass_tex, *_dirt_tex, *_stone_tex, 
-	*_blendmap, *_house_tex, *_wood_tex, *_axe_tex, 
-	*_water_tex, *_tree_tex, *_leaf_tex, *_leafMask_tex,
-	*_grassModel_tex, *_player_tex;
+	AssimpLoader *_house_data, *_wood_data, *_axe_data, *_tree_data, *_leaf_data, *_grass_data, *_player_data, *_cubeMap_data, *_lantern_data;
+	Texture *_grass_tex, *_dirt_tex, *_stone_tex, *_blendmap, *_house_tex, *_wood_tex, *_axe_tex, *_water_tex, *_tree_tex, *_leaf_tex, *_leafMask_tex, *_grassModel_tex, *_player_tex, *_lantern_tex;
 	Basemodel *_ground;
-	Model *_house, *_wood, *_axe, *_water, *_tree, *_grass, *_player, *_cubeMap;
+	Model *_house, *_wood, *_axe, *_water, *_tree, *_grass, *_player, *_cubeMap, *_lantern;
 	Leafmodel *_leaf;
 	Filemanager *_filemanager;
 	DisplayManager *_displayManager;
@@ -40,6 +35,7 @@ public:
 		: _displayManager(displayManager), _audioManager(audioManager)
 	{
 		initShader();
+		createContainer();
 		initData();
 		initTextures();
 		createModels();
@@ -57,18 +53,32 @@ public:
 		_cubeMap_shader = new Shader("res/shader/cubemap_vs.glsl", "res/shader/cubemap_fs.glsl");
 	}
 
-	void initData()
+	void createContainer()
 	{
 		_ground_data = new GroundData(256, 2);
+		_water_data = new PlaneData(128, 1);
 		_house_data = new AssimpLoader("res/obj/houses/Farmhouse.obj");
 		_wood_data = new AssimpLoader("res/obj/vegetation/Wood.obj");
 		_axe_data = new AssimpLoader("res/obj/tools/Axe.obj");
-		_water_data = new PlaneData(128, 1);
 		_tree_data = new AssimpLoader("res/obj/vegetation/MapleTree.obj");
 		_leaf_data = new AssimpLoader("res/obj/vegetation/MapleTreeLeaf.obj");
 		_grass_data = new AssimpLoader("res/obj/vegetation/LowGrass.obj");
 		_player_data = new AssimpLoader("res/obj/humans/Chibi.obj");
 		_cubeMap_data = new AssimpLoader("res/obj/geometry/cube.obj");
+		_lantern_data = new AssimpLoader("res/obj/lightsources/Parklight.obj");
+	}
+
+	void initData()
+	{
+		_house_data->initWithUV();
+		_wood_data->initWithUV();
+		_axe_data->initWithUV();
+		_tree_data->initWithUV();
+		_leaf_data->initWithUV();
+		_grass_data->initWithUV();
+		_player_data->initWithUV();
+		_cubeMap_data->initWithUV();
+		_lantern_data->initWithUV();
 	}
 
 	void initTextures()
@@ -86,6 +96,8 @@ public:
 		_leafMask_tex = new Texture("res/textures/models/MapleTreeMask.jpg");
 		_grassModel_tex = new Texture("res/textures/models/Grass.jpg");
 		_player_tex = new Texture("res/textures/models/Chibi.jpg");
+		_lantern_tex = new Texture("res/textures/models/Metal_2_dark.jpg");
+
 		_grass_tex->bind(0);
 		_dirt_tex->bind(1);
 		_stone_tex->bind(2);
@@ -99,6 +111,7 @@ public:
 		_leafMask_tex->bind(10);
 		_grassModel_tex->bind(11);
 		_player_tex->bind(12);
+		_lantern_tex->bind(14);
 
 		std::vector<std::string> faces
 		{
@@ -123,6 +136,7 @@ public:
 		_water = new Model(_water_data, _standard_shader, 7);
 		_player = new Model(_player_data, _standard_shader, 12);
 		_cubeMap = new Model(_cubeMap_data, _cubeMap_shader, 13, false);
+		_lantern = new Model(_lantern_data, _standard_shader, 14);
 	}
 
 	void transformModels()
@@ -140,6 +154,8 @@ public:
 		_axe->rotate(-90.0f, glm::vec3(0, 0, 1));
 		_water->translate(glm::vec3(165, -51, 340));
 		_water->rotate(90.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+		_lantern->translate(glm::vec3(350.0f, -49.0f, 75.0f));
+		_lantern->scale(glm::vec3(3.0f, 3.0f, 3.0f));		
 	}
 
 	void addModelsToRenderer()
@@ -151,6 +167,7 @@ public:
 		Models.push_back(_axe);
 		Models.push_back(_water);
 		Models.push_back(_player);
+		Models.push_back(_lantern);
 
 		for (int i = 0; i < 240; i++)
 		{

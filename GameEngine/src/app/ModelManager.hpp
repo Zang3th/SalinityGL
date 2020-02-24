@@ -32,9 +32,10 @@ private:
 
 public:
 	std::vector<Basemodel*> Models;
-	glm::vec3 _lightposition = glm::vec3(373.9f, -26.0f, 76.0f);
-	glm::vec3 _lightscale = glm::vec3(0.5f, 0.5f, 0.5f);
-	glm::vec3 _lightcolor = glm::vec3(1.0f, 1.0f, 1.0f);
+	glm::vec3 _lightPosition = glm::vec3(373.9f, 2.0f, 76.0f);
+	//glm::vec3 _lightPosition = glm::vec3(76.0f, 2.0f, 373.9f);
+	glm::vec3 _lightScale = glm::vec3(0.5f, 0.5f, 0.5f);
+	glm::vec3 _lightColor = glm::vec3(1.0f, 1.0f, 1.0f);
 
 	ModelManager(DisplayManager* displayManager, AudioManager* audioManager)
 		: _displayManager(displayManager), _audioManager(audioManager)
@@ -47,7 +48,7 @@ public:
 		transformModels();
 		addModelsToRenderer();
 		createPlayer();
-		//debugVectors();
+		debugVectors();
 	}
 
 	void initShader()
@@ -138,14 +139,14 @@ public:
 	void createModels()
 	{
 		_cubeMap = new Model(_cubeMap_data, _cubeMap_shader, 3, true);
-		_ground = new Groundmodel(_ground_data, _ground_shader, 0, 1, 1, 2);		
+		_ground = new Groundmodel(_ground_data, _ground_shader, 0, 1, 1, 2, _lightColor, _lightPosition);		
 		/*_house = new Model(_house_data, _standard_shader, 4);
 		_wood = new Model(_wood_data, _standard_shader, 5);
 		_axe = new Model(_axe_data, _standard_shader, 6);
 		_water = new Model(_water_data, _standard_shader, 7);
 		_player = new Model(_player_data, _standard_shader, 12);		
 		_lantern = new Model(_lantern_data, _standard_shader, 14);*/
-		_lightbulb = new Lightmodel(_lightbulb_data, _lightbulb_shader, 14, _lightcolor);
+		_lightbulb = new Lightmodel(_lightbulb_data, _lightbulb_shader, 14, _lightColor);
 	}
 
 	void transformModels()
@@ -165,8 +166,8 @@ public:
 		_water->rotate(90.0f, glm::vec3(0.0f, 1.0f, 0.0f));
 		_lantern->translate(glm::vec3(350.0f, -49.0f, 75.0f));
 		_lantern->scale(glm::vec3(3.0f, 3.0f, 3.0f));*/
-		_lightbulb->translate(_lightposition);
-		_lightbulb->scale(_lightscale);
+		_lightbulb->translate(_lightPosition);
+		_lightbulb->scale(_lightScale);
 	}
 
 	void addModelsToRenderer()
@@ -252,5 +253,8 @@ public:
 	void debugVectors()
 	{
 		_filemanager = new Filemanager();		
+		_filemanager->writeReadableToFile(_ground_data->_normals, "res/data/readable/normals.gldata");
+		_filemanager->writeReadableToFile(_ground_data->_vertices, "res/data/readable/vertices.gldata");
+		_filemanager->writeReadableToFile(_ground_data->_indices, "res/data/readable/indices.gldata");
 	}
 };

@@ -3,6 +3,28 @@
 #include "RawData.hpp"
 #include "Heightmap.hpp"
 
+struct Point
+{
+	float _x;
+	float _y;
+	float _z;
+
+	Point(float x, float y, float z)
+		: _x(x), _y(y), _z(z)
+	{}
+};
+
+struct Triangle
+{
+	Point _P0;
+	Point _P1;
+	Point _P2;
+
+	Triangle(Point P0, Point P1, Point P2)
+		: _P0(P0), _P1(P1), _P2(P2)
+	{}
+};
+
 class GroundData : public RawData
 {
 private:
@@ -28,9 +50,9 @@ public:
 				float y = _heightmap->getPixelValue(i, j, 6.0f);
 				float z = (float)j / ((float)_size / (_size * _fieldmultiplier));
 				_vertices.emplace_back(glm::vec3(x, y, z));
-
 				_blendmapCoords.emplace_back(glm::vec2(x / 512, z / 512));
 				_texCoords.emplace_back(glm::vec2(x, z));
+				_normals.emplace_back(glm::vec3(0, 0, 0));
 				
 				if ((j != _size) && (i != _size))
 				{
@@ -45,8 +67,78 @@ public:
 				}
 			}
 		}
+		calculate_normals();
 		setParameters();
 	}
+
+	void calculate_normals()
+	{
+		std::vector<Triangle> triangles;
+		std::vector<glm::vec3> unmapped_normals;
+		float computations = 0.0f;
+		const float first_computations = _indices.size();
+		const float second_computations = _size * _size * 2;
+		const float third_computations = _indices.size();
+		int progress = 0;
+		std::cout << "\n";
+
+		for (glm::uvec3 uvec3 : _indices)
+		{
+			auto index0 = uvec3.x;
+			auto index1 = uvec3.y;
+			auto index2 = uvec3.z;
+
+			Point P0(_vertices.at(index0).x, _vertices.at(index0).y, _vertices.at(index0).z);
+			Point P1(_vertices.at(index1).x, _vertices.at(index1).y, _vertices.at(index1).z);
+			Point P2(_vertices.at(index2).x, _vertices.at(index2).y, _vertices.at(index2).z);
+
+			triangles.emplace_back(P0, P1, P2);
+
+			computations++;
+			progress = (int)((computations / first_computations) * 100.0f);
+			std::cout << "Triangles are getting calculated (%): " << progress << "\r";
+		}
+		computations = 0;
+		std::cout << "Triangles are getting calculated (%): 100\n";
+
+		for (Triangle t : triangles)
+		{
+			float u0 = t._P1._x - t._P0._x;
+			float u1 = t._P1._y - t._P0._y;
+			float u2 = t._P1._z - t._P0._z;
+			glm::vec3 U(u0, u1, u2);
+
+			float v0 = t._P2._x - t._P0._x;
+			float v1 = t._P2._y - t._P0._y;
+			float v2 = t._P2._z - t._P0._z;
+			glm::vec3 V(v0, v1, v2);
+
+			unmapped_normals.emplace_back(glm::cross(U, V));
+
+			computations++;
+			progress = (int)((computations / second_computations) * 100.0f);
+			std::cout << "Normals are getting calculated (%): " << progress << "\r";
+		}
+		computations = 0;
+		std::cout << "Normals are getting calculated (%): 100\n";
+
+		for (int i = 0; i < _indices.size(); i++)
+		{
+			auto index0 = _indices.at(i).x;
+			auto index1 = _indices.at(i).y;
+			auto index2 = _indices.at(i).z;
+			_normals.at(index0) = unmapped_normals.at(i);
+			_normals.at(index1) = unmapped_normals.at(i);
+			_normals.at(index2) = unmapped_normals.at(i);
+
+			computations++;
+			progress = (int)((computations / third_computations) * 100.0f);
+			std::cout << "Normals are getting mapped (%): " << progress << "\r";
+		}
+		computations = 0;
+		std::cout << "Normals are getting mapped (%): 100\n";
+	}
+
 
 	void setParameters()
 	{
@@ -54,6 +146,7 @@ public:
 		_indiceSize = _indices.size() * sizeof(glm::uvec3);
 		_texCoordSize = _texCoords.size() * sizeof(glm::vec2);		
 		_blendmapCoordsSize = _blendmapCoords.size() * sizeof(glm::vec2);
+		_normalSize = _normals.size() * sizeof(glm::vec3);
 		_verticesToRender = (GLsizei)_indices.size() * 3;
 	}
 

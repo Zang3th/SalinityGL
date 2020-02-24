@@ -4,6 +4,8 @@ in vec3 heightcolor_out;
 in vec2 texCoords_out;
 in vec2 blendmapCoords_out;
 in float visibility;
+in vec3 normals_out;
+in vec4 worldPosition;
 
 out vec4 fragColor;
 
@@ -12,7 +14,11 @@ uniform sampler2D dirtTexture;
 uniform sampler2D stoneTexture;
 uniform sampler2D blendmap;
 uniform vec3 skyColor;
+uniform vec3 lightColor;
+uniform vec3 lightPosition;
 
+const float ambientStrength = 0.2;
+const float diffuseStrength = 0.6;
 void main()
 {
 	//Texturen (Grass, Feldweg)
@@ -23,5 +29,19 @@ void main()
 	vec4 groundColor = (rTexture + gTexture + bTexture);
 
 	//Fog
-	fragColor = mix(vec4(skyColor, 1.0), groundColor, visibility);
+	vec4 mixColor = mix(vec4(skyColor, 1.0), groundColor, visibility);
+
+	//----------------Beleuchtung----------------
+	//Ambient
+	vec3 ambientLight = ambientStrength * lightColor;
+
+	//Diffus
+	vec3 Normal = normalize(normals_out);
+	vec3 lightDir = normalize(-(lightPosition - vec3(worldPosition.xyz)));
+	float diff = max(dot(normals_out, lightDir), 0.0);
+	vec3 diffuseLight = diff * diffuseStrength * lightColor;
+
+	//Ergebnis
+	vec3 result = (ambientLight + diffuseLight) * vec3(mixColor.xyz);
+	fragColor = vec4(result, 1.0);
 }

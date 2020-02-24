@@ -12,8 +12,8 @@ private:
 	glm::vec3 _lightColor;
 
 public:
-	Lightmodel(RawData* dataToUse, Shader* shaderToUse, unsigned int textureSlot, const glm::vec3& color)
-		: _data(dataToUse), _shader(shaderToUse), _texSlot(textureSlot), _lightColor(color)
+	Lightmodel(RawData* dataToUse, Shader* shaderToUse, unsigned int textureSlot, const glm::vec3& lightColor)
+		: _data(dataToUse), _shader(shaderToUse), _texSlot(textureSlot), _lightColor(lightColor)
 	{
 		this->initialize();
 	}

@@ -9,11 +9,12 @@ private:
 	Shader* _shader = nullptr;
 	RawData* _data = nullptr;
 	unsigned int _texSlot0, _texSlot1, _texSlot2, _texSlot3;
-	VertexBuffer* _vbo3 = nullptr;
-	
+	VertexBuffer *_vbo3 = nullptr, *_vbo4 = nullptr;
+	glm::vec3 _lightColor, _lightPosition;
+
 public:
-	Groundmodel(RawData* dataToUse, Shader* shaderToUse, unsigned int textureSlot0, unsigned int textureSlot1, unsigned int textureSlot2, unsigned int textureSlot3)
-		: _data(dataToUse), _shader(shaderToUse), _texSlot0(textureSlot0), _texSlot1(textureSlot1), _texSlot2(textureSlot2), _texSlot3(textureSlot3)
+	Groundmodel(RawData* dataToUse, Shader* shaderToUse, unsigned int textureSlot0, unsigned int textureSlot1, unsigned int textureSlot2, unsigned int textureSlot3, const glm::vec3& lightColor, const glm::vec3& lightPosition)
+		: _data(dataToUse), _shader(shaderToUse), _texSlot0(textureSlot0), _texSlot1(textureSlot1), _texSlot2(textureSlot2), _texSlot3(textureSlot3), _lightColor(lightColor), _lightPosition(lightPosition)
 	{
 		this->initialize();
 	}
@@ -39,7 +40,9 @@ public:
 		_vao->DefineAttributes(1, 2, GL_FLOAT, GL_FALSE, 0, (void*)0); //Texture attribute
 		_vbo3 = new VertexBuffer(&_data->_blendmapCoords[0], _data->_blendmapCoordsSize);
 		_vao->DefineAttributes(2, 2, GL_FLOAT, GL_FALSE, 0, (void*)0); //Map coords
-
+		_vbo4 = new VertexBuffer(&_data->_normals[0], _data->_normalSize);
+		_vao->DefineAttributes(3, 3, GL_FLOAT, GL_FALSE, 0, (void*)0); //Normal attribute
+		
 		//Erstellt IB
 		_ib = new IndexBuffer(&_data->_indices[0], _data->_indiceSize);
 
@@ -47,6 +50,7 @@ public:
 		_vbo1->unbind();
 		_vbo2->unbind();
 		_vbo3->unbind();
+		_vbo4->unbind();
 		_vao->unbind();
 	}
 
@@ -63,6 +67,8 @@ public:
 		_shader->SetUniform1i("stoneTexture", _texSlot2);
 		_shader->SetUniform1i("blendmap", _texSlot3);
 		_shader->SetUniformVec3("skyColor", glm::vec3(0.611, 0.705, 0.752));
+		_shader->SetUniformVec3("lightColor", _lightColor);
+		_shader->SetUniformVec3("lightPosition", _lightPosition);
 		_vao->bind();
 	}
 

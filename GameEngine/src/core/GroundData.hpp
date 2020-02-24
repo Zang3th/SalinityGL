@@ -18,7 +18,7 @@ public:
 
 	void init()
 	{
-		_heightmap = new Heightmap("res/maps/heightmap_256.bmp", 0);
+		_heightmap = new Heightmap("res/maps/Heightmap_256.bmp", 0);
 
 		for (int j = 0; j <= _size; ++j)
 		{

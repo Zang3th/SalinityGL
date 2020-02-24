@@ -7,9 +7,13 @@ out vec4 fragColor;
 
 uniform sampler2D textureSampler;
 uniform vec3 skyColor;
+uniform vec3 lightColor;
 
 void main()
 {
-	fragColor = texture(textureSampler, texCoords_out) * vec4(0.980, 0.921, 0.160, 1.0);
-	fragColor = mix(vec4(skyColor, 1.0), fragColor, visibility);
+	//Texturen
+	vec4 texColor = texture(textureSampler, texCoords_out) * vec4(lightColor, 1.0);
+
+	//Fog
+	fragColor = mix(vec4(skyColor, 1.0), texColor, visibility);
 }

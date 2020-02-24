@@ -45,5 +45,6 @@
     <ClInclude Include="src\core\AudioManager.hpp" />
     <ClInclude Include="src\core\Cubemap.hpp" />
     <ClInclude Include="src\core\RenderStateManager.hpp" />
+    <ClInclude Include="src\core\Lightmodel.hpp" />
   </ItemGroup>
 </Project>

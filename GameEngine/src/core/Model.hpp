@@ -65,14 +65,13 @@ public:
 		else
 		{			
 			_RSM->deactivateDepthMask();
-			_projection = glm::perspective(glm::radians(_camera->Zoom), (float)WIDTH / (float)HEIGHT, 0.1f, 1000.0f);
+			_projection = glm::perspective(glm::radians(_camera->Zoom), (float)WIDTH / (float)HEIGHT, 0.1f, 10000.0f);
 			_view = glm::mat4(glm::mat3(_camera->GetViewMatrix()));
 			_shader->bind();
 			_shader->SetUniformMat4f("projection", _projection);
 			_shader->SetUniformMat4f("view", _view);
 			_shader->SetUniform1i("textureSampler", _texSlot);
-			_vao->bind();
-			
+			_vao->bind();			
 		}
 	}
 

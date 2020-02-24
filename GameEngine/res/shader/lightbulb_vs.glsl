@@ -15,11 +15,15 @@ const float gradient = 5.0;
 
 void main()
 {
+	//MVP
 	vec4 worldPosition = model * vec4(position_in, 1.0);
 	vec4 positionToCam = view * worldPosition;
 	gl_Position = projection * positionToCam;
+
+	//Texturen
 	texCoords_out = texCoords_in;
 
+	//Fog
 	float distance = length(positionToCam.xyz);
 	visibility = exp(-pow((distance * density), gradient));
 	visibility = clamp(visibility, 0.0, 1.0);

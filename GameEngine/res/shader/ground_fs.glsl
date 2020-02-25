@@ -18,7 +18,8 @@ uniform vec3 lightColor;
 uniform vec3 lightPosition;
 
 const float ambientStrength = 0.2;
-const float diffuseStrength = 0.6;
+const float diffuseStrength = 0.8;
+
 void main()
 {
 	//Texturen (Grass, Feldweg)
@@ -26,22 +27,25 @@ void main()
 	vec4 rTexture = texture(dirtTexture, texCoords_out) * blendmapColor.r * 0.5;
 	vec4 gTexture = texture(grassTexture, texCoords_out) * blendmapColor.g * vec4(heightcolor_out, 1.0);
 	vec4 bTexture = texture(stoneTexture, texCoords_out) * blendmapColor.b;
-	vec4 groundColor = (rTexture + gTexture + bTexture);
-
-	//Fog
-	vec4 mixColor = mix(vec4(skyColor, 1.0), groundColor, visibility);
+	vec4 groundColor = (rTexture + gTexture + bTexture);	
 
 	//----------------Beleuchtung----------------
 	//Ambient
 	vec3 ambientLight = ambientStrength * lightColor;
 
-	//Diffus
+	//Diffuse
 	vec3 Normal = normalize(normals_out);
 	vec3 lightDir = normalize(-(lightPosition - vec3(worldPosition.xyz)));
 	float diff = max(dot(normals_out, lightDir), 0.0);
 	vec3 diffuseLight = diff * diffuseStrength * lightColor;
 
-	//Ergebnis
-	vec3 result = (ambientLight + diffuseLight) * vec3(mixColor.xyz);
-	fragColor = vec4(result, 1.0);
+	//Ergebnis der Beleuchtung
+	vec3 result = (ambientLight + diffuseLight) * vec3(groundColor.xyz);
+	//-------------------------------------------
+
+	//Fog (muss als letztes berechnet werden)
+	vec4 mixColor = mix(vec4(skyColor, 1.0), vec4(result, 1.0), visibility);
+
+	//Final-Fragmentcolor
+	fragColor = vec4(mixColor);
 }

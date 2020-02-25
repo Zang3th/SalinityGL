@@ -8,6 +8,7 @@ struct Point
 	float _x;
 	float _y;
 	float _z;
+	glm::vec3 _normal;
 
 	Point(float x, float y, float z)
 		: _x(x), _y(y), _z(z)
@@ -67,11 +68,48 @@ public:
 				}
 			}
 		}
-		calculate_normals();
+		calculate_normals_per_vertex();
 		setParameters();
 	}
 
-	void calculate_normals()
+	void calculate_normals_per_vertex()
+	{
+		for (int i = 0; i < _indices.size(); i++)
+		{
+			int index0 = _indices.at(i).x;
+			int index1 = _indices.at(i).y;
+			int index2 = _indices.at(i).z;
+
+			glm::vec3 point0 = _vertices.at(index0);
+			glm::vec3 point1 = _vertices.at(index1);
+			glm::vec3 point2 = _vertices.at(index2);
+
+			float u0 = point1.x - point0.x;
+			float u1 = point1.y - point0.y;
+			float u2 = point1.z - point0.z;
+			glm::vec3 U(u0, u1, u2);
+
+			float v0 = point2.x - point0.x;
+			float v1 = point2.y - point0.y;
+			float v2 = point2.z - point0.z;
+			glm::vec3 V(v0, v1, v2);
+
+			glm::vec3 p = glm::cross(U, V);			
+
+			_normals.at(index0) += p;
+			_normals.at(index1) += p;
+			_normals.at(index2) += p;
+		}
+
+		for (int j = 0; j < _normals.size(); j++)
+		{
+			glm::vec3 normal = _normals.at(j);
+			normal = glm::normalize(normal);
+			_normals.at(j) = normal;
+		}
+	}
+
+	void calculate_normals_per_triangle()
 	{
 		std::vector<Triangle> triangles;
 		std::vector<glm::vec3> unmapped_normals;

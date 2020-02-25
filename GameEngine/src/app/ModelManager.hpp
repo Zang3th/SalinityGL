@@ -32,8 +32,7 @@ private:
 
 public:
 	std::vector<Basemodel*> Models;
-	glm::vec3 _lightPosition = glm::vec3(373.9f, 2.0f, 76.0f);
-	//glm::vec3 _lightPosition = glm::vec3(76.0f, 2.0f, 373.9f);
+	glm::vec3 _lightPosition = glm::vec3(373.9f, 5.0f, 76.0f);
 	glm::vec3 _lightScale = glm::vec3(0.5f, 0.5f, 0.5f);
 	glm::vec3 _lightColor = glm::vec3(1.0f, 1.0f, 1.0f);
 
@@ -151,7 +150,7 @@ public:
 
 	void transformModels()
 	{		
-		_ground->translate(glm::vec3(0.0f, -40.0f, 0.0f));
+		//_ground->translate(glm::vec3(0.0f, -40.0f, 0.0f));
 		/*_house->translate(glm::vec3(430, -45, 85));
 		_house->scale(glm::vec3(1.75f, 1.75f, 1.75f));
 		_house->rotate(45.0f, glm::vec3(0, 1, 0));

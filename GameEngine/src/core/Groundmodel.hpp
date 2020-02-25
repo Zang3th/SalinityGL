@@ -69,6 +69,7 @@ public:
 		_shader->SetUniformVec3("skyColor", glm::vec3(0.611, 0.705, 0.752));
 		_shader->SetUniformVec3("lightColor", _lightColor);
 		_shader->SetUniformVec3("lightPosition", _lightPosition);
+		_shader->SetUniformVec3("viewPosition", _camera->Position);
 		_vao->bind();
 	}
 

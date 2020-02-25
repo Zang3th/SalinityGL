@@ -16,9 +16,11 @@ uniform sampler2D blendmap;
 uniform vec3 skyColor;
 uniform vec3 lightColor;
 uniform vec3 lightPosition;
+uniform vec3 viewPosition;
 
 const float ambientStrength = 0.3;
-const float diffuseStrength = 0.8;
+const float diffuseStrength = 0.6;
+const float specularStrength = 0.8;
 
 void main()
 {
@@ -39,8 +41,14 @@ void main()
 	float diff = max(dot(normals_out, lightDir), 0.0);
 	vec3 diffuseLight = diff * diffuseStrength * lightColor;
 
+	//Specular
+	vec3 viewDir = normalize(viewPosition - vec3(worldPosition.xyz));
+	vec3 reflectDir = reflect(-lightDir, Normal);
+	float spec = pow(max(dot(viewDir, reflectDir), 0.0), 16);
+	vec3 specular = specularStrength * spec * lightColor;
+
 	//Ergebnis der Beleuchtung
-	vec3 result = (ambientLight + diffuseLight) * vec3(groundColor.xyz);
+	vec3 result = (ambientLight + diffuseLight + specular) * vec3(groundColor.xyz);
 	//-------------------------------------------
 
 	//Fog (muss als letztes berechnet werden)

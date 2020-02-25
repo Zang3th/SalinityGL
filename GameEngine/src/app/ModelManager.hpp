@@ -32,7 +32,7 @@ private:
 
 public:
 	std::vector<Basemodel*> Models;
-	glm::vec3 _lightPosition = glm::vec3(374.0f, 5.0f, 76.0f);
+	glm::vec3 _lightPosition = glm::vec3(374.0f, 8.0f, 76.0f);
 	glm::vec3 _lightScale = glm::vec3(0.5f, 0.5f, 0.5f);
 	glm::vec3 _lightColor = glm::vec3(1.0f, 1.0f, 1.0f);
 

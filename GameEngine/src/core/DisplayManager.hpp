@@ -97,7 +97,7 @@ public:
 	DisplayManager(Player* player)
 		: _width(WIDTH), _height(HEIGHT), _player(player)
 	{
-		_camera = new Camera(glm::vec3(50.0f * 4, 0.0f, 50.0f * 4), glm::vec3(0.0f, 1.0f, 0.0f));		
+		_camera = new Camera(glm::vec3(255.0f, 25.0f, 60.0f), glm::vec3(0.0f, 1.0f, 0.0f));		
 		_RSM = new RenderStateManager();
 	}
 

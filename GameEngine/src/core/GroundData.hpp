@@ -8,7 +8,6 @@ struct Point
 	float _x;
 	float _y;
 	float _z;
-	glm::vec3 _normal;
 
 	Point(float x, float y, float z)
 		: _x(x), _y(y), _z(z)
@@ -175,8 +174,14 @@ public:
 		}
 		computations = 0;
 		std::cout << "Normals are getting mapped (%): 100\n";
-	}
 
+		for (int j = 0; j < _normals.size(); j++)
+		{
+			glm::vec3 normal = _normals.at(j);
+			normal = glm::normalize(normal);
+			_normals.at(j) = normal;
+		}
+	}
 
 	void setParameters()
 	{

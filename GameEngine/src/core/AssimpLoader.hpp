@@ -14,10 +14,10 @@ public:
 	AssimpLoader(const char* filepath)
 		: _filepath(filepath)
 	{
-		
+		init();
 	}
 
-	void initWithUV()
+	void init()
 	{
 		Assimp::Importer importer;
 		const aiScene* scene = importer.ReadFile(_filepath, aiProcess_Triangulate);
@@ -56,10 +56,10 @@ public:
 			_indices.emplace_back(glm::uvec3(mesh->mFaces[i].mIndices[0], mesh->mFaces[i].mIndices[1], mesh->mFaces[i].mIndices[2]));
 		}
 	
-		setParametersWithUV();
+		setParameters();
 	}
 
-	void setParametersWithUV()
+	void setParameters()
 	{
 		_verticeSize = _vertices.size() * sizeof(glm::vec3);
 		_indiceSize = _indices.size() * sizeof(glm::uvec3);

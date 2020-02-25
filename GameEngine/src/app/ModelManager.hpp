@@ -32,7 +32,7 @@ private:
 
 public:
 	std::vector<Basemodel*> Models;
-	glm::vec3 _lightPosition = glm::vec3(373.9f, 5.0f, 76.0f);
+	glm::vec3 _lightPosition = glm::vec3(374.0f, 5.0f, 76.0f);
 	glm::vec3 _lightScale = glm::vec3(0.5f, 0.5f, 0.5f);
 	glm::vec3 _lightColor = glm::vec3(1.0f, 1.0f, 1.0f);
 
@@ -41,7 +41,6 @@ public:
 	{
 		initShader();
 		createContainer();
-		initData();
 		initTextures();
 		createModels();
 		transformModels();
@@ -73,20 +72,6 @@ public:
 		_player_data = new AssimpLoader("res/obj/humans/Chibi.obj");		
 		_lantern_data = new AssimpLoader("res/obj/lightsources/Parklight.obj");*/		
 		_lightbulb_data = new AssimpLoader("res/obj/geometry/cylinder.obj");
-	}
-
-	void initData()
-	{
-		/*_house_data->initWithUV();
-		_wood_data->initWithUV();
-		_axe_data->initWithUV();
-		_tree_data->initWithUV();
-		_leaf_data->initWithUV();
-		_grass_data->initWithUV();
-		_player_data->initWithUV();		
-		_lantern_data->initWithUV();*/
-		_cubeMap_data->initWithUV();
-		_lightbulb_data->initWithUV();
 	}
 
 	void initTextures()
@@ -251,9 +236,9 @@ public:
 
 	void debugVectors()
 	{
-		_filemanager = new Filemanager();		
-		_filemanager->writeReadableToFile(_ground_data->_normals, "res/data/readable/normals.gldata");
-		_filemanager->writeReadableToFile(_ground_data->_vertices, "res/data/readable/vertices.gldata");
-		_filemanager->writeReadableToFile(_ground_data->_indices, "res/data/readable/indices.gldata");
+		//_filemanager = new Filemanager();		
+		//_filemanager->writeReadableToFile(_ground_data->_normals, "res/data/readable/normals.gldata");
+		//_filemanager->writeReadableToFile(_ground_data->_vertices, "res/data/readable/vertices.gldata");
+		//_filemanager->writeReadableToFile(_ground_data->_indices, "res/data/readable/indices.gldata");
 	}
 };

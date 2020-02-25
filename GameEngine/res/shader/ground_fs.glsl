@@ -17,7 +17,7 @@ uniform vec3 skyColor;
 uniform vec3 lightColor;
 uniform vec3 lightPosition;
 
-const float ambientStrength = 0.2;
+const float ambientStrength = 0.3;
 const float diffuseStrength = 0.8;
 
 void main()

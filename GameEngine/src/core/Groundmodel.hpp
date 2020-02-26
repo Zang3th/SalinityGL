@@ -2,6 +2,7 @@
 
 #include "Basemodel.hpp"
 #include "RawData.hpp"
+#include <string>
 
 class Groundmodel : public Basemodel
 {
@@ -10,11 +11,11 @@ private:
 	RawData* _data = nullptr;
 	unsigned int _texSlot0, _texSlot1, _texSlot2, _texSlot3;
 	VertexBuffer *_vbo3 = nullptr, *_vbo4 = nullptr;
-	glm::vec3 _lightColor, _lightPosition;
+	glm::vec3 _lightColor, *_lightPositions;
 
 public:
-	Groundmodel(RawData* dataToUse, Shader* shaderToUse, unsigned int textureSlot0, unsigned int textureSlot1, unsigned int textureSlot2, unsigned int textureSlot3, const glm::vec3& lightColor, const glm::vec3& lightPosition)
-		: _data(dataToUse), _shader(shaderToUse), _texSlot0(textureSlot0), _texSlot1(textureSlot1), _texSlot2(textureSlot2), _texSlot3(textureSlot3), _lightColor(lightColor), _lightPosition(lightPosition)
+	Groundmodel(RawData* dataToUse, Shader* shaderToUse, unsigned int textureSlot0, unsigned int textureSlot1, unsigned int textureSlot2, unsigned int textureSlot3, const glm::vec3& lightColor, glm::vec3* lightPositions)
+		: _data(dataToUse), _shader(shaderToUse), _texSlot0(textureSlot0), _texSlot1(textureSlot1), _texSlot2(textureSlot2), _texSlot3(textureSlot3), _lightColor(lightColor), _lightPositions(lightPositions)
 	{
 		this->initialize();
 	}
@@ -68,8 +69,16 @@ public:
 		_shader->SetUniform1i("blendmap", _texSlot3);
 		_shader->SetUniformVec3("skyColor", glm::vec3(0.611, 0.705, 0.752));
 		_shader->SetUniformVec3("lightColor", _lightColor);
-		_shader->SetUniformVec3("lightPosition", _lightPosition);
 		_shader->SetUniformVec3("viewPosition", _camera->Position);
+
+		for(int i = 0; i < numberOfPointlights; i++)
+		{
+			std::string uniformName = "lightPositions[";
+			uniformName += std::to_string(i);
+			uniformName += "]";
+			_shader->SetUniformVec3(uniformName, _lightPositions[i]);
+		}		
+		
 		_vao->bind();
 	}
 

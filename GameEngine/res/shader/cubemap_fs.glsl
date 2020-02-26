@@ -8,7 +8,7 @@ uniform samplerCube textureSampler;
 uniform vec3 fogColor;
 
 const float lowerLimit = 0.0;
-const float upperLimit = 20.0;
+const float upperLimit = 200.0;
 
 void main()
 {

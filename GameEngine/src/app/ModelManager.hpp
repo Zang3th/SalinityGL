@@ -1,5 +1,7 @@
 #pragma once
 
+const int numberOfPointlights = 9;
+
 #include "Shader.hpp"
 #include "GroundData.hpp"
 #include "Texture.hpp"
@@ -32,7 +34,18 @@ private:
 
 public:
 	std::vector<Basemodel*> Models;
-	glm::vec3 _lightPosition = glm::vec3(374.0f, 8.0f, 76.0f);
+	glm::vec3 _lightPositions[numberOfPointlights] =
+	{ 
+		glm::vec3(375.0f, 10.0f, 75.0f),
+		glm::vec3(252.0f, 10.0f, 113.0f),
+		glm::vec3(100.0f, 10.0f, 58.0f),
+		glm::vec3(143.0f, 10.0f, 194.0f),
+		glm::vec3(74.0f, 20.0f, 293.0f),
+		glm::vec3(97.0f, 20.0f, 435.0f),
+		glm::vec3(344.0f, 20.0f, 430.0f),
+		glm::vec3(455.0f, 20.0f, 335.0f),
+		glm::vec3(339.0f, 20.0f, 214.0f)
+	};	
 	glm::vec3 _lightScale = glm::vec3(0.5f, 0.5f, 0.5f);
 	glm::vec3 _lightColor = glm::vec3(1.0f, 1.0f, 1.0f);
 
@@ -123,14 +136,26 @@ public:
 	void createModels()
 	{
 		_cubeMap = new Model(_cubeMap_data, _cubeMap_shader, 3, true);
-		_ground = new Groundmodel(_ground_data, _ground_shader, 0, 1, 1, 2, _lightColor, _lightPosition);		
+		_ground = new Groundmodel(_ground_data, _ground_shader, 0, 1, 1, 2, _lightColor, _lightPositions);
 		/*_house = new Model(_house_data, _standard_shader, 4);
 		_wood = new Model(_wood_data, _standard_shader, 5);
 		_axe = new Model(_axe_data, _standard_shader, 6);
 		_water = new Model(_water_data, _standard_shader, 7);
 		_player = new Model(_player_data, _standard_shader, 12);		
 		_lantern = new Model(_lantern_data, _standard_shader, 14);*/
-		_lightbulb = new Lightmodel(_lightbulb_data, _lightbulb_shader, 14, _lightColor);
+		//_lightbulb = new Lightmodel(_lightbulb_data, _lightbulb_shader, 14, _lightColor);
+		createLightbulbs();
+	}
+
+	void createLightbulbs()
+	{
+		for(int i = 0; i < numberOfPointlights; i++)
+		{
+			_lightbulb = new Lightmodel(_lightbulb_data, _lightbulb_shader, 14, _lightColor);
+			_lightbulb->translate(_lightPositions[i]);
+			_lightbulb->scale(_lightScale);
+			Models.push_back(_lightbulb);
+		}
 	}
 
 	void transformModels()
@@ -150,15 +175,15 @@ public:
 		_water->rotate(90.0f, glm::vec3(0.0f, 1.0f, 0.0f));
 		_lantern->translate(glm::vec3(350.0f, -49.0f, 75.0f));
 		_lantern->scale(glm::vec3(3.0f, 3.0f, 3.0f));*/
-		_lightbulb->translate(_lightPosition);
-		_lightbulb->scale(_lightScale);
+		//_lightbulb->translate(_lightPositions[0]);
+		//_lightbulb->scale(_lightScale);
 	}
 
 	void addModelsToRenderer()
 	{
 		Models.push_back(_cubeMap);
 		Models.push_back(_ground);
-		Models.push_back(_lightbulb);
+		//Models.push_back(_lightbulb);
 		/*Models.push_back(_house);
 		Models.push_back(_wood);
 		Models.push_back(_axe);

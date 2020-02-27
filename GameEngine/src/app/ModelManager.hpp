@@ -12,6 +12,7 @@
 #include "AudioManager.hpp"
 #include "Cubemap.hpp"
 #include "Lightmodel.hpp"
+#include "LightPositions.hpp"
 
 class ModelManager
 {
@@ -66,8 +67,8 @@ public:
 		_tree_data = new AssimpLoader("res/obj/vegetation/MapleTree.obj");
 		_leaf_data = new AssimpLoader("res/obj/vegetation/MapleTreeLeaf.obj");
 		_grass_data = new AssimpLoader("res/obj/vegetation/LowGrass.obj");
-		_player_data = new AssimpLoader("res/obj/humans/Chibi.obj");		
-		_lantern_data = new AssimpLoader("res/obj/lightsources/Parklight.obj");*/		
+		_player_data = new AssimpLoader("res/obj/humans/Chibi.obj");*/	
+		_lantern_data = new AssimpLoader("res/obj/lightsources/Parklight.obj");		
 		_lightbulb_data = new AssimpLoader("res/obj/geometry/cylinder.obj");
 	}
 
@@ -84,8 +85,8 @@ public:
 		_leaf_tex = new Texture("res/textures/models/MapleTreeLeaf.jpg");
 		_leafMask_tex = new Texture("res/textures/models/MapleTreeMask.jpg");
 		_grassModel_tex = new Texture("res/textures/models/Grass.jpg");
-		_player_tex = new Texture("res/textures/models/Chibi.jpg");
-		_lantern_tex = new Texture("res/textures/models/Metal_2_dark.jpg");*/
+		_player_tex = new Texture("res/textures/models/Chibi.jpg");*/
+		_lantern_tex = new Texture("res/textures/models/Metal_2_dark.jpg");
 		_lightbulb_tex = new Texture("res/textures/models/White.jpg");
 
 		_grass_tex->bind(0);
@@ -99,8 +100,8 @@ public:
 		_leaf_tex->bind(9);
 		_leafMask_tex->bind(10);
 		_grassModel_tex->bind(11);
-		_player_tex->bind(12);
-		_lantern_tex->bind(13);*/
+		_player_tex->bind(12);*/
+		_lantern_tex->bind(13);
 		_lightbulb_tex->bind(14);
 
 		std::vector<std::string> faces
@@ -125,20 +126,25 @@ public:
 		/*_wood = new Model(_wood_data, _standard_shader, 5);
 		_axe = new Model(_axe_data, _standard_shader, 6);
 		_water = new Model(_water_data, _standard_shader, 7);
-		_player = new Model(_player_data, _standard_shader, 12);		
-		_lantern = new Model(_lantern_data, _standard_shader, 14);*/
-		//_lightbulb = new Lightmodel(_lightbulb_data, _lightbulb_shader, 14, _lightColor);
-		createLightbulbs();
+		_player = new Model(_player_data, _standard_shader, 12);*/
+		_lantern = new Model(_lantern_data, _standard_shader, 13, _lightColor, _lightPositions);
+		createLights();
 	}
 
-	void createLightbulbs()
+	void createLights()
 	{
 		for(int i = 0; i < numberOfPointlights; i++)
 		{
+			//Lightbulbs
 			_lightbulb = new Lightmodel(_lightbulb_data, _lightbulb_shader, 14, _lightColor);
 			_lightbulb->translate(_lightPositions[i]);
 			_lightbulb->scale(_lightScale);
 			Models.push_back(_lightbulb);
+
+			//Lanterns
+			/*_lantern = new Model(_lantern_data, _standard_shader, 13, _lightColor, _lightPositions);
+			_lightbulb->translate(_lanternPositions[i]);
+			Models.push_back(_lantern);*/
 		}
 	}
 
@@ -156,9 +162,10 @@ public:
 		_axe->rotate(-90.0f, glm::vec3(0, 1, 0));
 		_axe->rotate(-90.0f, glm::vec3(0, 0, 1));
 		_water->translate(glm::vec3(165, -51, 340));
-		_water->rotate(90.0f, glm::vec3(0.0f, 1.0f, 0.0f));
-		_lantern->translate(glm::vec3(350.0f, -49.0f, 75.0f));
-		_lantern->scale(glm::vec3(3.0f, 3.0f, 3.0f));*/
+		_water->rotate(90.0f, glm::vec3(0.0f, 1.0f, 0.0f));*/
+		_lantern->translate(_lanternPositions[0]);
+		_lantern->scale(_lanternScale);
+		//_lightbulb->translate(_lanternPositions[0]);
 	}
 
 	void addModelsToRenderer()
@@ -166,6 +173,7 @@ public:
 		Models.push_back(_cubeMap);
 		Models.push_back(_ground);
 		Models.push_back(_house);
+		Models.push_back(_lantern);
 		/*Models.push_back(_wood);
 		Models.push_back(_axe);
 		Models.push_back(_water);

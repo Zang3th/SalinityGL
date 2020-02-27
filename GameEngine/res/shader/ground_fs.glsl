@@ -15,7 +15,7 @@ uniform sampler2D grassTexture;
 uniform sampler2D dirtTexture;
 uniform sampler2D stoneTexture;
 uniform sampler2D blendmap;
-uniform vec3 skyColor;
+uniform vec3 fogColor;
 uniform vec3 lightColor;
 uniform vec3 lightPositions[NR_OF_POINT_LIGHTS];
 uniform vec3 viewPosition;
@@ -73,8 +73,8 @@ void main()
 	result *= vec3(groundColor.xyz);
 
 	//Fog (muss als letztes berechnet werden)
-	vec4 mixColor = mix(vec4(skyColor, 1.0), vec4(result, 1.0), visibility);
+	vec4 mixColor = mix(vec4(fogColor, 1.0), vec4(result, 1.0), visibility);
 
 	//Final-Fragmentcolor
-	fragColor = vec4(mixColor);
+	fragColor = mixColor;
 }

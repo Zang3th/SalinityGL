@@ -43,11 +43,11 @@ public:
 		}
 
 		// Fill vertices normals
-		/*normals.reserve(mesh->mNumVertices);
+		_normals.reserve(mesh->mNumVertices);
 		for (unsigned int i = 0; i < mesh->mNumVertices; i++) {
 			aiVector3D n = mesh->mNormals[i];
-			normals.push_back(glm::vec3(n.x, n.y, n.z));
-		}*/
+			_normals.push_back(glm::vec3(n.x, n.y, n.z));
+		}
 
 		// Fill face indices
 		_indices.reserve(3 * mesh->mNumFaces);
@@ -64,6 +64,7 @@ public:
 		_verticeSize = _vertices.size() * sizeof(glm::vec3);
 		_indiceSize = _indices.size() * sizeof(glm::uvec3);
 		_texCoordSize = _texCoords.size() * sizeof(glm::vec2);
+		_normalSize = _normals.size() * sizeof(glm::vec3);
 		_verticesToRender = (GLsizei)_indices.size() * 3;
 	}	
 };

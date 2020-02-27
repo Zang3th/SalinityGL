@@ -46,5 +46,6 @@
     <ClInclude Include="src\core\Cubemap.hpp" />
     <ClInclude Include="src\core\RenderStateManager.hpp" />
     <ClInclude Include="src\core\Lightmodel.hpp" />
+    <ClInclude Include="src\core\LightPositions.hpp" />
   </ItemGroup>
 </Project>

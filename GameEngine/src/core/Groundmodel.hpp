@@ -25,6 +25,8 @@ public:
 		delete _vao;
 		delete _vbo1;
 		delete _vbo2;
+		delete _vbo3;
+		delete _vbo4;
 		delete _ib;
 	}
 
@@ -67,7 +69,7 @@ public:
 		_shader->SetUniform1i("dirtTexture", _texSlot1);
 		_shader->SetUniform1i("stoneTexture", _texSlot2);
 		_shader->SetUniform1i("blendmap", _texSlot3);
-		_shader->SetUniformVec3("skyColor", glm::vec3(0.611, 0.705, 0.752));
+		_shader->SetUniformVec3("fogColor", glm::vec3(0.611, 0.705, 0.752));
 		_shader->SetUniformVec3("lightColor", _lightColor);
 		_shader->SetUniformVec3("viewPosition", _camera->Position);
 

@@ -6,6 +6,7 @@
 #include "OpenGLErrorManager.hpp"
 #include "Camera.hpp"
 #include "RenderStateManager.hpp"
+#include "LightPositions.hpp"
 
 const unsigned int WIDTH = 1800; //Global WIDTH-Setting
 const unsigned int HEIGHT = 1200; //Global HEIGHT-Setting
@@ -17,6 +18,7 @@ bool window_focused = false; //Is the window in focus?
 
 Camera* _camera = nullptr; //Global camera object. Needs to be global for callbacks and Model.hpp
 RenderStateManager* _RSM = nullptr;
+
 #include "Player.hpp" //Needs to be included last because Model.hpp needs global _camera object
 
 void processInput(GLFWwindow* window, Player* _playerObject)

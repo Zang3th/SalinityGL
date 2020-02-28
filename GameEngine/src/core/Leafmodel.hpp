@@ -9,11 +9,11 @@ private:
 	Shader* _shader = nullptr;
 	RawData* _data = nullptr;
 	unsigned int _texSlot0, _texSlot1;
-	DisplayManager* _myDisplayManager;
+	VertexBuffer* _vbo3 = nullptr;
 
 public:
-	Leafmodel(RawData* dataToUse, Shader* shaderToUse, unsigned int textureSlot0, unsigned int textureSlot1, DisplayManager* _displayManager)
-		: _data(dataToUse), _shader(shaderToUse), _texSlot0(textureSlot0), _texSlot1(textureSlot1), _myDisplayManager(_displayManager)
+	Leafmodel(RawData* dataToUse, Shader* shaderToUse, unsigned int textureSlot0, unsigned int textureSlot1)
+		: _data(dataToUse), _shader(shaderToUse), _texSlot0(textureSlot0), _texSlot1(textureSlot1)
 	{
 		this->initialize();
 	}
@@ -23,6 +23,7 @@ public:
 		delete _vao;
 		delete _vbo1;
 		delete _vbo2;
+		delete _vbo3;
 		delete _ib;
 	}
 
@@ -37,13 +38,16 @@ public:
 		_vao->DefineAttributes(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0); //Position attribute
 		_vbo2 = new VertexBuffer(&_data->_texCoords[0], _data->_texCoordSize);
 		_vao->DefineAttributes(1, 2, GL_FLOAT, GL_FALSE, 0, (void*)0); //Texture attribute
-
+		_vbo3 = new VertexBuffer(&_data->_normals[0], _data->_normalSize);
+		_vao->DefineAttributes(2, 3, GL_FLOAT, GL_FALSE, 0, (void*)0); //Normal attribute	
+		
 		//Erstellt IB
 		_ib = new IndexBuffer(&_data->_indices[0], _data->_indiceSize);
 
 		//Unbindet VAO und VBO
 		_vbo1->unbind();
 		_vbo2->unbind();
+		_vbo3->unbind();
 		_vao->unbind();
 	}
 
@@ -57,7 +61,18 @@ public:
 		_shader->SetUniformMat4f("view", _view);
 		_shader->SetUniform1i("leafTexture", _texSlot0);
 		_shader->SetUniform1i("leafMask", _texSlot1);
-		_shader->SetUniformVec3("skyColor", glm::vec3(0.611, 0.705, 0.752));
+		_shader->SetUniformVec3("fogColor", glm::vec3(0.611, 0.705, 0.752));
+		_shader->SetUniformVec3("lightColor", _lightColor);
+		_shader->SetUniformVec3("viewPosition", _camera->Position);
+
+		for (int i = 0; i < numberOfPointlights; i++)
+		{
+			std::string uniformName = "lightPositions[";
+			uniformName += std::to_string(i);
+			uniformName += "]";
+			_shader->SetUniformVec3(uniformName, _lightPositions[i]);
+		}
+
 		_vao->bind();
 	}
 

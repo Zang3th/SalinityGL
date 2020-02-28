@@ -60,7 +60,7 @@ void main()
 		result += PointLight(lightPositions[i], worldPosition, viewPosition);
 	}
 
-	//Verrechnung mit Bodenfarbe
+	//Verrechnung mit Texturfarbe
 	result *= vec3(texColor.xyz);
 
 	//Fog (muss als letztes berechnet werden)

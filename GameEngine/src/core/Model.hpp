@@ -10,14 +10,12 @@ private:
 	RawData* _data = nullptr;
 	unsigned int _texSlot;
 	VertexBuffer* _vbo3 = nullptr;
-	glm::vec3 _lightColor, *_lightPositions;
-	//int _numberOfPointlights;
 
 public:
 	bool _isCubeMap;
 
-	Model(RawData* dataToUse, Shader* shaderToUse, unsigned int textureSlot, const glm::vec3& lightColor, glm::vec3* lightPositions, bool isCubeMap = false)
-		: _data(dataToUse), _shader(shaderToUse), _texSlot(textureSlot), _lightColor(lightColor), _lightPositions(lightPositions), _isCubeMap(isCubeMap)
+	Model(RawData* dataToUse, Shader* shaderToUse, unsigned int textureSlot, bool isCubeMap = false)
+		: _data(dataToUse), _shader(shaderToUse), _texSlot(textureSlot), _isCubeMap(isCubeMap)
 	{
 		this->initialize();
 	}
@@ -51,6 +49,7 @@ public:
 		//Unbindet VAO und VBO
 		_vbo1->unbind();
 		_vbo2->unbind();
+		_vbo3->unbind();
 		_vao->unbind();
 	}
 

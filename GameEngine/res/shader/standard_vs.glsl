@@ -32,5 +32,6 @@ void main()
 	visibility = clamp(visibility, 0.0, 1.0);
 
 	//Normals
-	normals_out = normals_in;
+	//normals_out = normals_in;
+	normals_out = mat3(transpose(inverse(model))) * normals_in;
 }

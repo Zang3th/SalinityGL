@@ -6,7 +6,7 @@ in float visibility;
 out vec4 fragColor;
 
 uniform sampler2D textureSampler;
-uniform vec3 skyColor;
+uniform vec3 fogColor;
 uniform vec3 lightColor;
 
 void main()
@@ -15,5 +15,6 @@ void main()
 	vec4 texColor = texture(textureSampler, texCoords_out) * vec4(lightColor, 1.0);
 
 	//Fog
-	fragColor = mix(vec4(skyColor, 1.0), texColor, visibility);
+	vec3 newFogColor = fogColor * 0.6;
+	fragColor = mix(vec4(newFogColor, 1.0), texColor, visibility);
 }

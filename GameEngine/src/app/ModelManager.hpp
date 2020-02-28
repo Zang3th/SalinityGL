@@ -136,9 +136,10 @@ public:
 		_house->scale(glm::vec3(1.75f, 1.75f, 1.75f));
 		_house->rotate(45.0f, glm::vec3(0, 1, 0));
 		_house->rotate(-7.0f, glm::vec3(1, 0, 0));
-		_wood->translate(glm::vec3(420, 1.0, 115));
+		_wood->translate(glm::vec3(420, 0.0, 115));
 		_wood->scale(glm::vec3(2.5f, 2.5f, 2.5f));
 		_wood->rotate(170.0f, glm::vec3(0, 0, 1));
+		_wood->rotate(20.0f, glm::vec3(0, 1, 1));
 		_axe->translate(glm::vec3(414, 1.4, 115));
 		_axe->scale(glm::vec3(0.6f, 0.6f, 0.6f));
 		_axe->rotate(-120.0f, glm::vec3(0, 1, 0));

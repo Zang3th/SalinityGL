@@ -56,7 +56,7 @@ public:
 		_shader->SetUniformMat4f("projection", _projection);
 		_shader->SetUniformMat4f("view", _view);
 		_shader->SetUniform1i("textureSampler", _texSlot);
-		_shader->SetUniformVec3("skyColor", glm::vec3(0.611, 0.705, 0.752));
+		_shader->SetUniformVec3("fogColor", glm::vec3(0.611, 0.705, 0.752));
 		_shader->SetUniformVec3("lightColor", _lightColor);
 		_vao->bind();		
 	}

@@ -20,9 +20,9 @@ uniform vec3 lightColor;
 uniform vec3 lightPositions[NR_OF_POINT_LIGHTS];
 uniform vec3 viewPosition;
 
-const float ambientStrength = 0.2;
+const float ambientStrength = 0.1;
 const float diffuseStrength = 0.8;
-const float specularStrength = 0.4;
+const float specularStrength = 0.3;
 const float lightConstant = 1.0;
 const float lightLinear = 0.007;
 const float lightQuadratic = 0.0002;
@@ -73,7 +73,8 @@ void main()
 	result *= vec3(groundColor.xyz);
 
 	//Fog (muss als letztes berechnet werden)
-	vec4 mixColor = mix(vec4(fogColor, 1.0), vec4(result, 1.0), visibility);
+	vec3 newFogColor = fogColor * 0.6;
+	vec4 mixColor = mix(vec4(newFogColor, 1.0), vec4(result, 1.0), visibility);
 
 	//Final-Fragmentcolor
 	fragColor = mixColor;

@@ -17,7 +17,7 @@ uniform vec3 viewPosition;
 
 const float ambientStrength = 0.2;
 const float diffuseStrength = 1.0;
-const float specularStrength = 0.5;
+const float specularStrength = 0.8;
 const float lightConstant = 1.0;
 const float lightLinear = 0.007;
 const float lightQuadratic = 0.0002;
@@ -35,13 +35,13 @@ vec3 PointLight(vec3 lightPosition, vec4 worldPosition, vec3 viewPosition)
 
 	//Diffuse
 	vec3 Normal = normalize(normals_out);
-	vec3 lightDir = normalize(-(lightPosition - vec3(worldPosition.xyz)));
+	vec3 lightDir = normalize((lightPosition - vec3(worldPosition.xyz)));
 	float diff = max(dot(normals_out, lightDir), 0.0);
 	vec3 diffuseLight = diff * diffuseStrength * lightColor * attenuation;
 
 	//Specular
 	vec3 viewDir = normalize(viewPosition - vec3(worldPosition.xyz));
-	vec3 reflectDir = reflect(lightDir, Normal);
+	vec3 reflectDir = reflect(-lightDir, Normal);
 	float spec = pow(max(dot(viewDir, reflectDir), 0.0), shininess);
 	vec3 specularLight = specularStrength * spec * lightColor * attenuation;
 
@@ -64,7 +64,8 @@ void main()
 	result *= vec3(texColor.xyz);
 
 	//Fog (muss als letztes berechnet werden)
-	vec4 mixColor = mix(vec4(fogColor, 1.0), vec4(result, 1.0), visibility);
+	vec3 newFogColor = fogColor * 0.6;
+	vec4 mixColor = mix(vec4(newFogColor, 1.0), vec4(result, 1.0), visibility);
 
 	//Final-Fragmentcolor
 	fragColor = mixColor;

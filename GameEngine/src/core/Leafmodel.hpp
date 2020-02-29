@@ -53,7 +53,7 @@ public:
 
 	void draw() override
 	{
-		_projection = glm::perspective(glm::radians(_camera->Zoom), (float)WIDTH / (float)HEIGHT, 0.1f, 1000.0f);
+		_projection = glm::perspective(glm::radians(_camera->Zoom), (float)WIDTH / (float)HEIGHT, 0.1f, 10000.0f);
 		_view = _camera->GetViewMatrix();
 		_shader->bind();
 		_shader->SetUniformMat4f("model", _model);

@@ -5,6 +5,7 @@
 #include "Renderer.hpp"
 #include "ModelManager.hpp"
 #include "AudioManager.hpp"
+#include "MousePicker.hpp"
 
 int main()
 {
@@ -29,6 +30,9 @@ int main()
 	//Modelmanager
 	ModelManager modelManager(&displayManager, &audioManager);	
 
+	//Mousepicker
+	MousePicker mousePicker;
+
 	while (!displayManager.WindowShouldClose())
 	{
 		//Measure Frametime
@@ -42,7 +46,10 @@ int main()
 
 		//Check Keyboard and Mouseinputs
 		displayManager.checkForInput();
-		
+
+		//Update MouseRay
+		mousePicker.update();
+
 		//Render Stuff		
 		renderer.render(modelManager.Models);
 
@@ -55,6 +62,8 @@ int main()
 			ImGui::Text("Camera-Yaw: %f, Camera-Pitch: %f", _camera->Yaw, _camera->Pitch);			
 			ImGui::Text("Player-Coords: X: %f, Y: %f, Z: %f", displayManager._player->_playerPosition.x, displayManager._player->_playerPosition.y, displayManager._player->_playerPosition.z);
 			ImGui::Text("Player-Rotation: %f", displayManager._player->_yaw);
+			ImGui::Text("Mouse-Coords (VIEW): X: %f, Y: %f", rawMouse_X, rawMouse_Y);
+			ImGui::Text("Mouse-Coords (WORLD): X: %f, Y: %f, Z: %f", mousePicker._mouseRay.x, mousePicker._mouseRay.y, mousePicker._mouseRay.z);
 			guiManager.exitWindow();
 		}
 

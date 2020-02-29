@@ -12,8 +12,9 @@ const unsigned int WIDTH = 1800; //Global WIDTH-Setting
 const unsigned int HEIGHT = 1200; //Global HEIGHT-Setting
 float deltaTime = 0.0f;	//Time between current frame and last frame
 float lastFrame = 0.0f; //Time of last frame
-float lastX = WIDTH / 2.0f; //X-Coord of last frame
-float lastY = HEIGHT / 2.0f; //Y-Coord of last frame
+float lastX = WIDTH / 2.0f; //X-Coord of the mouse
+float lastY = HEIGHT / 2.0f; //Y-Coord of the mouse
+float rawMouse_X, rawMouse_Y;
 bool window_focused = false; //Is the window in focus?
 
 Camera* _camera = nullptr; //Global camera object. Needs to be global for callbacks and Model.hpp
@@ -65,6 +66,9 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 		lastX = xpos;
 		lastY = ypos;
 	}
+
+	rawMouse_X = xpos;
+	rawMouse_Y = ypos;
 }
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)

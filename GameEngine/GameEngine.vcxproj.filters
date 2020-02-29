@@ -47,5 +47,6 @@
     <ClInclude Include="src\core\RenderStateManager.hpp" />
     <ClInclude Include="src\core\Lightmodel.hpp" />
     <ClInclude Include="src\core\LightPositions.hpp" />
+    <ClInclude Include="src\core\MousePicker.hpp" />
   </ItemGroup>
 </Project>

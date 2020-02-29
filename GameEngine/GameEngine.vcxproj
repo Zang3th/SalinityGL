@@ -167,6 +167,7 @@
     <ClInclude Include="src\app\ModelManager.hpp" />
     <ClInclude Include="src\core\Lightmodel.hpp" />
     <ClInclude Include="src\core\LightPositions.hpp" />
+    <ClInclude Include="src\core\MousePicker.hpp" />
     <ClInclude Include="src\core\PlaneData.hpp" />
     <ClInclude Include="src\core\Player.hpp" />
     <ClInclude Include="src\core\RawData.hpp" />

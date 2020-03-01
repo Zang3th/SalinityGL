@@ -63,7 +63,7 @@ int main()
 			ImGui::Text("Player-Coords: X: %f, Y: %f, Z: %f", displayManager._player->_playerPosition.x, displayManager._player->_playerPosition.y, displayManager._player->_playerPosition.z);
 			ImGui::Text("Player-Rotation: %f", displayManager._player->_yaw);
 			ImGui::Text("Mouse-Coords (VIEW): X: %f, Y: %f", rawMouse_X, rawMouse_Y);
-			ImGui::Text("Mouse-Coords (WORLD): X: %f, Y: %f, Z: %f", mousePicker._mouseRay.x, mousePicker._mouseRay.y, mousePicker._mouseRay.z);
+			ImGui::Text("Mouse-RAY-Direction (WORLD): X: %f, Y: %f, Z: %f", mousePicker._mouseRay.x, mousePicker._mouseRay.y, mousePicker._mouseRay.z);
 			guiManager.exitWindow();
 		}
 

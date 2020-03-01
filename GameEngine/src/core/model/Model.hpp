@@ -9,6 +9,7 @@ private:
 	Shader* _shader = nullptr;
 	RawData* _data = nullptr;
 	unsigned int _texSlot;
+	VertexBuffer* _vbo2 = nullptr;
 	VertexBuffer* _vbo3 = nullptr;
 
 public:

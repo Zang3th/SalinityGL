@@ -9,8 +9,7 @@ class Basemodel
 {
 public:
 	VertexArray* _vao = nullptr;
-	VertexBuffer* _vbo1 = nullptr;
-	VertexBuffer* _vbo2 = nullptr;
+	VertexBuffer* _vbo1 = nullptr;	
 	IndexBuffer* _ib = nullptr;	
 	glm::mat4 _model = glm::mat4(1.0f);
 	glm::mat4 _projection;

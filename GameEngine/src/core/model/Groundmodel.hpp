@@ -2,28 +2,31 @@
 
 #include "Basemodel.hpp"
 #include "RawData.hpp"
+#include <string>
 
-class Leafmodel : public Basemodel
+class Groundmodel : public Basemodel
 {
 private:
 	Shader* _shader = nullptr;
 	RawData* _data = nullptr;
-	unsigned int _texSlot0, _texSlot1;
-	VertexBuffer* _vbo3 = nullptr;
+	unsigned int _texSlot0, _texSlot1, _texSlot2, _texSlot3;
+	VertexBuffer *_vbo2 = nullptr, *_vbo3 = nullptr, *_vbo4 = nullptr;
+	glm::vec3 _lightColor, *_lightPositions;
 
 public:
-	Leafmodel(RawData* dataToUse, Shader* shaderToUse, unsigned int textureSlot0, unsigned int textureSlot1)
-		: _data(dataToUse), _shader(shaderToUse), _texSlot0(textureSlot0), _texSlot1(textureSlot1)
+	Groundmodel(RawData* dataToUse, Shader* shaderToUse, unsigned int textureSlot0, unsigned int textureSlot1, unsigned int textureSlot2, unsigned int textureSlot3, const glm::vec3& lightColor, glm::vec3* lightPositions)
+		: _data(dataToUse), _shader(shaderToUse), _texSlot0(textureSlot0), _texSlot1(textureSlot1), _texSlot2(textureSlot2), _texSlot3(textureSlot3), _lightColor(lightColor), _lightPositions(lightPositions)
 	{
 		this->initialize();
 	}
 
-	~Leafmodel()
+	~Groundmodel()
 	{
 		delete _vao;
 		delete _vbo1;
 		delete _vbo2;
 		delete _vbo3;
+		delete _vbo4;
 		delete _ib;
 	}
 
@@ -38,8 +41,10 @@ public:
 		_vao->DefineAttributes(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0); //Position attribute
 		_vbo2 = new VertexBuffer(&_data->_texCoords[0], _data->_texCoordSize);
 		_vao->DefineAttributes(1, 2, GL_FLOAT, GL_FALSE, 0, (void*)0); //Texture attribute
-		_vbo3 = new VertexBuffer(&_data->_normals[0], _data->_normalSize);
-		_vao->DefineAttributes(2, 3, GL_FLOAT, GL_FALSE, 0, (void*)0); //Normal attribute	
+		_vbo3 = new VertexBuffer(&_data->_blendmapCoords[0], _data->_blendmapCoordsSize);
+		_vao->DefineAttributes(2, 2, GL_FLOAT, GL_FALSE, 0, (void*)0); //Map coords
+		_vbo4 = new VertexBuffer(&_data->_normals[0], _data->_normalSize);
+		_vao->DefineAttributes(3, 3, GL_FLOAT, GL_FALSE, 0, (void*)0); //Normal attribute
 		
 		//Erstellt IB
 		_ib = new IndexBuffer(&_data->_indices[0], _data->_indiceSize);
@@ -48,6 +53,7 @@ public:
 		_vbo1->unbind();
 		_vbo2->unbind();
 		_vbo3->unbind();
+		_vbo4->unbind();
 		_vao->unbind();
 	}
 
@@ -59,20 +65,22 @@ public:
 		_shader->SetUniformMat4f("model", _model);
 		_shader->SetUniformMat4f("projection", _projection);
 		_shader->SetUniformMat4f("view", _view);
-		_shader->SetUniform1i("leafTexture", _texSlot0);
-		_shader->SetUniform1i("leafMask", _texSlot1);
+		_shader->SetUniform1i("grassTexture", _texSlot0);
+		_shader->SetUniform1i("dirtTexture", _texSlot1);
+		_shader->SetUniform1i("stoneTexture", _texSlot2);
+		_shader->SetUniform1i("blendmap", _texSlot3);
 		_shader->SetUniformVec3("fogColor", glm::vec3(0.611, 0.705, 0.752));
 		_shader->SetUniformVec3("lightColor", _lightColor);
 		_shader->SetUniformVec3("viewPosition", _camera->Position);
 
-		for (int i = 0; i < numberOfPointlights; i++)
+		for(int i = 0; i < numberOfPointlights; i++)
 		{
 			std::string uniformName = "lightPositions[";
 			uniformName += std::to_string(i);
 			uniformName += "]";
 			_shader->SetUniformVec3(uniformName, _lightPositions[i]);
-		}
-
+		}		
+		
 		_vao->bind();
 	}
 

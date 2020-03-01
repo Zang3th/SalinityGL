@@ -42,11 +42,13 @@
     <ClInclude Include="src\core\data\Heightmap.hpp" />
     <ClInclude Include="src\core\model\Leafmodel.hpp" />
     <ClInclude Include="src\core\model\Lightmodel.hpp" />
-    <ClInclude Include="src\core\model\Model.hpp" />
     <ClInclude Include="src\core\functionality\MousePicker.hpp" />
     <ClInclude Include="src\core\data\PlaneData.hpp" />
     <ClInclude Include="src\core\functionality\Player.hpp" />
     <ClInclude Include="src\core\data\RawData.hpp" />
     <ClInclude Include="src\core\data\LightPositions.hpp" />
+    <ClInclude Include="src\core\model\Standardmodel.hpp" />
+    <ClInclude Include="src\core\data\QuaderData.hpp" />
+    <ClInclude Include="src\core\model\Primitivemodel.hpp" />
   </ItemGroup>
 </Project>

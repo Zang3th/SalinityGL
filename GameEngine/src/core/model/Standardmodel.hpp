@@ -3,7 +3,7 @@
 #include "Basemodel.hpp"
 #include "RawData.hpp"
 
-class Model : public Basemodel
+class Standardmodel : public Basemodel
 {
 private:
 	Shader* _shader = nullptr;
@@ -15,13 +15,13 @@ private:
 public:
 	bool _isCubeMap;
 
-	Model(RawData* dataToUse, Shader* shaderToUse, unsigned int textureSlot, bool isCubeMap = false)
+	Standardmodel(RawData* dataToUse, Shader* shaderToUse, unsigned int textureSlot, bool isCubeMap = false)
 		: _data(dataToUse), _shader(shaderToUse), _texSlot(textureSlot), _isCubeMap(isCubeMap)
 	{
 		this->initialize();
 	}
 
-	~Model()
+	~Standardmodel()
 	{
 		delete _vao;
 		delete _vbo1;

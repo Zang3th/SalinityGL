@@ -8,28 +8,32 @@
 #include "AssimpLoader.hpp"
 #include "PlaneData.hpp"
 #include "Leafmodel.hpp"
-#include "Model.hpp"
+#include "Standardmodel.hpp"
 #include "AudioManager.hpp"
 #include "Cubemap.hpp"
 #include "Lightmodel.hpp"
 #include "LightPositions.hpp"
+#include "QuaderData.hpp"
+#include "Primitivemodel.hpp"
 
 class ModelManager
 {
 private:
-	Shader *_standard_shader, *_ground_shader, *_leaf_shader, *_cubeMap_shader, *_lightbulb_shader;
+	Shader *_standard_shader, *_ground_shader, *_leaf_shader, *_cubeMap_shader, *_lightbulb_shader, *_primitive_shader;
 	GroundData *_ground_data;
 	PlaneData *_water_data;
 	AssimpLoader *_house_data, *_wood_data, *_axe_data, *_tree_data, *_leaf_data, *_grass_data, *_player_data, *_cubeMap_data, *_lantern_data, *_lightbulb_data;
 	Texture *_grass_tex, *_dirt_tex, *_stone_tex, *_blendmap, *_house_tex, *_wood_tex, *_axe_tex, *_water_tex, *_tree_tex, *_leaf_tex, *_leafMask_tex, *_grassModel_tex, *_player_tex, *_lantern_tex, *_lightbulb_tex;
 	Groundmodel *_ground;
-	Model *_house, *_wood, *_axe, *_water, *_tree, *_grass, *_player, *_cubeMap, *_lantern;
+	Standardmodel *_house, *_wood, *_axe, *_water, *_tree, *_grass, *_player, *_cubeMap, *_lantern;
 	Lightmodel *_lightbulb;
 	Leafmodel *_leaf;
 	Filemanager *_filemanager;
 	DisplayManager *_displayManager;
 	AudioManager *_audioManager;
 	Cubemap *_cubeMap_tex;
+	QuaderData *_quaderData;
+	Primitivemodel *_quader;
 
 public:
 	std::vector<Basemodel*> Models;	
@@ -53,6 +57,7 @@ public:
 		_leaf_shader = new Shader("res/shader/leaf_vs.glsl", "res/shader/leaf_fs.glsl");
 		_cubeMap_shader = new Shader("res/shader/cubemap_vs.glsl", "res/shader/cubemap_fs.glsl");
 		_lightbulb_shader = new Shader("res/shader/lightbulb_vs.glsl", "res/shader/lightbulb_fs.glsl");
+		_primitive_shader = new Shader("res/shader/primitive_vs.glsl", "res/shader/primitive_fs.glsl");
 	}
 
 	void createContainer()
@@ -69,6 +74,7 @@ public:
 		_player_data = new AssimpLoader("res/obj/humans/Chibi.obj");	
 		_lantern_data = new AssimpLoader("res/obj/lightsources/Parklight.obj");		
 		_lightbulb_data = new AssimpLoader("res/obj/geometry/cylinder.obj");
+		_quaderData = new QuaderData();
 	}
 
 	void initTextures()
@@ -119,15 +125,15 @@ public:
 
 	void createModels()
 	{
-		_cubeMap = new Model(_cubeMap_data, _cubeMap_shader, 3, true);		
+		_cubeMap = new Standardmodel(_cubeMap_data, _cubeMap_shader, 3, true);
 		_ground = new Groundmodel(_ground_data, _ground_shader, 0, 1, 1, 2, _lightColor, _lightPositions);
-		_house = new Model(_house_data, _standard_shader, 4);
-		_wood = new Model(_wood_data, _standard_shader, 5);
-		_axe = new Model(_axe_data, _standard_shader, 6);
-		_water = new Model(_water_data, _standard_shader, 7);
-		_player = new Model(_player_data, _standard_shader, 12);
-		_lantern = new Model(_lantern_data, _standard_shader, 13);
-		
+		_house = new Standardmodel(_house_data, _standard_shader, 4);
+		_wood = new Standardmodel(_wood_data, _standard_shader, 5);
+		_axe = new Standardmodel(_axe_data, _standard_shader, 6);
+		_water = new Standardmodel(_water_data, _standard_shader, 7);
+		_player = new Standardmodel(_player_data, _standard_shader, 12);
+		_lantern = new Standardmodel(_lantern_data, _standard_shader, 13);
+		_quader = new Primitivemodel(_quaderData, _primitive_shader);
 	}	
 
 	void transformModels()
@@ -157,6 +163,7 @@ public:
 		Models.push_back(_axe);
 		Models.push_back(_water);
 		Models.push_back(_player);
+		Models.push_back(_quader);
 
 		createLights();
 		createPlayer();
@@ -174,7 +181,7 @@ public:
 			Models.push_back(_lightbulb);
 
 			//Lanterns
-			_lantern = new Model(_lantern_data, _standard_shader, 13);
+			_lantern = new Standardmodel(_lantern_data, _standard_shader, 13);
 			_lantern->translate(_lanternPositions[i]);
 			_lantern->scale(_lanternScale);
 			Models.push_back(_lantern);
@@ -220,7 +227,7 @@ public:
 			}
 			else
 			{
-				_grass = new Model(_grass_data, _standard_shader, 11);
+				_grass = new Standardmodel(_grass_data, _standard_shader, 11);
 				_grass->translate(glm::vec3(grass_x, grass_y, grass_z));
 				int size = rand() % 30;
 				_grass->scale(glm::vec3(size, size, size));
@@ -240,7 +247,7 @@ public:
 				}
 				else
 				{
-					_tree = new Model(_tree_data, _standard_shader, 8);
+					_tree = new Standardmodel(_tree_data, _standard_shader, 8);
 					_leaf = new Leafmodel(_leaf_data, _leaf_shader, 9, 10);
 					_tree->translate(glm::vec3(tree_x, tree_y, tree_z));
 					_leaf->translate(glm::vec3(tree_x, tree_y, tree_z));
@@ -257,5 +264,7 @@ public:
 		//_filemanager->writeReadableToFile(_ground_data->_normals, "res/data/readable/normals.gldata");
 		//_filemanager->writeReadableToFile(_ground_data->_vertices, "res/data/readable/vertices.gldata");
 		//_filemanager->writeReadableToFile(_ground_data->_indices, "res/data/readable/indices.gldata");
+		//_filemanager->writeReadableToFile(_quaderData->_vertices, "res/data/readable/quaderVertices.gldata");
+		//_filemanager->writeReadableToFile(_quaderData->_indices, "res/data/readable/quaderIndices.gldata");
 	}
 };

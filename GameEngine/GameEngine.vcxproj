@@ -153,9 +153,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\data\AssimpLoader.hpp" />
+    <ClInclude Include="src\core\data\QuaderData.hpp" />
     <ClInclude Include="src\core\functionality\AudioManager.hpp" />
     <ClInclude Include="src\core\model\Basemodel.hpp" />
     <ClInclude Include="src\core\functionality\Camera.hpp" />
+    <ClInclude Include="src\core\model\Primitivemodel.hpp" />
     <ClInclude Include="src\core\OpenGL_Interfaces\Cubemap.hpp" />
     <ClInclude Include="src\core\functionality\Filemanager.hpp" />
     <ClInclude Include="src\core\data\GroundData.hpp" />
@@ -177,7 +179,7 @@
     <ClInclude Include="src\core\OpenGL_Interfaces\Texture.hpp" />
     <ClInclude Include="src\core\OpenGL_Interfaces\VertexArray.hpp" />
     <ClInclude Include="src\core\OpenGL_Interfaces\OpenGLErrorManager.hpp" />
-    <ClInclude Include="src\core\model\Model.hpp" />
+    <ClInclude Include="src\core\model\Standardmodel.hpp" />
     <ClInclude Include="src\core\OpenGL_Interfaces\VertexBuffer.hpp" />
     <ClInclude Include="src\vendor\imgui\imconfig.h" />
     <ClInclude Include="src\vendor\imgui\imgui.h" />

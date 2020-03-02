@@ -73,8 +73,7 @@ public:
 		_grass_data = new AssimpLoader("res/obj/vegetation/LowGrass.obj");
 		_player_data = new AssimpLoader("res/obj/humans/Chibi.obj");	
 		_lantern_data = new AssimpLoader("res/obj/lightsources/Parklight.obj");		
-		_lightbulb_data = new AssimpLoader("res/obj/geometry/cylinder.obj");
-		_quaderData = new QuaderData();
+		_lightbulb_data = new AssimpLoader("res/obj/geometry/cylinder.obj");		
 	}
 
 	void initTextures()
@@ -133,23 +132,26 @@ public:
 		_water = new Standardmodel(_water_data, _standard_shader, 7);
 		_player = new Standardmodel(_player_data, _standard_shader, 12);
 		_lantern = new Standardmodel(_lantern_data, _standard_shader, 13);
-		_quader = new Primitivemodel(_quaderData, _primitive_shader);
+		
 	}	
 
 	void transformModels()
-	{		
+	{				
 		_house->translate(glm::vec3(430, -5, 85));
 		_house->scale(glm::vec3(1.75f, 1.75f, 1.75f));
 		_house->rotate(45.0f, glm::vec3(0, 1, 0));
 		_house->rotate(-7.0f, glm::vec3(1, 0, 0));
+		
 		_wood->translate(glm::vec3(420, 0.0, 115));
 		_wood->scale(glm::vec3(2.5f, 2.5f, 2.5f));
 		_wood->rotate(170.0f, glm::vec3(0, 0, 1));
 		_wood->rotate(20.0f, glm::vec3(0, 1, 1));
+				
 		_axe->translate(glm::vec3(414, 1.4, 115));
 		_axe->scale(glm::vec3(0.6f, 0.6f, 0.6f));
 		_axe->rotate(-120.0f, glm::vec3(0, 1, 0));
 		_axe->rotate(-120.0f, glm::vec3(0, 0, 1));
+
 		_water->translate(glm::vec3(165, -11, 340));
 		_water->rotate(90.0f, glm::vec3(0.0f, 1.0f, 0.0f));
 	}
@@ -162,12 +164,11 @@ public:
 		Models.push_back(_wood);
 		Models.push_back(_axe);
 		Models.push_back(_water);
-		Models.push_back(_player);
-		Models.push_back(_quader);
+		Models.push_back(_player);		
 
 		createLights();
 		createPlayer();
-		createVegetation();			
+		createVegetation();
 	}
 
 	void createLights()
@@ -175,13 +176,13 @@ public:
 		for (int i = 0; i < numberOfPointlights; i++)
 		{
 			//Lightbulbs
-			_lightbulb = new Lightmodel(_lightbulb_data, _lightbulb_shader, 14, _lightColor);
+			_lightbulb = new Lightmodel(_lightbulb_data, _lightbulb_shader, 14, _lightColor);			
 			_lightbulb->translate(_lightPositions[i]);
 			_lightbulb->scale(_lightScale);
 			Models.push_back(_lightbulb);
 
 			//Lanterns
-			_lantern = new Standardmodel(_lantern_data, _standard_shader, 13);
+			_lantern = new Standardmodel(_lantern_data, _standard_shader, 13);			
 			_lantern->translate(_lanternPositions[i]);
 			_lantern->scale(_lanternScale);
 			Models.push_back(_lantern);
@@ -228,9 +229,9 @@ public:
 			else
 			{
 				_grass = new Standardmodel(_grass_data, _standard_shader, 11);
-				_grass->translate(glm::vec3(grass_x, grass_y, grass_z));
 				int size = rand() % 30;
-				_grass->scale(glm::vec3(size, size, size));
+				_grass->translate(glm::vec3(grass_x, grass_y, grass_z));
+				_grass->scale(glm::vec3(size, size, size));				
 				Models.push_back(_grass);
 			}
 
@@ -258,6 +259,22 @@ public:
 		}	
 	}
 
+	void createRay(const glm::vec3& startPosition, const glm::vec3& endPosition, const float& angle)
+	{
+		_quaderData = new QuaderData(glm::vec3(0,0,0), endPosition);
+		_quader = new Primitivemodel(_quaderData, _primitive_shader);
+		
+		//_quader->translate(transPos);
+		_quader->translate(startPosition);
+		//_quader->rotate(angle, glm::vec3(0, -1, 0));
+		
+		//_quader->rotate(glfwGetTime() * 50.0f, glm::vec3(0, 1, 0));
+		//_quader->rotate(angle, glm::vec3(0, -1, 0));
+		//_quader->translate(transPos);
+		int pos = Models.size() - 1;
+		Models.at(pos) = _quader;
+	}
+	
 	void debugVectors()
 	{
 		//_filemanager = new Filemanager();		

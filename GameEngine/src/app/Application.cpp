@@ -50,6 +50,12 @@ int main()
 		//Update MouseRay
 		mousePicker.update();
 
+		//Update RenderRay Position
+		glm::vec3 rayPos = glm::vec3(_camera->Position.x + 4, _camera->Position.y - 4, _camera->Position.z);
+		//modelManager.createRay(rayPos, _camera->Front, _camera->Yaw);
+		//modelManager.createRay(glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), _camera->Yaw);
+		modelManager.createRay(rayPos, _camera->Front, _camera->Yaw);
+
 		//Render Stuff		
 		renderer.render(modelManager.Models);
 
@@ -59,7 +65,8 @@ int main()
 			guiManager.newWindow("General stuff");
 			ImGui::Text("\nApplication average %.3f ms/frame (%.1f FPS)\n", 1000.f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 			ImGui::Text("Camera-Coords: X: %f, Y: %f, Z: %f", _camera->Position.x, _camera->Position.y, _camera->Position.z);
-			ImGui::Text("Camera-Yaw: %f, Camera-Pitch: %f", _camera->Yaw, _camera->Pitch);			
+			ImGui::Text("Camera-Yaw: %f, Camera-Pitch: %f", _camera->Yaw, _camera->Pitch);
+			ImGui::Text("Camera-Front Vec3: X: %f, Y: %f, Z: %f", _camera->Front.x, _camera->Front.y, _camera->Front.z);
 			ImGui::Text("Player-Coords: X: %f, Y: %f, Z: %f", displayManager._player->_playerPosition.x, displayManager._player->_playerPosition.y, displayManager._player->_playerPosition.z);
 			ImGui::Text("Player-Rotation: %f", displayManager._player->_yaw);
 			ImGui::Text("Mouse-Coords (VIEW): X: %f, Y: %f", rawMouse_X, rawMouse_Y);

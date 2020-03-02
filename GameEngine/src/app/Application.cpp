@@ -51,10 +51,8 @@ int main()
 		mousePicker.update();
 
 		//Update RenderRay Position
-		glm::vec3 rayPos = glm::vec3(_camera->Position.x + 4, _camera->Position.y - 4, _camera->Position.z);
-		//modelManager.createRay(rayPos, _camera->Front, _camera->Yaw);
-		//modelManager.createRay(glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), _camera->Yaw);
-		modelManager.createRay(rayPos, _camera->Front, _camera->Yaw);
+		glm::vec3 camPos = glm::vec3(_camera->Position.x, _camera->Position.y - 4, _camera->Position.z);
+		modelManager.createRay(camPos, _camera->Front, _camera->Yaw);
 
 		//Render Stuff		
 		renderer.render(modelManager.Models);

@@ -5,129 +5,102 @@
 class QuaderData : public RawData
 {
 private:
-	glm::vec3 _startPosition, _endPosition;
+	glm::vec3 _camPosition, _endPosition;
+	float _angle;
 
 public:
-	QuaderData(const glm::vec3& startPosition, const glm::vec3& endPosition)
-		: _startPosition(startPosition), _endPosition(endPosition)
+	QuaderData(const glm::vec3& camPosition, const glm::vec3& endPosition, const float& angle)
+		: _camPosition(camPosition), _endPosition(endPosition), _angle(angle)
 	{
 		init();
 	}
 
 	void init()
 	{
-		/*float vert[]
-		{*/
-			//-0.5f,  0.5f, -0.5f, // top left
-			//-0.5f, -0.5f, -0.5f, // bottom left
-			// 0.5f, -0.5f, -0.5f, // bottom right
-			// 0.5f,  0.5f, -0.5f, // top right 
+		//-------------------------------------------------------------------Front Face-----------------------------------------------------------------------------------
+		glm::vec3 originPosition(0, 0, 0);
 
-			/* 0.0f, 0.0f, 0.0f,
-			 0.0f, 0.0f, 1.0f,
-			 0.0f, 1.0f, 1.0f,
-			 0.0f, 1.0f, 0.0f*/
+		//Create face in origin
+		glm::vec3 bottom_left = glm::vec3(originPosition.x, originPosition.y, originPosition.z);
+		glm::vec3 bottom_right = glm::vec3(originPosition.x, originPosition.y, originPosition.z + 1);
+		glm::vec3 top_right = glm::vec3(originPosition.x, originPosition.y + 1, originPosition.z + 1);
+		glm::vec3 top_left = glm::vec3(originPosition.x, originPosition.y + 1, originPosition.z);
 
-			/*-0.5f,  0.5f, 0.5f, 
-			-0.5f, -0.5f, 0.5f, 
-			 0.5f, -0.5f, 0.5f, 
-			 0.5f,  0.5f, 0.5f, 
+		//Create Transformationmatrix
+		glm::mat4 trans = glm::mat4(1.0f);
+		trans = glm::translate(trans, _camPosition);
+		trans = glm::rotate(trans, glm::radians(_angle), glm::vec3(0, -1, 0));		
 
-			 0.5f,  0.5f, -0.5f, 
-			 0.5f, -0.5f, -0.5f, 
-			 0.5f, -0.5f,  0.5f, 
-			 0.5f,  0.5f,  0.5f, 
+		//Create 4D Vector
+		glm::vec4 bottom_left_4D = glm::vec4(bottom_left, 1.0f);
+		glm::vec4 bottom_right_4D = glm::vec4(bottom_right, 1.0f);
+		glm::vec4 top_right_4D = glm::vec4(top_right, 1.0f);
+		glm::vec4 top_left_4D = glm::vec4(top_left, 1.0f);
 
-			 -0.5f,  0.5f, -0.5f,
-			 -0.5f, -0.5f, -0.5f,
-			 -0.5f, -0.5f,  0.5f,
-			 -0.5f,  0.5f,  0.5f,
+		//Transform
+		bottom_left_4D = trans * bottom_left_4D;
+		bottom_right_4D = trans * bottom_right_4D;
+		top_right_4D = trans * top_right_4D;
+		top_left_4D = trans * top_left_4D;
 
-			 -0.5f, 0.5f,  0.5f, 
-			 -0.5f, 0.5f, -0.5f, 
-			  0.5f, 0.5f, -0.5f, 
-			  0.5f, 0.5f,  0.5f, */
+		_vertices.emplace_back(glm::vec3(bottom_left_4D.x, bottom_left_4D.y, bottom_left_4D.z));
+		_vertices.emplace_back(glm::vec3(bottom_right_4D.x, bottom_right_4D.y, bottom_right_4D.z));
+		_vertices.emplace_back(glm::vec3(top_right_4D.x, top_right_4D.y, top_right_4D.z));
+		_vertices.emplace_back(glm::vec3(top_left_4D.x, top_left_4D.y, top_left_4D.z));
 
-			/* -0.5f, -0.5f,  0.5f,
-			 -0.5f, -0.5f, -0.5f,
-			  0.5f, -0.5f, -0.5f,
-			  0.5f, -0.5f,  0.5f*/
-		/*};
+		_indices.emplace_back(glm::uvec3(0, 1, 2));
+		_indices.emplace_back(glm::uvec3(0, 2, 3));
 
-		std::vector<float> floats = std::vector<float>(vert, vert + sizeof(vert) / sizeof(vert[0]));
+		//-------------------------------------------------------------------Back Face-----------------------------------------------------------------------------------
+		glm::vec3 calcEndPos = glm::vec3(_camPosition.x + _endPosition.x * 100, _camPosition.y + _endPosition.y * 100, _camPosition.z + _endPosition.z * 100);
 
-		for(int i = 0; i < floats.size(); i += 3)
-		{
-			_vertices.emplace_back(glm::vec3(floats.at(i), floats.at(i + 1), floats.at(i + 2)));
-		}
+		//Create face in origin
+		bottom_left = glm::vec3(originPosition.x, originPosition.y, originPosition.z);
+		bottom_right = glm::vec3(originPosition.x, originPosition.y, originPosition.z + 1);
+		top_right = glm::vec3(originPosition.x, originPosition.y + 1, originPosition.z + 1);
+		top_left = glm::vec3(originPosition.x, originPosition.y + 1, originPosition.z);
 
-		unsigned int ind[] =
-		{
-			0, 1, 2,
-			0, 2, 3*/
+		//Create Transformationmatrix
+		trans = glm::mat4(1.0f);
+		trans = glm::translate(trans, calcEndPos);
+		trans = glm::rotate(trans, glm::radians(_angle), glm::vec3(0, -1, 0));
 
-			//0, 1, 3,
-			//3, 1, 2,
-			/*
-			4, 5, 7,
-			7, 5, 6,
-			8, 9, 11,
-			11, 9, 10,
-			12, 13, 15,
-			15, 13, 14,
-			16, 17, 19,
-			19, 17, 18,
-			20, 21, 23,
-			23, 21, 22*/
-		/*};
-		
-		std::vector<unsigned int> uInts = std::vector<unsigned int>(ind, ind + sizeof(ind) / sizeof(ind[0]));
+		//Create 4D Vector
+		bottom_left_4D = glm::vec4(bottom_left, 1.0f);
+		bottom_right_4D = glm::vec4(bottom_right, 1.0f);
+		top_right_4D = glm::vec4(top_right, 1.0f);
+		top_left_4D = glm::vec4(top_left, 1.0f);
 
-		for (int i = 0; i < uInts.size(); i += 3)
-		{
-			_indices.emplace_back(glm::uvec3(uInts.at(i), uInts.at(i + 1), uInts.at(i + 2)));
-		}
-		*/
+		//Transform
+		bottom_left_4D = trans * bottom_left_4D;
+		bottom_right_4D = trans * bottom_right_4D;
+		top_right_4D = trans * top_right_4D;
+		top_left_4D = trans * top_left_4D;
 
-		//for(int i = 0; i < 1; i++)
-		//{
-			//Front Face
-			_vertices.emplace_back(glm::vec3(_startPosition.x, _startPosition.y, _startPosition.z));
-			_vertices.emplace_back(glm::vec3(_startPosition.x, _startPosition.y, _startPosition.z + 1));
-			_vertices.emplace_back(glm::vec3(_startPosition.x, _startPosition.y + 1, _startPosition.z + 1));
-			_vertices.emplace_back(glm::vec3(_startPosition.x, _startPosition.y + 1, _startPosition.z));
-			_indices.emplace_back(glm::uvec3(0, 1, 2));
-			_indices.emplace_back(glm::uvec3(0, 2, 3));
+		_vertices.emplace_back(glm::vec3(bottom_left_4D.x, bottom_left_4D.y, bottom_left_4D.z));
+		_vertices.emplace_back(glm::vec3(bottom_right_4D.x, bottom_right_4D.y, bottom_right_4D.z));
+		_vertices.emplace_back(glm::vec3(top_right_4D.x, top_right_4D.y, top_right_4D.z));
+		_vertices.emplace_back(glm::vec3(top_left_4D.x, top_left_4D.y, top_left_4D.z));
 
-			glm::vec3 calcEndPos = glm::vec3(_startPosition.x + _endPosition.x * 100, _startPosition.y + _endPosition.y * 100, _startPosition.z + _endPosition.z * 100);
-			//glm::vec3 calcEndPos = glm::vec3(_endPosition.x * 100, _startPosition.y, _endPosition.z * 100);
-			//glm::vec3 calcEndPos = _endPosition;
-			//glm::vec3 calcEndPos = glm::vec3(_startPosition.x + 50, _startPosition.y, _startPosition.z);
+		_indices.emplace_back(glm::uvec3(4, 5, 6));
+		_indices.emplace_back(glm::uvec3(4, 6, 7));
 
-			//Back Face
-			_vertices.emplace_back(glm::vec3(calcEndPos.x, calcEndPos.y, calcEndPos.z));
-			_vertices.emplace_back(glm::vec3(calcEndPos.x, calcEndPos.y, calcEndPos.z + 1));
-			_vertices.emplace_back(glm::vec3(calcEndPos.x, calcEndPos.y + 1, calcEndPos.z + 1));
-			_vertices.emplace_back(glm::vec3(calcEndPos.x, calcEndPos.y + 1, calcEndPos.z));
-			_indices.emplace_back(glm::uvec3(4, 5, 6));
-			_indices.emplace_back(glm::uvec3(4, 6, 7));
+		//-------------------------------------------------------------------Other Faces----------------------------------------------------------------------------------
+		//Bottom
+		_indices.emplace_back(glm::uvec3(0, 1, 5));
+		_indices.emplace_back(glm::uvec3(0, 5, 4));
 
-			//Bottom
-			//_indices.emplace_back(glm::uvec3(0, 1, 5));
-			//_indices.emplace_back(glm::uvec3(0, 5, 4));
+		//Right
+		_indices.emplace_back(glm::uvec3(1, 5, 6));
+		_indices.emplace_back(glm::uvec3(1, 6, 2));
 
-			////Right
-			//_indices.emplace_back(glm::uvec3(1, 5, 6));
-			//_indices.emplace_back(glm::uvec3(1, 6, 2));
+		//Top
+		_indices.emplace_back(glm::uvec3(3, 2, 6));
+		_indices.emplace_back(glm::uvec3(3, 6, 7));
 
-			////Top
-			//_indices.emplace_back(glm::uvec3(3, 2, 6));
-			//_indices.emplace_back(glm::uvec3(3, 6, 7));
-
-			////Left
-			//_indices.emplace_back(glm::uvec3(0, 4, 7));
-			//_indices.emplace_back(glm::uvec3(0, 7, 3));
-		//}
+		//Left
+		_indices.emplace_back(glm::uvec3(0, 4, 7));
+		_indices.emplace_back(glm::uvec3(0, 7, 3));		
 
 		setParameters();
 	}

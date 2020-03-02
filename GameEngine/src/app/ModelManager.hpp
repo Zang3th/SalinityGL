@@ -259,18 +259,10 @@ public:
 		}	
 	}
 
-	void createRay(const glm::vec3& startPosition, const glm::vec3& endPosition, const float& angle)
+	void createRay(const glm::vec3& camPosition, const glm::vec3& endPosition, const float& angle)
 	{
-		_quaderData = new QuaderData(glm::vec3(0,0,0), endPosition);
+		_quaderData = new QuaderData(camPosition, endPosition, angle);
 		_quader = new Primitivemodel(_quaderData, _primitive_shader);
-		
-		//_quader->translate(transPos);
-		_quader->translate(startPosition);
-		//_quader->rotate(angle, glm::vec3(0, -1, 0));
-		
-		//_quader->rotate(glfwGetTime() * 50.0f, glm::vec3(0, 1, 0));
-		//_quader->rotate(angle, glm::vec3(0, -1, 0));
-		//_quader->translate(transPos);
 		int pos = Models.size() - 1;
 		Models.at(pos) = _quader;
 	}

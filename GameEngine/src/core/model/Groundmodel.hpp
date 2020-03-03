@@ -11,11 +11,10 @@ private:
 	RawData* _data = nullptr;
 	unsigned int _texSlot0, _texSlot1, _texSlot2, _texSlot3;
 	VertexBuffer *_vbo2 = nullptr, *_vbo3 = nullptr, *_vbo4 = nullptr;
-	glm::vec3 _lightColor, *_lightPositions;
 
 public:
-	Groundmodel(RawData* dataToUse, Shader* shaderToUse, unsigned int textureSlot0, unsigned int textureSlot1, unsigned int textureSlot2, unsigned int textureSlot3, const glm::vec3& lightColor, glm::vec3* lightPositions)
-		: _data(dataToUse), _shader(shaderToUse), _texSlot0(textureSlot0), _texSlot1(textureSlot1), _texSlot2(textureSlot2), _texSlot3(textureSlot3), _lightColor(lightColor), _lightPositions(lightPositions)
+	Groundmodel(RawData* dataToUse, Shader* shaderToUse, unsigned int textureSlot0, unsigned int textureSlot1, unsigned int textureSlot2, unsigned int textureSlot3)
+		: _data(dataToUse), _shader(shaderToUse), _texSlot0(textureSlot0), _texSlot1(textureSlot1), _texSlot2(textureSlot2), _texSlot3(textureSlot3)
 	{
 		this->initialize();
 	}

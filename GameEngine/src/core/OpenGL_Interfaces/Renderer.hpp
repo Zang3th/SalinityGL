@@ -14,10 +14,17 @@ public:
 	void render(const std::vector<Basemodel*>& Models)
 	{
 		for(Basemodel* m : Models)
-		{			
-			m->draw();
-			GLCall(glDrawElements(GL_TRIANGLES, m->getNumberOfVertices(), GL_UNSIGNED_INT, nullptr));
-			m->undraw();
+		{		
+			if(m->renderModel == true)
+			{
+				m->draw();
+				GLCall(glDrawElements(GL_TRIANGLES, m->getNumberOfVertices(), GL_UNSIGNED_INT, nullptr));
+				m->undraw();
+			}
+			else
+			{
+				
+			}
 		}
 	}
 };

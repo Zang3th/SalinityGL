@@ -7,6 +7,9 @@
 #include "AudioManager.hpp"
 #include "MousePicker.hpp"
 
+bool renderRay = false;
+bool fixedRay = false;
+
 int main()
 {
 	Player* _playerObject = nullptr; //Player object	
@@ -50,9 +53,12 @@ int main()
 		//Update MouseRay
 		mousePicker.update();
 
-		//Update RenderRay Position
-		glm::vec3 camPos = glm::vec3(_camera->Position.x, _camera->Position.y - 4, _camera->Position.z);
-		modelManager.createRay(camPos, _camera->Front, _camera->Yaw);
+		//Update RenderRay Position		
+		if(fixedRay == false)
+		{
+			glm::vec3 camPos = glm::vec3(_camera->Position.x, _camera->Position.y - 4, _camera->Position.z);
+			modelManager.createRay(camPos, _camera->Front, _camera->Yaw, renderRay);
+		}		
 
 		//Render Stuff		
 		renderer.render(modelManager.Models);
@@ -61,14 +67,19 @@ int main()
 		{
 			//Neues Fenster mit FPS Counter rendern
 			guiManager.newWindow("General stuff");
-			ImGui::Text("\nApplication average %.3f ms/frame (%.1f FPS)\n", 1000.f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+			ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+			ImGui::Text("---------------------------------------------");
 			ImGui::Text("Camera-Coords: X: %f, Y: %f, Z: %f", _camera->Position.x, _camera->Position.y, _camera->Position.z);
 			ImGui::Text("Camera-Yaw: %f, Camera-Pitch: %f", _camera->Yaw, _camera->Pitch);
-			ImGui::Text("Camera-Front Vec3: X: %f, Y: %f, Z: %f", _camera->Front.x, _camera->Front.y, _camera->Front.z);
+			ImGui::Text("Camera-Front: X: %f, Y: %f, Z: %f", _camera->Front.x, _camera->Front.y, _camera->Front.z);
+			ImGui::Text("---------------------------------------------");
 			ImGui::Text("Player-Coords: X: %f, Y: %f, Z: %f", displayManager._player->_playerPosition.x, displayManager._player->_playerPosition.y, displayManager._player->_playerPosition.z);
 			ImGui::Text("Player-Rotation: %f", displayManager._player->_yaw);
-			ImGui::Text("Mouse-Coords (VIEW): X: %f, Y: %f", rawMouse_X, rawMouse_Y);
-			ImGui::Text("Mouse-RAY-Direction (WORLD): X: %f, Y: %f, Z: %f", mousePicker._mouseRay.x, mousePicker._mouseRay.y, mousePicker._mouseRay.z);
+			ImGui::Text("---------------------------------------------");
+			ImGui::Text("Mouse-Coords: X: %f, Y: %f", rawMouse_X, rawMouse_Y);
+			ImGui::Text("Mouse-Ray-Direction: X: %f, Y: %f, Z: %f", mousePicker._mouseRay.x, mousePicker._mouseRay.y, mousePicker._mouseRay.z);
+			ImGui::Checkbox("Mouse-Ray rendern", &renderRay); ImGui::SameLine(); ImGui::Checkbox("Mouse-Ray fixieren", &fixedRay);
+			ImGui::Text("---------------------------------------------");
 			guiManager.exitWindow();
 		}
 

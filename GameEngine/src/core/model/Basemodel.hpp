@@ -14,6 +14,7 @@ public:
 	glm::mat4 _model = glm::mat4(1.0f);
 	glm::mat4 _projection;
 	glm::mat4 _view;	
+	bool renderModel = true;
 
 	void virtual initialize() = 0;
 	void virtual draw() = 0;

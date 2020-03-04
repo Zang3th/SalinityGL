@@ -21,10 +21,10 @@ public:
 		glm::vec3 originPosition(0, 0, 0);
 
 		//Create face in origin
-		glm::vec3 bottom_left = glm::vec3(originPosition.x, originPosition.y, originPosition.z);
-		glm::vec3 bottom_right = glm::vec3(originPosition.x, originPosition.y, originPosition.z + 1);
-		glm::vec3 top_right = glm::vec3(originPosition.x, originPosition.y + 1, originPosition.z + 1);
-		glm::vec3 top_left = glm::vec3(originPosition.x, originPosition.y + 1, originPosition.z);
+		glm::vec3 bottom_left = glm::vec3(originPosition.x, originPosition.y, originPosition.z - 0.25);
+		glm::vec3 bottom_right = glm::vec3(originPosition.x, originPosition.y, originPosition.z + 0.25);
+		glm::vec3 top_right = glm::vec3(originPosition.x, originPosition.y + 0.25, originPosition.z + 0.25);
+		glm::vec3 top_left = glm::vec3(originPosition.x, originPosition.y + 0.25, originPosition.z - 0.25);
 
 		//Create Transformationmatrix
 		glm::mat4 trans = glm::mat4(1.0f);
@@ -55,10 +55,10 @@ public:
 		glm::vec3 calcEndPos = glm::vec3(_camPosition.x + _endPosition.x * 100, _camPosition.y + _endPosition.y * 100, _camPosition.z + _endPosition.z * 100);
 
 		//Create face in origin
-		bottom_left = glm::vec3(originPosition.x, originPosition.y, originPosition.z);
-		bottom_right = glm::vec3(originPosition.x, originPosition.y, originPosition.z + 1);
-		top_right = glm::vec3(originPosition.x, originPosition.y + 1, originPosition.z + 1);
-		top_left = glm::vec3(originPosition.x, originPosition.y + 1, originPosition.z);
+		bottom_left = glm::vec3(originPosition.x, originPosition.y, originPosition.z - 0.25);
+		bottom_right = glm::vec3(originPosition.x, originPosition.y, originPosition.z + 0.25);
+		top_right = glm::vec3(originPosition.x, originPosition.y + 0.25, originPosition.z + 0.25);
+		top_left = glm::vec3(originPosition.x, originPosition.y + 0.25, originPosition.z - 0.25);
 
 		//Create Transformationmatrix
 		trans = glm::mat4(1.0f);

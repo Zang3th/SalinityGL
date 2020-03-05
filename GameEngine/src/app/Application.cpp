@@ -1,5 +1,3 @@
-#pragma once
-
 #include "DisplayManager.hpp"
 #include "GUIManager.hpp"
 #include "Renderer.hpp"
@@ -54,11 +52,11 @@ int main()
 		mousePicker.update();
 
 		//Update RenderRay Position		
-		if(fixedRay == false)
+		if(!fixedRay)
 		{
 			glm::vec3 camPos = glm::vec3(_camera->Position.x, _camera->Position.y - 4, _camera->Position.z);
 			modelManager.createRay(camPos, _camera->Front, _camera->Yaw, renderRay);
-		}		
+		}
 
 		//Render Stuff		
 		renderer.render(modelManager.Models);

@@ -8,7 +8,7 @@
 class Filemanager 
 {
 public:
-	void writeReadableToFile(std::vector<glm::vec3>& vec3_vector, const std::string& filepath)
+	void writeReadableToFile(std::vector<glm::vec3>& vec3_vector, const char* filepath)
 	{
 		std::ofstream myfile(filepath);
 		if (myfile.is_open())
@@ -24,7 +24,7 @@ public:
 		else spdlog::error("Unable to open file! | Path: {}", filepath);
 	}
 
-	void writeReadableToFile(std::vector<glm::uvec3>& uvec3_vector, const std::string& filepath)
+	void writeReadableToFile(std::vector<glm::uvec3>& uvec3_vector, const char* filepath)
 	{
 		std::ofstream myfile(filepath);
 		if (myfile.is_open())
@@ -40,7 +40,7 @@ public:
 		else spdlog::error("Unable to open file! | Path: {}", filepath);
 	}
 
-	void writeReadableToFile(std::vector<glm::vec2>& vec2_vector, const std::string& filepath)
+	void writeReadableToFile(std::vector<glm::vec2>& vec2_vector, const char* filepath)
 	{
 		std::ofstream myfile(filepath);
 		if (myfile.is_open())

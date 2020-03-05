@@ -23,7 +23,7 @@ private:
 	GroundData *_ground_data;
 	PlaneData *_water_data;
 	AssimpLoader *_house_data, *_wood_data, *_axe_data, *_tree_data, *_leaf_data, *_grass_data, *_player_data, *_cubeMap_data, *_lantern_data, *_lightbulb_data;
-	Texture *_grass_tex, *_dirt_tex, *_stone_tex, *_blendmap, *_house_tex, *_wood_tex, *_axe_tex, *_water_tex, *_tree_tex, *_leaf_tex, *_leafMask_tex, *_grassModel_tex, *_player_tex, *_lantern_tex, *_lightbulb_tex;
+	Texture *_grass_tex, *_dirt_tex, *_blendmap, *_house_tex, *_wood_tex, *_axe_tex, *_water_tex, *_tree_tex, *_leaf_tex, *_leafMask_tex, *_grassModel_tex, *_player_tex, *_lantern_tex, *_lightbulb_tex;
 	Groundmodel *_ground;
 	Standardmodel *_house, *_wood, *_axe, *_water, *_tree, *_grass, *_playerModel, *_cubeMap, *_lantern;
 	Lightmodel *_lightbulb;
@@ -33,7 +33,7 @@ private:
 	AudioManager *_audioManager;
 	Cubemap *_cubeMap_tex;
 	QuaderData *_quaderData;
-	Primitivemodel *_quader;
+	Primitivemodel *_quader = nullptr;
 
 public:
 	std::vector<Basemodel*> Models;	
@@ -47,7 +47,7 @@ public:
 		createModels();
 		transformModels();
 		addModelsToRenderer();
-		debugVectors();
+		//debugVectors();
 	}
 
 	void initShader()
@@ -73,7 +73,8 @@ public:
 		_grass_data = new AssimpLoader("res/obj/vegetation/LowGrass.obj");
 		_player_data = new AssimpLoader("res/obj/humans/Chibi.obj");	
 		_lantern_data = new AssimpLoader("res/obj/lightsources/Parklight.obj");		
-		_lightbulb_data = new AssimpLoader("res/obj/geometry/cylinder.obj");		
+		_lightbulb_data = new AssimpLoader("res/obj/geometry/cylinder.obj");
+		_quaderData = new QuaderData();
 	}
 
 	void initTextures()
@@ -108,7 +109,7 @@ public:
 		_lantern_tex->bind(13);
 		_lightbulb_tex->bind(14);
 
-		std::vector<std::string> faces
+		std::vector<const char*> faces
 		{
 				"res/textures/cubeMap/xp.jpg",
 				"res/textures/cubeMap/xn.jpg",
@@ -131,10 +132,11 @@ public:
 		_axe = new Standardmodel(_axe_data, _standard_shader, 6);
 		_water = new Standardmodel(_water_data, _standard_shader, 7);
 		_playerModel = new Standardmodel(_player_data, _standard_shader, 12);
-		_lantern = new Standardmodel(_lantern_data, _standard_shader, 13);		
+		_lantern = new Standardmodel(_lantern_data, _standard_shader, 13);
+		_quader = new Primitivemodel(_quaderData, _primitive_shader);
 	}	
 
-	void transformModels()
+	void transformModels() const
 	{		
 		_house->translate(glm::vec3(430, -6, 90));
 		_house->scale(glm::vec3(1.75f, 1.75f, 1.75f));		
@@ -163,11 +165,13 @@ public:
 		Models.push_back(_wood);
 		Models.push_back(_axe);
 		Models.push_back(_water);
-		Models.push_back(_playerModel);		
-
+		Models.push_back(_playerModel);			
+		
 		createLights();
 		createPlayer();
 		createVegetation();
+
+		Models.push_back(_quader);
 	}
 
 	void createLights()
@@ -188,7 +192,7 @@ public:
 		}
 	}
 
-	void createPlayer()
+	void createPlayer() const
 	{
 		//Create playerobject from model and translate it
 		float x = 330 / 2;
@@ -260,22 +264,25 @@ public:
 
 	void createRay(const glm::vec3& camPosition, const glm::vec3& endPosition, const float& angle, bool& renderRay)
 	{
-		_quaderData = new QuaderData(camPosition, endPosition, angle);
+		delete _quader;		
+		_quaderData->updatePosition(camPosition, endPosition, angle);
 		_quader = new Primitivemodel(_quaderData, _primitive_shader);
-		int pos = Models.size() - 1;
-		Models.at(pos) = _quader;
-
+		Models.pop_back();
+		Models.push_back(_quader);
+		
 		if (renderRay == false)
 			_quader->renderModel = false;
+		else
+			_quader->renderModel = true;		
 	}
 	
 	void debugVectors()
 	{
-		//_filemanager = new Filemanager();		
-		//_filemanager->writeReadableToFile(_ground_data->_normals, "res/data/readable/normals.gldata");
-		//_filemanager->writeReadableToFile(_ground_data->_vertices, "res/data/readable/vertices.gldata");
-		//_filemanager->writeReadableToFile(_ground_data->_indices, "res/data/readable/indices.gldata");
-		//_filemanager->writeReadableToFile(_quaderData->_vertices, "res/data/readable/quaderVertices.gldata");
-		//_filemanager->writeReadableToFile(_quaderData->_indices, "res/data/readable/quaderIndices.gldata");
+		_filemanager = new Filemanager();		
+		_filemanager->writeReadableToFile(_ground_data->_normals, "res/data/readable/normals.gldata");
+		_filemanager->writeReadableToFile(_ground_data->_vertices, "res/data/readable/vertices.gldata");
+		_filemanager->writeReadableToFile(_ground_data->_indices, "res/data/readable/indices.gldata");
+		_filemanager->writeReadableToFile(_quaderData->_vertices, "res/data/readable/quaderVertices.gldata");
+		_filemanager->writeReadableToFile(_quaderData->_indices, "res/data/readable/quaderIndices.gldata");
 	}
 };

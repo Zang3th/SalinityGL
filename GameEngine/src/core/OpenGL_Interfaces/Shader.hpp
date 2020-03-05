@@ -7,14 +7,14 @@
 #include <sstream>
 #include <glm/glm.hpp>
 
-class Shader 
+class Shader
 {
 private:
 	std::string _vs_Filepath;
 	std::string _fs_Filepath;
-	unsigned int _RendererID;	
+	unsigned int _RendererID;
 	std::unordered_map<std::string, int> _UniformLocationCache; //Caching for uniforms
-	
+
 	std::string GraspShader(const std::string& Filepath)
 	{
 		std::ifstream stream(Filepath);

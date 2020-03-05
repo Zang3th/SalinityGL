@@ -9,14 +9,21 @@ private:
 	float _angle;
 
 public:
-	QuaderData(const glm::vec3& camPosition, const glm::vec3& endPosition, const float& angle)
-		: _camPosition(camPosition), _endPosition(endPosition), _angle(angle)
+	QuaderData()
+		: _camPosition(10,10,10), _endPosition(100,10,10), _angle(20.0f)
 	{
-		init();
+		updatePosition(_camPosition, _endPosition, _angle); //Erforderlich, da das Programm in DEBUG sonst crashed!
 	}
 
-	void init()
+	void updatePosition(const glm::vec3& camPosition, const glm::vec3& endPosition, const float& angle)
 	{
+		//Preparation
+		_camPosition = camPosition;
+		_endPosition = endPosition;
+		_angle = angle;
+
+		_vertices.clear();
+		_indices.clear();
 		//-------------------------------------------------------------------Front Face-----------------------------------------------------------------------------------
 		glm::vec3 originPosition(0, 0, 0);
 

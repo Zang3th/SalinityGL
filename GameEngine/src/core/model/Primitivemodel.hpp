@@ -30,11 +30,11 @@ public:
 		_vao->bind();
 
 		//Erstellt VBO und konfiguriert VAO
-		_vbo1 = new VertexBuffer(&_data->_vertices[0], _data->_verticeSize);
+		_vbo1 = new VertexBuffer(&_data->_vertices[0], _data->_verticeSize, false);
 		_vao->DefineAttributes(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0); //Position attribute
 
 		//Erstellt IB
-		_ib = new IndexBuffer(&_data->_indices[0], _data->_indiceSize);
+		_ib = new IndexBuffer(&_data->_indices[0], _data->_indiceSize, false);
 
 		//Unbindet VAO und VBO
 		_vbo1->unbind();
@@ -76,5 +76,11 @@ public:
 	unsigned int getNumberOfVertices() override
 	{
 		return _data->_verticesToRender;
+	}
+
+	void updateData(RawData* dataToUse)
+	{
+		_data = dataToUse;
+		initialize();
 	}
 };

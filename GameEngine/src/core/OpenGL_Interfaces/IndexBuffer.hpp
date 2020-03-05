@@ -8,11 +8,21 @@ private:
 	unsigned int _RendererID;
 
 public:
-	IndexBuffer(const void* data, unsigned int size)
+	IndexBuffer(const void* data, unsigned int size, bool isDynamic = false)
+		: _RendererID(0)
 	{
-		GLCall(glGenBuffers(1, &_RendererID));
-		GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _RendererID));
-		GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, data, GL_STATIC_DRAW));
+		if(isDynamic)
+		{
+			GLCall(glGenBuffers(1, &_RendererID));
+			GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _RendererID));
+			GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, data, GL_DYNAMIC_DRAW));
+		}
+		else
+		{
+			GLCall(glGenBuffers(1, &_RendererID));
+			GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _RendererID));
+			GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, data, GL_STATIC_DRAW));
+		}		
 	}
 
 	~IndexBuffer()

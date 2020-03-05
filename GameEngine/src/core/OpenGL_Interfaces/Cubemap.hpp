@@ -9,7 +9,7 @@ private:
     unsigned int _RendererID;
 
 public:
-	Cubemap(std::vector<std::string>& faces)
+	Cubemap(std::vector<const char*>& faces)
 	{
         GLCall(glGenTextures(1, &_RendererID));
         GLCall(glBindTexture(GL_TEXTURE_CUBE_MAP, _RendererID));
@@ -18,7 +18,7 @@ public:
         int width, height, nrChannels;
         for (unsigned int i = 0; i < faces.size(); i++)
         {
-            unsigned char* data = stbi_load(faces[i].c_str(), &width, &height, &nrChannels, 0);
+            unsigned char* data = stbi_load(faces[i], &width, &height, &nrChannels, 0);
             if (data)
             {
                 GLCall(glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,

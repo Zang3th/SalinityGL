@@ -1,6 +1,5 @@
 #pragma once
 
-#include <string>
 #include <opencv2/opencv.hpp>
 
 class Heightmap
@@ -12,13 +11,13 @@ private:
 	double m_min_value;
 	double m_max_value;
 	cv::Mat m_img;
-	std::string m_filepath;
+	const char* m_filepath;
 	int m_flag;	
 
 public:
 	int m_valOutOfBounds;
 
-	Heightmap(std::string filepath, int flag)
+	Heightmap(const char* filepath, int flag)
 		: m_filepath(filepath), m_flag(flag), m_valOutOfBounds(0)
 	{
 		//Einlesen des Bildes

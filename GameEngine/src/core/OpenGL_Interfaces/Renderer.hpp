@@ -23,7 +23,7 @@ public:
 			}
 			else
 			{
-				
+				//spdlog::error("Model ist nicht sichtbar geschaltet!");
 			}
 		}
 	}

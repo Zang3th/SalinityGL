@@ -263,12 +263,9 @@ public:
 	}
 
 	void createRay(const glm::vec3& camPosition, const glm::vec3& endPosition, const float& angle, bool& renderRay)
-	{
-		delete _quader;		
+	{	
 		_quaderData->updatePosition(camPosition, endPosition, angle);
-		_quader = new Primitivemodel(_quaderData, _primitive_shader);
-		Models.pop_back();
-		Models.push_back(_quader);
+		_quader->updateData(_quaderData);		
 		
 		if (renderRay == false)
 			_quader->renderModel = false;

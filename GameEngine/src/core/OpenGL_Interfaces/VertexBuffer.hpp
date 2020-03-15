@@ -39,4 +39,9 @@ public:
 	{
 		GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
 	}
+
+	void updateData(const void* data, unsigned int size)
+	{
+		GLCall(glBufferSubData(GL_ARRAY_BUFFER, 0, size, data));
+	}
 };

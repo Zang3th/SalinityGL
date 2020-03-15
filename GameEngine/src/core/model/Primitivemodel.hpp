@@ -30,7 +30,7 @@ public:
 		_vao->bind();
 
 		//Erstellt VBO und konfiguriert VAO
-		_vbo1 = new VertexBuffer(&_data->_vertices[0], _data->_verticeSize, false);
+		_vbo1 = new VertexBuffer(&_data->_vertices[0], _data->_verticeSize, true);
 		_vao->DefineAttributes(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0); //Position attribute
 
 		//Erstellt IB
@@ -80,7 +80,16 @@ public:
 
 	void updateData(RawData* dataToUse)
 	{
+		//Binden
+		_vao->bind();
+		_vbo1->bind();
+
+		//Updaten
 		_data = dataToUse;
-		initialize();
+		_vbo1->updateData(&_data->_vertices[0], _data->_verticeSize);
+
+		//Unbinden
+		_vbo1->unbind();
+		_vao->unbind();
 	}
 };

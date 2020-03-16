@@ -7,8 +7,10 @@ private:
 	glm::mat4 _view;
 
 public:
-	glm::vec3 _mouseRay;
-
+	glm::vec3 _mouseRay = glm::vec3(0, 0, 0);
+	glm::vec3 _mouseRayEndPoint = glm::vec3(0,0,0);
+	glm::vec3 _mouseRayTerrainEntry = glm::vec3(0, 0, 0);
+	
 	MousePicker()
 	{
 

@@ -92,7 +92,7 @@ public:
 
 		//Calculate new height (y-value)
 		old_height = _playerPosition.y;
-		new_height = _ground_data->getHeightValue(_playerPosition.x / 2, _playerPosition.z / 2, 6.0f);
+		new_height = _ground_data->getHeightValueUnbuffered(_playerPosition.x / 2, _playerPosition.z / 2, 6.0f);
 		_playerPosition.y = new_height;
 
 		//Translate the player

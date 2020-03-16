@@ -41,7 +41,7 @@ public:
 		cv::imshow("Heightmap", m_img);
 	}
 
-	float getPixelValue(int x, int z, float scale)
+	float getPixelValueBuffered(int x, int z, float scale)
 	{
 		if ((x < m_width) && (z < m_height))
 		{
@@ -83,6 +83,21 @@ public:
 			}
 
 			return 0;
+		}
+	}
+
+	float getPixelValueUnbuffered(int x, int z, float scale)
+	{
+		if ((x < m_width) && (z < m_height) && (x >= 0) && (z >= 0))
+		{
+			float greyvalue = m_img.at<uchar>(x, z);
+			greyvalue -= m_max_value / 2;
+			greyvalue /= scale;
+			return greyvalue;
+		}
+		else
+		{
+			return 9999;
 		}
 	}
 

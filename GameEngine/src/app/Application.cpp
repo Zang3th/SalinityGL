@@ -7,6 +7,7 @@
 
 bool renderRay = false;
 bool fixedRay = false;
+bool calcCollision = false;
 
 int main()
 {
@@ -58,6 +59,16 @@ int main()
 			modelManager.createRay(camPos, _camera->Front, _camera->Yaw, renderRay);
 		}
 
+		if(calcCollision)
+		{			
+			int rayLength = 1000;
+			float x = _camera->Position.x + _camera->Front.x * rayLength;
+			float y = _camera->Position.y + _camera->Front.y * rayLength;
+			float z = _camera->Position.z + _camera->Front.z * rayLength;
+			mousePicker._mouseRayEndPoint = glm::vec3(x, y, z);
+			mousePicker._mouseRayTerrainEntry = modelManager.calcCollision(_camera->Position, _camera->Front);
+		}
+		
 		//Render Stuff		
 		renderer.render(modelManager.Models);
 
@@ -71,12 +82,15 @@ int main()
 			ImGui::Text("Camera-Yaw: %f, Camera-Pitch: %f", _camera->Yaw, _camera->Pitch);
 			ImGui::Text("Camera-Front: X: %f, Y: %f, Z: %f", _camera->Front.x, _camera->Front.y, _camera->Front.z);
 			ImGui::Text("---------------------------------------------");
-			ImGui::Text("Player-Coords: X: %f, Y: %f, Z: %f", displayManager._player->_playerPosition.x, displayManager._player->_playerPosition.y, displayManager._player->_playerPosition.z);
-			ImGui::Text("Player-Rotation: %f", displayManager._player->_yaw);
+			//ImGui::Text("Player-Coords: X: %f, Y: %f, Z: %f", displayManager._player->_playerPosition.x, displayManager._player->_playerPosition.y, displayManager._player->_playerPosition.z);
+			//ImGui::Text("Player-Rotation: %f", displayManager._player->_yaw);
 			ImGui::Text("---------------------------------------------");
+			ImGui::Checkbox("Mouse-Ray rendern", &renderRay); ImGui::SameLine(); ImGui::Checkbox("Mouse-Ray fixieren", &fixedRay);
 			ImGui::Text("Mouse-Coords: X: %f, Y: %f", rawMouse_X, rawMouse_Y);
 			ImGui::Text("Mouse-Ray-Direction: X: %f, Y: %f, Z: %f", mousePicker._mouseRay.x, mousePicker._mouseRay.y, mousePicker._mouseRay.z);
-			ImGui::Checkbox("Mouse-Ray rendern", &renderRay); ImGui::SameLine(); ImGui::Checkbox("Mouse-Ray fixieren", &fixedRay);
+			ImGui::Checkbox("Terrain Collision", &calcCollision);
+			ImGui::Text("EndPoint-Coords: X: %f, Y: %f, Z: %f", mousePicker._mouseRayEndPoint.x, mousePicker._mouseRayEndPoint.y, mousePicker._mouseRayEndPoint.z);
+			ImGui::Text("EndPoint-Coords: X: %f, Y: %f, Z: %f", mousePicker._mouseRayTerrainEntry.x, mousePicker._mouseRayTerrainEntry.y, mousePicker._mouseRayTerrainEntry.z);
 			ImGui::Text("---------------------------------------------");
 			guiManager.exitWindow();
 		}

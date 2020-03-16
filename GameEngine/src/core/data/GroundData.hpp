@@ -47,7 +47,7 @@ public:
 			for (int i = 0; i <= _size; ++i)
 			{
 				float x = (float)i / ((float)_size / (_size * _fieldmultiplier));
-				float y = _heightmap->getPixelValue(i, j, 6.0f);
+				float y = _heightmap->getPixelValueBuffered(i, j, 6.0f);
 				float z = (float)j / ((float)_size / (_size * _fieldmultiplier));
 				_vertices.emplace_back(glm::vec3(x, y, z));
 				_blendmapCoords.emplace_back(glm::vec2(x / 512, z / 512));
@@ -193,8 +193,13 @@ public:
 		_verticesToRender = (GLsizei)_indices.size() * 3;
 	}
 
-	float getHeightValue(int x, int y, float scale)
+	float getHeightValueBuffered(int x, int y, float scale)
 	{
-		return _heightmap->getPixelValue(x, y, scale);
+		return _heightmap->getPixelValueBuffered(x, y, scale);
+	}
+
+	float getHeightValueUnbuffered(int x, int y, float scale)
+	{
+		return _heightmap->getPixelValueUnbuffered(x, y, scale);
 	}
 };

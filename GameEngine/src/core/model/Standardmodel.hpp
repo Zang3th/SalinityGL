@@ -123,6 +123,12 @@ public:
 		_model = glm::scale(_model, scalar);
 	}
 
+	void changePosition(const glm::vec3 newPosition)
+	{
+		_model = glm::mat4(1.0f);
+		_model = glm::translate(_model, newPosition);
+	}
+	
 	unsigned int getNumberOfVertices() override
 	{
 		return _data->_verticesToRender;

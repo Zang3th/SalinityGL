@@ -29,25 +29,26 @@ class GroundData : public RawData
 {
 private:
 	unsigned int _size, _fieldmultiplier;
+	const char* _heightmap_filepath;
 	Heightmap* _heightmap = nullptr;
 
 public:
-	GroundData(int size, int fieldmultiplier)
-		: _size(size), _fieldmultiplier(fieldmultiplier)
+	GroundData(const unsigned int& size, const unsigned int& fieldmultiplier, const char* heightmap_filepath)
+		: _size(size), _fieldmultiplier(fieldmultiplier), _heightmap_filepath(heightmap_filepath)
 	{
 		init();
 	}
 
 	void init()
-	{
-		_heightmap = new Heightmap("res/maps/Heightmap_256.bmp", 0);
+	{		
+		_heightmap = new Heightmap(_heightmap_filepath, 0);
 
 		for (int j = 0; j <= _size; ++j)
 		{
 			for (int i = 0; i <= _size; ++i)
 			{
 				float x = (float)i / ((float)_size / (_size * _fieldmultiplier));
-				float y = _heightmap->getPixelValueBuffered(i, j, 6.0f);
+				float y = getHeightValueBuffered(i, j);
 				float z = (float)j / ((float)_size / (_size * _fieldmultiplier));
 				_vertices.emplace_back(glm::vec3(x, y, z));
 				_blendmapCoords.emplace_back(glm::vec2(x / 512, z / 512));
@@ -193,13 +194,13 @@ public:
 		_verticesToRender = (GLsizei)_indices.size() * 3;
 	}
 
-	float getHeightValueBuffered(int x, int y, float scale)
+	float getHeightValueBuffered(const int& x, const int& z) const
 	{
-		return _heightmap->getPixelValueBuffered(x, y, scale);
+		return _heightmap->getPixelValueBuffered(x, z);
 	}
 
-	float getHeightValueUnbuffered(int x, int y, float scale)
+	float getHeightValueUnbuffered(const int& x, const int& z) const
 	{
-		return _heightmap->getPixelValueUnbuffered(x, y, scale);
+		return _heightmap->getPixelValueUnbuffered(x, z);
 	}
 };

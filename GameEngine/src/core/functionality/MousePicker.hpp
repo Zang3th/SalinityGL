@@ -5,13 +5,14 @@ class MousePicker
 private:
 	glm::mat4 _projection;
 	glm::mat4 _view;
-
+	GroundData* _terrain;
+	
 public:
 	glm::vec3 _mouseRay = glm::vec3(0, 0, 0);
-	glm::vec3 _mouseRayEndPoint = glm::vec3(0,0,0);
 	glm::vec3 _mouseRayTerrainEntry = glm::vec3(0, 0, 0);
 	
-	MousePicker()
+	MousePicker(GroundData* Terrain)
+		: _terrain(Terrain)
 	{
 
 	}
@@ -43,5 +44,35 @@ public:
 		ray_WORLD_3D = glm::normalize(ray_WORLD_3D);
 
 		return ray_WORLD_3D;
+	}
+
+	void calculateTerrainEntry(const glm::vec3& camPosition, const glm::vec3 endPosition)
+	{
+		int rayLength = 1000;
+		float x, y, z;
+
+		for (int i = 0; i < 10000; i++)
+		{
+			x = camPosition.x + endPosition.x * rayLength;
+			y = camPosition.y + endPosition.y * rayLength;
+			z = camPosition.z + endPosition.z * rayLength;
+			
+			float terrain_height = _terrain->getHeightValueUnbuffered(x, z);
+
+			if (terrain_height > y)
+			{
+				rayLength -= 0.1f;
+			}
+			else if (terrain_height < y)
+			{
+				rayLength += 0.1f;
+			}
+			else if (terrain_height == y)
+			{
+				break;
+			}			
+		}
+
+		_mouseRayTerrainEntry = glm::vec3(x, y - 0.5, z);
 	}
 };

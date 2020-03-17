@@ -63,7 +63,7 @@ public:
 	void createContainer()
 	{
 		_cubeMap_data = new AssimpLoader("res/obj/geometry/cube.obj");
-		_ground_data = new GroundData(256, 2);
+		_ground_data = new GroundData(512, 1, "res/maps/Heightmap_512.bmp");
 		/*_water_data = new PlaneData(128, 1);
 		_house_data = new AssimpLoader("res/obj/houses/Farmhouse.obj");*/
 		_wood_data = new AssimpLoader("res/obj/vegetation/Wood.obj");
@@ -81,7 +81,7 @@ public:
 	{
 		_grass_tex = new Texture("res/textures/Grass.jpg");
 		_dirt_tex = new Texture("res/textures/Dirt.jpg");
-		_blendmap = new Texture("res/maps/Blendmap_256_bold.jpg");
+		_blendmap = new Texture("res/maps/Blendmap_512_bold.jpg");
 		//_house_tex = new Texture("res/textures/models/Farmhouse.jpg");
 		_wood_tex = new Texture("res/textures/models/Wood.jpg");
 		/*_axe_tex = new Texture("res/textures/models/Axe.jpg");
@@ -195,11 +195,9 @@ public:
 	void createPlayer() const
 	{
 		//Create playerobject from model and translate it
-		float x = 330 / 2;
-		float z = 70 / 2;
-		float y = _ground_data->getHeightValueUnbuffered(x, z, 6.0);
-		x *= 2;
-		z *= 2;
+		float x = 330.0f;
+		float z = 70.0f;
+		float y = _ground_data->getHeightValueUnbuffered(x, z);
 		_displayManager->_player = new Player(_playerModel, glm::vec3(x, y, z), _ground_data, _audioManager);
 	}
 
@@ -210,13 +208,13 @@ public:
 			//Koordinatenberechnung
 			int grass_x = rand() % 256;
 			int grass_z = rand() % 256;
-			float grass_y = _ground_data->getHeightValueUnbuffered(grass_x, grass_z, 6.0);
+			float grass_y = _ground_data->getHeightValueUnbuffered(grass_x, grass_z);
 			grass_x *= 2;
 			grass_z *= 2;
 
 			int tree_x = rand() % 256;
 			int tree_z = rand() % 256;
-			float tree_y = _ground_data->getHeightValueUnbuffered(tree_x, tree_z, 6.0);
+			float tree_y = _ground_data->getHeightValueUnbuffered(tree_x, tree_z);
 			tree_x *= 2;
 			tree_z *= 2;
 
@@ -262,50 +260,16 @@ public:
 		}	
 	}
 
-	void createRay(const glm::vec3& camPosition, const glm::vec3& endPosition, const float& angle, bool& renderRay)
+	void createRay(const glm::vec3& camPosition, const glm::vec3& endPosition, const float& angle, bool& renderRay, const float& rayLength, const float& rayThickness) const
 	{	
-		_quaderData->updatePosition(camPosition, endPosition, angle);
+		_quaderData->updatePosition(camPosition, endPosition, angle, rayLength, rayThickness);
 		_quader->updateData(_quaderData);		
 		
 		if (renderRay == false)
 			_quader->renderModel = false;
 		else
 			_quader->renderModel = true;		
-	}
-
-	glm::vec3 calcCollision(const glm::vec3& camPosition, const glm::vec3 endPosition)
-	{
-		int rayLength = 1000;
-		float x = camPosition.x + endPosition.x * rayLength;
-		float y = camPosition.y + endPosition.y * rayLength;
-		float z = camPosition.z + endPosition.z * rayLength;
-		
-		for(int i = 0; i < 2000; i++)
-		{
-			float terrain_height = _ground_data->getHeightValueUnbuffered((int)x % 256, (int)z % 256, 6.0f);
-
-			if (terrain_height > y)
-			{
-				rayLength -= 0.1f;
-			}
-			else if (terrain_height < y)
-			{
-				rayLength += 0.1f;
-			}
-			else if (terrain_height == y)
-			{
-				break;
-			}
-
-			x = camPosition.x + endPosition.x * rayLength;
-			y = camPosition.y + endPosition.y * rayLength;
-			z = camPosition.z + endPosition.z * rayLength;
-		}
-		
-		_wood->changePosition(glm::vec3(x, y, z));
-		return glm::vec3(x, y, z);
-		
-	}
+	}	
 	
 	void debugVectors()
 	{
@@ -315,5 +279,15 @@ public:
 		_filemanager->writeReadableToFile(_ground_data->_indices, "res/data/readable/indices.gldata");
 		_filemanager->writeReadableToFile(_quaderData->_vertices, "res/data/readable/quaderVertices.gldata");
 		_filemanager->writeReadableToFile(_quaderData->_indices, "res/data/readable/quaderIndices.gldata");
+	}
+
+	GroundData* getTerrain() const
+	{
+		return _ground_data;
+	}
+
+	void translateObject(const glm::vec3& newPosition) const
+	{
+		_wood->changePosition(newPosition);
 	}
 };

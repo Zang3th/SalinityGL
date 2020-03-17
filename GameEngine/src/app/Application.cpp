@@ -33,7 +33,7 @@ int main()
 	ModelManager modelManager(&displayManager, &audioManager);	
 
 	//Mousepicker
-	MousePicker mousePicker;
+	MousePicker mousePicker(modelManager.getTerrain());
 
 	while (!displayManager.WindowShouldClose())
 	{
@@ -55,18 +55,15 @@ int main()
 		//Update RenderRay Position		
 		if(!fixedRay)
 		{
-			glm::vec3 camPos = glm::vec3(_camera->Position.x, _camera->Position.y - 4, _camera->Position.z);
-			modelManager.createRay(camPos, _camera->Front, _camera->Yaw, renderRay);
+			glm::vec3 camPos = glm::vec3(_camera->Position.x, _camera->Position.y - 1, _camera->Position.z);
+			modelManager.createRay(camPos, _camera->Front, _camera->Yaw, renderRay, 1000.0f, 0.1f);
 		}
 
 		if(calcCollision)
-		{			
-			int rayLength = 1000;
-			float x = _camera->Position.x + _camera->Front.x * rayLength;
-			float y = _camera->Position.y + _camera->Front.y * rayLength;
-			float z = _camera->Position.z + _camera->Front.z * rayLength;
-			mousePicker._mouseRayEndPoint = glm::vec3(x, y, z);
-			mousePicker._mouseRayTerrainEntry = modelManager.calcCollision(_camera->Position, _camera->Front);
+		{
+			mousePicker.calculateTerrainEntry(_camera->Position, _camera->Front);
+			//mousePicker._mouseRayTerrainEntry = modelManager.calcCollision(_camera->Position, _camera->Front);
+			modelManager.translateObject(mousePicker._mouseRayTerrainEntry);
 		}
 		
 		//Render Stuff		
@@ -89,8 +86,7 @@ int main()
 			ImGui::Text("Mouse-Coords: X: %f, Y: %f", rawMouse_X, rawMouse_Y);
 			ImGui::Text("Mouse-Ray-Direction: X: %f, Y: %f, Z: %f", mousePicker._mouseRay.x, mousePicker._mouseRay.y, mousePicker._mouseRay.z);
 			ImGui::Checkbox("Terrain Collision", &calcCollision);
-			ImGui::Text("EndPoint-Coords: X: %f, Y: %f, Z: %f", mousePicker._mouseRayEndPoint.x, mousePicker._mouseRayEndPoint.y, mousePicker._mouseRayEndPoint.z);
-			ImGui::Text("EndPoint-Coords: X: %f, Y: %f, Z: %f", mousePicker._mouseRayTerrainEntry.x, mousePicker._mouseRayTerrainEntry.y, mousePicker._mouseRayTerrainEntry.z);
+			ImGui::Text("Terrain-Entry-Point: X: %f, Y: %f, Z: %f", mousePicker._mouseRayTerrainEntry.x, mousePicker._mouseRayTerrainEntry.y, mousePicker._mouseRayTerrainEntry.z);
 			ImGui::Text("---------------------------------------------");
 			guiManager.exitWindow();
 		}

@@ -2,6 +2,8 @@
 
 #include <opencv2/opencv.hpp>
 
+const float SCALE = 6.0f;
+
 class Heightmap
 {
 private:
@@ -18,7 +20,7 @@ public:
 	int m_valOutOfBounds;
 
 	Heightmap(const char* filepath, int flag)
-		: m_filepath(filepath), m_flag(flag), m_valOutOfBounds(0)
+		: m_min_value(0), m_max_value(0), m_valOutOfBounds(0), m_filepath(filepath), m_flag(flag)
 	{
 		//Einlesen des Bildes
 		m_img = cv::imread(filepath, flag);
@@ -36,18 +38,18 @@ public:
 		minMaxLoc(m_img, &m_min_value, &m_max_value);
 	}
 
-	void display() const
+	void displayHeightmap() const
 	{
 		cv::imshow("Heightmap", m_img);
 	}
 
-	float getPixelValueBuffered(int x, int z, float scale)
+	float getPixelValueBuffered(const int& x, const int& z)
 	{
 		if ((x < m_width) && (z < m_height))
 		{
 			float greyvalue = m_img.at<uchar>(x, z);
 			greyvalue -= m_max_value / 2;
-			greyvalue /= scale;
+			greyvalue /= SCALE;
 			return greyvalue;
 		}
 		else
@@ -60,7 +62,7 @@ public:
 				m_valOutOfBounds++;
 				float greyvalue = m_img.at<uchar>(x - width_dif - 1, z - height_dif - 1);
 				greyvalue -= m_max_value / 2;
-				greyvalue /= scale;
+				greyvalue /= SCALE;
 				return greyvalue;
 			}
 
@@ -69,7 +71,7 @@ public:
 				m_valOutOfBounds++;
 				float greyvalue = m_img.at<uchar>(x - width_dif - 1, z);
 				greyvalue -= m_max_value / 2;
-				greyvalue /= scale;
+				greyvalue /= SCALE;
 				return greyvalue;
 			}
 
@@ -78,7 +80,7 @@ public:
 				m_valOutOfBounds++;
 				float greyvalue = m_img.at<uchar>(x, z - height_dif - 1);
 				greyvalue -= m_max_value / 2;
-				greyvalue /= scale;
+				greyvalue /= SCALE;
 				return greyvalue;
 			}
 
@@ -86,13 +88,13 @@ public:
 		}
 	}
 
-	float getPixelValueUnbuffered(int x, int z, float scale)
+	float getPixelValueUnbuffered(const int& x, const int& z)
 	{
 		if ((x < m_width) && (z < m_height) && (x >= 0) && (z >= 0))
 		{
 			float greyvalue = m_img.at<uchar>(x, z);
 			greyvalue -= m_max_value / 2;
-			greyvalue /= scale;
+			greyvalue /= SCALE;
 			return greyvalue;
 		}
 		else
@@ -101,7 +103,7 @@ public:
 		}
 	}
 
-	glm::vec3 getColorValue(int x, int z)
+	glm::vec3 getColorValue(const int& x, const int& z)
 	{
 		if ((x < m_width) && (z < m_height))
 		{

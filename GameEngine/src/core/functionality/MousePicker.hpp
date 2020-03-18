@@ -24,7 +24,7 @@ public:
 		_mouseRay = calculateMouseRay();
 	}
 
-	glm::vec3 calculateMouseRay()
+	glm::vec3 calculateMouseRay() const
 	{
 		//3d Normalised Device Coordinates
 		float x = (2.0f * rawMouse_X) / (float)WIDTH - 1.0f;
@@ -48,24 +48,24 @@ public:
 
 	void calculateTerrainEntry(const glm::vec3& camPosition, const glm::vec3 endPosition)
 	{
-		int rayLength = 1000;
-		float x, y, z;
+		float rayLength = 1000.0f;
+		float x = 0.0f, y = 0.0f, z = 0.0f;
 
-		for (int i = 0; i < 10000; i++)
+		for (int i = 0; i < 1000; i++)
 		{
 			x = camPosition.x + endPosition.x * rayLength;
 			y = camPosition.y + endPosition.y * rayLength;
 			z = camPosition.z + endPosition.z * rayLength;
 			
-			float terrain_height = _terrain->getHeightValueUnbuffered(x, z);
+			const float terrain_height = _terrain->getHeightValueUnbuffered((int)x, (int)z);
 
 			if (terrain_height > y)
 			{
-				rayLength -= 0.1f;
+				rayLength -= 1.0f;
 			}
 			else if (terrain_height < y)
 			{
-				rayLength += 0.1f;
+				rayLength += 1.0f;
 			}
 			else if (terrain_height == y)
 			{

@@ -16,6 +16,8 @@
 #include "QuaderData.hpp"
 #include "Primitivemodel.hpp"
 
+unsigned int _last_index = 0;
+
 class ModelManager
 {
 private:
@@ -33,11 +35,11 @@ private:
 	AudioManager *_audioManager;
 	Cubemap *_cubeMap_tex;
 	QuaderData *_quaderData;
-	Primitivemodel *_quader = nullptr;
-
+	Primitivemodel *_quader = nullptr;	
+	
 public:
 	std::vector<Basemodel*> Models;	
-
+	
 	ModelManager(DisplayManager* displayManager, AudioManager* audioManager)
 		: _displayManager(displayManager), _audioManager(audioManager)
 	{
@@ -270,6 +272,33 @@ public:
 		else
 			_quader->renderModel = true;		
 	}	
+
+	void colorPickedVertices(const glm::vec3& terrainEntry) const
+	{
+		//Delete color of the last picked vertice
+		_ground->getRawData()->_isPicked.at(_last_index) = glm::vec3(1.0, 1.0, 1.0);
+
+		//Get the picked vertice position
+		int x = (int)terrainEntry.x;
+		int z = (int)terrainEntry.z;
+
+		//Error-Checking
+		if (x < 0)
+			x = 0;
+		if (x > 511)
+			x = 511;
+		if (z < 1)
+			z = 1;
+		if (z > 511)
+			z = 511;
+
+		//Color new vertice
+		const unsigned int index = _ground->getGroundData()->_twoDimArray[x][z];
+		_ground->getRawData()->_isPicked.at(index) = glm::vec3(255, 0, 0);
+		_ground->updatePickedVertices();
+		
+		_last_index = index;			
+	}
 	
 	void debugVectors()
 	{
@@ -284,10 +313,5 @@ public:
 	GroundData* getTerrain() const
 	{
 		return _ground_data;
-	}
-
-	void translateObject(const glm::vec3& newPosition) const
-	{
-		_wood->changePosition(newPosition);
 	}
 };

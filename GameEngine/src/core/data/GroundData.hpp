@@ -33,6 +33,9 @@ private:
 	Heightmap* _heightmap = nullptr;
 
 public:
+	unsigned int _twoDimArray[512][512];
+	unsigned int _index = 0;
+	
 	GroundData(const unsigned int& size, const unsigned int& fieldmultiplier, const char* heightmap_filepath)
 		: _size(size), _fieldmultiplier(fieldmultiplier), _heightmap_filepath(heightmap_filepath)
 	{
@@ -41,8 +44,8 @@ public:
 
 	void init()
 	{		
-		_heightmap = new Heightmap(_heightmap_filepath, 0);
-
+		_heightmap = new Heightmap(_heightmap_filepath, 0);				
+		
 		for (int j = 0; j <= _size; ++j)
 		{
 			for (int i = 0; i <= _size; ++i)
@@ -54,6 +57,7 @@ public:
 				_blendmapCoords.emplace_back(glm::vec2(x / 512, z / 512));
 				_texCoords.emplace_back(glm::vec2(x, z));
 				_normals.emplace_back(glm::vec3(0, 0, 0));
+				_isPicked.emplace_back(glm::vec3(1.0, 1.0, 1.0));
 				
 				if ((j != _size) && (i != _size))
 				{
@@ -66,6 +70,9 @@ public:
 					// triangle 2
 					_indices.emplace_back(glm::uvec3(row1 + i, row2 + i + 1, row2 + i));
 				}
+
+				_index++;
+				_twoDimArray[(int)x][(int)z] = _index;
 			}
 		}
 		calculate_normals_per_vertex();
@@ -192,6 +199,7 @@ public:
 		_blendmapCoordsSize = _blendmapCoords.size() * sizeof(glm::vec2);
 		_normalSize = _normals.size() * sizeof(glm::vec3);
 		_verticesToRender = (GLsizei)_indices.size() * 3;
+		_isPickedSize = _isPicked.size() * sizeof(glm::vec3);
 	}
 
 	float getHeightValueBuffered(const int& x, const int& z) const

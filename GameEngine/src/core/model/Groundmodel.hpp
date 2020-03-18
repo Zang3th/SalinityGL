@@ -10,7 +10,7 @@ private:
 	Shader* _shader = nullptr;
 	RawData* _data = nullptr;
 	unsigned int _texSlot0, _texSlot1, _texSlot2, _texSlot3;
-	VertexBuffer *_vbo2 = nullptr, *_vbo3 = nullptr, *_vbo4 = nullptr;
+	VertexBuffer *_vbo2 = nullptr, *_vbo3 = nullptr, *_vbo4 = nullptr, *_vbo5 = nullptr;
 
 public:
 	Groundmodel(RawData* dataToUse, Shader* shaderToUse, unsigned int textureSlot0, unsigned int textureSlot1, unsigned int textureSlot2, unsigned int textureSlot3)
@@ -26,6 +26,7 @@ public:
 		delete _vbo2;
 		delete _vbo3;
 		delete _vbo4;
+		delete _vbo5;
 		delete _ib;
 	}
 
@@ -44,7 +45,9 @@ public:
 		_vao->DefineAttributes(2, 2, GL_FLOAT, GL_FALSE, 0, (void*)0); //Map coords
 		_vbo4 = new VertexBuffer(&_data->_normals[0], _data->_normalSize);
 		_vao->DefineAttributes(3, 3, GL_FLOAT, GL_FALSE, 0, (void*)0); //Normal attribute
-		
+		_vbo5 = new VertexBuffer(&_data->_isPicked[0], _data->_isPickedSize);
+		_vao->DefineAttributes(4, 3, GL_FLOAT, GL_FALSE, 0, (void*)0); //isPicked attribute
+				
 		//Erstellt IB
 		_ib = new IndexBuffer(&_data->_indices[0], _data->_indiceSize);
 
@@ -53,6 +56,7 @@ public:
 		_vbo2->unbind();
 		_vbo3->unbind();
 		_vbo4->unbind();
+		_vbo5->unbind();
 		_vao->unbind();
 	}
 
@@ -107,5 +111,29 @@ public:
 	unsigned int getNumberOfVertices() override
 	{
 		return _data->_verticesToRender;
+	}
+
+	void updatePickedVertices() const
+	{
+		//Binden
+		_vao->bind();
+		_vbo5->bind();
+
+		//Updaten
+		_vbo5->updateData(&_data->_isPicked[0], _data->_isPickedSize);
+
+		//Unbinden
+		_vbo5->unbind();
+		_vao->unbind();
+	}
+
+	RawData* getRawData() const
+	{
+		return _data;
+	}
+
+	GroundData* getGroundData() const
+	{
+		return (GroundData*)_data;
 	}
 };

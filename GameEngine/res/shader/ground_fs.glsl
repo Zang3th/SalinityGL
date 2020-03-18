@@ -8,6 +8,7 @@ in vec2 blendmapCoords_out;
 in float visibility;
 in vec3 normals_out;
 in vec4 worldPosition;
+in vec3 isPicked_out;
 
 out vec4 fragColor;
 
@@ -69,8 +70,8 @@ void main()
 		result += PointLight(lightPositions[i], worldPosition, viewPosition);
 	}		
 
-	//Verrechnung mit Bodenfarbe
-	result *= vec3(groundColor.xyz);
+	//Verrechnung mit Bodenfarbe und gepicktem Vertice
+	result = result * vec3(groundColor.xyz) + isPicked_out.x * 0.005;
 
 	//Fog (muss als letztes berechnet werden)
 	vec3 newFogColor = fogColor * 0.6;

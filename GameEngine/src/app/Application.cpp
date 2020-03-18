@@ -62,8 +62,7 @@ int main()
 		if(calcCollision)
 		{
 			mousePicker.calculateTerrainEntry(_camera->Position, _camera->Front);
-			//mousePicker._mouseRayTerrainEntry = modelManager.calcCollision(_camera->Position, _camera->Front);
-			modelManager.translateObject(mousePicker._mouseRayTerrainEntry);
+			modelManager.colorPickedVertices(mousePicker._mouseRayTerrainEntry);
 		}
 		
 		//Render Stuff		

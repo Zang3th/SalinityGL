@@ -27,7 +27,7 @@
             - Enhanced water quality (proper watershader)
             - Improved performance/less rendercalls (maybe Instancing or Batchrenderingsystem)
             
- #### Potential problems and things I try to do work on:
+ #### Potential problems and things I try to work on:
             - Too many (unnecessary) dependencies (e.g. OpenCV)
             - Naming conventions: Mostly english (I hope). Sorry though if some comments are in german.
             - Not using separate .h and .cpp files: I'm lazy  

@@ -16,6 +16,8 @@ float lastX = WIDTH / 2.0f; //X-Coord of the mouse
 float lastY = HEIGHT / 2.0f; //Y-Coord of the mouse
 float rawMouse_X, rawMouse_Y;
 bool window_focused = false; //Is the window in focus?
+bool mouseIsHold = false;
+bool ignoreNextClick = false;
 
 Camera* _camera = nullptr; //Global camera object. Needs to be global for callbacks and Model.hpp
 RenderStateManager* _RSM = nullptr;
@@ -82,12 +84,27 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 	{
 		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		window_focused = true;
-	}
 
+		if(ignoreNextClick)
+		{
+			ignoreNextClick = false;
+		}
+		else
+		{
+			mouseIsHold = true;
+		}		
+	}
+	
 	if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
 	{
 		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 		window_focused = false;
+		ignoreNextClick = true;
+	}
+
+	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE)
+	{
+		mouseIsHold = false;
 	}
 }
 

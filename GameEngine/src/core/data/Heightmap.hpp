@@ -2,7 +2,7 @@
 
 #include <opencv2/opencv.hpp>
 
-const float SCALE = 6.0f;
+const float SCALE = 5.0f;
 
 class Heightmap
 {

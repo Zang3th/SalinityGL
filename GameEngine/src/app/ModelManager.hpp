@@ -57,8 +57,8 @@ public:
 		_standard_shader = new Shader("res/shader/standard_vs.glsl", "res/shader/standard_fs.glsl");
 		_ground_shader = new Shader("res/shader/ground_vs.glsl", "res/shader/ground_fs.glsl");
 		_cubeMap_shader = new Shader("res/shader/cubemap_vs.glsl", "res/shader/cubemap_fs.glsl");
-		//_leaf_shader = new Shader("res/shader/leaf_vs.glsl", "res/shader/leaf_fs.glsl");		
-		//_lightbulb_shader = new Shader("res/shader/lightbulb_vs.glsl", "res/shader/lightbulb_fs.glsl");
+		_leaf_shader = new Shader("res/shader/leaf_vs.glsl", "res/shader/leaf_fs.glsl");		
+		_lightbulb_shader = new Shader("res/shader/lightbulb_vs.glsl", "res/shader/lightbulb_fs.glsl");
 		_primitive_shader = new Shader("res/shader/primitive_vs.glsl", "res/shader/primitive_fs.glsl");
 	}
 
@@ -66,16 +66,16 @@ public:
 	{
 		_cubeMap_data = new AssimpLoader("res/obj/geometry/cube.obj");
 		_ground_data = new GroundData(512, 1, "res/maps/Heightmap_512.bmp");
-		/*_water_data = new PlaneData(128, 1);
-		_house_data = new AssimpLoader("res/obj/houses/Farmhouse.obj");*/
+		_water_data = new PlaneData(160, 1);
+		_house_data = new AssimpLoader("res/obj/houses/Farmhouse.obj");
 		_wood_data = new AssimpLoader("res/obj/vegetation/Wood.obj");
-		/*_axe_data = new AssimpLoader("res/obj/tools/Axe.obj");
+		_axe_data = new AssimpLoader("res/obj/tools/Axe.obj");
 		_tree_data = new AssimpLoader("res/obj/vegetation/TreeNaked.obj");
 		_leaf_data = new AssimpLoader("res/obj/vegetation/LeafsNaked.obj");
 		_grass_data = new AssimpLoader("res/obj/vegetation/LowGrass.obj");
 		_player_data = new AssimpLoader("res/obj/humans/Chibi.obj");	
 		_lantern_data = new AssimpLoader("res/obj/lightsources/Parklight.obj");		
-		_lightbulb_data = new AssimpLoader("res/obj/geometry/cylinder.obj");*/
+		_lightbulb_data = new AssimpLoader("res/obj/geometry/cylinder.obj");
 		_quaderData = new QuaderData();
 	}
 
@@ -83,10 +83,10 @@ public:
 	{
 		_grass_tex = new Texture("res/textures/Grass.jpg");
 		_dirt_tex = new Texture("res/textures/Dirt.jpg");
-		_blendmap = new Texture("res/maps/Blendmap_512_bold.jpg");
-		//_house_tex = new Texture("res/textures/models/Farmhouse.jpg");
+		_blendmap = new Texture("res/maps/Blendmap_512.jpg");
+		_house_tex = new Texture("res/textures/models/Farmhouse.jpg");
 		_wood_tex = new Texture("res/textures/models/Wood.jpg");
-		/*_axe_tex = new Texture("res/textures/models/Axe.jpg");
+		_axe_tex = new Texture("res/textures/models/Axe.jpg");
 		_water_tex = new Texture("res/textures/Water.jpg");
 		_tree_tex = new Texture("res/textures/models/MapleTreeBark.jpg");
 		_leaf_tex = new Texture("res/textures/models/MapleTreeLeaf.jpg");
@@ -94,22 +94,22 @@ public:
 		_grassModel_tex = new Texture("res/textures/models/Grass.jpg");
 		_player_tex = new Texture("res/textures/models/Chibi.jpg");
 		_lantern_tex = new Texture("res/textures/models/Metal_2_dark.jpg");
-		_lightbulb_tex = new Texture("res/textures/models/White.jpg");*/
+		_lightbulb_tex = new Texture("res/textures/models/White.jpg");
 
 		_grass_tex->bind(0);
 		_dirt_tex->bind(1);
 		_blendmap->bind(2);
-		//_house_tex->bind(4);
+		_house_tex->bind(4);
 		_wood_tex->bind(5);
-		/*_axe_tex->bind(6);
+		_axe_tex->bind(6);
 		_water_tex->bind(7);
 		_tree_tex->bind(8);
 		_leaf_tex->bind(9);
 		_leafMask_tex->bind(10);
 		_grassModel_tex->bind(11);
-		_player_tex->bind(12);*/
-		//_lantern_tex->bind(13);
-		//_lightbulb_tex->bind(14);
+		_player_tex->bind(12);
+		_lantern_tex->bind(13);
+		_lightbulb_tex->bind(14);
 
 		std::vector<const char*> faces
 		{
@@ -129,49 +129,48 @@ public:
 	{
 		_cubeMap = new Standardmodel(_cubeMap_data, _cubeMap_shader, 3, true);
 		_ground = new Groundmodel(_ground_data, _ground_shader, 0, 1, 1, 2);
-		//_house = new Standardmodel(_house_data, _standard_shader, 4);
+		_house = new Standardmodel(_house_data, _standard_shader, 4);
 		_wood = new Standardmodel(_wood_data, _standard_shader, 5);
-		/*_axe = new Standardmodel(_axe_data, _standard_shader, 6);
+		_axe = new Standardmodel(_axe_data, _standard_shader, 6);
 		_water = new Standardmodel(_water_data, _standard_shader, 7);
-		_playerModel = new Standardmodel(_player_data, _standard_shader, 12);*/
-		//_lantern = new Standardmodel(_lantern_data, _standard_shader, 13);
+		_playerModel = new Standardmodel(_player_data, _standard_shader, 12);
+		_lantern = new Standardmodel(_lantern_data, _standard_shader, 13);
 		_quader = new Primitivemodel(_quaderData, _primitive_shader);
 	}	
 
 	void transformModels() const
 	{		
-		/*_house->translate(glm::vec3(430, -6, 90));
-		_house->scale(glm::vec3(1.75f, 1.75f, 1.75f));		
-		_house->rotate(45.0f, glm::vec3(0, 1, 0));
-		_house->rotate(5.0f, glm::vec3(-1, 0, 0));*/
+		_house->translate(glm::vec3(440, -1.5, 140));
+		_house->scale(glm::vec3(2.25f, 2.25f, 2.25f));		
+		_house->rotate(170.0f, glm::vec3(0, 1, 0));
+		_house->rotate(-5.0f, glm::vec3(1, 0, 0));
+		_house->rotate(-3.0f, glm::vec3(0, 0, 1));
 		
-		//_wood->translate(glm::vec3(420, 0.0, 118));
-		//_wood->scale(glm::vec3(2.5f, 2.5f, 2.5f));
-		//_wood->rotate(170.0f, glm::vec3(0, 0, 1));
-		//_wood->rotate(20.0f, glm::vec3(0, 1, 1));
+		_wood->translate(glm::vec3(412, -3.0, 116));
+		_wood->scale(glm::vec3(2.5f, 2.5f, 2.5f));
 				
-		/*_axe->translate(glm::vec3(414, 1.4, 118));
-		_axe->scale(glm::vec3(0.6f, 0.6f, 0.6f));
+		_axe->translate(glm::vec3(408, 3.5, 114));
+		_axe->scale(glm::vec3(0.4f, 0.4f, 0.4f));
 		_axe->rotate(120.0f, glm::vec3(0, -1, 0));
 		_axe->rotate(120.0f, glm::vec3(0, 0, -1));
 
-		_water->translate(glm::vec3(165, -11, 340));
-		_water->rotate(90.0f, glm::vec3(0.0f, 1.0f, 0.0f));*/
+		_water->translate(glm::vec3(190, -4.5, 480));
+		_water->rotate(90.0f, glm::vec3(0.0f, 1.0f, 0.0f));
 	}
 
 	void addModelsToRenderer()
 	{
 		Models.push_back(_cubeMap);
 		Models.push_back(_ground);
-		//Models.push_back(_house);
+		Models.push_back(_house);
 		Models.push_back(_wood);
-		/*Models.push_back(_axe);
+		Models.push_back(_axe);
 		Models.push_back(_water);
 		Models.push_back(_playerModel);			
 		
 		createLights();
 		createPlayer();
-		createVegetation();*/
+		createVegetation();
 
 		Models.push_back(_quader);
 	}
@@ -205,20 +204,16 @@ public:
 
 	void createVegetation()
 	{
-		for (int i = 0; i < 120; i++)
+		for (int i = 0; i < 90; i++)
 		{
 			//Koordinatenberechnung
-			int grass_x = rand() % 256;
-			int grass_z = rand() % 256;
+			int grass_x = rand() % 512;
+			int grass_z = rand() % 512;
 			float grass_y = _ground_data->getHeightValueUnbuffered(grass_x, grass_z);
-			grass_x *= 2;
-			grass_z *= 2;
 
-			int tree_x = rand() % 256;
-			int tree_z = rand() % 256;
+			int tree_x = rand() % 512;
+			int tree_z = rand() % 512;
 			float tree_y = _ground_data->getHeightValueUnbuffered(tree_x, tree_z);
-			tree_x *= 2;
-			tree_z *= 2;
 
 			//Grass	
 			if (grass_x > 160 && grass_x < 280 && grass_z > 200 && grass_z < 340)
@@ -295,9 +290,27 @@ public:
 		//Color new vertice
 		const unsigned int index = _ground->getGroundData()->_twoDimArray[x][z];
 		_ground->getRawData()->_isPicked.at(index) = glm::vec3(255, 0, 0);
-		_ground->updatePickedVertices();
+		_ground->updateColorOfPickedVertices();
 		
 		_last_index = index;			
+	}
+
+	void deleteLastColoredVertice() const
+	{
+		_ground->getRawData()->_isPicked.at(_last_index) = glm::vec3(1.0, 1.0, 1.0);
+		_ground->updateColorOfPickedVertices();
+	}
+	
+	void raiseTerrain() const
+	{
+		_ground->getRawData()->_vertices.at(_last_index).y += 0.05;
+		_ground->updateHeightOfPickedVertices();
+	}
+	
+	void sinkTerrain() const
+	{
+		_ground->getRawData()->_vertices.at(_last_index).y -= 0.05;
+		_ground->updateHeightOfPickedVertices();
 	}
 	
 	void debugVectors()

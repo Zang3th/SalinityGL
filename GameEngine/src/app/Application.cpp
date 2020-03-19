@@ -7,7 +7,10 @@
 
 bool renderRay = false;
 bool fixedRay = false;
-bool calcCollision = false;
+bool terrainEditor = false;
+bool deleteLastColoredVert = false;
+bool raise = false;
+bool sink = false;
 
 int main()
 {
@@ -57,13 +60,39 @@ int main()
 		{
 			glm::vec3 camPos = glm::vec3(_camera->Position.x, _camera->Position.y - 1, _camera->Position.z);
 			modelManager.createRay(camPos, _camera->Front, _camera->Yaw, renderRay, 1000.0f, 0.1f);
-		}
-
-		if(calcCollision)
+		}		
+		
+		//Activate Terraineditor
+		if(terrainEditor)
 		{
 			mousePicker.calculateTerrainEntry(_camera->Position, _camera->Front);
 			modelManager.colorPickedVertices(mousePicker._mouseRayTerrainEntry);
+			deleteLastColoredVert = true;
+			
+			if(mouseIsHold)
+			{
+				if(raise == true && sink == false && ignoreNextClick == false)
+				{
+					modelManager.raiseTerrain();
+				}
+				else if(sink == true && raise == false && ignoreNextClick == false)
+				{
+					modelManager.sinkTerrain();
+				}				
+			}
 		}
+		else
+		{
+			raise = false;
+			sink = false;
+		}
+
+		//Otherwise the last picked Vertice would remain white
+		if(terrainEditor == false && deleteLastColoredVert == true)
+		{
+			modelManager.deleteLastColoredVertice();
+			deleteLastColoredVert = false;
+		}		
 		
 		//Render Stuff		
 		renderer.render(modelManager.Models);
@@ -78,13 +107,14 @@ int main()
 			ImGui::Text("Camera-Yaw: %f, Camera-Pitch: %f", _camera->Yaw, _camera->Pitch);
 			ImGui::Text("Camera-Front: X: %f, Y: %f, Z: %f", _camera->Front.x, _camera->Front.y, _camera->Front.z);
 			ImGui::Text("---------------------------------------------");
-			//ImGui::Text("Player-Coords: X: %f, Y: %f, Z: %f", displayManager._player->_playerPosition.x, displayManager._player->_playerPosition.y, displayManager._player->_playerPosition.z);
-			//ImGui::Text("Player-Rotation: %f", displayManager._player->_yaw);
+			ImGui::Text("Player-Coords: X: %f, Y: %f, Z: %f", displayManager._player->_playerPosition.x, displayManager._player->_playerPosition.y, displayManager._player->_playerPosition.z);
+			ImGui::Text("Player-Rotation: %f", displayManager._player->_yaw);
 			ImGui::Text("---------------------------------------------");
 			ImGui::Checkbox("Mouse-Ray rendern", &renderRay); ImGui::SameLine(); ImGui::Checkbox("Mouse-Ray fixieren", &fixedRay);
 			ImGui::Text("Mouse-Coords: X: %f, Y: %f", rawMouse_X, rawMouse_Y);
 			ImGui::Text("Mouse-Ray-Direction: X: %f, Y: %f, Z: %f", mousePicker._mouseRay.x, mousePicker._mouseRay.y, mousePicker._mouseRay.z);
-			ImGui::Checkbox("Terrain Collision", &calcCollision);
+			ImGui::Text("---------------------------------------------");
+			ImGui::Checkbox("Terrain-Editor", &terrainEditor); ImGui::SameLine(); ImGui::Checkbox("Raise", &raise); ImGui::SameLine(); ImGui::Checkbox("Sink", &sink);
 			ImGui::Text("Terrain-Entry-Point: X: %f, Y: %f, Z: %f", mousePicker._mouseRayTerrainEntry.x, mousePicker._mouseRayTerrainEntry.y, mousePicker._mouseRayTerrainEntry.z);
 			ImGui::Text("---------------------------------------------");
 			guiManager.exitWindow();

@@ -1,17 +1,37 @@
-# GameEngine
-GameEngine with OpenGL
+# GameEngine with OpenGL
 
-Objectives: - Little OpenGL-Wrapper with abstraction (no OpenGL-Code in main() etc).
-            - Should be easy to setup. Just a few lines to get the engine going and to render the first objects.
-            - For learning purposes (don't expect enterprise-level code or structuring of the project - but I'm always open for improvement suggestions).
-            - Don't download versions before the 25th commit otherwise you have to include OpenCV yourself.
+#### Objectives:
+            - OpenGL-Wrapper with abstraction
+            - Should be easy to set up: 
+                 - One line of code for starting/stopping/rendering .. (currently not the case!)
             
-Plans for future version: - Verticepicking maybe via Raycasting
-                          - Improved Lighting
-                          - AI
-                          - Collisiondetection
-                          - Animation
-                          - Enhanced water quality
-                          - Overall better graphics
-                          - Improved performance via less rendercalls (maybe Instancing or Batchrendering)
+#### Already implemented:
+            - Little GUI
+            - Abstracted VAO, VBO, IB, Display-/Inputmanagement, Shader, Data-/Modelclasses etc.
+            - Camerasystem (Firstperson)
+            - OBJ-Fileparser
+            - Terraincreation via Heightmap and texturing via Blendmap
+            - Playerclass with movement
+            - Audiomanager for sounds and backgroundmusic
+            - Skybox
+            - Pointlights
+            - Normalcalculations per vertex or per triangle
+            - Terraineditor:
+                 - Verticepicking via raycasting (ray can be visualized)
+                 - Picked vertice is colored and can be ascended/descended
+                 
+#### Plans for future versions:
+            - Animation (created in Blender)
+            - AI
+            - Proper collsiondetection, maybe via boundingboxes/spheres
+            - Enhanced water quality (proper watershader)
+            - Improved performance/less rendercalls (maybe Instancing or Batchrenderingsystem)
             
+ #### Potential problems and things I try to do work on:
+            - Too many (unnecessary) dependencies (e.g. OpenCV)
+            - Naming conventions: Mostly english (I hope). Sorry though if some comments are in german.
+            - Not using separate .h and .cpp files: I'm lazy  
+            - And maaaany other things... Overall it's not enterprise level
+            
+#### Other:
+            - Versions before the 25th commit don't have OpenCV included        

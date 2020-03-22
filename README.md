@@ -34,4 +34,11 @@
             - And maaaany other things... Overall it's not enterprise level
             
 #### Other:
-            - Versions before the 25th commit don't have OpenCV included        
+            - Versions before the 25th commit don't have OpenCV included 
+
+#### Screenshots out of a scene I created with the engine:
+
+ <img src="https://user-images.githubusercontent.com/59279641/77147299-375d0f00-6a8d-11ea-9db8-0d94d04d178b.PNG"/>
+ <img src="https://user-images.githubusercontent.com/59279641/77147427-7ee39b00-6a8d-11ea-86cd-6ba2ad74efff.PNG"/>
+ <img src="https://user-images.githubusercontent.com/59279641/77147461-94f15b80-6a8d-11ea-82b8-0a67f637a7c7.PNG"/>
+            

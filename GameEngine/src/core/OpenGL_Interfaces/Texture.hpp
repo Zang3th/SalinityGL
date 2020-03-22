@@ -7,19 +7,19 @@ class Texture
 { 
 private:
 	unsigned int _RendererID;
-	std::string _Filepath;
+	const char* _Filepath;
 	unsigned char* _LocalBuffer;
 	int _Width, _Height, _BPP;
 	
 public:
-	Texture(const std::string& path)
+	Texture(const char* path)
 		: _RendererID(0), _Filepath(path), _LocalBuffer(nullptr), _Width(0), _Height(0), _BPP(0)
 	{
 		GLCall(glGenTextures(1, &_RendererID));
 		GLCall(glBindTexture(GL_TEXTURE_2D, _RendererID));
 		
 		stbi_set_flip_vertically_on_load(1);
-		_LocalBuffer = stbi_load(path.c_str(), &_Width, &_Height, &_BPP, 0);
+		_LocalBuffer = stbi_load(_Filepath, &_Width, &_Height, &_BPP, 0);
 
 		if (_LocalBuffer)
 		{
@@ -40,6 +40,7 @@ public:
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);*/
+			
 			spdlog::info("Texture loaded successfully: {}", _Filepath);
 			stbi_image_free(_LocalBuffer);
 		}

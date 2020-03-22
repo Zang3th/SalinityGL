@@ -9,7 +9,6 @@
     <ClCompile Include="src\vendor\imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="src\vendor\imgui\imgui_widgets.cpp" />
     <ClCompile Include="src\vendor\stb_image\stb_image.cpp" />
-    <ClCompile Include="src\core\functionality\GUIManager.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\vendor\imgui\imconfig.h" />
@@ -50,5 +49,7 @@
     <ClInclude Include="src\core\model\Standardmodel.hpp" />
     <ClInclude Include="src\core\data\QuaderData.hpp" />
     <ClInclude Include="src\core\model\Primitivemodel.hpp" />
+    <ClInclude Include="src\core\model\Models.hpp" />
+    <ClInclude Include="src\core\model\Terrain.hpp" />
   </ItemGroup>
 </Project>

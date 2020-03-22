@@ -25,16 +25,29 @@ struct Triangle
 	{}
 };
 
+template<typename T, int width, int height>
+class MultiArray
+{
+private:
+	typedef T cols[height];
+	cols* data;
+public:
+	T& operator() (int x, int y) { return data[x][y]; }
+	MultiArray() { data = new cols[width]; }
+	~MultiArray() { delete[] data; }
+};
+
 class GroundData : public RawData
 {
 private:
 	unsigned int _size, _fieldmultiplier;
 	const char* _heightmap_filepath;
 	Heightmap* _heightmap = nullptr;
-
+	
 public:
-	unsigned int _twoDimArray[512][512];
 	unsigned int _index = 0;
+	MultiArray<int, 512, 512> _twoDimArray;
+
 	
 	GroundData(const unsigned int& size, const unsigned int& fieldmultiplier, const char* heightmap_filepath)
 		: _size(size), _fieldmultiplier(fieldmultiplier), _heightmap_filepath(heightmap_filepath)
@@ -42,9 +55,14 @@ public:
 		init();
 	}
 
+	~GroundData()
+	{
+		delete _heightmap;
+	}
+	
 	void init()
 	{		
-		_heightmap = new Heightmap(_heightmap_filepath, 0);				
+		_heightmap = new Heightmap(_heightmap_filepath, 0);
 		
 		for (int j = 0; j <= _size; ++j)
 		{
@@ -64,15 +82,19 @@ public:
 					const int row1 = j * (_size + 1);
 					const int row2 = (j + 1) * (_size + 1);
 
-					// triangle 1
+					//Triangle 1
 					_indices.emplace_back(glm::uvec3(row1 + i, row1 + i + 1, row2 + i + 1));
 
-					// triangle 2
+					//Triangle 2
 					_indices.emplace_back(glm::uvec3(row1 + i, row2 + i + 1, row2 + i));
 				}
 
-				_index++;
-				_twoDimArray[(int)x][(int)z] = _index;
+				//2 Dim-Array for cursor
+				_index++;				
+				int ix = (int)x;
+				int iy = (int)y;
+				if(x >=0 && x < 512 && y >= 0 && y < 512)
+					_twoDimArray(x, y) = _index;
 			}
 		}
 		calculate_normals_per_vertex();

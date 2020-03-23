@@ -4,7 +4,6 @@
 #include "Texture.hpp"
 #include "Shader.hpp"
 #include "Groundmodel.hpp"
-#include "Basemodel.hpp"
 
 class TerrainEntity
 {	

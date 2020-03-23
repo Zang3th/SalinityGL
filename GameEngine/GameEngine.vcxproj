@@ -160,10 +160,11 @@
   <ItemGroup>
     <ClInclude Include="src\core\data\AssimpLoader.hpp" />
     <ClInclude Include="src\core\data\QuaderData.hpp" />
+    <ClInclude Include="src\core\entities\CubemapEntity.hpp" />
     <ClInclude Include="src\core\functionality\AudioManager.hpp" />
     <ClInclude Include="src\core\model\Basemodel.hpp" />
     <ClInclude Include="src\core\functionality\Camera.hpp" />
-    <ClInclude Include="src\core\entities\Entities.hpp" />
+    <ClInclude Include="src\core\entities\EntityManager.hpp" />
     <ClInclude Include="src\core\entities\ObjmodelEntity.hpp" />
     <ClInclude Include="src\core\model\Primitivemodel.hpp" />
     <ClInclude Include="src\core\entities\TerrainEntity.hpp" />

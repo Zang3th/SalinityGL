@@ -9,9 +9,10 @@ private:
     unsigned int _RendererID;
 
 public:
-	Cubemap(std::vector<const char*>& faces)
+	Cubemap(std::vector<const char*>& faces, const unsigned int& texSlot)
 	{
         GLCall(glGenTextures(1, &_RendererID));
+        GLCall(glActiveTexture(GL_TEXTURE0 + texSlot));
         GLCall(glBindTexture(GL_TEXTURE_CUBE_MAP, _RendererID));
         stbi_set_flip_vertically_on_load(false);
 
@@ -24,6 +25,7 @@ public:
                 GLCall(glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
                     0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data
                 ));
+                spdlog::info("Texture loaded successfully: {}", faces[i]);
                 stbi_image_free(data);
             }
             else

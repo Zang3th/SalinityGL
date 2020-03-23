@@ -4,7 +4,6 @@
 #include "Texture.hpp"
 #include "Shader.hpp"
 #include "Standardmodel.hpp"
-#include "Basemodel.hpp"
 
 class ObjmodelEntity
 {

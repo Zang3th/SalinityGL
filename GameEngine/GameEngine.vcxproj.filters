@@ -49,8 +49,9 @@
     <ClInclude Include="src\core\model\Standardmodel.hpp" />
     <ClInclude Include="src\core\data\QuaderData.hpp" />
     <ClInclude Include="src\core\model\Primitivemodel.hpp" />
-    <ClInclude Include="src\core\entities\Entities.hpp" />
     <ClInclude Include="src\core\entities\ObjmodelEntity.hpp" />
     <ClInclude Include="src\core\entities\TerrainEntity.hpp" />
+    <ClInclude Include="src\core\entities\CubemapEntity.hpp" />
+    <ClInclude Include="src\core\entities\EntityManager.hpp" />
   </ItemGroup>
 </Project>

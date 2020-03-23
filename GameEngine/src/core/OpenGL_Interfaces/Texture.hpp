@@ -12,12 +12,9 @@ private:
 	int _Width, _Height, _BPP;
 	
 public:
-	Texture(const char* path)
+	Texture(const char* path, const unsigned int& texSlot)
 		: _RendererID(0), _Filepath(path), _LocalBuffer(nullptr), _Width(0), _Height(0), _BPP(0)
-	{
-		GLCall(glGenTextures(1, &_RendererID));
-		GLCall(glBindTexture(GL_TEXTURE_2D, _RendererID));
-		
+	{		
 		stbi_set_flip_vertically_on_load(1);
 		_LocalBuffer = stbi_load(_Filepath, &_Width, &_Height, &_BPP, 0);
 
@@ -30,12 +27,14 @@ public:
 				format = GL_RGB;
 			else if (_BPP == 4)
 				format = GL_RGBA;
-
-			glBindTexture(GL_TEXTURE_2D, _RendererID);
-			glTexImage2D(GL_TEXTURE_2D, 0, format, _Width, _Height, 0, format, GL_UNSIGNED_BYTE, _LocalBuffer);
 			
-			glGenerateMipmap(GL_TEXTURE_2D);
-
+			GLCall(glGenTextures(1, &_RendererID));
+			GLCall(glActiveTexture(GL_TEXTURE0 + texSlot));
+			GLCall(glBindTexture(GL_TEXTURE_2D, _RendererID));
+			GLCall(glTexImage2D(GL_TEXTURE_2D, 0, format, _Width, _Height, 0, format, GL_UNSIGNED_BYTE, _LocalBuffer));
+			
+			GLCall(glGenerateMipmap(GL_TEXTURE_2D));			
+			
 			/*glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);

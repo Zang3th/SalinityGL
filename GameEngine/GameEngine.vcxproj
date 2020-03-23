@@ -99,7 +99,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLEW_STATIC;_MBCS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>src\core\OpenGL_Interfaces;src\core\data;src\core\model;src\core\functionality;src\vendor;$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\opencv\include;$(SolutionDir)Dependencies\assimp\include;$(SolutionDir)Dependencies\irrKlang\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src\core\OpenGL_Interfaces;src\core\data;src\core\model;src\core\entities;src\core\functionality;src\vendor;$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\opencv\include;$(SolutionDir)Dependencies\assimp\include;$(SolutionDir)Dependencies\irrKlang\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -134,7 +134,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLEW_STATIC;_CRT_SECURE_NO_WARNINGS;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>src\core\OpenGL_Interfaces;src\core\data;src\core\model;src\core\functionality;src\vendor;$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\opencv\include;$(SolutionDir)Dependencies\assimp\include;$(SolutionDir)Dependencies\irrKlang\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src\core\OpenGL_Interfaces;src\core\data;src\core\model;src\core\entities;src\core\functionality;src\vendor;$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\opencv\include;$(SolutionDir)Dependencies\assimp\include;$(SolutionDir)Dependencies\irrKlang\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -163,9 +163,10 @@
     <ClInclude Include="src\core\functionality\AudioManager.hpp" />
     <ClInclude Include="src\core\model\Basemodel.hpp" />
     <ClInclude Include="src\core\functionality\Camera.hpp" />
-    <ClInclude Include="src\core\model\Models.hpp" />
+    <ClInclude Include="src\core\entities\Entities.hpp" />
+    <ClInclude Include="src\core\entities\ObjmodelEntity.hpp" />
     <ClInclude Include="src\core\model\Primitivemodel.hpp" />
-    <ClInclude Include="src\core\model\Terrain.hpp" />
+    <ClInclude Include="src\core\entities\TerrainEntity.hpp" />
     <ClInclude Include="src\core\OpenGL_Interfaces\Cubemap.hpp" />
     <ClInclude Include="src\core\functionality\Filemanager.hpp" />
     <ClInclude Include="src\core\data\GroundData.hpp" />

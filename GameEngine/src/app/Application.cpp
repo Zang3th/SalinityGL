@@ -2,11 +2,11 @@
 #include <imgui/imgui.h>
 #include <imgui/imgui_impl_glfw.h>
 #include <imgui/imgui_impl_opengl3.h>
-#include "Renderer.hpp"
-#include "ModelManager.hpp"
+//#include "Renderer.hpp"
+//#include "ModelManager.hpp"
 #include "AudioManager.hpp"
-#include "MousePicker.hpp"
-#include "Models.hpp"
+//#include "MousePicker.hpp"
+#include "Entities.hpp"
 
 bool renderRay = false;
 bool fixedRay = false;
@@ -35,10 +35,20 @@ int main()
 	AudioManager audioManager;
 	audioManager.playSound2D("res/audio/music/TrueBlueSky.mp3", true);
 
-	//Models	
-	Models models;
-	models.addTerrain(512, 1, "res/maps/Heightmap_512.bmp", "res/textures/Grass.jpg", "res/textures/Dirt.jpg", "res/maps/Blendmap_512.jpg", "res/shader/ground_vs.glsl", "res/shader/ground_fs.glsl");
-	
+	//Create Models ----------------------------------------------------------------------------------------------------------------------------------------------------
+	Entities entities;
+
+	//Ground
+	auto ground = entities.addTerrain(512, 1, "res/maps/Heightmap_512.bmp", "res/textures/Grass.jpg", "res/textures/Dirt.jpg", "res/maps/Blendmap_512.jpg", "res/shader/ground_vs.glsl", "res/shader/ground_fs.glsl");
+
+	//House
+	auto house = entities.addObjModel("res/obj/houses/Farmhouse.obj", "res/textures/models/Farmhouse.jpg", "res/shader/standard_vs.glsl", "res/shader/standard_fs.glsl");
+	house->getModel()->translate(glm::vec3(440, -1.5, 140));
+	house->getModel()->scale(glm::vec3(2.25f, 2.25f, 2.25f));
+	house->getModel()->rotate(170.0f, glm::vec3(0, 1, 0));
+	house->getModel()->rotate(-5.0f, glm::vec3(1, 0, 0));
+	house->getModel()->rotate(-3.0f, glm::vec3(0, 0, 1));	
+	//------------------------------------------------------------------------------------------------------------------------------------------------------------------	
 	//Renderer
 	//Renderer renderer;	
 
@@ -65,7 +75,7 @@ int main()
 		displayManager.checkForInput();
 
 		//Render models
-		models.render();
+		entities.render();
 		
 		//Update MouseRay
 		//mousePicker.update();

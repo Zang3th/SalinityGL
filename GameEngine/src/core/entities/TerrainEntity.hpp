@@ -13,9 +13,10 @@ private:
 	unsigned int _terrainTexCount, _pathwayTexCount, _blendmapTexCount;
 	Shader* _shader;
 	Groundmodel* _groundModel;	
+	friend class EntityManager;
 	
 public:	
-	TerrainEntity(const unsigned int& size, const unsigned int& tileSize, const char* heightmap, const char* terrainTexture, const char* pathwayTexture, const char* blendmap, const char* vsShader, const char* fsShader, unsigned int* nextTextureSlot)
+	TerrainEntity(const unsigned int& size, const unsigned int& tileSize, const char* heightmap, const char* terrainTexture, const char* pathwayTexture, const char* blendmap, const char* vShader, const char* fShader, unsigned int* nextTextureSlot)
 	{		
 		//Create the data
 		_groundData = new GroundData(size, tileSize, heightmap);
@@ -34,7 +35,7 @@ public:
 		(*nextTextureSlot)++;
 		
 		//Create the shader
-		_shader = new Shader(vsShader, fsShader);
+		_shader = new Shader(vShader, fShader);
 
 		//Combine everything to the model
 		_groundModel = new Groundmodel(_groundData, _shader, _terrainTexCount, _pathwayTexCount, _pathwayTexCount, _blendmapTexCount);
@@ -50,8 +51,18 @@ public:
 		delete _groundModel;				
 	}
 
-	Groundmodel* getModel()
+	void translate(const glm::vec3& tVec3) const
 	{
-		return _groundModel;
+		_groundModel->translate(tVec3);
+	}
+
+	void rotate(const float& angle, const glm::vec3& axis) const
+	{
+		_groundModel->rotate(angle, axis);
+	}
+
+	void scale(const glm::vec3& scalar) const
+	{
+		_groundModel->scale(scalar);
 	}
 };

@@ -53,5 +53,7 @@
     <ClInclude Include="src\core\entities\TerrainEntity.hpp" />
     <ClInclude Include="src\core\entities\CubemapEntity.hpp" />
     <ClInclude Include="src\core\entities\EntityManager.hpp" />
+    <ClInclude Include="src\core\entities\PlaneEntity.hpp" />
+    <ClInclude Include="src\core\entities\TreeEntity.hpp" />
   </ItemGroup>
 </Project>

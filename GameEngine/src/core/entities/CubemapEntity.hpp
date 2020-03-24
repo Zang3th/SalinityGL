@@ -13,7 +13,8 @@ private:
 	unsigned int _textureCount;
 	Shader* _shader;
 	Standardmodel* _standardmodel;
-
+	friend class EntityManager;
+	
 public:
 	CubemapEntity(unsigned int* nextTextureSlot)
 	{
@@ -47,10 +48,5 @@ public:
 		delete _cubemapTexture;
 		delete _shader;
 		delete _standardmodel;
-	}
-
-	Standardmodel* getModel()
-	{
-		return _standardmodel;
 	}
 };

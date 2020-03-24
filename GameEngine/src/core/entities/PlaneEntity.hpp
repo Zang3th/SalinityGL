@@ -1,58 +1,55 @@
 #pragma once
 
-#include "AssimpLoader.hpp"
-#include "Texture.hpp"
-#include "Shader.hpp"
-#include "Standardmodel.hpp"
+#include "PlaneData.hpp"
 
-class ObjmodelEntity
+class PlaneEntity
 {
 private:
-	AssimpLoader* _ai;
+	PlaneData* _planeData;
 	Texture* _texture;
 	unsigned int _textureCount;
 	Shader* _shader;
-	Standardmodel* _standardmodel;
+	Standardmodel* _planeModel;
 	friend class EntityManager;
 	
-public:	
-	ObjmodelEntity(const char* objFile, const char* texture, const char* vShader, const char* fShader, unsigned int* nextTextureSlot)
+public:
+	PlaneEntity(const unsigned int& size, const unsigned int& tileSize, const char* texture, const char* vShader, const char* fShader, unsigned int* nextTextureSlot)
 	{
 		//Create the data
-		_ai = new AssimpLoader(objFile);
-		
+		_planeData = new PlaneData(size, tileSize);
+
 		//Create the texture
 		_textureCount = *nextTextureSlot;
 		_texture = new Texture(texture, _textureCount);
 		(*nextTextureSlot)++;
-		
+
 		//Create the shader
 		_shader = new Shader(vShader, fShader);
-		
+
 		//Combine everything to the model
-		_standardmodel = new Standardmodel(_ai, _shader, _textureCount, false);
+		_planeModel = new Standardmodel(_planeData, _shader, _textureCount, false);
 	}
 
-	~ObjmodelEntity()
+	~PlaneEntity()
 	{
-		delete _ai;
+		delete _planeData;
 		delete _texture;
 		delete _shader;
-		delete _standardmodel;
+		delete _planeModel;
 	}
 	
 	void translate(const glm::vec3& tVec3) const
 	{
-		_standardmodel->translate(tVec3);
+		_planeModel->translate(tVec3);
 	}
 
 	void rotate(const float& angle, const glm::vec3& axis) const
 	{
-		_standardmodel->rotate(angle, axis);
+		_planeModel->rotate(angle, axis);
 	}
 
 	void scale(const glm::vec3& scalar) const
 	{
-		_standardmodel->scale(scalar);
+		_planeModel->scale(scalar);
 	}
 };

@@ -25,12 +25,12 @@ public:
                 GLCall(glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
                     0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data
                 ));
-                spdlog::info("Texture loaded successfully: {}", faces[i]);
+                spdlog::info("Cubemap texture loaded successfully: {}", faces[i]);
                 stbi_image_free(data);
             }
             else
             {
-                std::cout << "Cubemap texture failed to load at path: " << faces[i] << std::endl;
+                spdlog::error("Cubemap texture failed to load at path: {}", faces[i]);
                 stbi_image_free(data);
             }
         }

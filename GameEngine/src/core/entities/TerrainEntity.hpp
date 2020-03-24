@@ -16,7 +16,7 @@ private:
 	friend class EntityManager;
 	
 public:	
-	TerrainEntity(const unsigned int& size, const unsigned int& tileSize, const char* heightmap, const char* terrainTexture, const char* pathwayTexture, const char* blendmap, const char* vShader, const char* fShader, unsigned int* nextTextureSlot)
+	TerrainEntity(const unsigned int& size, const unsigned int& tileSize, const char* heightmap, const char* terrainTexture, const char* pathwayTexture, const char* blendmap, unsigned int* nextTextureSlot)
 	{		
 		//Create the data
 		_groundData = new GroundData(size, tileSize, heightmap);
@@ -35,7 +35,7 @@ public:
 		(*nextTextureSlot)++;
 		
 		//Create the shader
-		_shader = new Shader(vShader, fShader);
+		_shader = new Shader("res/shader/ground_vs.glsl", "res/shader/ground_fs.glsl");
 
 		//Combine everything to the model
 		_groundModel = new Groundmodel(_groundData, _shader, _terrainTexCount, _pathwayTexCount, _pathwayTexCount, _blendmapTexCount);

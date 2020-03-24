@@ -42,15 +42,15 @@ int main()
 	entityManager.addCubemapEntity();
 	
 	//Ground
-	auto ground = entityManager.addTerrainEntity(512, 1, "res/maps/Heightmap_512.bmp", "res/textures/Grass.jpg", "res/textures/Dirt.jpg", "res/maps/Blendmap_512.jpg", "res/shader/ground_vs.glsl", "res/shader/ground_fs.glsl");
+	auto ground = entityManager.addTerrainEntity(512, 1, "res/maps/Heightmap_512.bmp", "res/textures/Grass.jpg", "res/textures/Dirt.jpg", "res/maps/Blendmap_512.jpg");
 
 	//Water
-	auto water = entityManager.addPlaneEntity(160, 1, "res/textures/Water.jpg", "res/shader/standard_vs.glsl", "res/shader/standard_fs.glsl");
+	auto water = entityManager.addPlaneEntity(160, 1, "res/textures/Water.jpg");
 	water->translate(glm::vec3(190, -4.5, 480));
 	water->rotate(90.0f, glm::vec3(0.0f, 1.0f, 0.0f));
 	
 	//House
-	auto house = entityManager.addOBJEntity("res/obj/houses/Farmhouse.obj", "res/textures/models/Farmhouse.jpg", "res/shader/standard_vs.glsl", "res/shader/standard_fs.glsl");
+	auto house = entityManager.addOBJEntity("res/obj/houses/Farmhouse.obj", "res/textures/models/Farmhouse.jpg");
 	house->translate(glm::vec3(440, -1.5, 140));
 	house->scale(glm::vec3(2.25f, 2.25f, 2.25f));
 	house->rotate(170.0f, glm::vec3(0, 1, 0));
@@ -58,23 +58,26 @@ int main()
 	house->rotate(-3.0f, glm::vec3(0, 0, 1));
 
 	//Wood
-	auto wood = entityManager.addOBJEntity("res/obj/vegetation/Wood.obj", "res/textures/models/Wood.jpg", "res/shader/standard_vs.glsl", "res/shader/standard_fs.glsl");
+	auto wood = entityManager.addOBJEntity("res/obj/vegetation/Wood.obj", "res/textures/models/Wood.jpg");
 	wood->translate(glm::vec3(412, -3.0, 116));
 	wood->scale(glm::vec3(2.5f, 2.5f, 2.5f));
 
 	//Axe
-	auto axe = entityManager.addOBJEntity("res/obj/tools/Axe.obj", "res/textures/models/Axe.jpg", "res/shader/standard_vs.glsl", "res/shader/standard_fs.glsl");
+	auto axe = entityManager.addOBJEntity("res/obj/tools/Axe.obj", "res/textures/models/Axe.jpg");
 	axe->translate(glm::vec3(408, 3.5, 114));
 	axe->scale(glm::vec3(0.4f, 0.4f, 0.4f));
 	axe->rotate(120.0f, glm::vec3(0, -1, 0));
 	axe->rotate(120.0f, glm::vec3(0, 0, -1));
 
 	//Grass
-	//auto grass = entityManager.addOBJEntity("res/obj/vegetation/LowGrass.obj", "res/textures/models/GrassOBJ.jpg", "res/shader/standard_vs.glsl", "res/shader/standard_fs.glsl");
+	//auto grass = entityManager.addOBJEntity("res/obj/vegetation/LowGrass.obj", "res/textures/models/GrassOBJ.jpg");
 
 	//Tree
-	auto tree = entityManager.addTreeEntity();
-	tree->translate(glm::vec3(200, 5, 200));
+	//auto tree = entityManager.addTreeEntity();
+
+	//Lights
+	auto light = entityManager.addLightEntity("res/obj/lightsources/Parklight.obj", "res/textures/models/Metal_2_dark.jpg", "res/obj/geometry/cylinder.obj", "res/textures/models/White.jpg");
+	light->translate(glm::vec3(350.0f, -3.0f, 75.0f));
 	//------------------------------------------------------------------------------------------------------------------------------------------------------------------	
 	//Renderer
 	//Renderer renderer;	

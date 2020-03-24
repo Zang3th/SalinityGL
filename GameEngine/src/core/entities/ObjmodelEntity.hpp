@@ -16,7 +16,7 @@ private:
 	friend class EntityManager;
 	
 public:	
-	ObjmodelEntity(const char* objFile, const char* texture, const char* vShader, const char* fShader, unsigned int* nextTextureSlot)
+	ObjmodelEntity(const char* objFile, const char* texture, unsigned int* nextTextureSlot)
 	{
 		//Create the data
 		_ai = new AssimpLoader(objFile);
@@ -27,7 +27,7 @@ public:
 		(*nextTextureSlot)++;
 		
 		//Create the shader
-		_shader = new Shader(vShader, fShader);
+		_shader = new Shader("res/shader/standard_vs.glsl", "res/shader/standard_fs.glsl");
 		
 		//Combine everything to the model
 		_standardmodel = new Standardmodel(_ai, _shader, _textureCount, false);

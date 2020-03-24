@@ -55,5 +55,6 @@
     <ClInclude Include="src\core\entities\EntityManager.hpp" />
     <ClInclude Include="src\core\entities\PlaneEntity.hpp" />
     <ClInclude Include="src\core\entities\TreeEntity.hpp" />
+    <ClInclude Include="src\core\entities\LightEntity.hpp" />
   </ItemGroup>
 </Project>

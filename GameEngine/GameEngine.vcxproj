@@ -161,6 +161,7 @@
     <ClInclude Include="src\core\data\AssimpLoader.hpp" />
     <ClInclude Include="src\core\data\QuaderData.hpp" />
     <ClInclude Include="src\core\entities\CubemapEntity.hpp" />
+    <ClInclude Include="src\core\entities\LightEntity.hpp" />
     <ClInclude Include="src\core\entities\PlaneEntity.hpp" />
     <ClInclude Include="src\core\entities\TreeEntity.hpp" />
     <ClInclude Include="src\core\functionality\AudioManager.hpp" />

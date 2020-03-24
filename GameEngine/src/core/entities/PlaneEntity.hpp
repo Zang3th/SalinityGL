@@ -13,7 +13,7 @@ private:
 	friend class EntityManager;
 	
 public:
-	PlaneEntity(const unsigned int& size, const unsigned int& tileSize, const char* texture, const char* vShader, const char* fShader, unsigned int* nextTextureSlot)
+	PlaneEntity(const unsigned int& size, const unsigned int& tileSize, const char* texture, unsigned int* nextTextureSlot)
 	{
 		//Create the data
 		_planeData = new PlaneData(size, tileSize);
@@ -24,7 +24,7 @@ public:
 		(*nextTextureSlot)++;
 
 		//Create the shader
-		_shader = new Shader(vShader, fShader);
+		_shader = new Shader("res/shader/standard_vs.glsl", "res/shader/standard_fs.glsl");
 
 		//Combine everything to the model
 		_planeModel = new Standardmodel(_planeData, _shader, _textureCount, false);

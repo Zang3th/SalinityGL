@@ -139,15 +139,5 @@ public:
 		//Unbinden
 		_vbo1->unbind();
 		_vao->unbind();
-	}	
-	
-	RawData* getRawData() const
-	{
-		return _data;
-	}
-
-	GroundData* getGroundData() const
-	{
-		return (GroundData*)_data;
-	}
+	}		
 };

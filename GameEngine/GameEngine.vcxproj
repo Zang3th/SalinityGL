@@ -163,6 +163,7 @@
     <ClInclude Include="src\core\entities\CubemapEntity.hpp" />
     <ClInclude Include="src\core\entities\LightEntity.hpp" />
     <ClInclude Include="src\core\entities\PlaneEntity.hpp" />
+    <ClInclude Include="src\core\entities\RayEntity.hpp" />
     <ClInclude Include="src\core\entities\TreeEntity.hpp" />
     <ClInclude Include="src\core\functionality\AudioManager.hpp" />
     <ClInclude Include="src\core\model\Basemodel.hpp" />

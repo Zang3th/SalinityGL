@@ -25,18 +25,6 @@ struct Triangle
 	{}
 };
 
-template<typename T, int width, int height>
-class MultiArray
-{
-private:
-	typedef T cols[height];
-	cols* data;
-public:
-	T& operator() (int x, int y) { return data[x][y]; }
-	MultiArray() { data = new cols[width]; }
-	~MultiArray() { delete[] data; }
-};
-
 class GroundData : public RawData
 {
 private:
@@ -46,8 +34,7 @@ private:
 	
 public:
 	unsigned int _index = 0;
-	MultiArray<int, 512, 512> _twoDimArray;
-
+	unsigned int _twoDimArray[512][512];
 	
 	GroundData(const unsigned int& size, const unsigned int& fieldmultiplier, const char* heightmap_filepath)
 		: _size(size), _fieldmultiplier(fieldmultiplier), _heightmap_filepath(heightmap_filepath)
@@ -92,9 +79,9 @@ public:
 				//2 Dim-Array for cursor
 				_index++;				
 				int ix = (int)x;
-				int iy = (int)y;
-				if(x >=0 && x < 512 && y >= 0 && y < 512)
-					_twoDimArray(x, y) = _index;
+				int iz = (int)z;
+				if(ix >=0 && ix < 512 && iz >= 0 && iz < 512)
+					_twoDimArray[ix][iz] = _index;
 			}
 		}
 		calculate_normals_per_vertex();

@@ -1,18 +1,20 @@
 #pragma once
 
+#include "TerrainEntity.hpp"
+
 class MousePicker
 {
 private:
 	glm::mat4 _projection;
 	glm::mat4 _view;
-	GroundData* _terrain;
+	TerrainEntity* _terrain;
 	
 public:
 	glm::vec3 _mouseRay = glm::vec3(0, 0, 0);
 	glm::vec3 _mouseRayTerrainEntry = glm::vec3(0, 0, 0);
 	
-	MousePicker(GroundData* Terrain)
-		: _terrain(Terrain)
+	MousePicker(TerrainEntity* terrain)
+		: _terrain(terrain)
 	{
 
 	}
@@ -57,17 +59,17 @@ public:
 			y = camPosition.y + endPosition.y * rayLength;
 			z = camPosition.z + endPosition.z * rayLength;
 			
-			const float terrain_height = _terrain->getHeightValueUnbuffered((int)x, (int)z);
-
-			if (terrain_height > y)
+			const float terrainHeight = _terrain->getHeightAt(x, z);
+			
+			if (terrainHeight > y)
 			{
 				rayLength -= 1.0f;
 			}
-			else if (terrain_height < y)
+			else if (terrainHeight < y)
 			{
 				rayLength += 1.0f;
 			}
-			else if (terrain_height == y)
+			else if (terrainHeight == y)
 			{
 				break;
 			}			

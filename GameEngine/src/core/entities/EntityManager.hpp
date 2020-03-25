@@ -7,22 +7,26 @@
 #include "PlaneEntity.hpp"
 #include "TreeEntity.hpp"
 #include "LightEntity.hpp"
+#include "RayEntity.hpp"
 
 class EntityManager
 {
 private:
 	Renderer _renderer;
-	unsigned int _nextTextureSlot = 0;
-	
+	unsigned int _nextTextureSlot = 0;	
 	std::vector<Basemodel*> _models;
-	std::vector<TerrainEntity*> _terrains;	
+	unsigned int _lastIndex = 0;
+	
 	std::vector<ObjmodelEntity*> _objs;
 	std::vector<PlaneEntity*> _planes;
 	std::vector<TreeEntity*> _trees;
 	std::vector<LightEntity*> _lights;
+	TerrainEntity* _terrain;
 	CubemapEntity* _cubemap;
+	RayEntity* _ray;
 	
 public:
+	
 	EntityManager()
 	{
 		
@@ -33,9 +37,6 @@ public:
 		for (auto objs : _objs)
 			delete objs;
 
-		for (auto terrains : _terrains)
-			delete terrains;
-
 		for (auto planes : _planes)
 			delete planes;
 
@@ -44,16 +45,17 @@ public:
 
 		for (auto lights : _lights)
 			delete lights;
-		
+
+		delete _terrain;
+		delete _ray;
 		delete _cubemap;
 	}
 
 	TerrainEntity* addTerrainEntity(const unsigned int& size, const unsigned int& tileSize, const char* heightmap, const char* terrainTexture, const char* pathwayTexture, const char* blendmap)
 	{
-		TerrainEntity* terrain = new TerrainEntity(size, tileSize, heightmap, terrainTexture, pathwayTexture, blendmap, &_nextTextureSlot);
-		_terrains.push_back(terrain);		
-		_models.push_back((Basemodel*)terrain->_groundModel);
-		return terrain;
+		_terrain = new TerrainEntity(size, tileSize, heightmap, terrainTexture, pathwayTexture, blendmap, &_nextTextureSlot);
+		_models.push_back((Basemodel*)_terrain->_groundModel);
+		return _terrain;
 	}
 	
 	ObjmodelEntity* addOBJEntity(const char* objFile, const char* texture)
@@ -94,6 +96,23 @@ public:
 	{
 		_cubemap = new CubemapEntity(&_nextTextureSlot);
 		_models.push_back((Basemodel*)_cubemap->_standardmodel);
+	}
+
+	void createRay()
+	{
+		_ray = new RayEntity();
+		_models.push_back((Basemodel*)_ray->_quaderModel);
+	}
+	
+	void visualizeRay(const glm::vec3& camPosition, const glm::vec3& endPosition, const float& angle, bool& renderRay, const float& rayLength, const float& rayThickness) const
+	{
+		_ray->updateRay(camPosition, endPosition, angle, renderRay, rayLength, rayThickness);		
+	}
+
+	void colorPickedVertices(const glm::vec3& terrainEntry)
+	{
+		unsigned int tempIndex = _lastIndex;
+		_lastIndex = _terrain->colorPickedVertices(terrainEntry, tempIndex);
 	}
 	
 	void render()

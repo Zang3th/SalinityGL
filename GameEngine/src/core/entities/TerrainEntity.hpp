@@ -65,4 +65,36 @@ public:
 	{
 		_groundModel->scale(scalar);
 	}
+
+	float getHeightAt(const float& x, const float& z) const
+	{
+		return _groundData->getHeightValueUnbuffered((int)x, (int)z);
+	}
+
+	unsigned int colorPickedVertices(const glm::vec3& terrainEntry, unsigned int lastIndex)
+	{
+		//Delete color of the last picked vertice
+		((RawData*)_groundData)->_isPicked.at(lastIndex) = glm::vec3(1.0, 1.0, 1.0);
+		
+		//Get the picked vertice position
+		int x = (int)terrainEntry.x;
+		int z = (int)terrainEntry.z;
+
+		//Error-Checking
+		if (x < 0)
+			x = 0;
+		if (x > 511)
+			x = 511;
+		if (z < 1)
+			z = 1;
+		if (z > 511)
+			z = 511;
+
+		//Color new vertice
+		unsigned int index = _groundData->_twoDimArray[x][z];
+		((RawData*)_groundData)->_isPicked.at(index) = glm::vec3(255, 0, 0);
+		_groundModel->updateColorOfPickedVertices();
+		
+		return index;
+	}
 };

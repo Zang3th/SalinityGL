@@ -2,8 +2,6 @@
 #include <imgui/imgui.h>
 #include <imgui/imgui_impl_glfw.h>
 #include <imgui/imgui_impl_opengl3.h>
-//#include "Renderer.hpp"
-//#include "ModelManager.hpp"
 #include "AudioManager.hpp"
 #include "MousePicker.hpp"
 #include "EntityManager.hpp"
@@ -78,12 +76,6 @@ int main()
 	//Lights
 	//auto light = entityManager.addLightEntity("res/obj/lightsources/Parklight.obj", "res/textures/models/Metal_2_dark.jpg", "res/obj/geometry/cylinder.obj", "res/textures/models/White.jpg");
 	//------------------------------------------------------------------------------------------------------------------------------------------------------------------	
-	//Renderer
-	//Renderer renderer;	
-
-	//Modelmanager
-	//ModelManager modelManager(&displayManager, &audioManager);	
-
 	//Mousepicker
 	MousePicker mousePicker(ground);
 
@@ -94,9 +86,6 @@ int main()
 	{
 		//Measure Frametime
 		displayManager.measureFrameTime();
-
-		//Clear Buffer and prepare for rendering
-		//renderer.prepare();
 		
 		//Start GUI-Frame
 		ImGui_ImplOpenGL3_NewFrame();
@@ -105,36 +94,39 @@ int main()
 
 		//Check Keyboard and Mouseinputs
 		displayManager.checkForInput();
-
-		//Render models
-		entityManager.render();
 		
 		//Update MouseRay
 		mousePicker.update();
-
-		//Update RenderRay Position		
+		
+		//Update RenderRay Position
 		if(!fixedRay)
 		{
 			glm::vec3 camPos = glm::vec3(_camera->Position.x, _camera->Position.y - 1, _camera->Position.z);
 			entityManager.visualizeRay(camPos, _camera->Front, _camera->Yaw, renderRay, 1000.0f, 0.1f);
-		}		
-		
+		}
+		else if(!renderRay)
+		{
+			fixedRay = false;
+			glm::vec3 camPos = glm::vec3(_camera->Position.x, _camera->Position.y - 1, _camera->Position.z);
+			entityManager.visualizeRay(camPos, _camera->Front, _camera->Yaw, renderRay, 1000.0f, 0.1f);
+		}			
+					
 		//Activate Terraineditor
 		if(terrainEditor)
 		{
 			mousePicker.calculateTerrainEntry(_camera->Position, _camera->Front);
-			entityManager.colorPickedVertices(mousePicker._mouseRayTerrainEntry);
+			entityManager.colorPickedVertice(mousePicker._mouseRayTerrainEntry);
 			deleteLastColoredVert = true;
 			
 			if(mouseIsHold)
 			{
 				if(raise == true && sink == false && ignoreNextClick == false)
 				{
-					//modelManager.raiseTerrain();
+					entityManager.raiseTerrain();
 				}
 				else if(sink == true && raise == false && ignoreNextClick == false)
 				{
-					//modelManager.sinkTerrain();
+					entityManager.sinkTerrain();
 				}				
 			}
 		}
@@ -147,13 +139,13 @@ int main()
 		//Otherwise the last picked Vertice would remain white
 		if(terrainEditor == false && deleteLastColoredVert == true)
 		{
-			//modelManager.deleteLastColoredVertice();
+			entityManager.deleteLastColoredVertice();
 			deleteLastColoredVert = false;
 		}		
 		
-		//Render Stuff		
-		//renderer.render(modelManager.Models);
-
+		//Render models
+		entityManager.render();
+		
 		//GUI Stuff
 		{
 			ImGui::Begin("General stuff");

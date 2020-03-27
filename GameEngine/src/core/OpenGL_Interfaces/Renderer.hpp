@@ -23,7 +23,7 @@ public:
 			}
 			else
 			{
-				//Model is not visible -> render nothing!
+				//Model is not visible -> don't render it!
 			}
 		}
 	}

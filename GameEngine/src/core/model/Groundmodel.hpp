@@ -113,7 +113,7 @@ public:
 		return _data->_verticesToRender;
 	}
 
-	void updateColorOfPickedVertices() const
+	void updateColorOfPickedVertice() const
 	{
 		//Binden
 		_vao->bind();
@@ -127,7 +127,7 @@ public:
 		_vao->unbind();
 	}
 
-	void updateHeightOfPickedVertices() const
+	void updateHeightOfPickedVertice() const
 	{
 		//Binden
 		_vao->bind();

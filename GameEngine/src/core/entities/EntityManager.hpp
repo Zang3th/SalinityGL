@@ -109,10 +109,24 @@ public:
 		_ray->updateRay(camPosition, endPosition, angle, renderRay, rayLength, rayThickness);		
 	}
 
-	void colorPickedVertices(const glm::vec3& terrainEntry)
+	void colorPickedVertice(const glm::vec3& terrainEntry)
 	{
-		unsigned int tempIndex = _lastIndex;
-		_lastIndex = _terrain->colorPickedVertices(terrainEntry, tempIndex);
+		_terrain->colorPickedVertice(terrainEntry, &_lastIndex);
+	}
+
+	void deleteLastColoredVertice()
+	{
+		_terrain->deleteLastPickedVertice(&_lastIndex);
+	}
+
+	void raiseTerrain()
+	{
+		_terrain->raise(&_lastIndex);
+	}
+
+	void sinkTerrain()
+	{
+		_terrain->sink(&_lastIndex);
 	}
 	
 	void render()

@@ -11,7 +11,21 @@ private:
 	Shader* _shader;
 	Primitivemodel* _quaderModel;
 	friend class EntityManager;
-
+	
+	void updateRay(const glm::vec3& camPosition, const glm::vec3& endPosition, const float& angle, bool& renderRay, const float& rayLength, const float& rayThickness) const
+	{		
+		if (renderRay == false)
+		{
+			_quaderModel->renderModel = false;
+		}			
+		else
+		{
+			_quaderData->updatePosition(camPosition, endPosition, angle, rayLength, rayThickness);
+			_quaderModel->updateData(_quaderData);
+			_quaderModel->renderModel = true;
+		}			
+	}
+	
 public:
 	RayEntity()
 	{
@@ -23,6 +37,7 @@ public:
 
 		//Combine everything to the model
 		_quaderModel = new Primitivemodel(_quaderData, _shader);
+		_quaderModel->renderModel = false;
 	}
 
 	~RayEntity()
@@ -30,16 +45,5 @@ public:
 		delete _quaderData;
 		delete _shader;
 		delete _quaderModel;
-	}
-
-	void updateRay(const glm::vec3& camPosition, const glm::vec3& endPosition, const float& angle, bool& renderRay, const float& rayLength, const float& rayThickness) const
-	{
-		_quaderData->updatePosition(camPosition, endPosition, angle, rayLength, rayThickness);
-		_quaderModel->updateData(_quaderData);
-
-		if (renderRay == false)
-			_quaderModel->renderModel = false;
-		else
-			_quaderModel->renderModel = true;
-	}
+	}	
 };

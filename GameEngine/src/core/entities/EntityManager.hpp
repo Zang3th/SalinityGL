@@ -8,6 +8,7 @@
 #include "TreeEntity.hpp"
 #include "LightEntity.hpp"
 #include "RayEntity.hpp"
+#include "PlayerEntity.hpp"
 
 class EntityManager
 {
@@ -24,6 +25,7 @@ private:
 	TerrainEntity* _terrain;
 	CubemapEntity* _cubemap;
 	RayEntity* _ray;
+	PlayerEntity* _playerEntity;
 	
 public:
 	
@@ -49,6 +51,7 @@ public:
 		delete _terrain;
 		delete _ray;
 		delete _cubemap;
+		delete _playerEntity;
 	}
 
 	TerrainEntity* addTerrainEntity(const unsigned int& size, const unsigned int& tileSize, const char* heightmap, const char* terrainTexture, const char* pathwayTexture, const char* blendmap)
@@ -90,6 +93,13 @@ public:
 		_models.push_back((Basemodel*)light->_lanternModel);
 		_models.push_back((Basemodel*)light->_lightbulbModel);
 		return light;
+	}
+
+	PlayerEntity* addPlayerEntity(DisplayManager* DM, AudioManager* AM, const glm::vec3& spawnPos)
+	{
+		_playerEntity = new PlayerEntity(DM, AM, spawnPos, _terrain->_groundData, &_nextTextureSlot);
+		_models.push_back((Basemodel*)_playerEntity->_playerModel);
+		return _playerEntity;
 	}
 	
 	void addCubemapEntity()

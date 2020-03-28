@@ -29,8 +29,8 @@ public:
 	glm::vec3 calculateMouseRay() const
 	{
 		//3d Normalised Device Coordinates
-		float x = (2.0f * rawMouse_X) / (float)WIDTH - 1.0f;
-		float y = 1.0f - (2.0f * rawMouse_Y) / (float)HEIGHT;
+		float x = (2.0f * lastX) / (float)WIDTH - 1.0f;
+		float y = 1.0f - (2.0f * lastY) / (float)HEIGHT;
 		glm::vec3 ray_NDS = glm::vec3(x, y, 1.0f);
 
 		//4d Homogeneous Clip Coordinates

@@ -20,7 +20,6 @@
     <ClInclude Include="src\vendor\imgui\imstb_textedit.h" />
     <ClInclude Include="src\vendor\imgui\imstb_truetype.h" />
     <ClInclude Include="src\vendor\stb_image\stb_image.h" />
-    <ClInclude Include="src\app\ModelManager.hpp" />
     <ClInclude Include="src\core\OpenGL_Interfaces\DisplayManager.hpp" />
     <ClInclude Include="src\core\OpenGL_Interfaces\IndexBuffer.hpp" />
     <ClInclude Include="src\core\OpenGL_Interfaces\OpenGLErrorManager.hpp" />
@@ -57,5 +56,6 @@
     <ClInclude Include="src\core\entities\TreeEntity.hpp" />
     <ClInclude Include="src\core\entities\LightEntity.hpp" />
     <ClInclude Include="src\core\entities\RayEntity.hpp" />
+    <ClInclude Include="src\core\entities\PlayerEntity.hpp" />
   </ItemGroup>
 </Project>

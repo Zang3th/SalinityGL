@@ -5,20 +5,12 @@
 #include "AudioManager.hpp"
 #include "MousePicker.hpp"
 #include "EntityManager.hpp"
-
-bool renderRay = false;
-bool fixedRay = false;
-bool terrainEditor = false;
-bool deleteLastColoredVert = false;
-bool raise = false;
-bool sink = false;
+#include "LightPositions.hpp"
 
 int main()
 {
-	Player* _playerObject = nullptr; //Player object	
-
 	//Display-Management
-	DisplayManager displayManager(_playerObject);
+	DisplayManager displayManager;
 	displayManager.createDisplay();
 	displayManager.printVersion();
 	
@@ -31,7 +23,7 @@ int main()
 
 	//Audio-Management
 	AudioManager audioManager;
-	//audioManager.playSound2D("res/audio/music/TrueBlueSky.mp3", true);
+	audioManager.playSound2D("res/audio/music/TrueBlueSky.mp3", true);
 
 	//Create Models ----------------------------------------------------------------------------------------------------------------------------------------------------	
 	EntityManager entityManager;
@@ -67,20 +59,78 @@ int main()
 	axe->rotate(120.0f, glm::vec3(0, -1, 0));
 	axe->rotate(120.0f, glm::vec3(0, 0, -1));
 
-	//Grass
-	//auto grass = entityManager.addOBJEntity("res/obj/vegetation/LowGrass.obj", "res/textures/models/GrassOBJ.jpg");
-
-	//Tree
-	//auto tree = entityManager.addTreeEntity();
-
+	//Vegetation
+	for (int i = 0; i < 90; i++)
+	{
+		//Calculation of the coodinates
+		int grass_x = rand() % 512;
+		int grass_z = rand() % 512;
+		float grass_y = ground->getHeightAt(grass_x, grass_z);
+	
+		int tree_x = rand() % 512;
+		int tree_z = rand() % 512;
+		float tree_y = ground->getHeightAt(grass_x, grass_z);
+	
+		//Grass	
+		if (grass_x > 160 && grass_x < 280 && grass_z > 200 && grass_z < 340)
+		{
+			//Collision with the water
+		}
+		else if (grass_x > 380 && grass_x < 500 && grass_z > 40 && grass_z < 160)
+		{
+			//Collision with the house
+		}
+		else
+		{
+			auto grass = entityManager.addOBJEntity("res/obj/vegetation/LowGrass.obj", "res/textures/models/GrassOBJ.jpg");
+			grass->translate(glm::vec3(grass_x, grass_y, grass_z));
+			int size = rand() % 30;
+			grass->scale(glm::vec3(size, size, size));
+		}
+	
+		//Tree
+		if (i % 3 == 0)
+		{
+			if (tree_x > 160 && tree_x < 280 && tree_z > 200 && tree_z < 340)
+			{
+				//Collision with the water
+			}
+			else if (tree_x > 380 && tree_x < 500 && tree_z > 40 && tree_z < 160)
+			{
+				//Collision with the house
+			}
+			else
+			{
+				auto tree = entityManager.addTreeEntity();
+				tree->translate(glm::vec3(tree_x, tree_y, tree_z));
+			}
+		}
+	}
+			
 	//Lights
-	//auto light = entityManager.addLightEntity("res/obj/lightsources/Parklight.obj", "res/textures/models/Metal_2_dark.jpg", "res/obj/geometry/cylinder.obj", "res/textures/models/White.jpg");
+	for(int i = 0; i < numberOfPointlights; i++)
+	{
+		auto light = entityManager.addLightEntity("res/obj/lightsources/Parklight.obj", "res/textures/models/Metal_2_dark.jpg", "res/obj/geometry/cylinder.obj", "res/textures/models/White.jpg");
+		glm::vec3 trans = glm::vec3(_lightPositions[i].x, _lightPositions[i].y - 23.0f, _lightPositions[i].z);
+		light->translate(trans);
+	}
+	
+	//Player
+	auto player = entityManager.addPlayerEntity(&displayManager, &audioManager, glm::vec3(330, 2.7, 70));
 	//------------------------------------------------------------------------------------------------------------------------------------------------------------------	
 	//Mousepicker
 	MousePicker mousePicker(ground);
 
 	//Create ray visualization
 	entityManager.createRay();
+
+	//Booleans for UI and Controlstuff
+	bool renderRay = false;
+	bool fixedRay = false;
+	bool terrainEditor = false;
+	bool deleteLastColoredVert = false;
+	bool raise = false;
+	bool sink = false;
 	
 	while (!displayManager.WindowShouldClose())
 	{
@@ -155,11 +205,11 @@ int main()
 			ImGui::Text("Camera-Yaw: %f, Camera-Pitch: %f", _camera->Yaw, _camera->Pitch);
 			ImGui::Text("Camera-Front: X: %f, Y: %f, Z: %f", _camera->Front.x, _camera->Front.y, _camera->Front.z);
 			ImGui::Text("---------------------------------------------");
-			//ImGui::Text("Player-Coords: X: %f, Y: %f, Z: %f", displayManager._player->_playerPosition.x, displayManager._player->_playerPosition.y, displayManager._player->_playerPosition.z);
-			//ImGui::Text("Player-Rotation: %f", displayManager._player->_yaw);
+			ImGui::Text("Player-Coords: X: %f, Y: %f, Z: %f", displayManager._player->_playerPosition.x, displayManager._player->_playerPosition.y, displayManager._player->_playerPosition.z);
+			ImGui::Text("Player-Rotation: %f", displayManager._player->_yaw);
 			ImGui::Text("---------------------------------------------");
-			ImGui::Checkbox("Mouse-Ray rendern", &renderRay); ImGui::SameLine(); ImGui::Checkbox("Mouse-Ray fixieren", &fixedRay);
-			ImGui::Text("Mouse-Coords: X: %f, Y: %f", rawMouse_X, rawMouse_Y);
+			ImGui::Checkbox("Mouse-Ray (Render)", &renderRay); ImGui::SameLine(); ImGui::Checkbox("Mouse-Ray (Static)", &fixedRay);
+			ImGui::Text("Mouse-Coords: X: %f, Y: %f", lastX, lastY);
 			ImGui::Text("Mouse-Ray-Direction: X: %f, Y: %f, Z: %f", mousePicker._mouseRay.x, mousePicker._mouseRay.y, mousePicker._mouseRay.z);
 			ImGui::Text("---------------------------------------------");
 			ImGui::Checkbox("Terrain-Editor", &terrainEditor); ImGui::SameLine(); ImGui::Checkbox("Raise", &raise); ImGui::SameLine(); ImGui::Checkbox("Sink", &sink);
@@ -170,7 +220,7 @@ int main()
 
 		//Update stuff
 		{
-			//audioManager.updateListenerPosition(&_camera->Position, &_camera->Front, &_camera->Up);
+			audioManager.updateListenerPosition(&_camera->Position, &_camera->Front, &_camera->Up);
 			ImGui::Render();
 			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 			displayManager.updateDisplay();

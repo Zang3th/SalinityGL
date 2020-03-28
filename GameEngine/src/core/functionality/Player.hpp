@@ -4,9 +4,6 @@
 #include "GroundData.hpp"
 #include "AudioManager.hpp"
 
-
-//class Model;
-
 enum Player_Movement
 {
 	P_FORWARD,
@@ -29,7 +26,7 @@ private:
 	AudioManager *_audioManager = nullptr;
 	
 public:
-	Standardmodel*_playerModel;
+	Standardmodel* _playerModel;
 	float _yaw = 0.0f;
 	glm::vec3 _front, _playerPosition;
 
@@ -38,8 +35,7 @@ public:
 	{
 		_playerModel->translate(_playerPosition);
 	}
-	
-	//Processes input received from any keyboard-like input system. Accepts input parameter in the form of camera defined ENUM (to abstract it from windowing systems)
+
 	void ProcessKeyboard(Player_Movement direction, float deltaTime)
 	{		
 		if (direction == P_FORWARD) 

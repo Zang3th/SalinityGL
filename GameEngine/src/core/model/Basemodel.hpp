@@ -4,6 +4,7 @@
 #include "VertexBuffer.hpp"
 #include "IndexBuffer.hpp"
 #include "Shader.hpp"
+#include "LightPositions.hpp"
 
 class Basemodel
 {

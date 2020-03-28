@@ -6,23 +6,23 @@
 #include "OpenGLErrorManager.hpp"
 #include "Camera.hpp"
 #include "RenderStateManager.hpp"
-#include "LightPositions.hpp"
 
 const unsigned int WIDTH = 1800; //Global WIDTH-Setting
 const unsigned int HEIGHT = 1200; //Global HEIGHT-Setting
+
 float deltaTime = 0.0f;	//Time between current frame and last frame
 float lastFrame = 0.0f; //Time of last frame
 float lastX = WIDTH / 2.0f; //X-Coord of the mouse
 float lastY = HEIGHT / 2.0f; //Y-Coord of the mouse
-float rawMouse_X, rawMouse_Y;
 bool window_focused = false; //Is the window in focus?
-bool mouseIsHold = false;
-bool ignoreNextClick = false;
+
+bool mouseIsHold = false; //Leftmousebutton is being hold
+bool ignoreNextClick = false; //Ignore first click in the window - maybe its just cause of focusing
 
 Camera* _camera = nullptr; //Global camera object. Needs to be global for callbacks and Model.hpp
-RenderStateManager* _RSM = nullptr;
+RenderStateManager* _RSM = nullptr; //Special OpenGL-Calls for rendering transparent objects
 
-#include "Player.hpp" //Needs to be included last because Model.hpp needs global _camera object
+#include "Player.hpp" //Needs to be included last because Player.hpp includes Model.hpp and Model.hpp needs global _camera object
 
 void processInput(GLFWwindow* window, Player* _playerObject)
 {
@@ -68,9 +68,6 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 		lastX = xpos;
 		lastY = ypos;
 	}
-
-	rawMouse_X = xpos;
-	rawMouse_Y = ypos;
 }
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
@@ -117,8 +114,8 @@ private:
 public:	
 	Player* _player = nullptr;
 
-	DisplayManager(Player* player)
-		: _width(WIDTH), _height(HEIGHT), _player(player)
+	DisplayManager()
+		: _width(WIDTH), _height(HEIGHT)
 	{
 		_camera = new Camera(glm::vec3(185.0f, 50.0f, 200.0f), glm::vec3(0.0f, 1.0f, 0.0f));		
 		_RSM = new RenderStateManager();

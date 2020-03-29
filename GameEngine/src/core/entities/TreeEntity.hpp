@@ -13,8 +13,8 @@ private:
 	Texture* _treeTex, * _leafTex,* _leafMaskTex;
 	unsigned int _treeTexCount, _leafTexCount, _leafMaskCount;
 	Shader* _treeShader,* _leafShader;
-	Standardmodel* _treeModel;
-	Leafmodel* _leafModel;
+	std::vector<Standardmodel*> _treeModels;
+	std::vector<Leafmodel*> _leafModels;
 	friend class EntityManager;
 	
 public:
@@ -40,10 +40,6 @@ public:
 		//Create the shaders
 		_treeShader = new Shader("res/shader/standard_vs.glsl", "res/shader/standard_fs.glsl");
 		_leafShader = new Shader("res/shader/leaf_vs.glsl", "res/shader/leaf_fs.glsl");
-		
-		//Combine everything to the model
-		_treeModel = new Standardmodel(_treeData, _treeShader, _treeTexCount);
-		_leafModel = new Leafmodel(_leafData, _leafShader, _leafTexCount, _leafMaskCount);
 	}
 
 	~TreeEntity()
@@ -55,25 +51,37 @@ public:
 		delete _leafMaskTex;
 		delete _treeShader;
 		delete _leafShader;
-		delete _treeModel;
-		delete _leafModel;
+
+		for (auto tree : _treeModels)
+			delete tree;
+
+		for (auto leaf : _leafModels)
+			delete leaf;
+	}
+
+	void addTree()
+	{
+		Standardmodel* treeModel = new Standardmodel(_treeData, _treeShader, _treeTexCount);
+		Leafmodel* leafModel = new Leafmodel(_leafData, _leafShader, _leafTexCount, _leafMaskCount);
+		_treeModels.push_back(treeModel);
+		_leafModels.push_back(leafModel);
 	}
 	
-	void translate(const glm::vec3& tVec3) const
+	void translate(const unsigned int& treeID, const glm::vec3& tVec3) const
 	{
-		_treeModel->translate(tVec3);
-		_leafModel->translate(tVec3);
+		_treeModels.at(treeID)->translate(tVec3);
+		_leafModels.at(treeID)->translate(tVec3);
 	}
 
-	void rotate(const float& angle, const glm::vec3& axis) const
+	void rotate(const unsigned int& treeID, const float& angle, const glm::vec3& axis) const
 	{
-		_treeModel->rotate(angle, axis);
-		_leafModel->rotate(angle, axis);
+		_treeModels.at(treeID)->rotate(angle, axis);
+		_leafModels.at(treeID)->rotate(angle, axis);
 	}
 
-	void scale(const glm::vec3& scalar) const
+	void scale(const unsigned int& treeID, const glm::vec3& scalar) const
 	{
-		_treeModel->scale(scalar);
-		_leafModel->scale(scalar);
+		_treeModels.at(treeID)->scale(scalar);
+		_leafModels.at(treeID)->scale(scalar);
 	}
 };

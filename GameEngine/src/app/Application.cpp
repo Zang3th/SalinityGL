@@ -69,7 +69,7 @@ int main()
 	
 		int tree_x = rand() % 512;
 		int tree_z = rand() % 512;
-		float tree_y = ground->getHeightAt(grass_x, grass_z);
+		float tree_y = ground->getHeightAt(tree_x, tree_z);
 	
 		//Grass	
 		if (grass_x > 160 && grass_x < 280 && grass_z > 200 && grass_z < 340)
@@ -82,10 +82,10 @@ int main()
 		}
 		else
 		{
-			auto grass = entityManager.addOBJEntity("res/obj/vegetation/LowGrass.obj", "res/textures/models/GrassOBJ.jpg");
-			grass->translate(glm::vec3(grass_x, grass_y, grass_z));
+			auto grass = entityManager.addGrassEntity("res/obj/vegetation/LowGrass.obj", "res/textures/models/GrassOBJ.jpg");
+			entityManager.translateGrassEntity(grass, glm::vec3(grass_x, grass_y, grass_z));
 			int size = rand() % 30;
-			grass->scale(glm::vec3(size, size, size));
+			entityManager.scaleGrassEntity(grass, glm::vec3(size, size, size));
 		}
 	
 		//Tree
@@ -102,7 +102,7 @@ int main()
 			else
 			{
 				auto tree = entityManager.addTreeEntity();
-				tree->translate(glm::vec3(tree_x, tree_y, tree_z));
+				entityManager.translateTreeEntity(tree, glm::vec3(tree_x, tree_y, tree_z));
 			}
 		}
 	}
@@ -110,9 +110,9 @@ int main()
 	//Lights
 	for(int i = 0; i < numberOfPointlights; i++)
 	{
-		auto light = entityManager.addLightEntity("res/obj/lightsources/Parklight.obj", "res/textures/models/Metal_2_dark.jpg", "res/obj/geometry/cylinder.obj", "res/textures/models/White.jpg");
+		auto lightID = entityManager.addLightEntity("res/obj/lightsources/Parklight.obj", "res/textures/models/Metal_2_dark.jpg", "res/obj/geometry/cylinder.obj", "res/textures/models/White.jpg");
 		glm::vec3 trans = glm::vec3(_lightPositions[i].x, _lightPositions[i].y - 23.0f, _lightPositions[i].z);
-		light->translate(trans);
+		entityManager.translateLightEntity(lightID, trans);
 	}
 	
 	//Player

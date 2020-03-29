@@ -13,8 +13,8 @@ private:
 	Texture* _lanternTex, * _lightbulbTex;
 	unsigned int _lanternTexCount, _lightbulbTexCount;
 	Shader* _lanternShader, * _lightbulbShader;
-	Standardmodel* _lanternModel;
-	Lightmodel* _lightbulbModel;
+	std::vector<Standardmodel*> _lanternModels;
+	std::vector<Lightmodel*> _lightbulbModels;
 	friend class EntityManager;
 	
 public:
@@ -35,11 +35,7 @@ public:
 
 		//Create the shaders
 		_lanternShader = new Shader("res/shader/standard_vs.glsl", "res/shader/standard_fs.glsl");
-		_lightbulbShader = new Shader("res/shader/lightbulb_vs.glsl", "res/shader/lightbulb_fs.glsl");
-
-		//Combine everything to the model
-		_lanternModel = new Standardmodel(_lanternData, _lanternShader, _lanternTexCount);
-		_lightbulbModel = new Lightmodel(_lightbulbData, _lightbulbShader, _lightbulbTexCount, glm::vec3(1.0, 1.0, 1.0));		
+		_lightbulbShader = new Shader("res/shader/lightbulb_vs.glsl", "res/shader/lightbulb_fs.glsl");			
 	}
 
 	~LightEntity()
@@ -50,25 +46,37 @@ public:
 		delete _lightbulbTex;
 		delete _lanternShader;
 		delete _lightbulbShader;
-		delete _lanternModel;
-		delete _lightbulbModel;
+
+		for (auto lantern : _lanternModels)
+			delete lantern;
+
+		for (auto lightbulb : _lightbulbModels)
+			delete lightbulb;
 	}
 
-	void translate(const glm::vec3& tVec3) const
+	void addLight()
 	{
-		_lanternModel->translate(tVec3);
-		_lightbulbModel->translate(tVec3);			
+		Standardmodel* lanternModel = new Standardmodel(_lanternData, _lanternShader, _lanternTexCount);
+		Lightmodel* lightbulbModel = new Lightmodel(_lightbulbData, _lightbulbShader, _lightbulbTexCount, glm::vec3(1.0, 1.0, 1.0));
+		_lanternModels.push_back(lanternModel);
+		_lightbulbModels.push_back(lightbulbModel);
 	}
 	
-	void rotate(const float& angle, const glm::vec3& axis) const
+	void translate(const unsigned int& lightID, const glm::vec3& tVec3)
 	{
-		_lanternModel->rotate(angle, axis);
-		_lightbulbModel->rotate(angle, axis);		
+		_lanternModels.at(lightID)->translate(tVec3);
+		_lightbulbModels.at(lightID)->translate(tVec3);
+	}	
+	
+	void rotate(const unsigned int& lightID, const float& angle, const glm::vec3& axis) const
+	{
+		_lanternModels.at(lightID)->rotate(angle, axis);
+		_lightbulbModels.at(lightID)->rotate(angle, axis);		
 	}
 
-	void scale(const glm::vec3& scalar) const
+	void scale(const unsigned int& lightID, const glm::vec3& scalar) const
 	{
-		_lanternModel->scale(scalar);
-		_lightbulbModel->scale(scalar);		
+		_lanternModels.at(lightID)->scale(scalar);
+		_lightbulbModels.at(lightID)->scale(scalar);
 	}
 };

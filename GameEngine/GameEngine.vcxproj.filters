@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="src\app\Application.cpp" />
     <ClCompile Include="src\vendor\imgui\imgui.cpp" />
     <ClCompile Include="src\vendor\imgui\imgui_demo.cpp" />
     <ClCompile Include="src\vendor\imgui\imgui_draw.cpp" />
@@ -9,6 +8,8 @@
     <ClCompile Include="src\vendor\imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="src\vendor\imgui\imgui_widgets.cpp" />
     <ClCompile Include="src\vendor\stb_image\stb_image.cpp" />
+    <ClCompile Include="src\app\Zanget3uWorld.cpp" />
+    <ClCompile Include="src\app\Breakout.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\vendor\imgui\imconfig.h" />
@@ -58,5 +59,11 @@
     <ClInclude Include="src\core\entities\RayEntity.hpp" />
     <ClInclude Include="src\core\entities\PlayerEntity.hpp" />
     <ClInclude Include="src\core\entities\GrassEntity.hpp" />
+    <ClInclude Include="src\game\Game.hpp" />
+    <ClInclude Include="src\game\GameDisplayManager.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\shader\breakout_vs.glsl" />
+    <None Include="res\shader\breakout_fs.glsl" />
   </ItemGroup>
 </Project>

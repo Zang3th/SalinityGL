@@ -9,8 +9,8 @@
 float deltaTime = 0.0f;	//Time between current frame and last frame
 float lastFrame = 0.0f; //Time of last frame
 
-const unsigned int WIDTH = 1600; //Global WIDTH-Setting
-const unsigned int HEIGHT = 1000; //Global HEIGHT-Setting
+const unsigned int WIDTH = 1800; //Global WIDTH-Setting
+const unsigned int HEIGHT = 1200; //Global HEIGHT-Setting
 
 Game breakout(WIDTH, HEIGHT); //Game creation
 

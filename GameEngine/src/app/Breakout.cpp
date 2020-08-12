@@ -9,8 +9,7 @@ int main()
 	GameDisplayManager gameDisplayManager(WIDTH, HEIGHT);
 	gameDisplayManager.printVersion();
 
-	//Renderer
-	Game breakout(WIDTH, HEIGHT);
+	//Game Initialization
 	breakout.init();
 
 	//Setup ImGui

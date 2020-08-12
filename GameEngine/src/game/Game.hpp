@@ -1,8 +1,7 @@
-#include "VertexArray.hpp"
-#include "VertexBuffer.hpp"
-#include "Shader.hpp"
-
 #pragma once
+
+#include "SpriteRenderer.hpp"
+#include "Texture.hpp"
 
 enum GameState
 {
@@ -17,14 +16,14 @@ public:
     GameState _state;
     bool _keys[1024];
     unsigned int _width, _height;
-    VertexArray* _vao = nullptr;
-    VertexBuffer* _vbo = nullptr;
-    Shader* _shader = nullptr;
-
+    SpriteRenderer _spriteRenderer;
+    Texture* _brickTexture = nullptr;
+	
     Game(unsigned int width, unsigned int height)
         : _state(GAME_ACTIVE), _keys(), _width(width), _height(height)
     {
-
+        _spriteRenderer = SpriteRenderer();
+        
     }
 
     ~Game()
@@ -34,23 +33,8 @@ public:
 
     void init()
     {
-        //Erstellt und bindet VAO
-        _vao = new VertexArray();
-        _vao->bind();
-
-        float vertices[] = {
-            -0.5f, -0.5f, 0.0f,
-             0.5f, -0.5f, 0.0f,
-             0.0f,  0.5f, 0.0f
-        };
-
-        _vbo = new VertexBuffer(vertices, sizeof(vertices));
-        _vao->DefineAttributes(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-
-        _vbo->unbind();
-        _vao->unbind();
-
-        _shader = new Shader("res/shader/breakout_vs.glsl", "res/shader/breakout_fs.glsl");
+        _spriteRenderer.initRenderData("res/shader/breakout_vs.glsl", "res/shader/breakout_fs.glsl");
+        _brickTexture = new Texture("res/textures/Brick.jpg", 0);
     }
 
     void update(float dt)
@@ -65,9 +49,6 @@ public:
 
     void render()
     {
-        _shader->bind();
-        _vao->bind();
-
-        GLCall(glDrawArrays(GL_TRIANGLES, 0, 3));
+        _spriteRenderer.DrawSprite(_brickTexture, glm::vec2(200.0f, 200.0f), glm::vec2(200.0f, 200.0f), 0.0f, glm::vec3(0.0f, 1.0f, 0.0f));
     }
 };

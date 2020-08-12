@@ -199,6 +199,7 @@
     <ClInclude Include="src\core\OpenGL_Interfaces\VertexBuffer.hpp" />
     <ClInclude Include="src\game\Game.hpp" />
     <ClInclude Include="src\game\GameDisplayManager.hpp" />
+    <ClInclude Include="src\game\SpriteRenderer.hpp" />
     <ClInclude Include="src\vendor\imgui\imconfig.h" />
     <ClInclude Include="src\vendor\imgui\imgui.h" />
     <ClInclude Include="src\vendor\imgui\imgui_impl_glfw.h" />
@@ -212,6 +213,18 @@
   <ItemGroup>
     <None Include="res\shader\breakout_fs.glsl" />
     <None Include="res\shader\breakout_vs.glsl" />
+    <None Include="res\shader\cubemap_fs.glsl" />
+    <None Include="res\shader\cubemap_vs.glsl" />
+    <None Include="res\shader\ground_fs.glsl" />
+    <None Include="res\shader\ground_vs.glsl" />
+    <None Include="res\shader\leaf_fs.glsl" />
+    <None Include="res\shader\leaf_vs.glsl" />
+    <None Include="res\shader\lightbulb_fs.glsl" />
+    <None Include="res\shader\lightbulb_vs.glsl" />
+    <None Include="res\shader\primitive_fs.glsl" />
+    <None Include="res\shader\primitive_vs.glsl" />
+    <None Include="res\shader\standard_fs.glsl" />
+    <None Include="res\shader\standard_vs.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

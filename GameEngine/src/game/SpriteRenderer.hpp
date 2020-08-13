@@ -48,10 +48,12 @@ public:
 
     ~SpriteRenderer()
     {
-    	
+        delete _vao;
+        delete _vbo;
+        delete _shader;
     }
     
-    void DrawSprite(Texture* texture, glm::vec2 position, glm::vec2 size, float rotate, glm::vec3 color)
+    void DrawSprite(Texture* texture, glm::vec2 position, glm::vec2 size, float rotation, glm::vec3 color)
     {
         _shader->bind();
 
@@ -63,7 +65,7 @@ public:
         model = glm::translate(model, glm::vec3(position, 0.0f));  // first translate (transformations are: scale happens first, then rotation, and then final translation happens; reversed order)
 
         model = glm::translate(model, glm::vec3(0.5f * size.x, 0.5f * size.y, 0.0f)); // move origin of rotation to center of quad
-        model = glm::rotate(model, glm::radians(rotate), glm::vec3(0.0f, 0.0f, 1.0f)); // then rotate
+        model = glm::rotate(model, glm::radians(rotation), glm::vec3(0.0f, 0.0f, 1.0f)); // then rotate
         model = glm::translate(model, glm::vec3(-0.5f * size.x, -0.5f * size.y, 0.0f)); // move origin back
 
         model = glm::scale(model, glm::vec3(size, 1.0f)); // last scale
@@ -74,7 +76,7 @@ public:
         _shader->SetUniformVec3("spriteColor", color);
 
     	//Set texture
-        texture->bind(0);
+        texture->bind();
 
     	//Bind vao
         _vao->bind();

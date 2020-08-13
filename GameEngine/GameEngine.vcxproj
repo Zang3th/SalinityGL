@@ -199,6 +199,7 @@
     <ClInclude Include="src\core\OpenGL_Interfaces\VertexBuffer.hpp" />
     <ClInclude Include="src\game\Game.hpp" />
     <ClInclude Include="src\game\GameDisplayManager.hpp" />
+    <ClInclude Include="src\game\ResourceManager.hpp" />
     <ClInclude Include="src\game\SpriteRenderer.hpp" />
     <ClInclude Include="src\vendor\imgui\imconfig.h" />
     <ClInclude Include="src\vendor\imgui\imgui.h" />

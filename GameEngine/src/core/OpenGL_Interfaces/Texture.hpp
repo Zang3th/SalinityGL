@@ -12,7 +12,12 @@ private:
 	int _Width, _Height, _BPP;
 	
 public:
-	Texture(const char* path, const unsigned int& texSlot)
+	Texture()
+	{
+		
+	}
+	
+	Texture(const char* path, unsigned int texSlot = 0)
 		: _RendererID(0), _Filepath(path), _LocalBuffer(nullptr), _Width(0), _Height(0), _BPP(0)
 	{		
 		stbi_set_flip_vertically_on_load(1);
@@ -55,7 +60,7 @@ public:
 		GLCall(glDeleteTextures(1, &_RendererID));
 	}
 
-	void bind(unsigned int slot) const
+	void bind(unsigned int slot = 0) const
 	{
 		GLCall(glActiveTexture(GL_TEXTURE0 + slot));
 		GLCall(glBindTexture(GL_TEXTURE_2D, _RendererID));

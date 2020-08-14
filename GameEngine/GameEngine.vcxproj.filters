@@ -80,5 +80,6 @@
     <None Include="res\shader\primitive_fs.glsl" />
     <None Include="res\shader\primitive_vs.glsl" />
     <None Include="res\shader\standard_fs.glsl" />
+    <None Include="res\levels\basic.level" />
   </ItemGroup>
 </Project>

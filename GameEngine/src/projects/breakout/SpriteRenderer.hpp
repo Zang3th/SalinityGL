@@ -12,6 +12,7 @@ private:
 	VertexArray* _vao = nullptr;
 	VertexBuffer* _vbo = nullptr;
 	Shader* _shader = nullptr;
+    unsigned int _width, _height;
 	
 public:
     void initRenderData(const char* vsPath, const char* fsPath)
@@ -41,7 +42,8 @@ public:
         _shader = new Shader(vsPath, fsPath);
     }
 	
-    SpriteRenderer(const char* vsPath, const char* fsPath)
+    SpriteRenderer(const char* vsPath, const char* fsPath, const unsigned int& width, const unsigned int& height)
+	    : _width(width), _height(height)
     {
         this->initRenderData(vsPath, fsPath);
     }
@@ -58,7 +60,7 @@ public:
         _shader->bind();
 
     	//Projection-Matrix
-        glm::mat4 projection = glm::ortho(0.0f, 1800.0f, 1200.0f, 0.0f, -1.0f, 1.0f);
+        glm::mat4 projection = glm::ortho(0.0f, (float)_width, (float)_height, 0.0f, -1.0f, 1.0f);
 
     	//Model transformations
         glm::mat4 model = glm::mat4(1.0f);

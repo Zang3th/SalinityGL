@@ -35,13 +35,13 @@ public:
     void init()
     {
     	//create SpriteRenderer
-        _spriteRenderer = new SpriteRenderer("res/shader/breakout_vs.glsl", "res/shader/breakout_fs.glsl");
+        _spriteRenderer = new SpriteRenderer("res/shader/breakout_vs.glsl", "res/shader/breakout_fs.glsl", _width, _height);
             	
         //create GameLevelCreator
         _gameLevelCreator = new GameLevelCreator(_spriteRenderer, _width, _height);
     	
     	//load level from file
-        _gameLevelCreator->loadFromFile("res/level/first.level");
+        _gameLevelCreator->generateLevel();
     }
 
     void update(float dt)

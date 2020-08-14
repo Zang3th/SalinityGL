@@ -41,9 +41,9 @@ public:
         _shader = new Shader(vsPath, fsPath);
     }
 	
-    SpriteRenderer()
+    SpriteRenderer(const char* vsPath, const char* fsPath)
     {
-    	
+        this->initRenderData(vsPath, fsPath);
     }
 
     ~SpriteRenderer()

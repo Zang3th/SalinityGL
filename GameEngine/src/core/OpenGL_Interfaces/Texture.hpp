@@ -12,11 +12,6 @@ private:
 	int _Width, _Height, _BPP;
 	
 public:
-	Texture()
-	{
-		
-	}
-	
 	Texture(const char* path, unsigned int texSlot = 0)
 		: _RendererID(0), _Filepath(path), _LocalBuffer(nullptr), _Width(0), _Height(0), _BPP(0)
 	{		

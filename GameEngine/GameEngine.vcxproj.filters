@@ -63,6 +63,7 @@
     <ClInclude Include="src\game\GameDisplayManager.hpp" />
     <ClInclude Include="src\game\SpriteRenderer.hpp" />
     <ClInclude Include="src\game\ResourceManager.hpp" />
+    <ClInclude Include="src\game\GameLevelCreator.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shader\breakout_vs.glsl" />

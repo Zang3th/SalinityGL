@@ -98,9 +98,8 @@ public:
                     {
                         glm::vec2 pos(brick_width * x, brick_height * y);
                         glm::vec2 size(brick_width, brick_height);
-                        GameObject obj(pos, size, glm::vec2(0.0f, 0.0f), glm::vec3(0.8f, 0.8f, 0.7f), 0.0f, ResourceManager::GetTexture("Block_solid"), _spriteRenderer);
-                        obj._solid = true;
-                        _bricks.push_back(obj);
+                    	
+                        _bricks.emplace_back(pos, size, glm::vec2(0.0f, 0.0f), glm::vec3(0.8f, 0.8f, 0.7f), 0.0f, ResourceManager::GetTexture("Block_solid"), _spriteRenderer, true);
                     }
 
                     else if (tileData[y][x] > 1)

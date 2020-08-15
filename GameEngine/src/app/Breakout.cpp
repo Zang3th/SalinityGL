@@ -35,6 +35,9 @@ int main()
 		//Clear framebuffer
 		gameDisplayManager.clear();
 
+		//Update
+		breakout.processInput(deltaTime);
+		
 		//Render
 		breakout.render();
 

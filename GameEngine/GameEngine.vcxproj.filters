@@ -64,6 +64,8 @@
     <ClInclude Include="src\projects\zanget3uWorld\functionality\AssimpLoader.hpp" />
     <ClInclude Include="src\projects\zanget3uWorld\model\Player.hpp" />
     <ClInclude Include="src\projects\zanget3uWorld\functionality\DisplayManager.hpp" />
+    <ClInclude Include="src\projects\breakout\GameObject.hpp" />
+    <ClInclude Include="src\projects\breakout\BallObject.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shader\breakout_vs.glsl" />

@@ -44,4 +44,7 @@
 
  <img src="https://user-images.githubusercontent.com/59279641/77147299-375d0f00-6a8d-11ea-9db8-0d94d04d178b.PNG"/>
  <img src="https://user-images.githubusercontent.com/59279641/77147427-7ee39b00-6a8d-11ea-86cd-6ba2ad74efff.PNG"/>
- <img src="https://user-images.githubusercontent.com/59279641/77147461-94f15b80-6a8d-11ea-82b8-0a67f637a7c7.PNG"/>    
+ <img src="https://user-images.githubusercontent.com/59279641/77147461-94f15b80-6a8d-11ea-82b8-0a67f637a7c7.PNG"/>  
+ 
+ #### Screenshot of my implementation of the game "Breakout" from "learnopengl.com":
+ <img src="https://user-images.githubusercontent.com/59279641/90671729-630b3d80-e255-11ea-8410-2512daf577d6.PNG"/>

@@ -4,6 +4,14 @@
 #include "GameLevelCreator.hpp"
 #include "BallObject.hpp"
 
+enum CollisionSide
+{
+    LEFT,
+	RIGHT,
+	TOP,
+	BOTTOM
+};
+
 enum GameState
 {
     GAME_ACTIVE,
@@ -17,18 +25,66 @@ private:
     bool CollisionOccured(GameObject& GO1, GameObject& GO2)
     {
 	    //Check collision on x-axis
-        bool collisionX_0 = GO1._position.x + GO1._size.x >= GO2._position.x; //Right side of GO1 greater than left side of GO2
-        bool collisionX_1 = GO2._position.x + GO2._size.x >= GO1._position.x; //Right side of GO2 greater than left side of GO1
-        bool collisionOnX = collisionX_0 && collisionX_1;
+        const bool collisionX_0 = GO1._position.x + GO1._size.x >= GO2._position.x; //Right side of GO1 greater than left side of GO2
+        const bool collisionX_1 = GO2._position.x + GO2._size.x >= GO1._position.x; //Right side of GO2 greater than left side of GO1
+        const bool collisionOnX = collisionX_0 && collisionX_1;
     	
     	//Check collision on y-axis
-        bool collisionY_0 = GO1._position.y + GO1._size.y >= GO2._position.y; //Bottom side of GO1 greater than top side of GO2
-        bool collisionY_1 = GO2._position.y + GO2._size.y >= GO1._position.y; //Bottom side of GO2 greater than top side of GO1
-        bool collisionOnY = collisionY_0 && collisionY_1;
+        const bool collisionY_0 = GO1._position.y + GO1._size.y >= GO2._position.y; //Bottom side of GO1 greater than top side of GO2
+        const bool collisionY_1 = GO2._position.y + GO2._size.y >= GO1._position.y; //Bottom side of GO2 greater than top side of GO1
+        const bool collisionOnY = collisionY_0 && collisionY_1;
 
         return collisionOnX && collisionOnY;
     }
 
+    bool CollisionOccured(BallObject& Ball, GameObject& GO, bool isPlayer = false)
+    {
+        const glm::vec2 ball_center(Ball._position + Ball._radius);
+        const glm::vec2 box_half(GO._size.x / 2, GO._size.y / 2);
+        const glm::vec2 box_center(GO._position + box_half);
+        glm::vec2 diff = ball_center - box_center;
+        const glm::vec2 clamped = glm::clamp(diff, -box_half, box_half);
+        const glm::vec2 closest_point = box_center + clamped;
+        diff = closest_point - ball_center;                
+            	
+        if (glm::length(diff) < Ball._radius)
+        {
+            const float left_line = GO._position.x;
+            const float right_line = GO._position.x + GO._size.x;
+            const float top_line = GO._position.y;
+            const float bottom_line = GO._position.y + GO._size.y;
+
+        	if (!isPlayer)
+        	{
+                if ((int)closest_point.x == (int)left_line)
+                    ChangeDirection(LEFT);
+                else if ((int)closest_point.x == (int)right_line)
+                    ChangeDirection(RIGHT);
+                else if ((int)closest_point.y == (int)top_line)
+                    ChangeDirection(TOP);
+                else if ((int)closest_point.y == (int)bottom_line)
+                    ChangeDirection(BOTTOM);
+        	}
+            else
+            {
+				if ((int)closest_point.y == (int)top_line)
+					ChangeDirection(TOP);
+            }            
+        	
+            return true;
+        }
+            
+        return false;
+    }
+
+    void ChangeDirection(CollisionSide side)
+    {
+        if (side == TOP || side == BOTTOM)
+            _ball->_velocity.y = -_ball->_velocity.y;
+        else
+            _ball->_velocity.x = -_ball->_velocity.x;
+    }
+	
     void CheckCollisions()
     {
 	    for (GameObject& box : _gameLevelCreator->_bricks)
@@ -38,7 +94,9 @@ private:
 			    if (CollisionOccured(*_ball, box))
 			    {
                     if (!box._solid)
-                        box._destroyed = true;
+                    {
+                        box._destroyed = true;                    	
+                    }                    
 			    }
 		    }
 	    }
@@ -64,7 +122,7 @@ public:
     float _ballRadius;
 	
     Game(unsigned int width, unsigned int height)
-        : _state(GAME_ACTIVE), _keys(), _width(width), _height(height), _playerSize(100.0f, 20.0f), _playerVelocity(500.0f), _ballVelocity(100.0f, -350.0f), _ballRadius(12.5f)
+        : _state(GAME_ACTIVE), _keys(), _width(width), _height(height), _playerSize(140.0f, 20.0f), _playerVelocity(500.0f), _ballVelocity(100.0f, -350.0f), _ballRadius(12.5f)
     {
     	
     }
@@ -105,9 +163,15 @@ public:
 
     void update(float dt)
     {
+    	//Move ball via velocity vector
         _ball->Move(dt, _width);
 
+    	//Check for collisions with boxed
         CheckCollisions();
+    	
+        //Check for collision with player paddle
+        if (CollisionOccured(*_ball, *_player, true))
+            _ball->_velocity *= 1.01f;
     }
 
     void processInput(float dt)

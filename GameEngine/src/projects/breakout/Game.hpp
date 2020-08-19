@@ -13,6 +13,37 @@ enum GameState
 
 class Game
 {
+private:
+    bool CollisionOccured(GameObject& GO1, GameObject& GO2)
+    {
+	    //Check collision on x-axis
+        bool collisionX_0 = GO1._position.x + GO1._size.x >= GO2._position.x; //Right side of GO1 greater than left side of GO2
+        bool collisionX_1 = GO2._position.x + GO2._size.x >= GO1._position.x; //Right side of GO2 greater than left side of GO1
+        bool collisionOnX = collisionX_0 && collisionX_1;
+    	
+    	//Check collision on y-axis
+        bool collisionY_0 = GO1._position.y + GO1._size.y >= GO2._position.y; //Bottom side of GO1 greater than top side of GO2
+        bool collisionY_1 = GO2._position.y + GO2._size.y >= GO1._position.y; //Bottom side of GO2 greater than top side of GO1
+        bool collisionOnY = collisionY_0 && collisionY_1;
+
+        return collisionOnX && collisionOnY;
+    }
+
+    void CheckCollisions()
+    {
+	    for (GameObject& box : _gameLevelCreator->_bricks)
+	    {
+		    if (!box._destroyed)
+		    {
+			    if (CollisionOccured(*_ball, box))
+			    {
+                    if (!box._solid)
+                        box._destroyed = true;
+			    }
+		    }
+	    }
+    }
+	
 public:
 	//Game
     GameState _state;
@@ -20,6 +51,7 @@ public:
     unsigned int _width, _height;
     SpriteRenderer* _spriteRenderer = nullptr;
     GameLevelCreator* _gameLevelCreator = nullptr;
+    GameObject* _background = nullptr;
 	
 	//Player
     GameObject* _player = nullptr;
@@ -43,6 +75,8 @@ public:
         delete _gameLevelCreator;
         delete _player;
         delete _ball;
+    	
+        ResourceManager::DeleteTextures();
     }
 
     void init()
@@ -55,6 +89,10 @@ public:
     	
     	//Load level from file
         _gameLevelCreator->generateLevel("res/levels/basic.level");
+
+        //Background creation
+        ResourceManager::LoadTexture("res/textures/Background_1.jpg", "Background");
+        _background = new GameObject(glm::vec2(0.0f, 0.0f), glm::vec2(_width, _height), glm::vec2(0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 0.0f, ResourceManager::GetTexture("Background"), _spriteRenderer);
     	
         //Player paddle creation 	
         ResourceManager::LoadTexture("res/textures/Paddle.png", "Paddle");
@@ -68,6 +106,8 @@ public:
     void update(float dt)
     {
         _ball->Move(dt, _width);
+
+        CheckCollisions();
     }
 
     void processInput(float dt)
@@ -104,6 +144,9 @@ public:
 
     void render()
     {
+        //Render backgroudn
+        _background->Draw();
+    	
     	//Render level
         _gameLevelCreator->renderLevel();
 

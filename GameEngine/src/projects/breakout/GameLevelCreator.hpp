@@ -9,17 +9,17 @@ class GameLevelCreator
 {
 private:
     SpriteRenderer* _spriteRenderer = nullptr;
-    unsigned int _gameWidth, _gameHeight;
-    std::vector<GameObject> _bricks;
+    unsigned int _gameWidth, _gameHeight;    
 
 	void init()
 	{
-        ResourceManager::LoadTexture("res/textures/Background_1.jpg", "Background");
-        ResourceManager::LoadTexture("res/textures/Block.jpg", "Block");
+		ResourceManager::LoadTexture("res/textures/Block.jpg", "Block");
         ResourceManager::LoadTexture("res/textures/Block_solid.jpg", "Block_solid");		
 	}
 	
 public:
+    std::vector<GameObject> _bricks;
+	
 	GameLevelCreator(SpriteRenderer* spriteRenderer, const unsigned int& width, const unsigned int& height)
 		: _spriteRenderer(spriteRenderer), _gameWidth(width), _gameHeight(height)
 	{
@@ -28,14 +28,11 @@ public:
 
     ~GameLevelCreator()
 	{
-        ResourceManager::DeleteTextures();
+        
 	}
 	
     void generateLevel(const char* level_filepath)
-    {
-        //Add background to render pipeline
-        _bricks.emplace_back(glm::vec2(0.0f, 0.0f), glm::vec2(_gameWidth, _gameHeight), glm::vec2(0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 0.0f, ResourceManager::GetTexture("Background"), _spriteRenderer);
-		    
+    {		    
         //Load from file
         unsigned int tileCode;
         std::string line;
@@ -98,9 +95,10 @@ public:
 
 	void renderLevel()
 	{
-		for(auto bricks: _bricks)
+		for(auto brick: _bricks)
 		{
-            bricks.Draw();
+			if (!brick._destroyed)
+				brick.Draw();
 		}
 	}
 };

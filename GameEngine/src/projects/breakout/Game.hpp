@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SpriteRenderer.hpp"
+#include "ResourceManager.hpp"
 #include "GameLevelCreator.hpp"
 #include "BallObject.hpp"
 
@@ -155,15 +156,20 @@ public:
         delete _ball;
     	
         ResourceManager::DeleteTextures();
+        ResourceManager::DeleteShaders();
     }
 
     void init()
     {
+        
     	//Create SpriteRenderer
-        _spriteRenderer = new SpriteRenderer("res/shader/breakout_vs.glsl", "res/shader/breakout_fs.glsl", _width, _height);
+        ResourceManager::LoadShader("res/shader/breakout_vs.glsl", "res/shader/breakout_fs.glsl", "Box_Shader");
+        _spriteRenderer = new SpriteRenderer(ResourceManager::GetShader("Box_Shader"), _width, _height);
             	
         //Create GameLevelCreator
-        _gameLevelCreator = new GameLevelCreator(_spriteRenderer, _width, _height);
+        ResourceManager::LoadTexture("res/textures/Block.jpg", "Block");
+        ResourceManager::LoadTexture("res/textures/Block_solid.jpg", "Block_solid");
+        _gameLevelCreator = new GameLevelCreator(_spriteRenderer, _width, _height, ResourceManager::GetTexture("Block"), ResourceManager::GetTexture("Block_solid"));
     	
     	//Load level from file
         _gameLevelCreator->generateLevel("res/levels/basic.level");

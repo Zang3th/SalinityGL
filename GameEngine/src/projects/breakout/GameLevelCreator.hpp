@@ -1,7 +1,6 @@
 #pragma once
 
 #include "GameObject.hpp"
-#include "ResourceManager.hpp"
 #include <vector>
 #include <string>
 
@@ -9,21 +8,16 @@ class GameLevelCreator
 {
 private:
     SpriteRenderer* _spriteRenderer = nullptr;
-    unsigned int _gameWidth, _gameHeight;    
-
-	void init()
-	{
-		ResourceManager::LoadTexture("res/textures/Block.jpg", "Block");
-        ResourceManager::LoadTexture("res/textures/Block_solid.jpg", "Block_solid");		
-	}
+    unsigned int _gameWidth, _gameHeight;
+    Texture* _block_tex, * _solid_block_tex;
 	
 public:
     std::vector<GameObject> _bricks;
 	
-	GameLevelCreator(SpriteRenderer* spriteRenderer, const unsigned int& width, const unsigned int& height)
-		: _spriteRenderer(spriteRenderer), _gameWidth(width), _gameHeight(height)
+	GameLevelCreator(SpriteRenderer* spriteRenderer, const unsigned int& width, const unsigned int& height, Texture* block_tex, Texture* solid_block_tex)
+		: _spriteRenderer(spriteRenderer), _gameWidth(width), _gameHeight(height), _block_tex(block_tex),  _solid_block_tex(solid_block_tex)
 	{
-        this->init();
+		
 	}
 
     ~GameLevelCreator()
@@ -67,7 +61,7 @@ public:
                         glm::vec2 pos(brick_width * x, brick_height * y);
                         glm::vec2 size(brick_width, brick_height);
                     	
-                        _bricks.emplace_back(pos, size, glm::vec2(0.0f, 0.0f), glm::vec3(0.8f, 0.8f, 0.7f), 0.0f, ResourceManager::GetTexture("Block_solid"), _spriteRenderer, true);
+                        _bricks.emplace_back(pos, size, glm::vec2(0.0f, 0.0f), glm::vec3(0.8f, 0.8f, 0.7f), 0.0f, _solid_block_tex, _spriteRenderer, true);
                     }
 
                     else if (tileData[y][x] > 1)
@@ -86,7 +80,7 @@ public:
                         glm::vec2 pos(brick_width * x, brick_height * y);
                         glm::vec2 size(brick_width, brick_height);
 
-                        _bricks.emplace_back(pos, size, glm::vec2(0.0f, 0.0f), color, 0.0f, ResourceManager::GetTexture("Block"), _spriteRenderer);
+                        _bricks.emplace_back(pos, size, glm::vec2(0.0f, 0.0f), color, 0.0f, _block_tex, _spriteRenderer);
                     }
                 }
             }

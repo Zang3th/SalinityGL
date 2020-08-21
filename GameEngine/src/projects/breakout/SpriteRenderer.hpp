@@ -15,7 +15,7 @@ private:
     unsigned int _width, _height;
 	
 public:
-    void initRenderData(const char* vsPath, const char* fsPath)
+    void initRenderData()
     {
         //Erstellt und bindet VAO
         _vao = new VertexArray();
@@ -38,21 +38,18 @@ public:
 
         _vbo->unbind();
         _vao->unbind();
-
-        _shader = new Shader(vsPath, fsPath);
     }
 	
-    SpriteRenderer(const char* vsPath, const char* fsPath, const unsigned int& width, const unsigned int& height)
-	    : _width(width), _height(height)
+    SpriteRenderer(Shader* shader, const unsigned int& width, const unsigned int& height)
+	    : _shader(shader), _width(width), _height(height)
     {
-        this->initRenderData(vsPath, fsPath);
+        this->initRenderData();
     }
 
     ~SpriteRenderer()
     {
         delete _vao;
         delete _vbo;
-        delete _shader;
     }
     
     void DrawSprite(Texture* texture, glm::vec2 position, glm::vec2 size, float rotation, glm::vec3 color)

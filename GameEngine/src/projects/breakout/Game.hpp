@@ -22,7 +22,7 @@ enum GameState
 class Game
 {
 private:
-    bool CollisionOccured(GameObject& GO1, GameObject& GO2)
+    bool CollisionOccured(GameObject& GO1, GameObject& GO2) const
     {
 	    //Check collision on x-axis
         const bool collisionX_0 = GO1._position.x + GO1._size.x >= GO2._position.x; //Right side of GO1 greater than left side of GO2
@@ -37,7 +37,7 @@ private:
         return collisionOnX && collisionOnY;
     }
 
-    bool CollisionOccured(BallObject& Ball, GameObject& GO, bool isPlayer = false)
+    bool CollisionOccured(BallObject& Ball, GameObject& GO, bool isPlayer = false) const
     {
         const glm::vec2 ball_center(Ball._position + Ball._radius);
         const glm::vec2 box_half(GO._size.x / 2, GO._size.y / 2);
@@ -49,27 +49,47 @@ private:
             	
         if (glm::length(diff) < Ball._radius)
         {
+        	//Which side of the quad did the ball hit
             const float left_line = GO._position.x;
             const float right_line = GO._position.x + GO._size.x;
             const float top_line = GO._position.y;
             const float bottom_line = GO._position.y + GO._size.y;
 
+            //Repositioning
+            const float penetration_depth = Ball._radius - glm::length(diff);
+        	
         	if (!isPlayer)
         	{
                 if ((int)closest_point.x == (int)left_line)
+                {
                     ChangeDirection(LEFT);
+                    Ball._position.x += penetration_depth;
+                }                    
                 else if ((int)closest_point.x == (int)right_line)
+                {
                     ChangeDirection(RIGHT);
+                    Ball._position.x -= penetration_depth;
+                }                    
                 else if ((int)closest_point.y == (int)top_line)
+                {
                     ChangeDirection(TOP);
+                    Ball._position.y -= penetration_depth;
+                }                    
                 else if ((int)closest_point.y == (int)bottom_line)
+                {
                     ChangeDirection(BOTTOM);
+                    Ball._position.y += penetration_depth;
+                }
+                    
         	}
             else
             {
 				if ((int)closest_point.y == (int)top_line)
-					ChangeDirection(TOP);
-            }            
+				{
+                    ChangeDirection(TOP);
+                    Ball._position.y -= penetration_depth;
+				}					
+            }     
         	
             return true;
         }
@@ -77,7 +97,7 @@ private:
         return false;
     }
 
-    void ChangeDirection(CollisionSide side)
+    void ChangeDirection(CollisionSide side) const
     {
         if (side == TOP || side == BOTTOM)
             _ball->_velocity.y = -_ball->_velocity.y;
@@ -166,12 +186,12 @@ public:
     	//Move ball via velocity vector
         _ball->Move(dt, _width);
 
-    	//Check for collisions with boxed
+    	//Check for collisions with boxes
         CheckCollisions();
     	
         //Check for collision with player paddle
         if (CollisionOccured(*_ball, *_player, true))
-            _ball->_velocity *= 1.01f;
+            _ball->_velocity.x *= 1.05f;
     }
 
     void processInput(float dt)

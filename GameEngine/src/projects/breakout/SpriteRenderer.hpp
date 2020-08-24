@@ -13,15 +13,15 @@ private:
 	VertexBuffer* _vbo = nullptr;
 	Shader* _shader = nullptr;
     unsigned int _width, _height;
+    glm::mat4 _projection;
 	
-public:
     void initRenderData()
     {
         //Erstellt und bindet VAO
         _vao = new VertexArray();
         _vao->bind();
 
-        float vertices[] = 
+        float vertices[] =
         {
             // pos      // tex
             0.0f, 1.0f, 0.0f, 1.0f,
@@ -39,11 +39,19 @@ public:
         _vbo->unbind();
         _vao->unbind();
     }
+
+	void matrixSetUP()
+    {
+        //Projection-Matrix
+        _projection = glm::ortho(0.0f, (float)_width, (float)_height, 0.0f, -1.0f, 1.0f);
+    }
 	
+public:  
     SpriteRenderer(Shader* shader, const unsigned int& width, const unsigned int& height)
 	    : _shader(shader), _width(width), _height(height)
     {
         this->initRenderData();
+        this->matrixSetUP();
     }
 
     ~SpriteRenderer()
@@ -56,11 +64,10 @@ public:
     {
         _shader->bind();
 
-    	//Projection-Matrix
-        glm::mat4 projection = glm::ortho(0.0f, (float)_width, (float)_height, 0.0f, -1.0f, 1.0f);
-
-    	//Model transformations
+        //Model-Matrix
         glm::mat4 model = glm::mat4(1.0f);
+    	
+    	//Model transformations    	
         model = glm::translate(model, glm::vec3(position, 0.0f));  // first translate (transformations are: scale happens first, then rotation, and then final translation happens; reversed order)
 
         model = glm::translate(model, glm::vec3(0.5f * size.x, 0.5f * size.y, 0.0f)); // move origin of rotation to center of quad
@@ -70,7 +77,7 @@ public:
         model = glm::scale(model, glm::vec3(size, 1.0f)); // last scale
 
     	//Set Uniforms
-        _shader->SetUniformMat4f("projection", projection);    	
+        _shader->SetUniformMat4f("projection", _projection);
         _shader->SetUniformMat4f("model", model);    	
         _shader->SetUniformVec3("spriteColor", color);
 
@@ -82,5 +89,10 @@ public:
 
     	//Render quad
         GLCall(glDrawArrays(GL_TRIANGLES, 0, 6));
+    }
+
+    glm::mat4 getProjectionMatrix() const
+    {
+        return _projection;
     }
 };

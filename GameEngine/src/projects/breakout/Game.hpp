@@ -4,6 +4,7 @@
 #include "ResourceManager.hpp"
 #include "GameLevelCreator.hpp"
 #include "BallObject.hpp"
+#include "ParticleGenerator.hpp"
 
 enum CollisionSide
 {
@@ -141,6 +142,9 @@ public:
     BallObject* _ball = nullptr;
     glm::vec2 _ballVelocity;
     float _ballRadius;
+
+    //Particles
+    ParticleGenerator* _particleGenerator = nullptr;
 	
     Game(unsigned int width, unsigned int height)
         : _state(GAME_ACTIVE), _keys(), _width(width), _height(height), _playerSize(140.0f, 20.0f), _playerVelocity(500.0f), _ballVelocity(100.0f, -350.0f), _ballRadius(12.5f)
@@ -154,16 +158,16 @@ public:
         delete _gameLevelCreator;
         delete _player;
         delete _ball;
+        delete _particleGenerator;
     	
         ResourceManager::DeleteTextures();
         ResourceManager::DeleteShaders();
     }
 
     void init()
-    {
-        
+    {        
     	//Create SpriteRenderer
-        ResourceManager::LoadShader("res/shader/breakout_vs.glsl", "res/shader/breakout_fs.glsl", "Box_Shader");
+        ResourceManager::LoadShader("res/shader/breakout/breakout_vs.glsl", "res/shader/breakout/breakout_fs.glsl", "Box_Shader");
         _spriteRenderer = new SpriteRenderer(ResourceManager::GetShader("Box_Shader"), _width, _height);
             	
         //Create GameLevelCreator
@@ -185,6 +189,10 @@ public:
         //Ball creation
         ResourceManager::LoadTexture("res/textures/Cannonball.png", "Ball");
         _ball = new BallObject(_player->_position + glm::vec2(_player->_size.x / 2.0f - _ballRadius, -_ballRadius * 2.0f), _ballRadius, _ballVelocity, ResourceManager::GetTexture("Ball"), _spriteRenderer);
+
+        //ParticleGenerator creation
+        ResourceManager::LoadShader("res/shader/breakout/particle_vs.glsl", "res/shader/breakout/particle_fs.glsl", "Particle_Shader");
+        _particleGenerator = new ParticleGenerator(ResourceManager::GetShader("Particle_Shader"), _spriteRenderer->getProjectionMatrix());
     }
 
     void update(float dt)
@@ -198,6 +206,9 @@ public:
         //Check for collision with player paddle
         if (CollisionOccured(*_ball, *_player, true))
             _ball->_velocity.x *= 1.05f;
+
+    	//Update Particles
+        _particleGenerator->updateParticles();
     }
 
     void processInput(float dt)
@@ -234,7 +245,7 @@ public:
 
     void render()
     {
-        //Render backgroudn
+        //Render background
         _background->Draw();
     	
     	//Render level
@@ -245,5 +256,8 @@ public:
 
     	//Render ball
         _ball->Draw();
+
+    	//Render particles
+        _particleGenerator->renderParticles();
     }
 };

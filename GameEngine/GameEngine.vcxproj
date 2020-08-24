@@ -217,8 +217,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="res\levels\basic.level" />
-    <None Include="res\shader\breakout_fs.glsl" />
-    <None Include="res\shader\breakout_vs.glsl" />
+    <None Include="res\shader\breakout\breakout_fs.glsl" />
+    <None Include="res\shader\breakout\breakout_vs.glsl" />
+    <None Include="res\shader\breakout\particle_fs.glsl" />
+    <None Include="res\shader\breakout\particle_vs.glsl" />
     <None Include="res\shader\cubemap_fs.glsl" />
     <None Include="res\shader\cubemap_vs.glsl" />
     <None Include="res\shader\ground_fs.glsl" />

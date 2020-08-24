@@ -162,6 +162,7 @@
     <ClInclude Include="src\projects\breakout\BallObject.hpp" />
     <ClInclude Include="src\projects\breakout\GameObject.hpp" />
     <ClInclude Include="src\projects\breakout\ParticleGenerator.hpp" />
+    <ClInclude Include="src\projects\breakout\Random.hpp" />
     <ClInclude Include="src\projects\zanget3uWorld\functionality\AssimpLoader.hpp" />
     <ClInclude Include="src\projects\zanget3uWorld\data\QuaderData.hpp" />
     <ClInclude Include="src\projects\zanget3uWorld\entities\CubemapEntity.hpp" />

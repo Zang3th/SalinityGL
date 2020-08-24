@@ -208,7 +208,7 @@ public:
             _ball->_velocity.x *= 1.05f;
 
     	//Update Particles
-        _particleGenerator->updateParticles();
+        _particleGenerator->updateParticle(dt, glm::vec2(900.0f, 600.0f));
     }
 
     void processInput(float dt)
@@ -258,6 +258,6 @@ public:
         _ball->Draw();
 
     	//Render particles
-        _particleGenerator->renderParticles();
+        _particleGenerator->renderParticle();
     }
 };

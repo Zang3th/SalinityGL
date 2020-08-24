@@ -1,10 +1,10 @@
 #pragma once
 
-#include <glm/vec2.hpp>
-#include <glm/vec4.hpp>
 #include "Shader.hpp"
 #include "VertexArray.hpp"
 #include "VertexBuffer.hpp"
+#include "Random.hpp"
+#include <glm/gtx/compatibility.hpp>
 
 class ParticleGenerator
 {
@@ -12,13 +12,13 @@ private:
 	struct Particle
 	{
 		glm::vec2 _position, _velocity, _size;
-		glm::vec4 _color;
-		float _life;
+		glm::vec4 _startColor, _endColor, _currentColor;
+		float _lifeTime, _lifeRemaining;
 
-		Particle(glm::vec2 position, glm::vec2 velocity, glm::vec2 size, glm::vec4 color, float life)
-			: _position(position), _velocity(velocity), _size(size), _color(color), _life(life)
+		Particle(glm::vec2 position, glm::vec2 velocity, glm::vec2 size, glm::vec4 startColor, glm::vec4 endColor, float life)
+			: _position(position), _velocity(velocity), _size(size), _startColor(startColor), _endColor(endColor), _lifeTime(life), _lifeRemaining(life)
 		{
-
+			
 		}
 	};
 
@@ -48,7 +48,16 @@ private:
 
 	void createParticles()
 	{
-		_particles.emplace_back(glm::vec2(900.0f, 600.0f), glm::vec2(0.0f, 0.0f), glm::vec2(50.0f, 50.0f), glm::vec4(0.9f, 0.9f, 0.0f, 0.0f), 0.0f);
+		for (int i = 0; i < 500; i++)
+		{			
+			float xVelocity = (random::Float() * 150.0f) - 75.0f;
+			float yVelocity = (random::Float() * 300.0f) - 300.0f;			
+			glm::vec2 velocity(xVelocity, yVelocity);
+
+			float lifeTime = random::Float() * 3.0f;
+			
+			_particles.emplace_back(glm::vec2(900.0f, 600.0f), velocity, glm::vec2(2.0f, 2.0f), glm::vec4(1.0f, 0.0f, 0.0f, 0.0f), glm::vec4(0.0f, 0.0f, 1.0f, 0.0f), lifeTime);
+		}		
 	}
 	
 	VertexArray* _vao = nullptr;
@@ -71,32 +80,53 @@ public:
 		delete _vbo;
 	}
 
-	void updateParticles()
+	void updateParticle(float dt, glm::vec2 position)
 	{
-		
+		for (int i = 0; i < _particles.size(); i++)
+		{			
+			Particle& p = _particles[i];	
+			
+			p._lifeRemaining -= dt;
+			
+			if (p._lifeRemaining > 0.0f)
+			{
+				p._position -= p._velocity * dt;
+				float life = p._lifeRemaining / p._lifeTime;
+				p._currentColor = glm::lerp(p._endColor, p._startColor, life);
+			}
+			else if (p._lifeRemaining < 0.0f)
+			{
+				p._position = position;
+				p._lifeRemaining = p._lifeTime;
+				p._currentColor = p._startColor;
+			}
+		}	
 	}
 
-	void renderParticles()
+	void renderParticle()
 	{
 		for (Particle p : _particles)
 		{
-			_shader->bind();
+			if (p._lifeRemaining > 0.0f)
+			{
+				_shader->bind();
 
-			//Model transformations
-			glm::mat4 model = glm::mat4(1.0f);
-			model = glm::translate(model, glm::vec3(p._position, 0.0f)); //translate
-			model = glm::scale(model, glm::vec3(p._size, 1.0f)); //scale
-			
-			//Set Uniforms
-			_shader->SetUniformMat4f("projection", _projection);
-			_shader->SetUniformMat4f("model", model);
-			_shader->SetUniformVec3("particleColor", p._color);
+				//Model transformations
+				glm::mat4 model = glm::mat4(1.0f);
+				model = glm::translate(model, glm::vec3(p._position, 0.0f)); //translate
+				model = glm::scale(model, glm::vec3(p._size, 1.0f)); //scale
 
-			//Bind vao
-			_vao->bind();
+				//Set Uniforms
+				_shader->SetUniformMat4f("projection", _projection);
+				_shader->SetUniformMat4f("model", model);
+				_shader->SetUniformVec3("particleColor", p._currentColor);
 
-			//Render quad
-			GLCall(glDrawArrays(GL_TRIANGLES, 0, 6));
+				//Bind vao
+				_vao->bind();
+
+				//Render quad
+				GLCall(glDrawArrays(GL_TRIANGLES, 0, 6));
+			}			
 		}
 	}
 };

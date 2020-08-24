@@ -24,7 +24,7 @@ private:
 
 	void initRenderData()
 	{
-		//Erstellt und bindet VAO
+		//Create and bind vao
 		_vao = new VertexArray();
 		_vao->bind();
 
@@ -46,19 +46,7 @@ private:
 		_vao->unbind();
 	}	
 
-	void createParticles()
-	{
-		for (int i = 0; i < 500; i++)
-		{			
-			float xVelocity = (random::Float() * 150.0f) - 75.0f;
-			float yVelocity = (random::Float() * 300.0f) - 300.0f;			
-			glm::vec2 velocity(xVelocity, yVelocity);
-
-			float lifeTime = random::Float() * 3.0f;
-			
-			_particles.emplace_back(glm::vec2(900.0f, 600.0f), velocity, glm::vec2(2.0f, 2.0f), glm::vec4(1.0f, 0.0f, 0.0f, 0.0f), glm::vec4(0.0f, 0.0f, 1.0f, 0.0f), lifeTime);
-		}		
-	}
+	
 	
 	VertexArray* _vao = nullptr;
 	VertexBuffer* _vbo = nullptr;
@@ -71,7 +59,6 @@ public:
 		: _shader(shader), _projection(projectionMatrix)
 	{
 		this->initRenderData();
-		this->createParticles();
 	}
 
 	~ParticleGenerator()
@@ -79,8 +66,24 @@ public:
 		delete _vao;
 		delete _vbo;
 	}
+	
+	void createParticles(glm::vec2 position, glm::vec2 size, glm::vec4 startColor, glm::vec4 endColor)
+	{
+		for (int i = 0; i < 400; i++)
+		{
+			//Randomize velocity
+			float xVelocity = (random::Float() * 70.0f) - 35.0f;
+			float yVelocity = (random::Float() * 300.0f) - 300.0f;
+			glm::vec2 velocity(xVelocity, yVelocity);
 
-	void updateParticle(float dt, glm::vec2 position)
+			//Randomize lifetime
+			float lifeTime = random::Float() * 3.0f;
+
+			_particles.emplace_back(position, velocity, size, startColor, endColor, lifeTime);
+		}
+	}
+	
+	void updateParticles(float dt, glm::vec2 position)
 	{
 		for (int i = 0; i < _particles.size(); i++)
 		{			
@@ -88,13 +91,13 @@ public:
 			
 			p._lifeRemaining -= dt;
 			
-			if (p._lifeRemaining > 0.0f)
+			if (p._lifeRemaining > 0.0f)	//Update particle
 			{
 				p._position -= p._velocity * dt;
 				float life = p._lifeRemaining / p._lifeTime;
 				p._currentColor = glm::lerp(p._endColor, p._startColor, life);
 			}
-			else if (p._lifeRemaining < 0.0f)
+			else                            //Respawn particle
 			{
 				p._position = position;
 				p._lifeRemaining = p._lifeTime;
@@ -103,7 +106,7 @@ public:
 		}	
 	}
 
-	void renderParticle()
+	void renderParticles()
 	{
 		for (Particle p : _particles)
 		{

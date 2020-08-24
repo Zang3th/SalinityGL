@@ -17,13 +17,13 @@ private:
 	
     void initRenderData()
     {
-        //Erstellt und bindet VAO
+        //Create and bind vao
         _vao = new VertexArray();
         _vao->bind();
 
         float vertices[] =
         {
-            // pos      // tex
+            //Position  //Texture
             0.0f, 1.0f, 0.0f, 1.0f,
             1.0f, 0.0f, 1.0f, 0.0f,
             0.0f, 0.0f, 0.0f, 0.0f,
@@ -68,15 +68,15 @@ public:
         glm::mat4 model = glm::mat4(1.0f);
     	
     	//Model transformations    	
-        model = glm::translate(model, glm::vec3(position, 0.0f));  // first translate (transformations are: scale happens first, then rotation, and then final translation happens; reversed order)
+        model = glm::translate(model, glm::vec3(position, 0.0f));  //First translate (transformations are: scale happens first, then rotation, and then final translation happens; reversed order)
 
-        model = glm::translate(model, glm::vec3(0.5f * size.x, 0.5f * size.y, 0.0f)); // move origin of rotation to center of quad
-        model = glm::rotate(model, glm::radians(rotation), glm::vec3(0.0f, 0.0f, 1.0f)); // then rotate
-        model = glm::translate(model, glm::vec3(-0.5f * size.x, -0.5f * size.y, 0.0f)); // move origin back
+        model = glm::translate(model, glm::vec3(0.5f * size.x, 0.5f * size.y, 0.0f)); //Move origin of rotation to center of quad
+        model = glm::rotate(model, glm::radians(rotation), glm::vec3(0.0f, 0.0f, 1.0f)); //Then rotate
+        model = glm::translate(model, glm::vec3(-0.5f * size.x, -0.5f * size.y, 0.0f)); //Move origin back
 
-        model = glm::scale(model, glm::vec3(size, 1.0f)); // last scale
+        model = glm::scale(model, glm::vec3(size, 1.0f)); //Last scale
 
-    	//Set Uniforms
+    	//Set uniforms
         _shader->SetUniformMat4f("projection", _projection);
         _shader->SetUniformMat4f("model", model);    	
         _shader->SetUniformVec3("spriteColor", color);

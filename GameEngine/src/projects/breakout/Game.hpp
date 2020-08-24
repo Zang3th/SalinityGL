@@ -193,6 +193,7 @@ public:
         //ParticleGenerator creation
         ResourceManager::LoadShader("res/shader/breakout/particle_vs.glsl", "res/shader/breakout/particle_fs.glsl", "Particle_Shader");
         _particleGenerator = new ParticleGenerator(ResourceManager::GetShader("Particle_Shader"), _spriteRenderer->getProjectionMatrix());
+        _particleGenerator->createParticles(glm::vec2(_ball->_position.x + 12.0f, _ball->_position.y + 12.0f), glm::vec2(1.0f, 1.0f), glm::vec4(1.0f, 0.0f, 0.0f, 0.0f), glm::vec4(0.0f, 0.0f, 1.0f, 0.0f));
     }
 
     void update(float dt)
@@ -208,7 +209,7 @@ public:
             _ball->_velocity.x *= 1.05f;
 
     	//Update Particles
-        _particleGenerator->updateParticle(dt, glm::vec2(900.0f, 600.0f));
+        _particleGenerator->updateParticles(dt, glm::vec2(_ball->_position.x + 12.0f, _ball->_position.y + 12.0f));
     }
 
     void processInput(float dt)
@@ -253,11 +254,13 @@ public:
 
     	//Render player
         _player->Draw();
-
+    	
+        //Render particles
+        _particleGenerator->renderParticles();
+    	
     	//Render ball
         _ball->Draw();
 
-    	//Render particles
-        _particleGenerator->renderParticle();
+    	
     }
 };

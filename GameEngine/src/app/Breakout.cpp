@@ -4,11 +4,14 @@
 #include <imgui/imgui_impl_opengl3.h>
 
 int main()
-{
+{	
 	//Display-Management
 	GameDisplayManager gameDisplayManager(WIDTH, HEIGHT);
 	gameDisplayManager.printVersion();
 
+	//Initialize random number generator
+	//
+	
 	//Game Initialization
 	breakout.init();
 

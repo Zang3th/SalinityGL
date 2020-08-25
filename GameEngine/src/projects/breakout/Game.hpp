@@ -5,6 +5,7 @@
 #include "GameLevelCreator.hpp"
 #include "BallObject.hpp"
 #include "ParticleGenerator.hpp"
+#include "Random.hpp"
 
 enum CollisionSide
 {
@@ -24,23 +25,9 @@ enum GameState
 class Game
 {
 private:
-    bool CollisionOccured(GameObject& GO1, GameObject& GO2) const
-    {
-	    //Check collision on x-axis
-        const bool collisionX_0 = GO1._position.x + GO1._size.x >= GO2._position.x; //Right side of GO1 greater than left side of GO2
-        const bool collisionX_1 = GO2._position.x + GO2._size.x >= GO1._position.x; //Right side of GO2 greater than left side of GO1
-        const bool collisionOnX = collisionX_0 && collisionX_1;
-    	
-    	//Check collision on y-axis
-        const bool collisionY_0 = GO1._position.y + GO1._size.y >= GO2._position.y; //Bottom side of GO1 greater than top side of GO2
-        const bool collisionY_1 = GO2._position.y + GO2._size.y >= GO1._position.y; //Bottom side of GO2 greater than top side of GO1
-        const bool collisionOnY = collisionY_0 && collisionY_1;
-
-        return collisionOnX && collisionOnY;
-    }
-
     bool CollisionOccured(BallObject& Ball, GameObject& GO, bool isPlayer = false) const
     {
+    	//Collision detection based on axis-aligned bounding boxes
         const glm::vec2 ball_center(Ball._position + Ball._radius);
         const glm::vec2 box_half(GO._size.x / 2, GO._size.y / 2);
         const glm::vec2 box_center(GO._position + box_half);
@@ -60,7 +47,7 @@ private:
             //Repositioning
             const float penetration_depth = Ball._radius - glm::length(diff);
         	
-        	if (!isPlayer)
+        	if (!isPlayer) //Check for collision with boxes
         	{
                 if ((int)closest_point.x == (int)left_line)
                 {
@@ -84,11 +71,25 @@ private:
                 }
                     
         	}
-            else
+            else         //Check for collision with player paddle
             {
 				if ((int)closest_point.y == (int)top_line)
 				{
+					//Calculate where the ball hit the paddle and change velocity based on the distance to the center
+                    const float paddle_center = GO._position.x + GO._size.x / 2.0f;
+                    const float distance_to_center = (Ball._position.x + Ball._radius) - paddle_center;
+                    float percentage = distance_to_center / (GO._size.x / 2.0f);
+                    const float strength = 4.0f;
+                    const glm::vec2 oldVelocity = Ball._velocity;
+                    Ball._velocity.x = oldVelocity.x + distance_to_center * strength;
+
+					//Change velocity in the y-direction
                     ChangeDirection(TOP);
+
+					//Normalize velocity
+                    Ball._velocity = glm::normalize(Ball._velocity) * glm::length(oldVelocity);
+
+					//Reset ball after hit based on penetration depth
                     Ball._position.y -= penetration_depth;
 				}					
             }     
@@ -107,7 +108,7 @@ private:
             _ball->_velocity.x = -_ball->_velocity.x;
     }
 	
-    void CheckCollisions()
+    void CheckCollisions() const
     {
 	    for (GameObject& box : _gameLevelCreator->_bricks)
 	    {
@@ -142,12 +143,13 @@ public:
     BallObject* _ball = nullptr;
     glm::vec2 _ballVelocity;
     float _ballRadius;
+    glm::vec2 _lastPos;
 
     //Particles
     ParticleGenerator* _particleGenerator = nullptr;
 	
     Game(unsigned int width, unsigned int height)
-        : _state(GAME_ACTIVE), _keys(), _width(width), _height(height), _playerSize(140.0f, 20.0f), _playerVelocity(500.0f), _ballVelocity(100.0f, -350.0f), _ballRadius(12.5f)
+        : _state(GAME_ACTIVE), _keys(), _width(width), _height(height), _playerSize(140.0f, 20.0f), _playerVelocity(500.0f), _ballVelocity((random::Float() * 400.0f) - 200.0f, -400.0f), _ballRadius(15.0f)
     {
     	
     }
@@ -187,13 +189,15 @@ public:
         _player = new GameObject(glm::vec2(_width / 2.0f - _playerSize.x / 2.0f, _height - _playerSize.y), _playerSize, glm::vec2(0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 0.0f, ResourceManager::GetTexture("Paddle"), _spriteRenderer);
 
         //Ball creation
-        ResourceManager::LoadTexture("res/textures/Cannonball.png", "Ball");
-        _ball = new BallObject(_player->_position + glm::vec2(_player->_size.x / 2.0f - _ballRadius, -_ballRadius * 2.0f), _ballRadius, _ballVelocity, ResourceManager::GetTexture("Ball"), _spriteRenderer);
-
+        ResourceManager::LoadTexture("res/textures/Cannonball_SW.png", "Ball");
+        _ball = new BallObject(_player->_position + glm::vec2(_player->_size.x / 2.0f - _ballRadius, -_ballRadius * 2.0f), _ballRadius, _ballVelocity, glm::vec3(0.7f, 0.7f, 1.0f), ResourceManager::GetTexture("Ball"), _spriteRenderer);
+        _lastPos = _ball->_position;
+    	
         //ParticleGenerator creation
         ResourceManager::LoadShader("res/shader/breakout/particle_vs.glsl", "res/shader/breakout/particle_fs.glsl", "Particle_Shader");
-        _particleGenerator = new ParticleGenerator(ResourceManager::GetShader("Particle_Shader"), _spriteRenderer->getProjectionMatrix());
-        _particleGenerator->createParticles(glm::vec2(_ball->_position.x + 12.0f, _ball->_position.y + 12.0f), glm::vec2(1.0f, 1.0f), glm::vec4(1.0f, 0.0f, 0.0f, 0.0f), glm::vec4(0.0f, 0.0f, 1.0f, 0.0f));
+        ResourceManager::LoadTexture("res/textures/Particle.png", "Particle");
+        _particleGenerator = new ParticleGenerator(ResourceManager::GetShader("Particle_Shader"), ResourceManager::GetTexture("Particle"),_spriteRenderer->getProjectionMatrix());
+        _particleGenerator->createParticles(glm::vec2(_ball->_position.x + 7.5f, _ball->_position.y + 7.5f), glm::vec2(10.0f, 10.0f), glm::vec4(0.0f, 0.0f, 1.0f, 0.0f), glm::vec4(1.0f, 1.0f, 1.0f, 0.0f));
     }
 
     void update(float dt)
@@ -205,11 +209,10 @@ public:
         CheckCollisions();
     	
         //Check for collision with player paddle
-        if (CollisionOccured(*_ball, *_player, true))
-            _ball->_velocity.x *= 1.05f;
+        CollisionOccured(*_ball, *_player, true);
 
     	//Update Particles
-        _particleGenerator->updateParticles(dt, glm::vec2(_ball->_position.x + 12.0f, _ball->_position.y + 12.0f));
+        _particleGenerator->updateParticles(dt, glm::vec2(_ball->_position.x + 7.5f, _ball->_position.y + 7.5f));
     }
 
     void processInput(float dt)
@@ -255,12 +258,14 @@ public:
     	//Render player
         _player->Draw();
     	
-        //Render particles
-        _particleGenerator->renderParticles();
+        //Render particles if ball position changed       
+        if(_lastPos != _ball->_position)
+			_particleGenerator->renderParticles();
+
+    	//Update last ball position
+        _lastPos = _ball->_position;
     	
     	//Render ball
         _ball->Draw();
-
-    	
     }
 };

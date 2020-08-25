@@ -30,33 +30,33 @@ private:
 
 		float vertices[] =
 		{
-			0.0f, 1.0f,
-			1.0f, 0.0f,
-			0.0f, 0.0f,
+			//Position  //Texture
+			0.0f, 1.0f, 0.0f, 1.0f,
+			1.0f, 0.0f, 1.0f, 0.0f,
+			0.0f, 0.0f, 0.0f, 0.0f,
 
-			0.0f, 1.0f,
-			1.0f, 1.0f,
-			1.0f, 0.0f
+			0.0f, 1.0f, 0.0f, 1.0f,
+			1.0f, 1.0f, 1.0f, 1.0f,
+			1.0f, 0.0f, 1.0f, 0.0f
 		};
 
 		_vbo = new VertexBuffer(vertices, sizeof(vertices));
-		_vao->DefineAttributes(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
+		_vao->DefineAttributes(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
 
 		_vbo->unbind();
 		_vao->unbind();
 	}	
-
-	
 	
 	VertexArray* _vao = nullptr;
 	VertexBuffer* _vbo = nullptr;
 	Shader* _shader = nullptr;
+	Texture* _texture = nullptr;
 	glm::mat4 _projection;
 	std::vector<Particle> _particles;
 	
 public:	
-	ParticleGenerator(Shader* shader, glm::mat4 projectionMatrix)
-		: _shader(shader), _projection(projectionMatrix)
+	ParticleGenerator(Shader* shader, Texture* texture, glm::mat4 projectionMatrix)
+		: _shader(shader), _texture(texture), _projection(projectionMatrix)
 	{
 		this->initRenderData();
 	}
@@ -69,15 +69,15 @@ public:
 	
 	void createParticles(glm::vec2 position, glm::vec2 size, glm::vec4 startColor, glm::vec4 endColor)
 	{
-		for (int i = 0; i < 400; i++)
+		for (int i = 0; i < 40; i++)
 		{
 			//Randomize velocity
-			float xVelocity = (random::Float() * 70.0f) - 35.0f;
-			float yVelocity = (random::Float() * 300.0f) - 300.0f;
+			float xVelocity = (random::Float() * 60.0f) - 30.0f;
+			float yVelocity = (random::Float() * 100.0f) - 100.0f;
 			glm::vec2 velocity(xVelocity, yVelocity);
 
 			//Randomize lifetime
-			float lifeTime = random::Float() * 3.0f;
+			float lifeTime = random::Float() * 0.5f;
 
 			_particles.emplace_back(position, velocity, size, startColor, endColor, lifeTime);
 		}
@@ -108,6 +108,7 @@ public:
 
 	void renderParticles()
 	{
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 		for (Particle p : _particles)
 		{
 			if (p._lifeRemaining > 0.0f)
@@ -124,6 +125,8 @@ public:
 				_shader->SetUniformMat4f("model", model);
 				_shader->SetUniformVec3("particleColor", p._currentColor);
 
+				_texture->bind();
+				
 				//Bind vao
 				_vao->bind();
 
@@ -131,5 +134,6 @@ public:
 				GLCall(glDrawArrays(GL_TRIANGLES, 0, 6));
 			}			
 		}
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}
 };

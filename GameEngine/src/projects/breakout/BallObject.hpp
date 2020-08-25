@@ -10,8 +10,8 @@ public:
 	bool _stuck;
 
 	//Constructor
-	BallObject(glm::vec2 pos, float radius, glm::vec2 velocity, Texture* spriteTexture, SpriteRenderer* spriteRenderer)
-		: GameObject(pos, glm::vec2(radius * 2.0f, radius * 2.0f), velocity, glm::vec3(1.0f, 0.5f, 0.5f), 0.0f, spriteTexture, spriteRenderer, false, false), _radius(radius), _stuck(true)
+	BallObject(glm::vec2 pos, float radius, glm::vec2 velocity, glm::vec3 color, Texture* spriteTexture, SpriteRenderer* spriteRenderer)
+		: GameObject(pos, glm::vec2(radius * 2.0f, radius * 2.0f), velocity, color, 0.0f, spriteTexture, spriteRenderer, false, false), _radius(radius), _stuck(true)
 	{
 		
 	}

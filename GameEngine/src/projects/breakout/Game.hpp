@@ -26,6 +26,21 @@ enum GameState
 class Game
 {
 private:
+    bool CollisionOccured(GameObject& GO1, GameObject& GO2) const
+    {
+        //Check collision on x-axis
+        const bool collisionX_0 = GO1._position.x + GO1._size.x >= GO2._position.x; //Right side of GO1 greater than left side of GO2
+        const bool collisionX_1 = GO2._position.x + GO2._size.x >= GO1._position.x; //Right side of GO2 greater than left side of GO1
+        const bool collisionOnX = collisionX_0 && collisionX_1;
+
+        //Check collision on y-axis
+        const bool collisionY_0 = GO1._position.y + GO1._size.y >= GO2._position.y; //Bottom side of GO1 greater than top side of GO2
+        const bool collisionY_1 = GO2._position.y + GO2._size.y >= GO1._position.y; //Bottom side of GO2 greater than top side of GO1
+        const bool collisionOnY = collisionY_0 && collisionY_1;
+
+        return collisionOnX && collisionOnY;
+    }
+	
     bool CollisionOccured(BallObject& Ball, GameObject& GO, bool isPlayer = false) const
     {
     	//Collision detection based on axis-aligned bounding boxes
@@ -50,27 +65,29 @@ private:
         	
         	if (!isPlayer) //Check for collision with boxes
         	{
-                if ((int)closest_point.x == (int)left_line)
+                if (!_ball->_passThrough)
                 {
-                    ChangeDirection(LEFT);
-                    Ball._position.x += penetration_depth;
-                }                    
-                else if ((int)closest_point.x == (int)right_line)
-                {
-                    ChangeDirection(RIGHT);
-                    Ball._position.x -= penetration_depth;
-                }                    
-                else if ((int)closest_point.y == (int)top_line)
-                {
-                    ChangeDirection(TOP);
-                    Ball._position.y -= penetration_depth;
-                }                    
-                else if ((int)closest_point.y == (int)bottom_line)
-                {
-                    ChangeDirection(BOTTOM);
-                    Ball._position.y += penetration_depth;
-                }
-                    
+                    if ((int)closest_point.x == (int)left_line)
+                    {
+                        ChangeDirection(LEFT);
+                        Ball._position.x += penetration_depth;
+                    }
+                    else if ((int)closest_point.x == (int)right_line)
+                    {
+                        ChangeDirection(RIGHT);
+                        Ball._position.x -= penetration_depth;
+                    }
+                    else if ((int)closest_point.y == (int)top_line)
+                    {
+                        ChangeDirection(TOP);
+                        Ball._position.y -= penetration_depth;
+                    }
+                    else if ((int)closest_point.y == (int)bottom_line)
+                    {
+                        ChangeDirection(BOTTOM);
+                        Ball._position.y += penetration_depth;
+                    }
+                }                                 
         	}
             else         //Check for collision with player paddle
             {
@@ -108,7 +125,7 @@ private:
         else
             _ball->_velocity.x = -_ball->_velocity.x;
     }
-	
+    
     void CheckCollisions() const
     {
 	    for (GameObject& box : _gameLevelCreator->_bricks)
@@ -119,11 +136,50 @@ private:
 			    {
                     if (!box._solid)
                     {
-                        box._destroyed = true;                    	
-                    }                    
+                    	box._destroyed = true;                    	
+                        _powerUpManager->spawnPowerUps(box._position, random::Int(10));
+                    }
+                    else
+                    {
+                        if (_ball->_passThrough)
+                            box._destroyed = true;
+                    }
 			    }
 		    }
 	    }
+
+    	for (auto& powerUp : _powerUpManager->_powerUpsToRender)
+    	{
+            unsigned int index = 0;
+    		if (CollisionOccured(*_player, powerUp))
+    		{
+                CreatePowerUpEffect(powerUp._type, powerUp._duration);
+                _powerUpManager->_powerUpsToRender.erase(_powerUpManager->_powerUpsToRender.begin() + index);               
+    		}
+            index++;
+    	}
+    }
+
+    void CreatePowerUpEffect(std::string& type, float duration) const
+    {
+        std::cout << type << "\n";
+        if (type == "speed")
+        {
+            _ball->_velocity *= 1.2f;
+        }            
+        else if (type == "sticky")
+        {
+            _ball->_position = _player->_position + glm::vec2(_player->_size.x / 2.0f - _ballRadius, -_ballRadius * 2.0f);
+            _ball->_stuck = true;
+        }
+        else if (type == "passThrough")
+        {
+            _ball->_passThrough = true;
+        }
+        else if (type == "padIncrease")
+        {
+            _player->_size.x += 40.0f;
+        }
     }
 	
 public:
@@ -137,7 +193,7 @@ public:
 	
 	//Player
     GameObject* _player = nullptr;
-    glm::vec2 _playerSize;
+    glm::vec2 _initalPlayerSize;
     float _playerVelocity;
 	
 	//Ball
@@ -153,7 +209,7 @@ public:
     PowerUpManager* _powerUpManager = nullptr;
 	
     Game(unsigned int width, unsigned int height)
-        : _state(GAME_ACTIVE), _keys(), _width(width), _height(height), _playerSize(140.0f, 20.0f), _playerVelocity(500.0f), _ballVelocity((random::Float() * 400.0f) - 200.0f, -400.0f), _ballRadius(15.0f)
+        : _state(GAME_ACTIVE), _keys(), _width(width), _height(height), _initalPlayerSize(140.0f, 20.0f), _playerVelocity(500.0f), _ballVelocity((random::Float() * 400.0f) - 200.0f, -400.0f), _ballRadius(15.0f)
     {
     	
     }
@@ -191,7 +247,7 @@ public:
     	
         //Player paddle creation 	
         ResourceManager::LoadTexture("res/textures/Paddle.png", "Paddle");
-        _player = new GameObject(glm::vec2(_width / 2.0f - _playerSize.x / 2.0f, _height - _playerSize.y), _playerSize, glm::vec2(0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 0.0f, ResourceManager::GetTexture("Paddle"), _spriteRenderer);
+        _player = new GameObject(glm::vec2(_width / 2.0f - _initalPlayerSize.x / 2.0f, _height - _initalPlayerSize.y), _initalPlayerSize, glm::vec2(0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 0.0f, ResourceManager::GetTexture("Paddle"), _spriteRenderer);
 
         //Ball creation
         ResourceManager::LoadTexture("res/textures/Cannonball_SW.png", "Ball");
@@ -216,18 +272,18 @@ public:
     {
     	//Move ball via velocity vector
         _ball->Move(dt, _width);
-
-    	//Check for collisions with boxes
+    	
+        //Update all powerups
+        _powerUpManager->updatePowerUps(dt);
+    	
+    	//Check for collisions with boxes and powerups
         CheckCollisions();
     	
         //Check for collision with player paddle
         CollisionOccured(*_ball, *_player, true);
 
     	//Update Particles
-        _particleGenerator->updateParticles(dt, glm::vec2(_ball->_position.x + 7.5f, _ball->_position.y + 7.5f));
-
-    	//Update all active powerups
-        _powerUpManager->updatePowerUps(dt);
+        _particleGenerator->updateParticles(dt, glm::vec2(_ball->_position.x + 7.5f, _ball->_position.y + 7.5f));    	
     }
 
     void processInput(float dt)
@@ -273,7 +329,7 @@ public:
     	//Render player
         _player->Draw();
     	
-        //Render particles if ball position changed       
+        //Render particles if ball position has changed       
         if(_lastPos != _ball->_position)
 			_particleGenerator->renderParticles();
 

@@ -13,4 +13,10 @@ namespace random
 		
 		return (float)s_Distribution(s_RandomEngine) / (float)std::numeric_limits<uint32_t>::max();
 	}
+
+	static unsigned int Int(int max_val)
+	{
+		s_RandomEngine.seed(std::random_device()());
+		return s_Distribution(s_RandomEngine) % max_val;
+	}
 }

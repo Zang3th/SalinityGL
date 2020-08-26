@@ -7,7 +7,7 @@ class BallObject : public GameObject
 public:
 	//Object state
 	float _radius;
-	bool _stuck;
+	bool  _stuck;
 
 	//Constructor
 	BallObject(glm::vec2 pos, float radius, glm::vec2 velocity, glm::vec3 color, Texture* spriteTexture, SpriteRenderer* spriteRenderer)

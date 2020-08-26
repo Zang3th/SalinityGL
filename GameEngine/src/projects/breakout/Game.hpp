@@ -6,6 +6,7 @@
 #include "BallObject.hpp"
 #include "ParticleGenerator.hpp"
 #include "Random.hpp"
+#include "PowerUpManager.hpp"
 
 enum CollisionSide
 {
@@ -147,6 +148,9 @@ public:
 
     //Particles
     ParticleGenerator* _particleGenerator = nullptr;
+
+	//PowerUps
+    PowerUpManager* _powerUpManager = nullptr;
 	
     Game(unsigned int width, unsigned int height)
         : _state(GAME_ACTIVE), _keys(), _width(width), _height(height), _playerSize(140.0f, 20.0f), _playerVelocity(500.0f), _ballVelocity((random::Float() * 400.0f) - 200.0f, -400.0f), _ballRadius(15.0f)
@@ -161,6 +165,7 @@ public:
         delete _player;
         delete _ball;
         delete _particleGenerator;
+        delete _powerUpManager;
     	
         ResourceManager::DeleteTextures();
         ResourceManager::DeleteShaders();
@@ -198,6 +203,13 @@ public:
         ResourceManager::LoadTexture("res/textures/Particle.png", "Particle");
         _particleGenerator = new ParticleGenerator(ResourceManager::GetShader("Particle_Shader"), ResourceManager::GetTexture("Particle"),_spriteRenderer->getProjectionMatrix());
         _particleGenerator->createParticles(glm::vec2(_ball->_position.x + 7.5f, _ball->_position.y + 7.5f), glm::vec2(10.0f, 10.0f), glm::vec4(0.0f, 0.0f, 1.0f, 0.0f), glm::vec4(1.0f, 1.0f, 1.0f, 0.0f));
+
+        //PowerUp creation
+        ResourceManager::LoadTexture("res/textures/Powerup_speed.png", "Speed");
+        ResourceManager::LoadTexture("res/textures/Powerup_sticky.png", "Sticky");
+        ResourceManager::LoadTexture("res/textures/Powerup_passthrough.png", "PassThrough");
+        ResourceManager::LoadTexture("res/textures/Powerup_increase.png", "Increase");
+        _powerUpManager = new PowerUpManager(ResourceManager::GetTexture("Speed"), ResourceManager::GetTexture("Sticky"), ResourceManager::GetTexture("PassThrough"), ResourceManager::GetTexture("Increase"), _spriteRenderer);
     }
 
     void update(float dt)
@@ -213,6 +225,9 @@ public:
 
     	//Update Particles
         _particleGenerator->updateParticles(dt, glm::vec2(_ball->_position.x + 7.5f, _ball->_position.y + 7.5f));
+
+    	//Update all active powerups
+        _powerUpManager->updatePowerUps(dt);
     }
 
     void processInput(float dt)
@@ -267,5 +282,8 @@ public:
     	
     	//Render ball
         _ball->Draw();
+
+    	//Render powerups
+        _powerUpManager->renderPowerUps();
     }
 };

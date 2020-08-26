@@ -51,7 +51,8 @@ public:
 	{
 		if (!glfwInit())
 			spdlog::error("GLFW INIT ERROR\n");
-
+		
+		glfwWindowHint(GLFW_SAMPLES, 4);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -69,7 +70,8 @@ public:
 		GLCall(glViewport(0, 0, _width, _height)); //Renderscreensize
 		GLCall(glEnable(GL_BLEND));
 		GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
-
+		GLCall(glEnable(GL_MULTISAMPLE)); //Multisampling
+		
 		glfwSetKeyCallback(_window, key_callback);
 	}
 

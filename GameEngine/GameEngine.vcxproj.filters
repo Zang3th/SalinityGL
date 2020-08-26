@@ -68,6 +68,8 @@
     <ClInclude Include="src\projects\breakout\BallObject.hpp" />
     <ClInclude Include="src\projects\breakout\ParticleGenerator.hpp" />
     <ClInclude Include="src\projects\breakout\Random.hpp" />
+    <ClInclude Include="src\projects\breakout\PowerUpObject.hpp" />
+    <ClInclude Include="src\projects\breakout\PowerUpManager.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shader\standard_vs.glsl" />

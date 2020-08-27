@@ -23,6 +23,23 @@ enum GameState
     GAME_WIN
 };
 
+struct ActiveEffect
+{
+    std::string _type;
+    float _duration;
+	
+	ActiveEffect(std::string type, float duration)
+		: _type(type), _duration(duration)
+	{
+		
+	}
+};
+
+unsigned int ACTIVE_SPEED_EFFECTS = 0;
+unsigned int ACTIVE_STICKY_EFFECTS = 0;
+unsigned int ACTIVE_PASSTHROUGH_EFFECTS = 0;
+unsigned int ACTIVE_PADINREASE_EFFECTS = 0;
+
 class Game
 {
 private:
@@ -126,7 +143,7 @@ private:
             _ball->_velocity.x = -_ball->_velocity.x;
     }
     
-    void CheckCollisions() const
+    void CheckCollisions()
     {
 	    for (GameObject& box : _gameLevelCreator->_bricks)
 	    {
@@ -153,33 +170,98 @@ private:
             unsigned int index = 0;
     		if (CollisionOccured(*_player, powerUp))
     		{
-                CreatePowerUpEffect(powerUp._type, powerUp._duration);
+    			//Create powerUp effect
+                CreatePowerUpEffect(powerUp._type);
+
+    			//Add effect to currently active effects
+                _activeEffects.emplace_back(powerUp._type, powerUp._duration);
+
+    			//Delete the catched powerUp from powerUps to render
                 _powerUpManager->_powerUpsToRender.erase(_powerUpManager->_powerUpsToRender.begin() + index);               
     		}
             index++;
     	}
     }
 
-    void CreatePowerUpEffect(std::string& type, float duration) const
+    void CreatePowerUpEffect(std::string& type) const
     {
-        std::cout << type << "\n";
         if (type == "speed")
         {
             _ball->_velocity *= 1.2f;
+            _ball->_color = glm::vec3(0.2f, 0.2f, 1.0f);
+            ACTIVE_SPEED_EFFECTS++;
         }            
         else if (type == "sticky")
         {
             _ball->_position = _player->_position + glm::vec2(_player->_size.x / 2.0f - _ballRadius, -_ballRadius * 2.0f);
             _ball->_stuck = true;
+            ACTIVE_STICKY_EFFECTS++;
         }
         else if (type == "passThrough")
         {
             _ball->_passThrough = true;
+            _ball->_color = glm::vec3(1.0f, 0.2f, 0.2f);
+            ACTIVE_PASSTHROUGH_EFFECTS++;
         }
         else if (type == "padIncrease")
         {
-            _player->_size.x += 40.0f;
+            _player->_size.x *= 1.2;
+            ACTIVE_PADINREASE_EFFECTS++;
         }
+    }
+
+    void DeletePowerUpEffect(std::string& type) const
+    {
+        if (type == "speed")
+        {
+        	if (ACTIVE_SPEED_EFFECTS > 1)
+        	{
+                _ball->_velocity /= 1.2f;
+                ACTIVE_SPEED_EFFECTS--;
+        	}           	
+            else
+            {
+                _ball->_velocity /= 1.2f;
+                _ball->_color = glm::vec3(0.7f, 0.7f, 1.0f);
+                ACTIVE_SPEED_EFFECTS--;
+            }                
+        }
+        else if (type == "sticky")
+        {
+           ACTIVE_STICKY_EFFECTS--;
+        }
+        else if (type == "passThrough")
+        {
+            if (ACTIVE_PASSTHROUGH_EFFECTS > 1)
+                ACTIVE_PASSTHROUGH_EFFECTS--;
+            else
+            {
+                _ball->_passThrough = false;
+                _ball->_color = glm::vec3(0.7f, 0.7f, 1.0f);
+                ACTIVE_PASSTHROUGH_EFFECTS--;
+            }            
+        }
+        else if (type == "padIncrease")
+        {            
+            _player->_size.x /= 1.2f;
+            ACTIVE_PADINREASE_EFFECTS--;                       
+        }
+    }
+	
+    void UpdateActiveEffects(float dt)
+    {
+	    for (ActiveEffect& effect : _activeEffects)
+	    {
+            unsigned int index = 0;
+            effect._duration -= dt;
+	    	
+            if (effect._duration <= 0.0f)
+            {
+                DeletePowerUpEffect(effect._type);
+                _activeEffects.erase(_activeEffects.begin() + index);            	          	
+            }
+            index++;
+	    }        
     }
 	
 public:
@@ -207,6 +289,7 @@ public:
 
 	//PowerUps
     PowerUpManager* _powerUpManager = nullptr;
+    std::vector<ActiveEffect> _activeEffects;
 	
     Game(unsigned int width, unsigned int height)
         : _state(GAME_ACTIVE), _keys(), _width(width), _height(height), _initalPlayerSize(140.0f, 20.0f), _playerVelocity(500.0f), _ballVelocity((random::Float() * 400.0f) - 200.0f, -400.0f), _ballRadius(15.0f)
@@ -228,23 +311,23 @@ public:
     }
 
     void init()
-    {        
-    	//Create SpriteRenderer
+    {
+        //Create SpriteRenderer
         ResourceManager::LoadShader("res/shader/breakout/breakout_vs.glsl", "res/shader/breakout/breakout_fs.glsl", "Box_Shader");
         _spriteRenderer = new SpriteRenderer(ResourceManager::GetShader("Box_Shader"), _width, _height);
-            	
+
         //Create GameLevelCreator
         ResourceManager::LoadTexture("res/textures/Block.jpg", "Block");
         ResourceManager::LoadTexture("res/textures/Block_solid.jpg", "Block_solid");
         _gameLevelCreator = new GameLevelCreator(_spriteRenderer, _width, _height, ResourceManager::GetTexture("Block"), ResourceManager::GetTexture("Block_solid"));
-    	
-    	//Load level from file
+
+        //Load level from file
         _gameLevelCreator->generateLevel("res/levels/basic.level");
 
         //Background creation
         ResourceManager::LoadTexture("res/textures/Background_1.jpg", "Background");
         _background = new GameObject(glm::vec2(0.0f, 0.0f), glm::vec2(_width, _height), glm::vec2(0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 0.0f, ResourceManager::GetTexture("Background"), _spriteRenderer);
-    	
+
         //Player paddle creation 	
         ResourceManager::LoadTexture("res/textures/Paddle.png", "Paddle");
         _player = new GameObject(glm::vec2(_width / 2.0f - _initalPlayerSize.x / 2.0f, _height - _initalPlayerSize.y), _initalPlayerSize, glm::vec2(0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 0.0f, ResourceManager::GetTexture("Paddle"), _spriteRenderer);
@@ -253,11 +336,11 @@ public:
         ResourceManager::LoadTexture("res/textures/Cannonball_SW.png", "Ball");
         _ball = new BallObject(_player->_position + glm::vec2(_player->_size.x / 2.0f - _ballRadius, -_ballRadius * 2.0f), _ballRadius, _ballVelocity, glm::vec3(0.7f, 0.7f, 1.0f), ResourceManager::GetTexture("Ball"), _spriteRenderer);
         _lastPos = _ball->_position;
-    	
+
         //ParticleGenerator creation
         ResourceManager::LoadShader("res/shader/breakout/particle_vs.glsl", "res/shader/breakout/particle_fs.glsl", "Particle_Shader");
         ResourceManager::LoadTexture("res/textures/Particle.png", "Particle");
-        _particleGenerator = new ParticleGenerator(ResourceManager::GetShader("Particle_Shader"), ResourceManager::GetTexture("Particle"),_spriteRenderer->getProjectionMatrix());
+        _particleGenerator = new ParticleGenerator(ResourceManager::GetShader("Particle_Shader"), ResourceManager::GetTexture("Particle"), _spriteRenderer->getProjectionMatrix());
         _particleGenerator->createParticles(glm::vec2(_ball->_position.x + 7.5f, _ball->_position.y + 7.5f), glm::vec2(10.0f, 10.0f), glm::vec4(0.0f, 0.0f, 1.0f, 0.0f), glm::vec4(1.0f, 1.0f, 1.0f, 0.0f));
 
         //PowerUp creation
@@ -276,10 +359,13 @@ public:
         //Update all powerups
         _powerUpManager->updatePowerUps(dt);
     	
-    	//Check for collisions with boxes and powerups
+    	//Check for collisions between ball+boxes and player+powerups
         CheckCollisions();
-    	
-        //Check for collision with player paddle
+
+    	//Update all active (powerUp) effects   	
+        UpdateActiveEffects(dt);
+            	
+        //Check for collision between ball+player
         CollisionOccured(*_ball, *_player, true);
 
     	//Update Particles

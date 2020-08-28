@@ -70,6 +70,7 @@
     <ClInclude Include="src\projects\breakout\Random.hpp" />
     <ClInclude Include="src\projects\breakout\PowerUpObject.hpp" />
     <ClInclude Include="src\projects\breakout\PowerUpManager.hpp" />
+    <ClInclude Include="src\projects\breakout\TextRenderer.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shader\standard_vs.glsl" />
@@ -89,5 +90,7 @@
     <None Include="res\shader\breakout\breakout_vs.glsl" />
     <None Include="res\shader\breakout\particle_vs.glsl" />
     <None Include="res\shader\breakout\particle_fs.glsl" />
+    <None Include="res\shader\breakout\text_2D_vs.glsl" />
+    <None Include="res\shader\breakout\text_2D_fs.glsl" />
   </ItemGroup>
 </Project>

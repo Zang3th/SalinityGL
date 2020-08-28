@@ -8,6 +8,7 @@
 #include "Random.hpp"
 #include "PowerUpManager.hpp"
 #include "AudioManager.hpp"
+#include "TextRenderer.hpp"
 
 enum CollisionSide
 {
@@ -300,6 +301,9 @@ public:
 
 	//Audio
     AudioManager* _audioManager = nullptr;
+
+    //Text
+    TextRenderer* _textRenderer = nullptr;
 	
     Game(unsigned int width, unsigned int height)
         : _state(GAME_ACTIVE), _keys(), _width(width), _height(height), _initalPlayerSize(140.0f, 20.0f), _playerVelocity(500.0f), _ballVelocity((random::Float() * 400.0f) - 200.0f, -400.0f), _ballRadius(15.0f)
@@ -316,6 +320,7 @@ public:
         delete _particleGenerator;
         delete _powerUpManager;
         delete _audioManager;
+        delete _textRenderer;
     	
         ResourceManager::DeleteTextures();
         ResourceManager::DeleteShaders();
@@ -364,6 +369,11 @@ public:
 		//AudioManager creation
         _audioManager = new AudioManager();
         _audioManager->playSound2D("res/audio/music/Breakout.mp3", true);
+
+    	//TextRenderer creation
+        ResourceManager::LoadShader("res/shader/breakout/text_2D_vs.glsl", "res/shader/breakout/text_2D_fs.glsl", "Text_Shader");
+        _textRenderer = new TextRenderer(ResourceManager::GetShader("Text_Shader"), _spriteRenderer->getProjectionMatrix());
+        _textRenderer->Load("res/fonts/OCRAEXT.TTF", 24);
     }
 
     void update(float dt)
@@ -443,5 +453,8 @@ public:
 
     	//Render powerups
         _powerUpManager->renderPowerUps();
+
+    	//Render text
+        _textRenderer->RenderText("Lives:", 5.0f, 5.0f, 2.0f, glm::vec3(1.0f));
     }
 };

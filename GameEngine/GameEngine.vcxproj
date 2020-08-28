@@ -99,13 +99,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLEW_STATIC;_MBCS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>src\core;src\projects\breakout;src\projects\zanget3uWorld\data;src\projects\zanget3uWorld\entities;src\projects\zanget3uWorld\functionality;src\projects\zanget3uWorld\model;src\vendor;$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\opencv\include;$(SolutionDir)Dependencies\assimp\include;$(SolutionDir)Dependencies\irrKlang\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src\core;src\projects\breakout;src\projects\zanget3uWorld\data;src\projects\zanget3uWorld\entities;src\projects\zanget3uWorld\functionality;src\projects\zanget3uWorld\model;src\vendor;$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\opencv\include;$(SolutionDir)Dependencies\assimp\include;$(SolutionDir)Dependencies\irrKlang\include;$(SolutionDir)Dependencies\freetype\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)Dependencies\GLFW\lib-vc2019;$(SolutionDir)Dependencies\GLEW\lib\Release\x64;$(SolutionDir)Dependencies\opencv\x64\vc15\lib;$(SolutionDir)Dependencies\assimp\lib64;$(SolutionDir)Dependencies\irrKlang\lib\Winx64-visualStudio;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glew32s.lib;glfw3.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Glu32.lib;opencv_world411d.lib;assimp.lib;irrKlang.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)Dependencies\GLFW\lib-vc2019;$(SolutionDir)Dependencies\GLEW\lib\Release\x64;$(SolutionDir)Dependencies\opencv\x64\vc15\lib;$(SolutionDir)Dependencies\assimp\lib64;$(SolutionDir)Dependencies\irrKlang\lib\Winx64-visualStudio;$(SolutionDir)Dependencies\freetype\win64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32s.lib;glfw3.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Glu32.lib;opencv_world411d.lib;assimp.lib;irrKlang.lib;freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>LIBCMT; MSVCRT;</IgnoreSpecificDefaultLibraries>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
     </Link>
@@ -165,6 +165,7 @@
     <ClInclude Include="src\projects\breakout\PowerUpManager.hpp" />
     <ClInclude Include="src\projects\breakout\PowerUpObject.hpp" />
     <ClInclude Include="src\projects\breakout\Random.hpp" />
+    <ClInclude Include="src\projects\breakout\TextRenderer.hpp" />
     <ClInclude Include="src\projects\zanget3uWorld\functionality\AssimpLoader.hpp" />
     <ClInclude Include="src\projects\zanget3uWorld\data\QuaderData.hpp" />
     <ClInclude Include="src\projects\zanget3uWorld\entities\CubemapEntity.hpp" />
@@ -224,6 +225,8 @@
     <None Include="res\shader\breakout\breakout_vs.glsl" />
     <None Include="res\shader\breakout\particle_fs.glsl" />
     <None Include="res\shader\breakout\particle_vs.glsl" />
+    <None Include="res\shader\breakout\text_2D_fs.glsl" />
+    <None Include="res\shader\breakout\text_2D_vs.glsl" />
     <None Include="res\shader\cubemap_fs.glsl" />
     <None Include="res\shader\cubemap_vs.glsl" />
     <None Include="res\shader\ground_fs.glsl" />

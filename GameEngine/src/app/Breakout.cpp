@@ -8,10 +8,7 @@ int main()
 	//Display-Management
 	GameDisplayManager gameDisplayManager(WIDTH, HEIGHT);
 	gameDisplayManager.printVersion();
-
-	//Initialize random number generator
-	//
-	
+		
 	//Game Initialization
 	breakout.init();
 
@@ -51,6 +48,11 @@ int main()
 		{
 			ImGui::Begin("General stuff");
 			ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+			ImGui::Text("Active PowerUps:");
+			ImGui::Text("Speed: %d", ACTIVE_SPEED_EFFECTS);
+			ImGui::Text("Sticky: %d", ACTIVE_STICKY_EFFECTS);
+			ImGui::Text("PassThrough: %d", ACTIVE_PASSTHROUGH_EFFECTS);
+			ImGui::Text("PadIncrease: %d", ACTIVE_PADINREASE_EFFECTS);
 			ImGui::End();
 		}
 

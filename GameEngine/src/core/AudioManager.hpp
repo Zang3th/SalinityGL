@@ -22,12 +22,12 @@ public:
 		_engine->drop();
 	}
 
-	void playSound2D(const char* filepath, bool loop)
+	void playSound2D(const char* filepath, bool loop, float volume = 0.3f)
 	{
 		irrklang::ISound* snd = _engine->play2D(filepath, loop, false, true);
 
 		if(snd)
-			snd->setVolume(0.3);
+			snd->setVolume(volume);
 	}
 
 	void playSound3D(const char* filepath, glm::vec3* position)

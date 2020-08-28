@@ -7,6 +7,7 @@
 #include "ParticleGenerator.hpp"
 #include "Random.hpp"
 #include "PowerUpManager.hpp"
+#include "AudioManager.hpp"
 
 enum CollisionSide
 {
@@ -155,11 +156,14 @@ private:
                     {
                     	box._destroyed = true;                    	
                         _powerUpManager->spawnPowerUps(box._position, random::Int(10));
+                        _audioManager->playSound2D("res/audio/sounds/Block_hit.wav", false);
                     }
                     else
                     {
                         if (_ball->_passThrough)
                             box._destroyed = true;
+
+                        _audioManager->playSound2D("res/audio/sounds/Block_hit.wav", false);
                     }
 			    }
 		    }
@@ -177,7 +181,10 @@ private:
                 _activeEffects.emplace_back(powerUp._type, powerUp._duration);
 
     			//Delete the catched powerUp from powerUps to render
-                _powerUpManager->_powerUpsToRender.erase(_powerUpManager->_powerUpsToRender.begin() + index);               
+                _powerUpManager->_powerUpsToRender.erase(_powerUpManager->_powerUpsToRender.begin() + index);
+
+    			//Play sound
+                _audioManager->playSound2D("res/audio/sounds/PowerUp_hit.wav", false);
     		}
             index++;
     	}
@@ -209,43 +216,43 @@ private:
             ACTIVE_PADINREASE_EFFECTS++;
         }
     }
-
+      
     void DeletePowerUpEffect(std::string& type) const
     {
         if (type == "speed")
         {
-        	if (ACTIVE_SPEED_EFFECTS > 1)
-        	{
-                _ball->_velocity /= 1.2f;
-                ACTIVE_SPEED_EFFECTS--;
-        	}           	
-            else
+            if (ACTIVE_SPEED_EFFECTS == 1)
             {
                 _ball->_velocity /= 1.2f;
                 _ball->_color = glm::vec3(0.7f, 0.7f, 1.0f);
                 ACTIVE_SPEED_EFFECTS--;
-            }                
+            }
+            else
+            {
+                _ball->_velocity /= 1.2f;
+                ACTIVE_SPEED_EFFECTS--;
+            }
         }
         else if (type == "sticky")
-        {
-           ACTIVE_STICKY_EFFECTS--;
-        }
+            ACTIVE_STICKY_EFFECTS--;
         else if (type == "passThrough")
         {
-            if (ACTIVE_PASSTHROUGH_EFFECTS > 1)
-                ACTIVE_PASSTHROUGH_EFFECTS--;
-            else
+            if (ACTIVE_PASSTHROUGH_EFFECTS == 1)
             {
                 _ball->_passThrough = false;
                 _ball->_color = glm::vec3(0.7f, 0.7f, 1.0f);
                 ACTIVE_PASSTHROUGH_EFFECTS--;
-            }            
+            }
+            else
+                ACTIVE_PASSTHROUGH_EFFECTS--;
         }
         else if (type == "padIncrease")
-        {            
+        {
             _player->_size.x /= 1.2f;
-            ACTIVE_PADINREASE_EFFECTS--;                       
+            ACTIVE_PADINREASE_EFFECTS--;
         }
+        else
+            spdlog::error("ERROR! CAN'T DELETE POWERUP!\n");
     }
 	
     void UpdateActiveEffects(float dt)
@@ -290,6 +297,9 @@ public:
 	//PowerUps
     PowerUpManager* _powerUpManager = nullptr;
     std::vector<ActiveEffect> _activeEffects;
+
+	//Audio
+    AudioManager* _audioManager = nullptr;
 	
     Game(unsigned int width, unsigned int height)
         : _state(GAME_ACTIVE), _keys(), _width(width), _height(height), _initalPlayerSize(140.0f, 20.0f), _playerVelocity(500.0f), _ballVelocity((random::Float() * 400.0f) - 200.0f, -400.0f), _ballRadius(15.0f)
@@ -305,6 +315,7 @@ public:
         delete _ball;
         delete _particleGenerator;
         delete _powerUpManager;
+        delete _audioManager;
     	
         ResourceManager::DeleteTextures();
         ResourceManager::DeleteShaders();
@@ -349,6 +360,10 @@ public:
         ResourceManager::LoadTexture("res/textures/Powerup_passthrough.png", "PassThrough");
         ResourceManager::LoadTexture("res/textures/Powerup_increase.png", "Increase");
         _powerUpManager = new PowerUpManager(ResourceManager::GetTexture("Speed"), ResourceManager::GetTexture("Sticky"), ResourceManager::GetTexture("PassThrough"), ResourceManager::GetTexture("Increase"), _spriteRenderer);
+
+		//AudioManager creation
+        _audioManager = new AudioManager();
+        _audioManager->playSound2D("res/audio/music/Breakout.mp3", true);
     }
 
     void update(float dt)
@@ -366,7 +381,8 @@ public:
         UpdateActiveEffects(dt);
             	
         //Check for collision between ball+player
-        CollisionOccured(*_ball, *_player, true);
+        if (CollisionOccured(*_ball, *_player, true))
+            _audioManager->playSound2D("res/audio/sounds/Player_hit.wav", false);
 
     	//Update Particles
         _particleGenerator->updateParticles(dt, glm::vec2(_ball->_position.x + 7.5f, _ball->_position.y + 7.5f));    	

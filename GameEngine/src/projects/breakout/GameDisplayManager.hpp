@@ -9,8 +9,8 @@
 float deltaTime = 0.0f;	//Time between current frame and last frame
 float lastFrame = 0.0f; //Time of last frame
 
-const unsigned int WIDTH = 1800; //Global WIDTH-Setting
-const unsigned int HEIGHT = 1200; //Global HEIGHT-Setting
+const unsigned int WIDTH = 1920; //Global WIDTH-Setting
+const unsigned int HEIGHT = 1080; //Global HEIGHT-Setting
 
 Game breakout(WIDTH, HEIGHT); //Game creation
 
@@ -27,6 +27,11 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		else if (action == GLFW_RELEASE)
 			breakout._keys[key] = false;
 	}
+}
+
+void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+	glViewport(0, 0, width, height);
 }
 
 class GameDisplayManager
@@ -73,6 +78,7 @@ public:
 		GLCall(glEnable(GL_MULTISAMPLE)); //Multisampling
 		
 		glfwSetKeyCallback(_window, key_callback);
+		glfwSetFramebufferSizeCallback(_window, framebuffer_size_callback);
 	}
 
 	void printVersion()

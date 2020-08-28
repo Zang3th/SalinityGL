@@ -41,6 +41,7 @@ unsigned int ACTIVE_SPEED_EFFECTS = 0;
 unsigned int ACTIVE_STICKY_EFFECTS = 0;
 unsigned int ACTIVE_PASSTHROUGH_EFFECTS = 0;
 unsigned int ACTIVE_PADINREASE_EFFECTS = 0;
+unsigned int DESTROYED_BLOCKS = 0;
 
 class Game
 {
@@ -158,6 +159,7 @@ private:
                     	box._destroyed = true;                    	
                         _powerUpManager->spawnPowerUps(box._position, random::Int(10));
                         _audioManager->playSound2D("res/audio/sounds/Block_hit.wav", false);
+                        DESTROYED_BLOCKS++;
                     }
                     else
                     {
@@ -165,6 +167,7 @@ private:
                             box._destroyed = true;
 
                         _audioManager->playSound2D("res/audio/sounds/Block_hit.wav", false);
+                        DESTROYED_BLOCKS++;
                     }
 			    }
 		    }
@@ -196,7 +199,7 @@ private:
         if (type == "speed")
         {
             _ball->_velocity *= 1.2f;
-            _ball->_color = glm::vec3(0.2f, 0.2f, 1.0f);
+            _ball->_color = glm::vec3(0.4f, 0.4f, 1.0f);
             ACTIVE_SPEED_EFFECTS++;
         }            
         else if (type == "sticky")
@@ -208,7 +211,7 @@ private:
         else if (type == "passThrough")
         {
             _ball->_passThrough = true;
-            _ball->_color = glm::vec3(1.0f, 0.2f, 0.2f);
+            _ball->_color = glm::vec3(1.0f, 0.4f, 0.4f);
             ACTIVE_PASSTHROUGH_EFFECTS++;
         }
         else if (type == "padIncrease")
@@ -455,6 +458,6 @@ public:
         _powerUpManager->renderPowerUps();
 
     	//Render text
-        _textRenderer->RenderText("Lives:", 5.0f, 5.0f, 2.0f, glm::vec3(1.0f));
+        _textRenderer->RenderText("Destroyed: " + std::to_string(DESTROYED_BLOCKS), 5.0f, 5.0f, 1.25f, glm::vec3(1.0f));
     }
 };

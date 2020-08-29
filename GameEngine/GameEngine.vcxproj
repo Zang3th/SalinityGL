@@ -99,7 +99,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLEW_STATIC;_MBCS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>src\core;src\projects\breakout;src\projects\zanget3uWorld\data;src\projects\zanget3uWorld\entities;src\projects\zanget3uWorld\functionality;src\projects\zanget3uWorld\model;src\vendor;$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\opencv\include;$(SolutionDir)Dependencies\assimp\include;$(SolutionDir)Dependencies\irrKlang\include;$(SolutionDir)Dependencies\freetype\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src\core;src\projects\breakout;src\projects\zanget3uWorld\data;src\projects\zanget3uWorld\entities;src\projects\zanget3uWorld\functionality;src\projects\zanget3uWorld\model;src\projects\simulation;src\vendor;$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\opencv\include;$(SolutionDir)Dependencies\assimp\include;$(SolutionDir)Dependencies\irrKlang\include;$(SolutionDir)Dependencies\freetype\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -148,8 +148,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\app\Breakout.cpp" />
-    <ClCompile Include="src\app\Zanget3uWorld.cpp" />
+    <ClCompile Include="src\apps\StartBreakout.cpp" />
+    <ClCompile Include="src\apps\StartSimulation.cpp" />
+    <ClCompile Include="src\apps\StartZanget3uWorld.cpp" />
     <ClCompile Include="src\vendor\imgui\imgui.cpp" />
     <ClCompile Include="src\vendor\imgui\imgui_demo.cpp" />
     <ClCompile Include="src\vendor\imgui\imgui_draw.cpp" />
@@ -166,6 +167,7 @@
     <ClInclude Include="src\projects\breakout\PowerUpObject.hpp" />
     <ClInclude Include="src\projects\breakout\Random.hpp" />
     <ClInclude Include="src\projects\breakout\TextRenderer.hpp" />
+    <ClInclude Include="src\projects\simulation\Simulation.hpp" />
     <ClInclude Include="src\projects\zanget3uWorld\functionality\AssimpLoader.hpp" />
     <ClInclude Include="src\projects\zanget3uWorld\data\QuaderData.hpp" />
     <ClInclude Include="src\projects\zanget3uWorld\entities\CubemapEntity.hpp" />
@@ -227,18 +229,18 @@
     <None Include="res\shader\breakout\particle_vs.glsl" />
     <None Include="res\shader\breakout\text_2D_fs.glsl" />
     <None Include="res\shader\breakout\text_2D_vs.glsl" />
-    <None Include="res\shader\cubemap_fs.glsl" />
-    <None Include="res\shader\cubemap_vs.glsl" />
-    <None Include="res\shader\ground_fs.glsl" />
-    <None Include="res\shader\ground_vs.glsl" />
-    <None Include="res\shader\leaf_fs.glsl" />
-    <None Include="res\shader\leaf_vs.glsl" />
-    <None Include="res\shader\lightbulb_fs.glsl" />
-    <None Include="res\shader\lightbulb_vs.glsl" />
-    <None Include="res\shader\primitive_fs.glsl" />
-    <None Include="res\shader\primitive_vs.glsl" />
-    <None Include="res\shader\standard_fs.glsl" />
-    <None Include="res\shader\standard_vs.glsl" />
+    <None Include="res\shader\zanget3uWorld\cubemap_fs.glsl" />
+    <None Include="res\shader\zanget3uWorld\cubemap_vs.glsl" />
+    <None Include="res\shader\zanget3uWorld\ground_fs.glsl" />
+    <None Include="res\shader\zanget3uWorld\ground_vs.glsl" />
+    <None Include="res\shader\zanget3uWorld\leaf_fs.glsl" />
+    <None Include="res\shader\zanget3uWorld\leaf_vs.glsl" />
+    <None Include="res\shader\zanget3uWorld\lightbulb_fs.glsl" />
+    <None Include="res\shader\zanget3uWorld\lightbulb_vs.glsl" />
+    <None Include="res\shader\zanget3uWorld\primitive_fs.glsl" />
+    <None Include="res\shader\zanget3uWorld\primitive_vs.glsl" />
+    <None Include="res\shader\zanget3uWorld\standard_fs.glsl" />
+    <None Include="res\shader\zanget3uWorld\standard_vs.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

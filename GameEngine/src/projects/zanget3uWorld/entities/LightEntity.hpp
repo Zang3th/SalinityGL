@@ -34,8 +34,8 @@ public:
 		(*nextTextureSlot)++;
 
 		//Create the shaders
-		_lanternShader = new Shader("res/shader/standard_vs.glsl", "res/shader/standard_fs.glsl");
-		_lightbulbShader = new Shader("res/shader/lightbulb_vs.glsl", "res/shader/lightbulb_fs.glsl");			
+		_lanternShader = new Shader("res/shader/zanget3uWorld/standard_vs.glsl", "res/shader/zanget3uWorld/standard_fs.glsl");
+		_lightbulbShader = new Shader("res/shader/zanget3uWorld/lightbulb_vs.glsl", "res/shader/zanget3uWorld/lightbulb_fs.glsl");			
 	}
 
 	~LightEntity()

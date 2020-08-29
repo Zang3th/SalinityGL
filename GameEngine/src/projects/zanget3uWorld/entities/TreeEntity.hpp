@@ -38,8 +38,8 @@ public:
 		(*nextTextureSlot)++;
 		
 		//Create the shaders
-		_treeShader = new Shader("res/shader/standard_vs.glsl", "res/shader/standard_fs.glsl");
-		_leafShader = new Shader("res/shader/leaf_vs.glsl", "res/shader/leaf_fs.glsl");
+		_treeShader = new Shader("res/shader/zanget3uWorld/standard_vs.glsl", "res/shader/zanget3uWorld/standard_fs.glsl");
+		_leafShader = new Shader("res/shader/zanget3uWorld/leaf_vs.glsl", "res/shader/zanget3uWorld/leaf_fs.glsl");
 	}
 
 	~TreeEntity()

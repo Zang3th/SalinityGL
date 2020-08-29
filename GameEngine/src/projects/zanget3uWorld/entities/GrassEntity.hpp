@@ -27,7 +27,7 @@ public:
 		(*nextTextureSlot)++;
 
 		//Create the shader
-		_grassShader = new Shader("res/shader/standard_vs.glsl", "res/shader/standard_fs.glsl");
+		_grassShader = new Shader("res/shader/zanget3uWorld/standard_vs.glsl", "res/shader/zanget3uWorld/standard_fs.glsl");
 	}
 
 	~GrassEntity()

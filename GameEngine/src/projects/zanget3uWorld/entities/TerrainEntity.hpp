@@ -79,7 +79,7 @@ public:
 		(*nextTextureSlot)++;
 		
 		//Create the shader
-		_shader = new Shader("res/shader/ground_vs.glsl", "res/shader/ground_fs.glsl");
+		_shader = new Shader("res/shader/zanget3uWorld/ground_vs.glsl", "res/shader/zanget3uWorld/ground_fs.glsl");
 
 		//Combine everything to the model
 		_groundModel = new Groundmodel(_groundData, _shader, _terrainTexCount, _pathwayTexCount, _pathwayTexCount, _blendmapTexCount);

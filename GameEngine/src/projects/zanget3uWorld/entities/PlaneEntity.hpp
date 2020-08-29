@@ -24,7 +24,7 @@ public:
 		(*nextTextureSlot)++;
 
 		//Create the shader
-		_shader = new Shader("res/shader/standard_vs.glsl", "res/shader/standard_fs.glsl");
+		_shader = new Shader("res/shader/zanget3uWorld/standard_vs.glsl", "res/shader/zanget3uWorld/standard_fs.glsl");
 
 		//Combine everything to the model
 		_planeModel = new Standardmodel(_planeData, _shader, _textureCount, false);

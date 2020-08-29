@@ -33,7 +33,7 @@ public:
 		_quaderData = new QuaderData();
 
 		//Create the shader
-		_shader = new Shader("res/shader/primitive_vs.glsl", "res/shader/primitive_fs.glsl");
+		_shader = new Shader("res/shader/zanget3uWorld/primitive_vs.glsl", "res/shader/zanget3uWorld/primitive_fs.glsl");
 
 		//Combine everything to the model
 		_quaderModel = new Primitivemodel(_quaderData, _shader);

@@ -36,7 +36,7 @@ public:
 		(*nextTextureSlot)++;
 		
 		//Create the shader
-		_shader = new Shader("res/shader/cubemap_vs.glsl", "res/shader/cubemap_fs.glsl");
+		_shader = new Shader("res/shader/zanget3uWorld/cubemap_vs.glsl", "res/shader/zanget3uWorld/cubemap_fs.glsl");
 
 		//Combine everything to the model
 		_standardmodel = new Standardmodel(_ai, _shader, _textureCount, true);

@@ -68,6 +68,11 @@ public:
 		_simDisplayManager.updateDisplay();
 	}
 
+	void processInput()
+	{
+		_simDisplayManager.processInput();
+	}
+	
 	void closeDisplay()
 	{
 		_simDisplayManager.closeDisplay();

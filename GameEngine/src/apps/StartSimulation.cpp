@@ -29,6 +29,9 @@ int main()
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 
+		//Check for input
+		simulation.processInput();
+		
 		//Clear buffers
 		simulation.clear();
 
@@ -42,6 +45,11 @@ int main()
 		{
 			ImGui::Begin("General stuff");
 			ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+			ImGui::Text("---------------------------------------------");
+			ImGui::Text("Camera-Coords: X: %f, Y: %f, Z: %f", camera.Position.x, camera.Position.y, camera.Position.z);
+			ImGui::Text("Camera-Yaw: %f, Camera-Pitch: %f", camera.Yaw, camera.Pitch);
+			ImGui::Text("Camera-Front: X: %f, Y: %f, Z: %f", camera.Front.x, camera.Front.y, camera.Front.z);
+			ImGui::Text("---------------------------------------------");
 			ImGui::End();
 		}
 

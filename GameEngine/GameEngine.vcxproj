@@ -182,7 +182,7 @@
     <ClInclude Include="src\projects\zanget3uWorld\entities\TreeEntity.hpp" />
     <ClInclude Include="src\core\AudioManager.hpp" />
     <ClInclude Include="src\projects\zanget3uWorld\model\Basemodel.hpp" />
-    <ClInclude Include="src\projects\zanget3uWorld\functionality\Camera.hpp" />
+    <ClInclude Include="src\core\Camera.hpp" />
     <ClInclude Include="src\projects\zanget3uWorld\entities\EntityManager.hpp" />
     <ClInclude Include="src\projects\zanget3uWorld\entities\ObjmodelEntity.hpp" />
     <ClInclude Include="src\projects\zanget3uWorld\model\Primitivemodel.hpp" />

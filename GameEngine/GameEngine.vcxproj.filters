@@ -42,7 +42,6 @@
     <ClInclude Include="src\projects\zanget3uWorld\entities\RayEntity.hpp" />
     <ClInclude Include="src\projects\zanget3uWorld\entities\TerrainEntity.hpp" />
     <ClInclude Include="src\projects\zanget3uWorld\entities\TreeEntity.hpp" />
-    <ClInclude Include="src\projects\zanget3uWorld\functionality\Camera.hpp" />
     <ClInclude Include="src\projects\zanget3uWorld\functionality\MousePicker.hpp" />
     <ClInclude Include="src\projects\zanget3uWorld\model\Basemodel.hpp" />
     <ClInclude Include="src\projects\zanget3uWorld\model\Groundmodel.hpp" />
@@ -76,6 +75,7 @@
     <ClInclude Include="src\core\ResourceManager.hpp" />
     <ClInclude Include="src\projects\simulation\ObjectManager.hpp" />
     <ClInclude Include="src\projects\simulation\Object.hpp" />
+    <ClInclude Include="src\core\Camera.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\levels\basic.level" />

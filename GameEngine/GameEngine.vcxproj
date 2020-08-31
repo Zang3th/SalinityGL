@@ -167,6 +167,9 @@
     <ClInclude Include="src\projects\breakout\PowerUpObject.hpp" />
     <ClInclude Include="src\projects\breakout\Random.hpp" />
     <ClInclude Include="src\projects\breakout\TextRenderer.hpp" />
+    <ClInclude Include="src\projects\simulation\Object.hpp" />
+    <ClInclude Include="src\projects\simulation\ObjectManager.hpp" />
+    <ClInclude Include="src\projects\simulation\SimDisplayManager.hpp" />
     <ClInclude Include="src\projects\simulation\Simulation.hpp" />
     <ClInclude Include="src\projects\zanget3uWorld\functionality\AssimpLoader.hpp" />
     <ClInclude Include="src\projects\zanget3uWorld\data\QuaderData.hpp" />
@@ -198,7 +201,7 @@
     <ClInclude Include="src\projects\zanget3uWorld\data\PlaneData.hpp" />
     <ClInclude Include="src\projects\zanget3uWorld\model\Player.hpp" />
     <ClInclude Include="src\projects\zanget3uWorld\data\RawData.hpp" />
-    <ClInclude Include="src\core\Renderer.hpp" />
+    <ClInclude Include="src\projects\zanget3uWorld\functionality\Renderer.hpp" />
     <ClInclude Include="src\core\RenderStateManager.hpp" />
     <ClInclude Include="src\core\Shader.hpp" />
     <ClInclude Include="src\core\Texture.hpp" />
@@ -209,7 +212,7 @@
     <ClInclude Include="src\projects\breakout\Game.hpp" />
     <ClInclude Include="src\projects\breakout\GameDisplayManager.hpp" />
     <ClInclude Include="src\projects\breakout\GameLevelCreator.hpp" />
-    <ClInclude Include="src\projects\breakout\ResourceManager.hpp" />
+    <ClInclude Include="src\core\ResourceManager.hpp" />
     <ClInclude Include="src\projects\breakout\SpriteRenderer.hpp" />
     <ClInclude Include="src\vendor\imgui\imconfig.h" />
     <ClInclude Include="src\vendor\imgui\imgui.h" />
@@ -229,6 +232,8 @@
     <None Include="res\shader\breakout\particle_vs.glsl" />
     <None Include="res\shader\breakout\text_2D_fs.glsl" />
     <None Include="res\shader\breakout\text_2D_vs.glsl" />
+    <None Include="res\shader\simulation\object_fs.glsl" />
+    <None Include="res\shader\simulation\object_vs.glsl" />
     <None Include="res\shader\zanget3uWorld\cubemap_fs.glsl" />
     <None Include="res\shader\zanget3uWorld\cubemap_vs.glsl" />
     <None Include="res\shader\zanget3uWorld\ground_fs.glsl" />

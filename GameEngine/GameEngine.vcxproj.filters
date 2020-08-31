@@ -25,7 +25,6 @@
     <ClInclude Include="src\projects\breakout\Game.hpp" />
     <ClInclude Include="src\projects\breakout\GameDisplayManager.hpp" />
     <ClInclude Include="src\projects\breakout\GameLevelCreator.hpp" />
-    <ClInclude Include="src\projects\breakout\ResourceManager.hpp" />
     <ClInclude Include="src\projects\breakout\SpriteRenderer.hpp" />
     <ClInclude Include="src\projects\zanget3uWorld\data\GroundData.hpp" />
     <ClInclude Include="src\projects\zanget3uWorld\data\Heightmap.hpp" />
@@ -54,7 +53,6 @@
     <ClInclude Include="src\core\Cubemap.hpp" />
     <ClInclude Include="src\core\IndexBuffer.hpp" />
     <ClInclude Include="src\core\OpenGLErrorManager.hpp" />
-    <ClInclude Include="src\core\Renderer.hpp" />
     <ClInclude Include="src\core\RenderStateManager.hpp" />
     <ClInclude Include="src\core\Shader.hpp" />
     <ClInclude Include="src\core\Texture.hpp" />
@@ -73,6 +71,11 @@
     <ClInclude Include="src\projects\breakout\PowerUpManager.hpp" />
     <ClInclude Include="src\projects\breakout\TextRenderer.hpp" />
     <ClInclude Include="src\projects\simulation\Simulation.hpp" />
+    <ClInclude Include="src\projects\simulation\SimDisplayManager.hpp" />
+    <ClInclude Include="src\projects\zanget3uWorld\functionality\Renderer.hpp" />
+    <ClInclude Include="src\core\ResourceManager.hpp" />
+    <ClInclude Include="src\projects\simulation\ObjectManager.hpp" />
+    <ClInclude Include="src\projects\simulation\Object.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\levels\basic.level" />
@@ -94,5 +97,7 @@
     <None Include="res\shader\zanget3uWorld\primitive_fs.glsl" />
     <None Include="res\shader\zanget3uWorld\primitive_vs.glsl" />
     <None Include="res\shader\zanget3uWorld\standard_fs.glsl" />
+    <None Include="res\shader\simulation\object_vs.glsl" />
+    <None Include="res\shader\simulation\object_fs.glsl" />
   </ItemGroup>
 </Project>

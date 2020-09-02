@@ -76,6 +76,8 @@
     <ClInclude Include="src\projects\simulation\ObjectManager.hpp" />
     <ClInclude Include="src\projects\simulation\Object.hpp" />
     <ClInclude Include="src\core\Camera.hpp" />
+    <ClInclude Include="src\projects\simulation\Data.hpp" />
+    <ClInclude Include="src\projects\simulation\DataLoader.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\levels\basic.level" />

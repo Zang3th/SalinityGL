@@ -15,7 +15,7 @@ float lastX = WIDTH / 2.0f; //X-Coord of the mouse
 float lastY = HEIGHT / 2.0f; //Y-Coord of the mouse
 bool window_focused = false; //Is the window in focus?
 
-Camera camera(glm::vec3(-5.5f, 2.7f, -4.6f), glm::vec3(0.0f, 1.0f, 0.0f)); //Global camera object -> global because of callbacks
+Camera camera(glm::vec3(0.0f, 0.0f, -10.0f), glm::vec3(0.0f, 1.0f, 0.0f)); //Global camera object -> global because of callbacks
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
@@ -73,7 +73,7 @@ public:
 
 		glfwWindowHint(GLFW_SAMPLES, 4);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 		_window = glfwCreateWindow(WIDTH, HEIGHT, "Simulation", NULL, NULL);
 
@@ -94,7 +94,7 @@ public:
 		glfwSetMouseButtonCallback(_window, mouse_button_callback);
 		GLCall(glEnable(GL_DEPTH_TEST)); //Depthtesting
 		GLCall(glEnable(GL_MULTISAMPLE)); //Multisampling
-		//GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
+		GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
 	}
 	
 	SimDisplayManager()

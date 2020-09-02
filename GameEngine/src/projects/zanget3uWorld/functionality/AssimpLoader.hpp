@@ -66,7 +66,7 @@ public:
 			spdlog::warn(".obj File had no normals: {}", _filepath);
 			calculate_normals_per_vertex();
 		}
-
+		
 		setParameters();
 	}
 

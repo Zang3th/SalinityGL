@@ -3,6 +3,8 @@
 #include <map>
 #include "Texture.hpp"
 #include "Shader.hpp"
+#include "Data.hpp"
+#include "DataLoader.hpp"
 
 namespace ResourceManager
 {
@@ -52,5 +54,32 @@ namespace ResourceManager
 	{
 		for (auto const& shader : _shaders)
 			delete shader.second;
+	}
+	
+	//------------------------ Data ------------------------ 
+
+	//Storing
+	static std::map<std::string, Data*> _data;
+	
+	//Loading
+	static DataLoader Loader;
+	static void LoadData(const std::string& data_Filepath, const std::string& name)
+	{
+		Data* d = new Data();
+		Loader.retrieve(data_Filepath.c_str(), d);
+		_data[name] = d;
+	}
+	
+	//Retrieving
+	static Data* GetData(const std::string& name)
+	{
+		return _data[name];
+	}
+	
+	//Deleting
+	static void DeleteData()
+	{
+		for (auto const& data : _data)
+			delete data.second;
 	}
 }

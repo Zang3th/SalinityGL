@@ -36,7 +36,7 @@ int main()
 		simulation.clear();
 
 		//Update
-		simulation.updateModels();
+		//simulation.updateModels();
 
 		//Render
 		simulation.render();

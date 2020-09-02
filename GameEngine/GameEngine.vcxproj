@@ -167,6 +167,8 @@
     <ClInclude Include="src\projects\breakout\PowerUpObject.hpp" />
     <ClInclude Include="src\projects\breakout\Random.hpp" />
     <ClInclude Include="src\projects\breakout\TextRenderer.hpp" />
+    <ClInclude Include="src\projects\simulation\Data.hpp" />
+    <ClInclude Include="src\projects\simulation\DataLoader.hpp" />
     <ClInclude Include="src\projects\simulation\Object.hpp" />
     <ClInclude Include="src\projects\simulation\ObjectManager.hpp" />
     <ClInclude Include="src\projects\simulation\SimDisplayManager.hpp" />

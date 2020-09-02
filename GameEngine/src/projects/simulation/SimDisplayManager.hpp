@@ -15,7 +15,7 @@ float lastX = WIDTH / 2.0f; //X-Coord of the mouse
 float lastY = HEIGHT / 2.0f; //Y-Coord of the mouse
 bool window_focused = false; //Is the window in focus?
 
-Camera camera(glm::vec3(0.0f, 0.0f, -10.0f), glm::vec3(0.0f, 1.0f, 0.0f)); //Global camera object -> global because of callbacks
+Camera camera(glm::vec3(-35.0f, 15.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f)); //Global camera object -> global because of callbacks
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
@@ -94,7 +94,7 @@ public:
 		glfwSetMouseButtonCallback(_window, mouse_button_callback);
 		GLCall(glEnable(GL_DEPTH_TEST)); //Depthtesting
 		GLCall(glEnable(GL_MULTISAMPLE)); //Multisampling
-		GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
+		//GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
 	}
 	
 	SimDisplayManager()
@@ -132,7 +132,7 @@ public:
 
 	void clear()
 	{
-		GLCall(glClearColor(0.368f, 0.721f, 0.811f, 1.0f));
+		GLCall(glClearColor(0.0f, 0.0f, 0.0f, 1.0f));
 		GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 	}
 

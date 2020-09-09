@@ -168,11 +168,11 @@
     <ClInclude Include="src\projects\breakout\Random.hpp" />
     <ClInclude Include="src\projects\breakout\TextRenderer.hpp" />
     <ClInclude Include="src\projects\simulation\Data.hpp" />
-    <ClInclude Include="src\projects\simulation\DataLoader.hpp" />
     <ClInclude Include="src\projects\simulation\Object.hpp" />
     <ClInclude Include="src\projects\simulation\ObjectManager.hpp" />
     <ClInclude Include="src\projects\simulation\SimDisplayManager.hpp" />
     <ClInclude Include="src\projects\simulation\Simulation.hpp" />
+    <ClInclude Include="src\projects\simulation\MeshCreator.hpp" />
     <ClInclude Include="src\projects\zanget3uWorld\functionality\AssimpLoader.hpp" />
     <ClInclude Include="src\projects\zanget3uWorld\data\QuaderData.hpp" />
     <ClInclude Include="src\projects\zanget3uWorld\entities\CubemapEntity.hpp" />

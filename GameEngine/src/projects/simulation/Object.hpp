@@ -7,15 +7,26 @@
 #include "VertexArray.hpp"
 #include "IndexBuffer.hpp"
 
+struct Rotation3D
+{
+	float x_angle, y_angle, z_angle;
+
+	Rotation3D(const float& x_rotation = 0.0f, const float& y_rotation = 0.0f, const float& z_rotation = 0.0f)
+		: x_angle(x_rotation), y_angle(y_rotation), z_angle(z_rotation)
+	{
+		
+	}
+};
+
 class Object
 {
 private:
-	Texture* _texture = nullptr;
-	Shader* _shader = nullptr;
-	Data* _data = nullptr;
-	VertexBuffer* _vbo = nullptr, *_vbo2 = nullptr;
-	VertexArray* _vao = nullptr;
-	IndexBuffer* _ib = nullptr;
+	Texture *_texture = nullptr;
+	Shader *_shader = nullptr;
+	Data *_data = nullptr;
+	VertexBuffer *_vbo = nullptr, *_vbo2 = nullptr;
+	VertexArray *_vao = nullptr;
+	IndexBuffer *_ib = nullptr;
 	glm::mat4 _model, _view, _projection;
 	
 	void initRenderData()
@@ -55,7 +66,7 @@ public:
 		delete _ib;
 	}
 
-	void render(const glm::vec3& color, const glm::vec3& position, const float& size, const float& rotation = 0.0f)
+	void render(const glm::vec3& color, const glm::vec3& translation, const float& scalar, const Rotation3D& rotation)
 	{
 		//Matrices
 		_projection = glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.1f, 1000.0f);
@@ -65,9 +76,11 @@ public:
 		_shader->bind();		
 
 		//Transformations
-		_model = glm::translate(_model, position);
-		_model = glm::rotate(_model, glm::radians(rotation), glm::vec3(0.0f, 1.0f, 0.0f));
-		_model = glm::scale(_model, glm::vec3(size));
+		_model = glm::translate(_model, translation);
+		_model = glm::rotate(_model, glm::radians(rotation.x_angle), glm::vec3(1.0f, 0.0f, 0.0f));
+		_model = glm::rotate(_model, glm::radians(rotation.y_angle), glm::vec3(0.0f, 1.0f, 0.0f));
+		_model = glm::rotate(_model, glm::radians(rotation.z_angle), glm::vec3(0.0f, 0.0f, 1.0f));
+		_model = glm::scale(_model, glm::vec3(scalar));
 		
 		//Set uniforms
 		_shader->SetUniformMat4f("model", _model);

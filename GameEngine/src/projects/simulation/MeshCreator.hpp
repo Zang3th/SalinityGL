@@ -3,13 +3,17 @@
 #include <assimp/Importer.hpp>      //C++ importer interface
 #include <assimp/scene.h>           //Output data structure
 #include <assimp/postprocess.h>     //Post processing flags
+#include <glm/vec2.hpp>
+#include <glm/vec3.hpp>
 #include "Data.hpp"
 
-class DataLoader
+class MeshCreator
 {
 public:
-	void retrieve(const char* filepath, Data* data) const
+	static Data* loadFromFile(const char* filepath)
 	{
+		Data *data = new Data();
+
 		Assimp::Importer importer;
 		const aiScene* scene = importer.ReadFile(filepath, aiProcess_Triangulate);
 		if (!scene)
@@ -89,6 +93,40 @@ public:
 			{
 				spdlog::warn("Failed to retrieve normals {}", filepath);
 			}
-		}		
+		}
+
+		return data;
+	}
+	
+	static Data* createPlane(const unsigned int& x, const unsigned int& z, const float& tileSize)
+	{
+		Data *data = new Data();		
+		
+		for (int j = 0; j <= z; ++j)
+		{
+			for (int i = 0; i <= x; ++i)
+			{
+				float x_pos = (float)i * tileSize;
+				float y_pos = 0.0f;
+				float z_pos = (float)j * tileSize;
+				
+				data->_vertices.emplace_back(glm::vec3(x_pos, y_pos, z_pos));
+				data->_texCoords.emplace_back(glm::vec2(x_pos / tileSize, z_pos / tileSize));
+
+				if ((j != z) && (i != x))
+				{
+					const int row1 = j * (x + 1);
+					const int row2 = (j + 1) * (x + 1);
+
+					//Triangle 1
+					data->_indices.emplace_back(glm::uvec3(row1 + i, row1 + i + 1, row2 + i + 1));
+
+					//Triangle 2
+					data->_indices.emplace_back(glm::uvec3(row1 + i, row2 + i + 1, row2 + i));
+				}
+			}
+		}
+		
+		return data;
 	}
 };

@@ -132,9 +132,9 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>GLEW_STATIC;_CRT_SECURE_NO_WARNINGS;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GLEW_STATIC;_CRT_SECURE_NO_WARNINGS;NDEBUG;_CONSOLE;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>src\core;src\projects\breakout;src\projects\zanget3uWorld\data;src\projects\zanget3uWorld\entities;src\projects\zanget3uWorld\model;src\projects\zanget3uWorld\functionality;src\vendor;$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\opencv\include;$(SolutionDir)Dependencies\assimp\include;$(SolutionDir)Dependencies\irrKlang\include;$(SolutionDir)Dependencies\freetype\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src\core;src\projects\breakout;src\projects\zanget3uWorld\data;src\projects\zanget3uWorld\entities;src\projects\zanget3uWorld\functionality;src\projects\zanget3uWorld\model;src\projects\simulation;src\vendor;$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\opencv\include;$(SolutionDir)Dependencies\assimp\include;$(SolutionDir)Dependencies\irrKlang\include;$(SolutionDir)Dependencies\freetype\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

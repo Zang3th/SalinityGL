@@ -1,7 +1,12 @@
+////#define DEBUG
+//
 //#include "GameDisplayManager.hpp"
-//#include <imgui/imgui.h>
-//#include <imgui/imgui_impl_glfw.h>
-//#include <imgui/imgui_impl_opengl3.h>
+//
+//#ifdef DEBUG
+//	#include <imgui/imgui.h>
+//	#include <imgui/imgui_impl_glfw.h>
+//	#include <imgui/imgui_impl_opengl3.h>
+//#endif
 //
 //int main()
 //{	
@@ -13,22 +18,26 @@
 //	breakout.init();
 //
 //	//Setup ImGui
-//	IMGUI_CHECKVERSION();
-//	ImGui::CreateContext();
-//	ImGui::StyleColorsDark(); //Setup ImGui style	
-//	ImGui_ImplGlfw_InitForOpenGL(gameDisplayManager.getWindow(), true); //Setup Platform/Renderer bindings
-//	ImGui_ImplOpenGL3_Init("#version 330");
-//
+//	#ifdef DEBUG
+//		IMGUI_CHECKVERSION();
+//		ImGui::CreateContext();
+//		ImGui::StyleColorsDark(); //Setup ImGui style	
+//		ImGui_ImplGlfw_InitForOpenGL(gameDisplayManager.getWindow(), true); //Setup Platform/Renderer bindings
+//		ImGui_ImplOpenGL3_Init("#version 330");
+//	#endif
+//	
 //	while (!gameDisplayManager.WindowShouldClose())
 //	{
 //		//Measure Frametime
 //		gameDisplayManager.measureFrameTime();
-//
-//		//Start GUI-Frame
-//		ImGui_ImplOpenGL3_NewFrame();
-//		ImGui_ImplGlfw_NewFrame();
-//		ImGui::NewFrame();
-//
+//		
+//		#ifdef DEBUG
+//			//Start GUI-Frame
+//			ImGui_ImplOpenGL3_NewFrame();
+//			ImGui_ImplGlfw_NewFrame();
+//			ImGui::NewFrame();
+//		#endif
+//		
 //		//Poll events
 //		gameDisplayManager.pollEvents();
 //
@@ -45,6 +54,7 @@
 //		breakout.render();
 //
 //		//GUI Stuff
+//		#ifdef DEBUG
 //		{
 //			ImGui::Begin("General stuff");
 //			ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
@@ -55,20 +65,25 @@
 //			ImGui::Text("PadIncrease: %d", ACTIVE_PADINREASE_EFFECTS);
 //			ImGui::End();
 //		}
-//
+//		#endif
+//		
 //		//Update stuff
 //		{
-//			ImGui::Render();
-//			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+//			#ifdef DEBUG
+//				ImGui::Render();
+//				ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+//			#endif
 //			gameDisplayManager.updateDisplay();
 //		}
 //	}
 //
 //	//CleanUP Stuff
 //	{
-//		ImGui_ImplOpenGL3_Shutdown();
-//		ImGui_ImplGlfw_Shutdown();
-//		ImGui::DestroyContext();
+//		#ifdef DEBUG
+//			ImGui_ImplOpenGL3_Shutdown();
+//			ImGui_ImplGlfw_Shutdown();
+//			ImGui::DestroyContext();
+//		#endif
 //		gameDisplayManager.closeDisplay();
 //	}
 //

@@ -28,6 +28,8 @@ private:
 	VertexArray *_vao = nullptr;
 	IndexBuffer *_ib = nullptr;
 	glm::mat4 _model, _view, _projection;
+	glm::vec3 _color;
+	unsigned int _vertices;
 	
 	void initRenderData()
 	{
@@ -44,6 +46,9 @@ private:
 		//Create ib
 		_ib = new IndexBuffer(&_data->_indices[0], _data->_indices.size() * sizeof(glm::uvec3));
 
+		//Vertices to render
+		_vertices = _data->_indices.size() * 3;
+		
 		//Unbind vao and vbo
 		_vbo->unbind();
 		_vbo2->unbind();
@@ -51,11 +56,18 @@ private:
 	}	
 	
 public:
-	Object(Texture* texture, Shader* shader, Data* data)
-		: _texture(texture), _shader(shader), _data(data)
+	Object(Texture* texture, Shader* shader, Data* data, const glm::vec3& color, const glm::vec3& translation, const float& scalar, const Rotation3D& rotation)
+		: _texture(texture), _shader(shader), _data(data), _color(color)
 	{
-		initRenderData();
+		initRenderData();		
+		
+		//Transformations
 		_model = glm::mat4(1.0f);
+		_model = glm::translate(_model, translation);
+		_model = glm::rotate(_model, glm::radians(rotation.x_angle), glm::vec3(1.0f, 0.0f, 0.0f));
+		_model = glm::rotate(_model, glm::radians(rotation.y_angle), glm::vec3(0.0f, 1.0f, 0.0f));
+		_model = glm::rotate(_model, glm::radians(rotation.z_angle), glm::vec3(0.0f, 0.0f, 1.0f));
+		_model = glm::scale(_model, glm::vec3(scalar));
 	}
 
 	~Object()
@@ -66,27 +78,20 @@ public:
 		delete _ib;
 	}
 
-	void render(const glm::vec3& color, const glm::vec3& translation, const float& scalar, const Rotation3D& rotation)
+	void render()
 	{
 		//Matrices
 		_projection = glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.1f, 1000.0f);
 		_view = camera.GetViewMatrix();
-		_model = glm::mat4(1.0f);
+		//_model = glm::mat4(1.0f);
 		
-		_shader->bind();		
-
-		//Transformations
-		_model = glm::translate(_model, translation);
-		_model = glm::rotate(_model, glm::radians(rotation.x_angle), glm::vec3(1.0f, 0.0f, 0.0f));
-		_model = glm::rotate(_model, glm::radians(rotation.y_angle), glm::vec3(0.0f, 1.0f, 0.0f));
-		_model = glm::rotate(_model, glm::radians(rotation.z_angle), glm::vec3(0.0f, 0.0f, 1.0f));
-		_model = glm::scale(_model, glm::vec3(scalar));
+		_shader->bind();			
 		
 		//Set uniforms
 		_shader->SetUniformMat4f("model", _model);
 		_shader->SetUniformMat4f("projection", _projection);
 		_shader->SetUniformMat4f("view", _view);		
-		_shader->SetUniformVec3("color", color);
+		_shader->SetUniformVec3("color", _color);
 
 		//Set texture
 		_texture->bind();
@@ -95,6 +100,11 @@ public:
 		_vao->bind();
 
 		//Render object
-		GLCall(glDrawElements(GL_TRIANGLES, (GLsizei)_data->_indices.size() * 3, GL_UNSIGNED_INT, nullptr));
+		GLCall(glDrawElements(GL_TRIANGLES, (GLsizei)_vertices, GL_UNSIGNED_INT, nullptr));
+	}
+
+	unsigned int getVertices() const
+	{
+		return _vertices;
 	}
 };

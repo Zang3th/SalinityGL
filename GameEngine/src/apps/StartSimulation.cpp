@@ -50,6 +50,7 @@ int main()
 			ImGui::Text("Camera-Yaw: %f, Camera-Pitch: %f", camera.Yaw, camera.Pitch);
 			ImGui::Text("Camera-Front: X: %f, Y: %f, Z: %f", camera.Front.x, camera.Front.y, camera.Front.z);
 			ImGui::Text("---------------------------------------------");
+			ImGui::Text("Rendered Vertices: %d", VERTICES_TO_RENDER);
 			ImGui::End();
 		}
 

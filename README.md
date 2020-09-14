@@ -1,41 +1,58 @@
 # GameEngine with OpenGL
 
 #### Objectives:
-            - OpenGL-Wrapper with abstraction
-            - Should be easy to set up: 
-                 - One line of code for starting/rendering .. (currently not the case!)
-            
-#### Already implemented:
-            - Little GUI
-            - Abstracted VAO, VBO, IB, Display-/Inputmanagement, Shader, Data-/Modelclasses etc.
+            - OpenGL-Wrapper functions
+                        - Should be easy to use
+
+#### Structure:
+            - Core engine functionalities are in "GameEngine-core"
+            - "Breakout", "Zanget3uWorld" and "Simulation"
+                        - actual implementations of projects with special functionalities
+
+#### Core engine functionalities (Methods with enough abstraction to be used across multiple projects):
+            - Abstracted VAO, VBO, IB, Shader, Texture and Data-classes
             - Camerasystem (Firstperson)
             - Simple OBJ-Fileparser
-            - Terraincreation via Heightmap and texturing via Blendmap
-            - Playerclass with movement
             - Audiomanager for sounds and backgroundmusic
-            - Skybox
-            - Pointlights
-            - Normalcalculations per vertex or per triangle
-            - Terraineditor:
-                 - Verticepicking via raycasting (ray can be visualized)
-                 - Picked vertice is colored and can be ascended/descended
-                 
+            - Cubemap texture creation (for skyboxes)
+            - Error/Logging-system
+            - Filemanagement
+            - Simple mesh creation (planes, tiles ...)
+
+#### Special functionalities in projects (Working features which are still not abstract enough to be put in the engine core): 
+            - Breakout (my implemenation of the game from learnopengl.com):
+                        - 2D Sprite-Renderer
+                        - Game level creation via fileparsing
+                        - Text rendering
+                        - 2D Particle-Generator
+                        
+            - Zanget3uWorld:
+                        - Abstracted Entity-/Modelclasses
+                        - Terraincreation via Heightmap and texturing via Blendmap
+                        - Pointlights
+                        - Normalcalculations per vertex or per triangle
+                        - Terraineditor:
+                                    - Verticepicking via raycasting (ray can be visualized)
+                                    - Picked vertice is colored and can be ascended/descended
+                                    
+            - Simulation:
+                        - Abstracted Data-/Objectclasses 
+                        - Physics engine with bullet3
+            
+            - Shared across all projects:
+                        - Display-/Inputmanagement
+                        - Little GUI with ImGUI
+                        
 #### Plans for future versions:
             - Animation
             - Game AI / pathfinding
-            - Proper collsiondetection, maybe via boundingboxes/spheres
             - Enhanced water quality (proper watershader)
-            - Particle Rendering System
-            - Improved performance and less rendercalls (maybe Instancing or Batch Rendering System)            
+            - Instancing or Batch Rendering System           
             
  #### Potential problems and things I try to work on:
-            - Too many (partly unnecessary) dependencies (e.g. OpenCV)
             - Naming conventions: Mostly english (I hope). Sorry though if some comments are in german.
             - Not using separate .h and .cpp files: I'm lazy  
-            - And many other things...
-            
-#### Other:
-            - Versions before the 25th commit don't have OpenCV included 
+            - And many other things...            
             
 #### License:
             - This code is provided under a BSD-style license. See the file LICENSE for details.

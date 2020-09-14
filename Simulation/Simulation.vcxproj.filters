@@ -50,6 +50,7 @@
     <ClInclude Include="src\vendor\spdlog\tweakme.h" />
     <ClInclude Include="src\vendor\spdlog\async.h" />
     <ClInclude Include="src\vendor\stb_image\stb_image.h" />
+    <ClInclude Include="src\app\ParticleGenerator3D.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\start\StartSimulation.cpp" />

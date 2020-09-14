@@ -163,6 +163,7 @@
     <ClInclude Include="src\core\Cubemap.hpp" />
     <ClInclude Include="src\core\Filemanager.hpp" />
     <ClInclude Include="src\core\IndexBuffer.hpp" />
+    <ClInclude Include="src\core\Random.hpp" />
     <ClInclude Include="src\core\RenderStateManager.hpp" />
     <ClInclude Include="src\core\Shader.hpp" />
     <ClInclude Include="src\core\Texture.hpp" />

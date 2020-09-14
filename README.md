@@ -7,7 +7,7 @@
 #### Structure:
             - Core engine functionalities are in "GameEngine-core"
             - "Breakout", "Zanget3uWorld" and "Simulation"
-                        - actual implementations of projects with special functionalities
+                        - Actual implementations of projects with special functionalities
 
 #### Core engine functionalities (Methods with enough abstraction to be used across multiple projects):
             - Abstracted VAO, VBO, IB, Shader, Texture and Data-classes

@@ -21,7 +21,7 @@ struct Rotation3D
 
 class Object
 {
-private:
+public:
 	Texture *_texture = nullptr;
 	Shader *_shader = nullptr;
 	Data *_data = nullptr;

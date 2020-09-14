@@ -33,4 +33,9 @@ public:
 		GLCall(glVertexAttribPointer(index, size, type, normalized, stride, offset));
 		GLCall(glEnableVertexAttribArray(index));
 	}
+
+	void AttributeDivisor(GLuint index, GLuint divisor)
+	{
+		GLCall(glVertexAttribDivisor(index, divisor));
+	}
 };

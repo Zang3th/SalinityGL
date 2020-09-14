@@ -10,7 +10,6 @@
     <ClInclude Include="src\app\ParticleGenerator.hpp" />
     <ClInclude Include="src\app\PowerUpManager.hpp" />
     <ClInclude Include="src\app\PowerUpObject.hpp" />
-    <ClInclude Include="src\app\Random.hpp" />
     <ClInclude Include="src\app\SpriteRenderer.hpp" />
     <ClInclude Include="src\vendor\glm\common.hpp" />
     <ClInclude Include="src\vendor\glm\exponential.hpp" />

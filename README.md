@@ -19,8 +19,8 @@
             - Filemanagement
             - Simple mesh creation (planes, tiles ...)
 
-#### Special functionalities in projects (Working features which are still not abstract enough to be put in the engine core): 
-            - Breakout (my implemenation of the game from learnopengl.com):
+#### Project specific functionalities (Working features which are still not abstract enough to be put in the engine core): 
+            - Breakout (my implementation of the game from learnopengl.com):
                         - 2D Sprite-Renderer
                         - Game level creation via fileparsing
                         - Text rendering

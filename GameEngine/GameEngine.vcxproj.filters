@@ -1,54 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="src\vendor\imgui\imgui.cpp" />
-    <ClCompile Include="src\vendor\imgui\imgui_demo.cpp" />
-    <ClCompile Include="src\vendor\imgui\imgui_draw.cpp" />
-    <ClCompile Include="src\vendor\imgui\imgui_impl_glfw.cpp" />
-    <ClCompile Include="src\vendor\imgui\imgui_impl_opengl3.cpp" />
-    <ClCompile Include="src\vendor\imgui\imgui_widgets.cpp" />
     <ClCompile Include="src\vendor\stb_image\stb_image.cpp" />
-    <ClCompile Include="src\apps\StartBreakout.cpp" />
-    <ClCompile Include="src\apps\StartSimulation.cpp" />
-    <ClCompile Include="src\apps\StartZanget3uWorld.cpp" />
+    <ClCompile Include="src\start\start_core.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\vendor\imgui\imconfig.h" />
-    <ClInclude Include="src\vendor\imgui\imgui.h" />
-    <ClInclude Include="src\vendor\imgui\imgui_impl_glfw.h" />
-    <ClInclude Include="src\vendor\imgui\imgui_impl_opengl3.h" />
-    <ClInclude Include="src\vendor\imgui\imgui_internal.h" />
-    <ClInclude Include="src\vendor\imgui\imstb_rectpack.h" />
-    <ClInclude Include="src\vendor\imgui\imstb_textedit.h" />
-    <ClInclude Include="src\vendor\imgui\imstb_truetype.h" />
-    <ClInclude Include="src\vendor\stb_image\stb_image.h" />
-    <ClInclude Include="src\projects\breakout\Game.hpp" />
-    <ClInclude Include="src\projects\breakout\GameDisplayManager.hpp" />
-    <ClInclude Include="src\projects\breakout\GameLevelCreator.hpp" />
-    <ClInclude Include="src\projects\breakout\SpriteRenderer.hpp" />
-    <ClInclude Include="src\projects\zanget3uWorld\data\GroundData.hpp" />
-    <ClInclude Include="src\projects\zanget3uWorld\data\Heightmap.hpp" />
-    <ClInclude Include="src\projects\zanget3uWorld\data\LightPositions.hpp" />
-    <ClInclude Include="src\projects\zanget3uWorld\data\PlaneData.hpp" />
-    <ClInclude Include="src\projects\zanget3uWorld\data\QuaderData.hpp" />
-    <ClInclude Include="src\projects\zanget3uWorld\data\RawData.hpp" />
-    <ClInclude Include="src\projects\zanget3uWorld\entities\CubemapEntity.hpp" />
-    <ClInclude Include="src\projects\zanget3uWorld\entities\EntityManager.hpp" />
-    <ClInclude Include="src\projects\zanget3uWorld\entities\GrassEntity.hpp" />
-    <ClInclude Include="src\projects\zanget3uWorld\entities\LightEntity.hpp" />
-    <ClInclude Include="src\projects\zanget3uWorld\entities\ObjmodelEntity.hpp" />
-    <ClInclude Include="src\projects\zanget3uWorld\entities\PlaneEntity.hpp" />
-    <ClInclude Include="src\projects\zanget3uWorld\entities\PlayerEntity.hpp" />
-    <ClInclude Include="src\projects\zanget3uWorld\entities\RayEntity.hpp" />
-    <ClInclude Include="src\projects\zanget3uWorld\entities\TerrainEntity.hpp" />
-    <ClInclude Include="src\projects\zanget3uWorld\entities\TreeEntity.hpp" />
-    <ClInclude Include="src\projects\zanget3uWorld\functionality\MousePicker.hpp" />
-    <ClInclude Include="src\projects\zanget3uWorld\model\Basemodel.hpp" />
-    <ClInclude Include="src\projects\zanget3uWorld\model\Groundmodel.hpp" />
-    <ClInclude Include="src\projects\zanget3uWorld\model\Leafmodel.hpp" />
-    <ClInclude Include="src\projects\zanget3uWorld\model\Lightmodel.hpp" />
-    <ClInclude Include="src\projects\zanget3uWorld\model\Primitivemodel.hpp" />
-    <ClInclude Include="src\projects\zanget3uWorld\model\Standardmodel.hpp" />
     <ClInclude Include="src\core\Cubemap.hpp" />
     <ClInclude Include="src\core\IndexBuffer.hpp" />
     <ClInclude Include="src\core\OpenGLErrorManager.hpp" />
@@ -59,37 +15,54 @@
     <ClInclude Include="src\core\VertexBuffer.hpp" />
     <ClInclude Include="src\core\AudioManager.hpp" />
     <ClInclude Include="src\core\Filemanager.hpp" />
-    <ClInclude Include="src\projects\zanget3uWorld\functionality\AssimpLoader.hpp" />
-    <ClInclude Include="src\projects\zanget3uWorld\model\Player.hpp" />
-    <ClInclude Include="src\projects\zanget3uWorld\functionality\DisplayManager.hpp" />
-    <ClInclude Include="src\projects\breakout\GameObject.hpp" />
-    <ClInclude Include="src\projects\breakout\BallObject.hpp" />
-    <ClInclude Include="src\projects\breakout\ParticleGenerator.hpp" />
-    <ClInclude Include="src\projects\breakout\Random.hpp" />
-    <ClInclude Include="src\projects\breakout\PowerUpObject.hpp" />
-    <ClInclude Include="src\projects\breakout\PowerUpManager.hpp" />
-    <ClInclude Include="src\projects\breakout\TextRenderer.hpp" />
-    <ClInclude Include="src\projects\simulation\Simulation.hpp" />
-    <ClInclude Include="src\projects\simulation\SimDisplayManager.hpp" />
-    <ClInclude Include="src\projects\zanget3uWorld\functionality\Renderer.hpp" />
     <ClInclude Include="src\core\ResourceManager.hpp" />
-    <ClInclude Include="src\projects\simulation\ObjectManager.hpp" />
-    <ClInclude Include="src\projects\simulation\Object.hpp" />
     <ClInclude Include="src\core\Camera.hpp" />
-    <ClInclude Include="src\projects\simulation\Data.hpp" />
-    <ClInclude Include="src\projects\simulation\MeshCreator.hpp" />
-    <ClInclude Include="src\projects\simulation\PhysicsEngine.hpp" />
+    <ClInclude Include="src\vendor\glm\common.hpp" />
+    <ClInclude Include="src\vendor\glm\exponential.hpp" />
+    <ClInclude Include="src\vendor\glm\ext.hpp" />
+    <ClInclude Include="src\vendor\glm\fwd.hpp" />
+    <ClInclude Include="src\vendor\glm\geometric.hpp" />
+    <ClInclude Include="src\vendor\glm\glm.hpp" />
+    <ClInclude Include="src\vendor\glm\integer.hpp" />
+    <ClInclude Include="src\vendor\glm\mat2x2.hpp" />
+    <ClInclude Include="src\vendor\glm\mat2x3.hpp" />
+    <ClInclude Include="src\vendor\glm\mat2x4.hpp" />
+    <ClInclude Include="src\vendor\glm\mat3x2.hpp" />
+    <ClInclude Include="src\vendor\glm\mat3x3.hpp" />
+    <ClInclude Include="src\vendor\glm\mat3x4.hpp" />
+    <ClInclude Include="src\vendor\glm\mat4x2.hpp" />
+    <ClInclude Include="src\vendor\glm\mat4x3.hpp" />
+    <ClInclude Include="src\vendor\glm\mat4x4.hpp" />
+    <ClInclude Include="src\vendor\glm\matrix.hpp" />
+    <ClInclude Include="src\vendor\glm\packing.hpp" />
+    <ClInclude Include="src\vendor\glm\trigonometric.hpp" />
+    <ClInclude Include="src\vendor\glm\vec2.hpp" />
+    <ClInclude Include="src\vendor\glm\vec3.hpp" />
+    <ClInclude Include="src\vendor\glm\vec4.hpp" />
+    <ClInclude Include="src\vendor\glm\vector_relational.hpp" />
+    <ClInclude Include="src\vendor\spdlog\version.h" />
+    <ClInclude Include="src\vendor\spdlog\async.h" />
+    <ClInclude Include="src\vendor\spdlog\async_logger.h" />
+    <ClInclude Include="src\vendor\spdlog\async_logger-inl.h" />
+    <ClInclude Include="src\vendor\spdlog\common.h" />
+    <ClInclude Include="src\vendor\spdlog\common-inl.h" />
+    <ClInclude Include="src\vendor\spdlog\formatter.h" />
+    <ClInclude Include="src\vendor\spdlog\logger.h" />
+    <ClInclude Include="src\vendor\spdlog\logger-inl.h" />
+    <ClInclude Include="src\vendor\spdlog\spdlog.h" />
+    <ClInclude Include="src\vendor\spdlog\spdlog-inl.h" />
+    <ClInclude Include="src\vendor\spdlog\tweakme.h" />
+    <ClInclude Include="src\vendor\stb_image\stb_image.h" />
+    <ClInclude Include="src\core\Data.hpp" />
+    <ClInclude Include="src\core\MeshCreator.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\levels\basic.level" />
-    <None Include="res\shader\breakout\breakout_fs.glsl" />
     <None Include="res\shader\breakout\breakout_vs.glsl" />
     <None Include="res\shader\breakout\particle_vs.glsl" />
     <None Include="res\shader\breakout\particle_fs.glsl" />
     <None Include="res\shader\breakout\text_2D_vs.glsl" />
     <None Include="res\shader\breakout\text_2D_fs.glsl" />
     <None Include="res\shader\zanget3uWorld\standard_vs.glsl" />
-    <None Include="res\shader\zanget3uWorld\cubemap_fs.glsl" />
     <None Include="res\shader\zanget3uWorld\cubemap_vs.glsl" />
     <None Include="res\shader\zanget3uWorld\ground_fs.glsl" />
     <None Include="res\shader\zanget3uWorld\ground_vs.glsl" />
@@ -101,6 +74,8 @@
     <None Include="res\shader\zanget3uWorld\primitive_vs.glsl" />
     <None Include="res\shader\zanget3uWorld\standard_fs.glsl" />
     <None Include="res\shader\simulation\object_vs.glsl" />
-    <None Include="res\shader\simulation\object_fs.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="src\vendor\glm\CMakeLists.txt" />
   </ItemGroup>
 </Project>

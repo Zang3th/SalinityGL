@@ -15,7 +15,7 @@ float lastX = WIDTH / 2.0f; //X-Coord of the mouse
 float lastY = HEIGHT / 2.0f; //Y-Coord of the mouse
 bool window_focused = false; //Is the window in focus?
 
-Camera camera(glm::vec3(-35.0f, 15.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f)); //Global camera object -> global because of callbacks
+Camera camera(glm::vec3(-40.0f, 50.0f, -14.0f), glm::vec3(0.0f, 1.0f, 0.0f)); //Global camera object -> global because of callbacks
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {

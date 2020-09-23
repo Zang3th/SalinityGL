@@ -87,10 +87,11 @@ public:
 		{
 			btTransform t;
 			_rigidBody->getMotionState()->getWorldTransform(t);
-			//std::cout << "x: " << t.getOrigin().getX() << " | y: " << t.getOrigin().getY() << " | z: " << t.getOrigin().getZ() << "\n";
-			glm::vec3 transform(t.getOrigin().getX(), t.getOrigin().getY(), t.getOrigin().getZ());
-			_model = glm::mat4(1.0f);
-			_model = glm::translate(_model, transform);
+
+			glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), t.getRotation().getAngle(), glm::vec3(t.getRotation().getAxis().getX(), t.getRotation().getAxis().getY(), t.getRotation().getAxis().getZ()));
+			glm::mat4 translation = glm::translate(glm::mat4(1.0f), glm::vec3(t.getOrigin().getX(), t.getOrigin().getY(), t.getOrigin().getZ()));
+
+			_model = translation * rotation;
 			_model = glm::scale(_model, glm::vec3(_size));
 		}		
 

@@ -145,7 +145,7 @@
   <ItemGroup>
     <ClInclude Include="src\app\Object.hpp" />
     <ClInclude Include="src\app\ObjectManager.hpp" />
-    <ClInclude Include="src\app\ParticleGenerator3D.hpp" />
+    <ClInclude Include="src\app\ObjectSpawner.hpp" />
     <ClInclude Include="src\app\PhysicsEngine.hpp" />
     <ClInclude Include="src\app\SimDisplayManager.hpp" />
     <ClInclude Include="src\app\Simulation.hpp" />

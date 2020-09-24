@@ -49,11 +49,12 @@ public:
 		_objectSpawner->init(ResourceManager::GetTexture("Sphere_texture"), ResourceManager::GetShader("Object_shader"), ResourceManager::GetData("Sphere_data"));
 				
 		//Plane resources
-		unsigned int plane_x = 100;
-		unsigned int plane_z = 100;
+		unsigned int plane_x = 200;
+		unsigned int plane_z = 200;
+		unsigned int tile_size = 6;
 		ResourceManager::LoadShader("../res/shader/simulation/object_vs.glsl", "../res/shader/simulation/object_fs.glsl", "Object_shader");
 		ResourceManager::LoadTexture("../res/textures/Block.jpg", "Block_texture");
-		ResourceManager::addData(MeshCreator::createPlane(plane_x, plane_z, 1), "Plane_data");
+		ResourceManager::addData(MeshCreator::createPlane(plane_x / tile_size, plane_z / tile_size, tile_size), "Plane_data");
 
 		//Add plane to renderer and to physics simulation
 		{
@@ -73,7 +74,7 @@ public:
 						ResourceManager::GetTexture("Block_texture"),
 						ResourceManager::GetShader("Object_shader"),
 						ResourceManager::GetData("Plane_data"),
-						glm::vec3(1.0f, 1.0f, 1.0f),
+						glm::vec3(0.4f, 0.4f, 0.4f),
 						position,
 						1.0f,
 						glm::vec3(0.0f, 0.0f, 0.0f),

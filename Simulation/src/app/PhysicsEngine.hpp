@@ -3,6 +3,7 @@
 #include <btBulletDynamicsCommon.h>
 #include "Object.hpp"
 #include <map>
+#include "Random.hpp"
 
 unsigned int PHYSIC_BODY_INDEX = 0;
 
@@ -31,6 +32,11 @@ private:
 
 		//Preconfigure sphere shape -> can be reused
 		_sphereShape = new btSphereShape(1.0f);
+	}
+
+	glm::mat4 resetRandom() 
+	{
+
 	}
 
 public:
@@ -109,10 +115,22 @@ public:
 	{
 		btTransform t;
 		_physicBodies[physicIndex]->getMotionState()->getWorldTransform(t);
-		glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), t.getRotation().getAngle(), glm::vec3(t.getRotation().getAxis().getX(), t.getRotation().getAxis().getY(), t.getRotation().getAxis().getZ()));
-		glm::mat4 translation = glm::translate(glm::mat4(1.0f), glm::vec3(t.getOrigin().getX(), t.getOrigin().getY(), t.getOrigin().getZ()));
+		glm::vec3 pos = glm::vec3(t.getOrigin().getX(), t.getOrigin().getY(), t.getOrigin().getZ());
 		
-		return translation * rotation;
+		//Reset object if it's far below the surface
+		if (pos.y < -10.0f) 
+		{
+			glm::vec3 new_pos = glm::vec3(random::Float() * 200.0f, random::Float() * 50.0f, random::Float() * 200.0f);
+			_physicBodies[physicIndex]->clearForces();
+			_physicBodies[physicIndex]->setMotionState(new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(new_pos.x, new_pos.y, new_pos.z))));			
+			return glm::translate(glm::mat4(1.0f), new_pos);
+		}			
+		else 
+		{
+			glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), t.getRotation().getAngle(), glm::vec3(t.getRotation().getAxis().getX(), t.getRotation().getAxis().getY(), t.getRotation().getAxis().getZ()));
+			glm::mat4 translation = glm::translate(glm::mat4(1.0f), pos);
+			return translation * rotation;
+		}		
 	}
 
 	void removeFromSimulation(const unsigned int& physicIndex)

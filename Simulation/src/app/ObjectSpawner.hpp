@@ -3,7 +3,7 @@
 #include "Random.hpp"
 #include "PhysicsEngine.hpp"
 
-const unsigned int INSTANCES = 250;
+const unsigned int INSTANCES = 300;
 
 class ObjectSpawner
 {
@@ -61,11 +61,11 @@ private:
 			_colorBuffer.emplace_back(random::Float(), random::Float(), random::Float());
 
 			//Model matrix
-			glm::vec3 pos = glm::vec3(random::Float() * 100.0f, random::Float() * 50.0f, random::Float() * 100.0f);
+			glm::vec3 pos = glm::vec3(random::Float() * 200.0f, random::Float() * 50.0f, random::Float() * 200.0f);
 			_modelBuffer.emplace_back(glm::translate(glm::mat4(1.0f), pos));
 
 			//Add to physics simulation
-			_physicBodyIndices.emplace_back(_physicsEngine->addSphere(pos, 20.0, 0.8f, 1.0f));
+			_physicBodyIndices.emplace_back(_physicsEngine->addSphere(pos, 60.0, 0.8f, 1.0f));
 		}		
 
 		//Create object
@@ -139,7 +139,7 @@ public:
 		//Get the world transform for all instances
 		for (int i = 0; i < INSTANCES; i++) 
 			_modelBuffer.at(i) = _physicsEngine->getWorldTransform(_physicBodyIndices.at(i));
-
+			
 		//Update model matrix in the vertex shader
 		_objectInstance->_vbo4->bind();
 		_objectInstance->_vbo4->updateData(&_modelBuffer[0], _modelBuffer.size() * sizeof(glm::mat4));

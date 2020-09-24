@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Random.hpp"
+#include "PhysicsEngine.hpp"
 
 const unsigned int INSTANCES = 250;
 
@@ -49,7 +50,7 @@ private:
 
 	//Physics stuff
 	PhysicsEngine* _physicsEngine = nullptr;
-	std::vector<btRigidBody*> _rigidBodies;
+	std::vector<unsigned int> _physicBodyIndices;
 	
 	void initData(Texture* texture, Shader* shader, Data* data)
 	{	
@@ -64,7 +65,7 @@ private:
 			_modelBuffer.emplace_back(glm::translate(glm::mat4(1.0f), pos));
 
 			//Add to physics simulation
-			_rigidBodies.emplace_back(_physicsEngine->addSphere(pos, 1.0f, 20.0, 0.8f, 1.0f));
+			_physicBodyIndices.emplace_back(_physicsEngine->addSphere(pos, 20.0, 0.8f, 1.0f));
 		}		
 
 		//Create object
@@ -126,9 +127,6 @@ public:
 	~ObjectSpawner()
 	{
 		delete _objectInstance;
-		
-		for (btRigidBody* bodies : _rigidBodies)
-			delete bodies;
 	}
 	
 	void init(Texture* texture, Shader* shader, Data* data)
@@ -138,18 +136,9 @@ public:
 
 	void render()
 	{
-		//Do the physics for all instances
-		btTransform t;
+		//Get the world transform for all instances
 		for (int i = 0; i < INSTANCES; i++) 
-		{
-			//Get world transform
-			_rigidBodies.at(i)->getMotionState()->getWorldTransform(t);
-
-			//Calculate and set corresponding model matrix
-			glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), t.getRotation().getAngle(), glm::vec3(t.getRotation().getAxis().getX(), t.getRotation().getAxis().getY(), t.getRotation().getAxis().getZ()));
-			glm::mat4 translation = glm::translate(glm::mat4(1.0f), glm::vec3(t.getOrigin().getX(), t.getOrigin().getY(), t.getOrigin().getZ()));
-			_modelBuffer.at(i) = translation * rotation;
-		}
+			_modelBuffer.at(i) = _physicsEngine->getWorldTransform(_physicBodyIndices.at(i));
 
 		//Update model matrix in the vertex shader
 		_objectInstance->_vbo4->bind();

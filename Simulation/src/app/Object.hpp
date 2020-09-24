@@ -6,22 +6,11 @@
 #include "VertexBuffer.hpp"
 #include "VertexArray.hpp"
 #include "IndexBuffer.hpp"
-#include <btBulletDynamicsCommon.h>
-
-struct Rotation3D
-{
-	float x_angle, y_angle, z_angle;
-
-	Rotation3D(const float& x_rotation = 0.0f, const float& y_rotation = 0.0f, const float& z_rotation = 0.0f)
-		: x_angle(x_rotation), y_angle(y_rotation), z_angle(z_rotation)
-	{
-		
-	}
-};
+#include "PhysicsEngine.hpp"
 
 class Object
 {
-public:
+private:
 	Texture *_texture = nullptr;
 	Shader *_shader = nullptr;
 	Data *_data = nullptr;
@@ -29,10 +18,11 @@ public:
 	VertexArray *_vao = nullptr;
 	IndexBuffer *_ib = nullptr;
 	glm::mat4 _model, _view, _projection;
-	glm::vec3 _color, _initPos;
-	unsigned int _vertices;
-	btRigidBody* _rigidBody = nullptr;
+	glm::vec3 _color, _initPos, _initRotation;
+	unsigned int _vertices, _bodyIndex;
 	float _size;
+	PhysicsEngine* _physicsEngine = nullptr;
+	bool _translatePhysics;
 
 	void initRenderData()
 	{
@@ -59,17 +49,17 @@ public:
 	}	
 	
 public:
-	Object(Texture* texture, Shader* shader, Data* data, const glm::vec3& color, const glm::vec3& translation, const float& scalar, const Rotation3D& rotation, btRigidBody* rigidBody = nullptr)
-		: _texture(texture), _shader(shader), _data(data), _color(color), _initPos(translation), _size(scalar), _rigidBody(rigidBody)
+	Object(Texture* texture, Shader* shader, Data* data, const glm::vec3& color, const glm::vec3& translation, const float& scalar, const glm::vec3& rotation, PhysicsEngine* physicsEngine, unsigned int bodyIndex, bool translatePhysics)
+		: _texture(texture), _shader(shader), _data(data), _color(color), _initPos(translation), _size(scalar), _initRotation(rotation), _bodyIndex(bodyIndex), _physicsEngine(physicsEngine), _translatePhysics(translatePhysics)
 	{
 		initRenderData();		
 		
 		//Transformations
 		_model = glm::mat4(1.0f);
 		_model = glm::translate(_model, _initPos);
-		//_model = glm::rotate(_model, glm::radians(rotation.x_angle), glm::vec3(1.0f, 0.0f, 0.0f));
-		//_model = glm::rotate(_model, glm::radians(rotation.y_angle), glm::vec3(0.0f, 1.0f, 0.0f));
-		//_model = glm::rotate(_model, glm::radians(rotation.z_angle), glm::vec3(0.0f, 0.0f, 1.0f));
+		//_model = glm::rotate(_model, glm::radians(_initRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+		//_model = glm::rotate(_model, glm::radians(_initRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+		//_model = glm::rotate(_model, glm::radians(_initRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
 		_model = glm::scale(_model, glm::vec3(_size));
 	}
 
@@ -83,28 +73,22 @@ public:
 
 	void render()
 	{
-		if (_rigidBody != nullptr) 
+		if (_translatePhysics)
 		{
-			btTransform t;
-			_rigidBody->getMotionState()->getWorldTransform(t);
-
-			glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), t.getRotation().getAngle(), glm::vec3(t.getRotation().getAxis().getX(), t.getRotation().getAxis().getY(), t.getRotation().getAxis().getZ()));
-			glm::mat4 translation = glm::translate(glm::mat4(1.0f), glm::vec3(t.getOrigin().getX(), t.getOrigin().getY(), t.getOrigin().getZ()));
-
-			_model = translation * rotation;
+			_model = _physicsEngine->getWorldTransform(_bodyIndex);
 			_model = glm::scale(_model, glm::vec3(_size));
-		}		
+		}
 
 		//Matrices
 		_projection = glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.1f, 1000.0f);
 		_view = camera.GetViewMatrix();
-		
-		_shader->bind();			
-		
+
+		_shader->bind();
+
 		//Set uniforms
 		_shader->SetUniformMat4f("model", _model);
 		_shader->SetUniformMat4f("projection", _projection);
-		_shader->SetUniformMat4f("view", _view);		
+		_shader->SetUniformMat4f("view", _view);
 		_shader->SetUniformVec3("color", _color);
 
 		//Set texture

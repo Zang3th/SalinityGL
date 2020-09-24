@@ -34,11 +34,6 @@ private:
 		_sphereShape = new btSphereShape(1.0f);
 	}
 
-	glm::mat4 resetRandom() 
-	{
-
-	}
-
 public:
 	PhysicsEngine() 
 	{

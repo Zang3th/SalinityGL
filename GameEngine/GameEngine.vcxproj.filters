@@ -5,7 +5,6 @@
     <ClCompile Include="src\start\start_core.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\core\Cubemap.hpp" />
     <ClInclude Include="src\core\IndexBuffer.hpp" />
     <ClInclude Include="src\core\OpenGLErrorManager.hpp" />
     <ClInclude Include="src\core\RenderStateManager.hpp" />
@@ -56,6 +55,7 @@
     <ClInclude Include="src\core\Data.hpp" />
     <ClInclude Include="src\core\MeshCreator.hpp" />
     <ClInclude Include="src\core\Random.hpp" />
+    <ClInclude Include="src\core\Cubemap.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shader\breakout\breakout_vs.glsl" />

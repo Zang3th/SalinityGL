@@ -17,7 +17,7 @@ int main()
 	ImGui::CreateContext();
 	ImGui::StyleColorsDark(); //Setup ImGui-style	
 	ImGui_ImplGlfw_InitForOpenGL(simulation.getWindow(), true); //Setup Platform/Renderer bindings
-	ImGui_ImplOpenGL3_Init("#version 330");
+	ImGui_ImplOpenGL3_Init("#version 440");
 
 	while (!simulation.windowShouldClose())
 	{

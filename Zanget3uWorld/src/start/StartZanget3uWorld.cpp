@@ -28,9 +28,6 @@ int main()
 	//Create Models ----------------------------------------------------------------------------------------------------------------------------------------------------	
 	EntityManager entityManager;
 
-	//Cubemap
-	entityManager.addCubemapEntity();
-	
 	//Ground
 	auto ground = entityManager.addTerrainEntity(512, 1, "../res/maps/Heightmap_512.bmp", "../res/textures/Grass.jpg", "../res/textures/Dirt.jpg", "../res/maps/Blendmap_512.jpg");
 

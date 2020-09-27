@@ -5,6 +5,7 @@
 #include "MeshCreator.hpp"
 #include "PhysicsEngine.hpp"
 #include "ObjectSpawner.hpp"
+#include "Cubemap.hpp"
 
 unsigned int VERTICES_TO_RENDER = 0;
 
@@ -14,6 +15,7 @@ private:
 	std::vector<Object*> _objects;
 	PhysicsEngine* _physicsEngine = nullptr;
 	ObjectSpawner* _objectSpawner = nullptr;
+	Cubemap* _cubemap = nullptr;
 	
 public:
 	ObjectManager()
@@ -32,6 +34,7 @@ public:
 
 		delete _physicsEngine;
 		delete _objectSpawner;
+		delete _cubemap;
 	}
 
 	void init()
@@ -74,7 +77,7 @@ public:
 						ResourceManager::GetTexture("Block_texture"),
 						ResourceManager::GetShader("Object_shader"),
 						ResourceManager::GetData("Plane_data"),
-						glm::vec3(0.4f, 0.4f, 0.4f),
+						glm::vec3(1.0f, 1.0f, 1.0f),
 						position,
 						1.0f,
 						glm::vec3(0.0f, 0.0f, 0.0f),
@@ -85,11 +88,27 @@ public:
 			);
 		}
 
+		//Add skybox to the scene
+		{
+			ResourceManager::LoadShader("../res/shader/simulation/cubemap_vs.glsl", "../res/shader/simulation/cubemap_fs.glsl", "Cubemap_shader");
+			std::vector<const char*> faces
+			{
+					"../res/textures/cubeMap/right_3.jpg", //Right
+					"../res/textures/cubeMap/left_3.jpg", //Left
+					"../res/textures/cubeMap/top_3.jpg", //Top
+					"../res/textures/cubeMap/bottom_3.jpg", //Bottom
+					"../res/textures/cubeMap/front_3.jpg", //Front
+					"../res/textures/cubeMap/back_3.jpg"  //Back
+			};
+			_cubemap = new Cubemap(faces, ResourceManager::GetShader("Cubemap_shader"), &camera, WIDTH, HEIGHT, 1000.0f);
+		}
+
 		//Calculate vertices to render
 		for (Object* obj : _objects)
 			VERTICES_TO_RENDER += obj->getVertices();
 
 		VERTICES_TO_RENDER += _objectSpawner->_verticsToRender;
+		VERTICES_TO_RENDER += 36; //Cubemap
 	}
 	
 	void updateObjects()
@@ -103,5 +122,8 @@ public:
 			obj->render();
 
 		_objectSpawner->render();
+
+		//Render cubemap last
+		_cubemap->render();
 	}
 };

@@ -3,7 +3,6 @@
 #include "Renderer.hpp"
 #include "TerrainEntity.hpp"
 #include "ObjmodelEntity.hpp"
-#include "CubemapEntity.hpp"
 #include "PlaneEntity.hpp"
 #include "TreeEntity.hpp"
 #include "LightEntity.hpp"
@@ -30,7 +29,6 @@ private:
 	TreeEntity* _treeEntity;	
 	LightEntity* _lightEntity;	
 	TerrainEntity* _terrainEntity;
-	CubemapEntity* _cubemapEntity;
 	RayEntity* _rayEntity;
 	PlayerEntity* _playerEntity;	
 	
@@ -53,7 +51,6 @@ public:
 		delete _lightEntity;
 		delete _terrainEntity;
 		delete _rayEntity;
-		delete _cubemapEntity;
 		delete _playerEntity;
 	}
 	
@@ -197,12 +194,6 @@ public:
 		_models.push_back((Basemodel*)_playerEntity->_playerModel);
 		return _playerEntity;
 	}	
-	
-	void addCubemapEntity()
-	{
-		_cubemapEntity = new CubemapEntity(&_nextTextureSlot);
-		_models.push_back((Basemodel*)_cubemapEntity->_standardmodel);
-	}
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	void createRay()
 	{

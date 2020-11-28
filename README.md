@@ -54,6 +54,9 @@
             - Not using separate .h and .cpp files: I'm lazy  
             - And many other things...            
             
+ #### Building:
+            - Currently only for Windows/VS19 (Clone the repository and execute the .sln file)
+            
 #### License:
             - This code is provided under a BSD-style license. See the file LICENSE for details.
 

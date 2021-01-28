@@ -38,6 +38,7 @@
             - Simulation:
                         - Abstracted Data-/Objectclasses 
                         - Physics engine with bullet3
+                        - Instanced Rendering
             
             - Shared across all projects:
                         - Display-/Inputmanagement
@@ -47,14 +48,14 @@
             - Animation
             - Game AI / pathfinding
             - Enhanced water quality (proper watershader)
-            - Instancing or Batch Rendering System           
+            - Batch Rendering System           
             
- #### Potential problems and things I try to work on:
+#### Potential problems and things I try to work on:
             - Naming conventions: Mostly english (I hope). Sorry though if some comments are in german.
             - Not using separate .h and .cpp files: I'm lazy  
             - And many other things...            
             
- #### Building:
+#### Building:
             - Currently only for Windows/VS19 (Clone the repository and execute the .sln file)
             
 #### License:
@@ -62,9 +63,14 @@
 
 #### Screenshots out of a scene that I created with the engine:
 
- <img src="https://user-images.githubusercontent.com/59279641/77147299-375d0f00-6a8d-11ea-9db8-0d94d04d178b.PNG"/>
- <img src="https://user-images.githubusercontent.com/59279641/77147427-7ee39b00-6a8d-11ea-86cd-6ba2ad74efff.PNG"/>
- <img src="https://user-images.githubusercontent.com/59279641/77147461-94f15b80-6a8d-11ea-82b8-0a67f637a7c7.PNG"/>  
+<img src="https://user-images.githubusercontent.com/59279641/77147299-375d0f00-6a8d-11ea-9db8-0d94d04d178b.PNG"/>
+<img src="https://user-images.githubusercontent.com/59279641/77147427-7ee39b00-6a8d-11ea-86cd-6ba2ad74efff.PNG"/>
+<img src="https://user-images.githubusercontent.com/59279641/77147461-94f15b80-6a8d-11ea-82b8-0a67f637a7c7.PNG"/>  
  
- #### Screenshot of my implementation of the game "Breakout" from "learnopengl.com":
- <img src="https://user-images.githubusercontent.com/59279641/91633530-3d1a3180-e9e9-11ea-889c-74dba8e7e700.PNG"/>
+#### Screenshot of my implementation of the game "Breakout" from "learnopengl.com":
+<img src="https://user-images.githubusercontent.com/59279641/91633530-3d1a3180-e9e9-11ea-889c-74dba8e7e700.PNG"/>
+
+#### Video of the simulation project
+<video width="900" height="600" controls>
+  <source src="Simulation.mp4" type="video/mp4">
+</video>

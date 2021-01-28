@@ -71,6 +71,4 @@
 <img src="https://user-images.githubusercontent.com/59279641/91633530-3d1a3180-e9e9-11ea-889c-74dba8e7e700.PNG"/>
 
 #### Video of the simulation project
-<video width="900" height="600" controls>
-  <source src="Simulation.mp4" type="video/mp4">
-</video>
+[![Simulation project video](https://user-images.githubusercontent.com/59279641/106173433-34927680-6194-11eb-9cfc-caabc3781d1f.gif)](https://user-images.githubusercontent.com/59279641/106173014-c0f06980-6193-11eb-9ea6-1efb2e17c5a9.mp4)

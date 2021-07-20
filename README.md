@@ -1,6 +1,6 @@
 # GameEngine in C++ with OpenGL
 
-## I'm currently rewriting the whole engine. Everything before commit 132 was deleted!
+## I'm currently rewriting the whole engine. Everything before commit 67cf366 was deleted!
 
 ### Objectives:
    - Simple OpenGL-Wrapper functions
@@ -30,7 +30,7 @@
       - cd build/
       - cmake ..
       - make            
-   - Not recommended but there is an old version of the engine (everything before commit 132) that builds on windows
+   - Not recommended but there is an old version of the engine (everything before commit 67cf366) that builds on windows
       - Clone the repository and execute the .sln file
             
 ### License:

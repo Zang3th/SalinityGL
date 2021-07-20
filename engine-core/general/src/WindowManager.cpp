@@ -1,4 +1,4 @@
-#include "WindowManager.hpp"
+#include "../include/WindowManager.hpp"
 
 // ----- Private -----
 
@@ -14,7 +14,7 @@ void WindowManager::CreateWindow()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);    
 
-    _window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, _windowName, NULL, NULL);
+    _window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, _windowName.c_str(), NULL, NULL);
 
     if(!_window)
         LOG(ERROR) << "Window could not be created! GLFW_Error: " << glfwGetError(NULL);
@@ -73,7 +73,7 @@ void WindowManager::CalcFrametime()
 
 // ----- Public -----
 
-WindowManager::WindowManager(const char* title)
+WindowManager::WindowManager(const std::string& title)
     : _windowName(title), _window(NULL), _isRunning(false), _deltaTime(0.0f), _lastFrame(0.0f)
 {
     CreateWindow();
@@ -97,7 +97,7 @@ void WindowManager::UpdateWindow()
     Prepare();
 }
 
-void WindowManager::SwapBuffer()
+void WindowManager::SwapBuffers()
 {
     glfwSwapBuffers(_window);
 }

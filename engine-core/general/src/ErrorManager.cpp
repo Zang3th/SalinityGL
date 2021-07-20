@@ -9,7 +9,7 @@ bool ErrorManager::GLLogCall(const char* function, const char* file, int line)
 {
 	while (GLenum error = glGetError())
 	{
-        LOG(ERROR) << "\nOpenGL Error with code " << error << " in " << function << " at line " << line << "\n";
+        LOG(ERROR) << "OpenGL Error [" << error << "] in " << function << " at line " << line;
 		return false;
 	}
 	return true;

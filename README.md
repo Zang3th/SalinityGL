@@ -16,13 +16,15 @@
 
 ### Credits
    - [Easylogging++](https://github.com/amrayn/easyloggingpp)
+   - [stb_image](https://github.com/nothings/stb/blob/master/stb_image.h)
    - [glad](https://github.com/Dav1dde/glad)
    - [GLFW](https://github.com/glfw/glfw)
+   - [glm](https://github.com/g-truc/glm)
 
 ### Using & Compiling
    - Currently only for linux, using CMake as a buildsystem
       - Clone the repository
-      - Install the dependencies (cglm, FreeType, Chipmunk2D, GLFW) 
+      - Install the extern dependencies (glm, GLFW) 
          - Take a look at the credits to find the repositories
       - mkdir build
       - cd build/
@@ -41,8 +43,7 @@
 <img src="https://user-images.githubusercontent.com/59279641/77147427-7ee39b00-6a8d-11ea-86cd-6ba2ad74efff.PNG"/>
 <img src="https://user-images.githubusercontent.com/59279641/77147461-94f15b80-6a8d-11ea-82b8-0a67f637a7c7.PNG"/>  
  
-#### 3D-Simulation-Project with bullet3 as a physics engine 
- 
+#### 3D-Simulation-Project with bullet3 as a physics engine  
 [![Simulation project video](https://user-images.githubusercontent.com/59279641/106173433-34927680-6194-11eb-9cfc-caabc3781d1f.gif)](https://user-images.githubusercontent.com/59279641/106173014-c0f06980-6193-11eb-9ea6-1efb2e17c5a9.mp4)
 
 #### My implementation of the game "Breakout" from "learnopengl.com":

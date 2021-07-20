@@ -8,22 +8,22 @@
 class WindowManager
 {
     private:
-        void CreateWindow();
-        void PollEvents();
-        void ProcessEvents();
-        void Prepare();
-        void CalcFrametime();
-
-        const char* _windowName;
+        std::string _windowName;
         GLFWwindow* _window;
         bool _isRunning;
         float _deltaTime;
         float _lastFrame;
 
+        void CreateWindow();
+        void PollEvents();
+        void ProcessEvents();
+        void Prepare();
+        void CalcFrametime();        
+
     public:
-        WindowManager(const char* title);
+        WindowManager(const std::string& title);
         ~WindowManager();
         bool WindowIsRunning();
         void UpdateWindow();   
-        void SwapBuffer();
+        void SwapBuffers();
 };

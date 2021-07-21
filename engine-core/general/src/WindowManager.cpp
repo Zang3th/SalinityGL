@@ -1,4 +1,4 @@
-#include "../include/WindowManager.hpp"
+#include "WindowManager.hpp"
 
 // ----- Private -----
 

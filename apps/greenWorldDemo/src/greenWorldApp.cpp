@@ -11,8 +11,8 @@ GreenWorldApp::GreenWorldApp()
 
 GreenWorldApp::~GreenWorldApp()
 {
-    delete _windowManager;
     ResourceManager::CleanUp();
+    delete _windowManager;
 }
 
 bool GreenWorldApp::IsRunning()

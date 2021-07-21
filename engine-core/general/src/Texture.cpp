@@ -1,4 +1,4 @@
-#include "../include/Texture.hpp"
+#include "Texture.hpp"
 
 // ----- Public -----
 

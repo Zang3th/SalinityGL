@@ -1,4 +1,4 @@
-#include "../include/Shader.hpp"
+#include "Shader.hpp"
 
 // ----- Private -----
 

@@ -38,10 +38,11 @@ int Shader::Compile(unsigned int shaderType, const std::string& source)
 	{
 		int length;
         GLCall(glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length));
-        char msg[length];
+        char* msg = new char[length];
         GLCall(glGetShaderInfoLog(id, length, &length, msg));
         LOG(ERROR) << "Failed to compile shader: " << shaderType;
         LOG(ERROR) << "Error: " << std::string(msg);
+        delete msg;
         GLCall(glDeleteShader(id));
 
 		return -1;
@@ -65,10 +66,11 @@ int Shader::Build(unsigned int vsID, unsigned int fsID)
     {
         int length;
         GLCall(glGetProgramiv(programID, GL_INFO_LOG_LENGTH, &length));
-        char msg[length];
+        char* msg = new char[length];
         GLCall(glGetProgramInfoLog(programID, length, &length, msg));
         LOG(ERROR) << "Failed to link shader: " << programID;
         LOG(ERROR) << "Error: " << std::string(msg);
+        delete msg;
         GLCall(glDeleteProgram(programID));
 
         return -1;

@@ -34,17 +34,23 @@ int Shader::Compile(unsigned int shaderType, const std::string& source)
     //Errorhandling
 	int result;
 	GLCall(glGetShaderiv(id, GL_COMPILE_STATUS, &result));
+
 	if(result == GL_FALSE)
 	{
+        //Get error message length
 		int length;
         GLCall(glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length));
-        char* msg = new char[length];
-        GLCall(glGetShaderInfoLog(id, length, &length, msg));
-        LOG(ERROR) << "Failed to compile shader: " << shaderType;
-        LOG(ERROR) << "Error: " << std::string(msg);
-        delete msg;
-        GLCall(glDeleteShader(id));
 
+        //Get error message
+        std::unique_ptr<char> msg(new char[length]);
+        GLCall(glGetShaderInfoLog(id, length, &length, msg.get()));
+
+        //Log error message
+        LOG(ERROR) << "Failed to compile shader: " << shaderType;
+        LOG(ERROR) << "Error: " << std::string(msg.get());
+
+        //Free resources and return
+        GLCall(glDeleteShader(id));
 		return -1;
     }
 
@@ -64,15 +70,20 @@ int Shader::Build(unsigned int vsID, unsigned int fsID)
     GLCall(glGetProgramiv(programID, GL_LINK_STATUS, &result));
     if(!result)
     {
+        //Get error message length
         int length;
         GLCall(glGetProgramiv(programID, GL_INFO_LOG_LENGTH, &length));
-        char* msg = new char[length];
-        GLCall(glGetProgramInfoLog(programID, length, &length, msg));
-        LOG(ERROR) << "Failed to link shader: " << programID;
-        LOG(ERROR) << "Error: " << std::string(msg);
-        delete msg;
-        GLCall(glDeleteProgram(programID));
 
+        //Get error message
+        std::unique_ptr<char[]> msg(new char[length]);
+        GLCall(glGetProgramInfoLog(programID, length, &length, msg.get()));
+
+        //Log error message
+        LOG(ERROR) << "Failed to link shader: " << programID;
+        LOG(ERROR) << "Error: " << std::string(msg.get());
+
+        //Free resources and return
+        GLCall(glDeleteProgram(programID));
         return -1;
     }
 

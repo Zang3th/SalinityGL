@@ -1,8 +1,7 @@
 #pragma once
 
 #include "../../../engine-core/general/include/WindowManager.hpp"
-#include "../../../engine-core/general/include/Texture.hpp"
-#include "../../../engine-core/general/include/Shader.hpp"
+#include "../../../engine-core/general/include/ResourceManager.hpp"
 
 class GreenWorldApp
 {

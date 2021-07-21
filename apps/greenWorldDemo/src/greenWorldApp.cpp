@@ -5,13 +5,14 @@
 GreenWorldApp::GreenWorldApp()
 {
     _windowManager = new WindowManager("GreenWorld Demo Application");
-    Texture texture("../res/textures/greenWorld/Stone.jpg");
-    Shader shader("../res/shader/greenWorld/standard_vs.glsl", "../res/shader/greenWorld/standard_fs.glsl");
+    ResourceManager::LoadTexture("StoneTexture", "../res/textures/greenWorld/Stone.jpg");
+    ResourceManager::LoadShader("StandardShader", "../res/shader/greenWorld/standard_vs.glsl", "../res/shader/greenWorld/standard_fs.glsl");
 }
 
 GreenWorldApp::~GreenWorldApp()
 {
     delete _windowManager;
+    ResourceManager::CleanUp();
 }
 
 bool GreenWorldApp::IsRunning()

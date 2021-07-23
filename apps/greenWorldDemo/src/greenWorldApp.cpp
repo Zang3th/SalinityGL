@@ -19,7 +19,7 @@ GreenWorldApp::GreenWorldApp()
     LoadResources();
 
     //Create test sprite
-    _testSprite = std::make_unique<Core::Sprite>(
+    _testSprite = std::make_shared<Core::Sprite>(
         _resourceManager.GetTexture("StoneTexture"),
         _resourceManager.GetShader("StandardShader"),
         glm::vec2(500.0f, 500.0f),
@@ -36,9 +36,15 @@ bool GreenWorldApp::IsRunning()
 
 void GreenWorldApp::Update()
 {
-    _windowManager.UpdateWindow();
+    _windowManager.UpdateWindow();    
 
     //Render stuff
+    _renderer.Prepare();
+    _renderer.Submit(_testSprite);
+    _renderer.Flush();
+
+    //Move sprite
+    _testSprite->Translate(glm::vec2(10.0f * _windowManager.GetDeltaTime(), 0.0f));
 
     _windowManager.SwapBuffers();
 }

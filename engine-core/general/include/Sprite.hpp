@@ -7,6 +7,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include "CoreDefines.hpp"
+#include "ErrorManager.hpp"
 
 namespace Core
 {
@@ -21,12 +22,14 @@ namespace Core
             float _rotation;
             glm::vec3 _color;
             glm::mat4 _model;
+            unsigned int _vertices;
 
             Ref<VertexArray> CreateSpriteVao();
             glm::mat4 CreateModelMatrix(glm::vec2 position, glm::vec2 size, float rotation);
 
         public:
             Sprite(Ref<Texture> texture, Ref<Shader> shader, glm::vec2 position, glm::vec2 size, float rotation, glm::vec3 color);
-            void TranslateSprite(glm::vec2 position);
+            unsigned int Draw(glm::mat4 projection);
+            void Translate(glm::vec2 position);
     };
 }

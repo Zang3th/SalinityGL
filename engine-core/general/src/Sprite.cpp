@@ -23,6 +23,9 @@ namespace Core
             1.0f, 0.0f, 1.0f, 0.0f
         };
 
+        //Set vertice count accordingly
+        _vertices = 6;
+
         //Create vbo, send it data and configure vao
         VertexBuffer vbo(vertices, sizeof(vertices));
         vao->DefineAttributes(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
@@ -55,14 +58,39 @@ namespace Core
     // ----- Public -----
 
     Sprite::Sprite(Ref<Texture> texture, Ref<Shader> shader, glm::vec2 position, glm::vec2 size, float rotation, glm::vec3 color)
-        : _texture(texture), _shader(shader), _position(position), _size(size), _rotation(rotation), _color(color)
+        : _texture(texture), _shader(shader), _position(position), _size(size), _rotation(rotation), _color(color), _vertices(0)
     {
         _vao = CreateSpriteVao();
         _model = CreateModelMatrix(_position, _size, _rotation);
     }
 
-    void Sprite::TranslateSprite(glm::vec2 position)
+    unsigned int Sprite::Draw(glm::mat4 projection)
     {
-        _model = CreateModelMatrix(position, _size, _rotation);
+        _shader->Bind();
+        
+        //Set uniforms
+        _shader->SetUniformVec3f("color", _color);
+        _shader->SetUniformMat4f("model", _model);
+        _shader->SetUniformMat4f("projection", projection);
+
+        _texture->Bind();
+        _vao->Bind();
+
+        //Render quad
+        GLCall(glDrawArrays(GL_TRIANGLES, 0, _vertices));
+
+        _vao->Unbind();
+        _texture->Unbind();
+        _shader->Unbind();
+
+        //Return rendered vertices
+        return _vertices;
+    }
+
+    void Sprite::Translate(glm::vec2 position)
+    {
+        glm::vec2 newPosition = glm::vec2(_position.x + position.x, _position.y + position.y);
+        _model = CreateModelMatrix(newPosition, _size, _rotation);
+        _position = newPosition;
     }
 }

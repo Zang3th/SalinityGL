@@ -4,7 +4,7 @@
 #include "ErrorManager.hpp"
 #include <string>
 #include "FileManager.hpp"
-#include <memory>
+#include "CoreDefines.hpp"
 
 namespace Core
 {
@@ -28,6 +28,6 @@ namespace Core
             void SetUniform1f(const std::string& name, float value);
             void SetUniform4f(const std::string& name, float v0, float v1, float v2, float v3);
             void SetUniformMat4f(const std::string& name, const glm::mat4& matrix);
-            void SetUniformVec3(const std::string& name, const glm::vec3& vec);
+            void SetUniformVec3f(const std::string& name, const glm::vec3& vec);
     };
 }

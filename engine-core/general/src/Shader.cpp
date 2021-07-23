@@ -23,7 +23,7 @@ namespace Core
             GLCall(glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length));
 
             //Get error message
-            std::unique_ptr<char> msg(new char[length]);
+            Scope<char[]> msg(new char[length]);
             GLCall(glGetShaderInfoLog(id, length, &length, msg.get()));
 
             //Log error message
@@ -56,7 +56,7 @@ namespace Core
             GLCall(glGetProgramiv(programID, GL_INFO_LOG_LENGTH, &length));
 
             //Get error message
-            std::unique_ptr<char[]> msg(new char[length]);
+            Scope<char[]> msg(new char[length]);
             GLCall(glGetProgramInfoLog(programID, length, &length, msg.get()));
 
             //Log error message
@@ -158,7 +158,7 @@ namespace Core
         GLCall(glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, &matrix[0][0]));
     }
 
-    void Shader::SetUniformVec3(const std::string& name, const glm::vec3& vec)
+    void Shader::SetUniformVec3f(const std::string& name, const glm::vec3& vec)
     {
         GLCall(glUniform3fv(GetUniformLocation(name), 1, &vec[0]));
     }

@@ -29,5 +29,6 @@ namespace Core
             bool WindowIsRunning();
             void UpdateWindow();   
             void SwapBuffers();
+            float GetDeltaTime();
     };
 }

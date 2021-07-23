@@ -109,4 +109,10 @@ namespace Core
     {
         glfwSwapBuffers(_window);
     }
+
+
+    float WindowManager::GetDeltaTime()
+    {
+        return _deltaTime;
+    }
 }

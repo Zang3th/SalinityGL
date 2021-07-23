@@ -2,28 +2,32 @@
 
 #include "ErrorManager.hpp"
 #include <GLFW/glfw3.h>
-#include "GlobalDefine.hpp"
+#include "CoreDefines.hpp"
 #include <string>
 
-class WindowManager
+namespace Core
 {
-    private:
-        std::string _windowName;
-        GLFWwindow* _window;
-        bool _isRunning;
-        float _deltaTime;
-        float _lastFrame;
+    class WindowManager
+    {
+        private:
+            std::string _windowName;
+            GLFWwindow* _window;
+            bool _isRunning;
+            float _deltaTime;
+            float _lastFrame;
 
-        void CreateWindow();
-        void PollEvents();
-        void ProcessEvents();
-        void Prepare();
-        void CalcFrametime();        
+            void CreateWindow();
+            void PollEvents();
+            void ProcessEvents();
+            void Prepare();
+            void CalcFrametime();        
 
-    public:
-        WindowManager(const std::string& title);
-        ~WindowManager();
-        bool WindowIsRunning();
-        void UpdateWindow();   
-        void SwapBuffers();
-};
+        public:
+            WindowManager();
+            ~WindowManager();
+            void SetWindowTitle(const std::string& title);
+            bool WindowIsRunning();
+            void UpdateWindow();   
+            void SwapBuffers();
+    };
+}

@@ -3,19 +3,20 @@
 #include <map>
 #include "Texture.hpp"
 #include "Shader.hpp"
+#include "CoreDefines.hpp"
 
-class ResourceManager
+namespace Core
 {
-    private:
-        static std::map<std::string, Texture*> _textureStorage;
-        static std::map<std::string, Shader*> _shaderStorage;
+    class ResourceManager
+    {
+        private:
+            std::map<std::string, Ref<Texture>> _textureStorage;
+            std::map<std::string, Ref<Shader>> _shaderStorage;
 
-        ResourceManager(){}
-
-    public:
-        static void LoadTexture(const std::string& name, const std::string& filepath);
-        static Texture* GetTexture(const std::string& name);
-        static void LoadShader(const std::string& name, const std::string& vsFilepath, const std::string& fsFilepath);
-        static Shader* GetShader(const std::string& name);
-        static void CleanUp();
-};
+        public:
+            void LoadTexture(const std::string& name, const std::string& filepath);
+            Ref<Texture> GetTexture(const std::string& name);
+            void LoadShader(const std::string& name, const std::string& vsFilepath, const std::string& fsFilepath);
+            Ref<Shader> GetShader(const std::string& name);
+    };
+}

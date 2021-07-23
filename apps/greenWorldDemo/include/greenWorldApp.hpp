@@ -2,16 +2,17 @@
 
 #include "../../../engine-core/general/include/WindowManager.hpp"
 #include "../../../engine-core/general/include/ResourceManager.hpp"
-#include <memory>
 
 class GreenWorldApp
 {
     private:
-        std::unique_ptr<WindowManager> _windowManager;
+        Core::WindowManager _windowManager;
+        Core::ResourceManager _resourceManager;
+
+        void LoadResources();
 
     public:
         GreenWorldApp();
-        ~GreenWorldApp();
         bool IsRunning();
         void Update();
 };

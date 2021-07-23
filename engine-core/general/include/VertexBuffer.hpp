@@ -2,14 +2,17 @@
 
 #include "ErrorManager.hpp"
 
-class VertexBuffer
+namespace Core
 {
-    private:
-        unsigned int _vboID;
+    class VertexBuffer
+    {
+        private:
+            unsigned int _vboID;
 
-    public:
-        VertexBuffer(const void* data, unsigned int size);
-        ~VertexBuffer();
-        void Bind();
-        void Unbind();
-};
+        public:
+            VertexBuffer(const void* data, unsigned int size);
+            ~VertexBuffer();
+            void Bind();
+            void Unbind();
+    };
+}

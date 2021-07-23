@@ -2,14 +2,17 @@
 
 #include "ErrorManager.hpp"
 
-class IndexBuffer
+namespace Core
 {
-    private:
-        unsigned int _iboID;
+    class IndexBuffer
+    {
+        private:
+            unsigned int _iboID;
 
-    public:
-        IndexBuffer(const void* data, unsigned int size);
-        ~IndexBuffer();
-        void Bind();
-        void Unbind();
-};
+        public:
+            IndexBuffer(const void* data, unsigned int size);
+            ~IndexBuffer();
+            void Bind();
+            void Unbind();
+    };
+}

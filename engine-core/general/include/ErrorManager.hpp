@@ -9,12 +9,15 @@
 x;\
 ASSERT(ErrorManager::GLLogCall(#x, __FILE__, __LINE__))
 
-class ErrorManager
+namespace Core
 {
-    private:
-        ErrorManager(){}
-        
-    public:
-        static void GLClearError();
-        static bool GLLogCall(const char* function, const char* file, int line);
-};
+    class ErrorManager
+    {
+        private:
+            ErrorManager(){}
+            
+        public:
+            static void GLClearError();
+            static bool GLLogCall(const char* function, const char* file, int line);
+    };
+}

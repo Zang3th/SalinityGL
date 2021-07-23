@@ -3,8 +3,7 @@
 #include <glm/glm.hpp>
 #include "ErrorManager.hpp"
 #include <string>
-#include <fstream>
-#include <sstream>
+#include "FileManager.hpp"
 #include <memory>
 
 namespace Core
@@ -15,7 +14,6 @@ namespace Core
             unsigned int _shaderID;
             std::unordered_map<std::string, int> _uniformLocationCache;
 
-            std::string Parse(const std::string& filepath);
             int Compile(unsigned int shaderType, const std::string& source);
             int Build(unsigned int vsID, unsigned int fsID);
             int Create(const std::string& vsFilepath, const std::string& fsFilepath);

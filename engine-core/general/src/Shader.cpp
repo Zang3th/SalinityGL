@@ -4,27 +4,6 @@ namespace Core
 {
     // ----- Private -----
 
-    std::string Shader::Parse(const std::string& filepath)
-    {
-        std::ifstream file(filepath);
-        if(file.fail())
-        {
-            LOG(ERROR) << "Could not open file: " << filepath;
-            return "FILE_ERROR";
-        }
-
-        std::string line, content;
-
-        while(getline(file, line))
-        {
-            content.append(line);
-            content.append("\n");
-        }
-
-        LOG(INFO) << "Successfully read shader at: " << filepath << " | Size: " << content.length();
-        return content;    
-    }
-
     int Shader::Compile(unsigned int shaderType, const std::string& source)
     {
         const char* src = source.c_str();
@@ -104,8 +83,8 @@ namespace Core
     int Shader::Create(const std::string& vsFilepath, const std::string& fsFilepath)
     {
         //Read in shader files
-        std::string vsSource = Parse(vsFilepath);
-        std::string fsSource = Parse(fsFilepath);
+        std::string vsSource = FileManager::FileToString(vsFilepath);
+        std::string fsSource = FileManager::FileToString(fsFilepath);
 
         if(vsSource == "FILE_ERROR" || fsSource == "FILE_ERROR")
             return -1;

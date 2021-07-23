@@ -17,6 +17,16 @@ GreenWorldApp::GreenWorldApp()
 
     //Resources
     LoadResources();
+
+    //Create test sprite
+    _testSprite = std::make_unique<Core::Sprite>(
+        _resourceManager.GetTexture("StoneTexture"),
+        _resourceManager.GetShader("StandardShader"),
+        glm::vec2(500.0f, 500.0f),
+        glm::vec2(300.0f, 300.0f),
+        0.0f,
+        glm::vec3(0.37f, 0.77, 0.29f)
+    );
 }
 
 bool GreenWorldApp::IsRunning()

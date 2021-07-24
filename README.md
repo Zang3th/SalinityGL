@@ -20,6 +20,7 @@
    - [glad](https://github.com/Dav1dde/glad)
    - [GLFW](https://github.com/glfw/glfw)
    - [glm](https://github.com/g-truc/glm)
+   - [imgui](https://github.com/ocornut/imgui)
 
 ### Using & Compiling
    - Currently only for linux, using CMake as a buildsystem

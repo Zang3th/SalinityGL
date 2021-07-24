@@ -20,15 +20,16 @@ namespace Core
             void PollEvents();
             void ProcessEvents();
             void Prepare();
-            void CalcFrametime();        
+            void CalcFrametime();    
 
         public:
             WindowManager();
             ~WindowManager();
             void SetWindowTitle(const std::string& title);
             bool WindowIsRunning();
-            void UpdateWindow();   
+            void PrepareFrame();   
             void SwapBuffers();
             float GetDeltaTime();
+            GLFWwindow* GetWindow();
     };
 }

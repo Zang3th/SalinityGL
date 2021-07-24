@@ -5,12 +5,14 @@
 #include "../../../engine-core/general/include/Renderer.hpp"
 #include "../../../engine-core/general/include/CoreDefines.hpp"
 #include "../../../engine-core/general/include/Sprite.hpp"
+#include "greenWorldInterface.hpp"
 
 class GreenWorldApp
 {
     private:
-        Core::WindowManager _windowManager;
+        Core::Ref<Core::WindowManager> _windowManager;
         Core::ResourceManager _resourceManager;
+        Core::Scope<GreenWorldInterface> _userInterface;
         Core::Renderer _renderer;
         Core::Ref<Core::Sprite> _testSprite;
 

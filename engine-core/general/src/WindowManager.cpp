@@ -97,7 +97,7 @@ namespace Core
         return _isRunning;
     }
 
-    void WindowManager::UpdateWindow()
+    void WindowManager::PrepareFrame()
     {
         CalcFrametime();
         PollEvents();
@@ -114,5 +114,10 @@ namespace Core
     float WindowManager::GetDeltaTime()
     {
         return _deltaTime;
+    }
+
+    GLFWwindow* WindowManager::GetWindow()
+    {
+        return _window;
     }
 }

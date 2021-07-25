@@ -68,15 +68,29 @@ namespace Core
 
     void WindowManager::CalcFrametime()
     {
+        //Calculate frametime
         float currentFrame = glfwGetTime();
         _deltaTime = currentFrame - _lastFrame;
         _lastFrame = currentFrame;
+        
+        //Accumulate to average the fps
+        _frameCounter++;
+        _dtAccumulated += _deltaTime;
+
+        if(_frameCounter > 120)
+        {
+            _fpsAvg = 1 / (_dtAccumulated / _frameCounter);         
+
+            //Reset
+            _frameCounter = 0;
+            _dtAccumulated = 0.0f;
+        } 
     }
 
     // ----- Public -----
 
     WindowManager::WindowManager()
-        : _windowName("GameEngine Default"), _window(NULL), _isRunning(false), _deltaTime(0.0f), _lastFrame(0.0f)
+        : _windowName("GameEngine Default"), _window(NULL), _isRunning(false), _deltaTime(0.0f), _lastFrame(0.0f), _frameCounter(0), _dtAccumulated(0.0f), _fpsAvg(0.0f)
     {
         CreateWindow();
     }
@@ -114,6 +128,11 @@ namespace Core
     float WindowManager::GetDeltaTime()
     {
         return _deltaTime;
+    }
+
+    float WindowManager::GetFps()
+    {
+        return _fpsAvg;
     }
 
     GLFWwindow* WindowManager::GetWindow()

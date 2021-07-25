@@ -33,4 +33,14 @@ namespace Core
             _drawcalls++;
         }
     }
+
+    unsigned int Renderer::GetDrawcalls()
+    {
+        return _drawcalls;
+    }
+
+    unsigned int Renderer::GetDrawnVertices()
+    {
+        return _drawnVertices;
+    }
 }

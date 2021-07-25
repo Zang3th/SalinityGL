@@ -10,7 +10,7 @@ namespace Core
 {
     class UserInterface
     {   
-        private:
+        protected:
             Ref<WindowManager> _window;
 
         public:

@@ -15,6 +15,9 @@ namespace Core
             bool _isRunning;
             float _deltaTime;
             float _lastFrame;
+            unsigned int _frameCounter;
+            float _dtAccumulated;
+            float _fpsAvg;
 
             void CreateWindow();
             void PollEvents();
@@ -30,6 +33,7 @@ namespace Core
             void PrepareFrame();   
             void SwapBuffers();
             float GetDeltaTime();
+            float GetFps();
             GLFWwindow* GetWindow();
     };
 }

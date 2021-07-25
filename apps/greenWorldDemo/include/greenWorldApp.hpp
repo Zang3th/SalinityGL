@@ -13,7 +13,7 @@ class GreenWorldApp
         Core::Ref<Core::WindowManager> _windowManager;
         Core::ResourceManager _resourceManager;
         Core::Scope<GreenWorldInterface> _userInterface;
-        Core::Renderer _renderer;
+        Core::Ref<Core::Renderer> _renderer;
         Core::Ref<Core::Sprite> _testSprite;
 
         void LoadResources();

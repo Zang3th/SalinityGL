@@ -24,7 +24,7 @@ namespace Core
             LOG(INFO) << "GLFW Window created!";      
 
         glfwMakeContextCurrent(_window);  
-        glfwSwapInterval(0);
+        glfwSwapInterval(1);
 
         if(!gladLoadGL()) 
             LOG(ERROR) << "Couldn't load OpenGL via glad!";
@@ -133,6 +133,11 @@ namespace Core
     float WindowManager::GetFps()
     {
         return _fpsAvg;
+    }
+
+    unsigned int WindowManager::GetFrameCounter()
+    {
+        return _frameCounter;
     }
 
     GLFWwindow* WindowManager::GetWindow()

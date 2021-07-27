@@ -34,6 +34,7 @@ namespace Core
             void SwapBuffers();
             float GetDeltaTime();
             float GetFps();
+            unsigned int GetFrameCounter();
             GLFWwindow* GetWindow();
     };
 }

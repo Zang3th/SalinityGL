@@ -21,7 +21,7 @@
    - [GLFW](https://github.com/glfw/glfw)
    - [glm](https://github.com/g-truc/glm)
    - [imgui](https://github.com/ocornut/imgui)
-   - [implot](https://github.com/epezent/implot)
+   - [imgui::plot_var](https://github.com/ocornut/imgui/wiki/plot_var_example)
 
 ### Using & Compiling
    - Currently only for linux, using CMake as a buildsystem

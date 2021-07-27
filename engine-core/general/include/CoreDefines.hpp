@@ -13,5 +13,7 @@ namespace Core
         using Scope = std::unique_ptr<T>;
 
     template<typename T>
-        using Ref = std::shared_ptr<T>;  
+        using Ref = std::shared_ptr<T>;
+
+    extern bool WireframeRendering;    
 }

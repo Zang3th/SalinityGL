@@ -27,6 +27,11 @@ namespace Core
 
     void Renderer::Flush()
     {
+        if(WireframeRendering == true){
+            GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));}
+        else{
+            GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));}
+
         for(auto sprite : _spriteBuffer)
         {
             _drawnVertices += sprite->Draw(_orthoProjection);

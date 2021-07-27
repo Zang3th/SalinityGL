@@ -1,6 +1,8 @@
 #include "greenWorldInterface.hpp"
 
- // ----- Private -----
+bool Core::WireframeRendering = false;
+
+// ----- Private -----
 
 void GreenWorldInterface::CalcOverlayPosition()
 {
@@ -30,8 +32,8 @@ GreenWorldInterface::GreenWorldInterface(Core::Ref<Core::WindowManager> window, 
 
 void GreenWorldInterface::AddElements()
 {
-    //Discard old data every 100 frames
-    if(_window->GetFrameCounter() > 100)
+    //Discard old plotting data every 120 frames
+    if(_window->GetFrameCounter() > 120)
         ImGui::PlotVarFlushOldEntries();
 
     //Menu bar
@@ -45,7 +47,7 @@ void GreenWorldInterface::AddElements()
 
         if(ImGui::BeginMenu("Rendering"))
         {
-            ImGui::MenuItem("Wireframe-Mode");
+            ImGui::MenuItem("Wireframe-Mode", "", &Core::WireframeRendering);
             ImGui::EndMenu();    
         }  
         ImGui::EndMainMenuBar();

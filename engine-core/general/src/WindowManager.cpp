@@ -77,7 +77,7 @@ namespace Core
         _frameCounter++;
         _dtAccumulated += _deltaTime;
 
-        if(_frameCounter > 120)
+        if(_frameCounter > 160)
         {
             _fpsAvg = 1 / (_dtAccumulated / _frameCounter);         
 

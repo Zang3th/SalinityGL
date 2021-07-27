@@ -4,6 +4,7 @@
 #include <vector>
 #include "Sprite.hpp"
 #include "CoreDefines.hpp"
+#include "ErrorManager.hpp"
 
 namespace Core
 {

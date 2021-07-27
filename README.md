@@ -20,8 +20,7 @@
    - [glad](https://github.com/Dav1dde/glad)
    - [GLFW](https://github.com/glfw/glfw)
    - [glm](https://github.com/g-truc/glm)
-   - [imgui](https://github.com/ocornut/imgui)
-   - [imgui::plot_var](https://github.com/ocornut/imgui/wiki/plot_var_example)
+   - [imgui](https://github.com/ocornut/imgui), [imgui::plot_var](https://github.com/ocornut/imgui/wiki/plot_var_example)
 
 ### Using & Compiling
    - Currently only for linux, using CMake as a buildsystem
@@ -52,4 +51,4 @@
 <img src="https://user-images.githubusercontent.com/59279641/91633530-3d1a3180-e9e9-11ea-889c-74dba8e7e700.PNG"/>
 
 ### Look of the GreenWorld App:
-   ![GreenWorld](res/screenshots/Screenshot_GW_001.png)
+   ![GreenWorld](res/screenshots/Screenshot_GW_002.png)

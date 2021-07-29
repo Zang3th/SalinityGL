@@ -7,7 +7,7 @@ namespace Core
     Ref<VertexArray> Sprite::CreateSpriteVao()
     {
         //Create and bind vao
-        Ref<VertexArray> vao = std::make_shared<VertexArray>();
+        Ref<VertexArray> vao = MakeRef<VertexArray>();
         vao->Bind();
 
         //Create data

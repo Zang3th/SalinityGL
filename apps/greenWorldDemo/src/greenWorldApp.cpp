@@ -13,20 +13,21 @@ void GreenWorldApp::LoadResources()
 GreenWorldApp::GreenWorldApp()
 {
     //Window-Settings
-    _windowManager = std::make_shared<Core::WindowManager>();
+    _windowManager = MakeScope<Core::WindowManager>();
     _windowManager->SetWindowTitle("GreenWorld Demo Application");
 
     //Renderer
-    _renderer = std::make_shared<Core::Renderer>();
+    _renderer = MakeRef<Core::Renderer>();
 
     //UI
-    _userInterface = std::make_unique<GreenWorldInterface>(_windowManager, _renderer);
+    _userInterface = MakeScope<GreenWorldInterface>(_windowManager, _renderer);
 
     //Resources
     LoadResources();
 
     //Create test sprite
-    _testSprite = std::make_shared<Core::Sprite>(
+    _testSprite = MakeRef<Core::Sprite>
+    (
         _resourceManager.GetTexture("StoneTexture"),
         _resourceManager.GetShader("SpriteShader"),
         glm::vec2(0.0f, 150.0f),
@@ -46,12 +47,14 @@ void GreenWorldApp::Update()
     //Prepare frame
     _windowManager->PrepareFrame();    
     _userInterface->PrepareFrame();
+    _renderer->Prepare();
+
+    //Add elements
+    _renderer->Submit(_testSprite);
+    _userInterface->AddElements();
 
     //Render stuff
-    _renderer->Prepare();
-    _renderer->Submit(_testSprite);
     _renderer->Flush();
-    _userInterface->AddElements();
     _userInterface->Render();
 
     //Move sprite

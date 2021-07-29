@@ -8,7 +8,10 @@ namespace Core
     #define WINDOW_WIDTH 1920
     #define WINDOW_HEIGHT 1080
 
-    //Smart-Pointer
+    //Smart-Pointer-Stuff
+    #define MakeScope std::make_unique
+    #define MakeRef std::make_shared
+
     template<typename T>
         using Scope = std::unique_ptr<T>;
 

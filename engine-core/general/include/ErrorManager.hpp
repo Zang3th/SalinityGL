@@ -2,7 +2,7 @@
 
 #include "../../vendor/include/glad.hpp"
 #include "../../vendor/include/easylogging++.hpp"
-#include <signal.h>
+#include <csignal>
 
 #define ASSERT(x) if(!(x)) raise(SIGTRAP);
 #define GLCall(x) ErrorManager::GLClearError();\
@@ -14,7 +14,7 @@ namespace Core
     class ErrorManager
     {
         private:
-            ErrorManager(){}
+            ErrorManager() = default;
             
         public:
             static void GLClearError();

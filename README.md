@@ -23,7 +23,7 @@
    - [imgui](https://github.com/ocornut/imgui), [imgui::plot_var](https://github.com/ocornut/imgui/wiki/plot_var_example)
 
 ### Using & Compiling
-   - Currently only for linux, using CMake as a buildsystem
+   - Currently, only for linux (with CMake as a buildsystem)
       - Clone the repository
       - Install the extern dependencies (glm, GLFW) 
          - Take a look at the credits to find the repositories
@@ -31,7 +31,7 @@
       - cd build/
       - cmake ..
       - make            
-   - Not recommended but there is an old version of the engine (everything before commit 67cf366) that builds on windows
+   - Not recommended but there is an old version of the engine (everything before commit 67cf366) that builds on Windows
       - Clone the repository and execute the .sln file
             
 ### License:

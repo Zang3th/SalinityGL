@@ -12,7 +12,7 @@ namespace Core
         public:
             IndexBuffer(const void* data, unsigned int size);
             ~IndexBuffer();
-            void Bind();
-            void Unbind();
+            void Bind() const;
+            void Unbind() const;
     };
 }

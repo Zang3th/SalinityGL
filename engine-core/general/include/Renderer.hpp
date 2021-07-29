@@ -21,7 +21,7 @@ namespace Core
             void Prepare();
             void Submit(Ref<Sprite> sprite);
             void Flush();
-            unsigned int GetDrawcalls();
-            unsigned int GetDrawnVertices();
+            unsigned int GetDrawcalls() const;
+            unsigned int GetDrawnVertices() const;
     };
 }

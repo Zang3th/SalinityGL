@@ -7,14 +7,13 @@ bool Core::WireframeRendering = false;
 void GreenWorldInterface::CalcOverlayPosition()
 {
     const float PAD = 10.0f;
-    const int corner = 1; //Top-Left = 0, Top-Right = 1, Bottom-Left = 2, Bottom-Right = 3
     const ImGuiViewport* viewport = ImGui::GetMainViewport();
     ImVec2 work_pos = viewport->WorkPos;
     ImVec2 work_size = viewport->WorkSize;
-    _overlayPos.x = (corner & 1) ? (work_pos.x + work_size.x - PAD) : (work_pos.x + PAD);
-    _overlayPos.y = (corner & 2) ? (work_pos.y + work_size.y - PAD) : (work_pos.y + PAD);
-    _overlayPosPivot.x = (corner & 1) ? 1.0f : 0.0f;
-    _overlayPosPivot.y = (corner & 2) ? 1.0f : 0.0f;
+    _overlayPos.x = work_pos.x + work_size.x - PAD;
+    _overlayPos.y = work_pos.y + PAD;
+    _overlayPosPivot.x = 1.0f;
+    _overlayPosPivot.y = 0.0f;
 }
 
 // ----- Public -----

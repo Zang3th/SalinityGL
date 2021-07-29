@@ -5,6 +5,7 @@ namespace Core
     // ----- Public -----
 
     VertexBuffer::VertexBuffer(const void* data, unsigned int size)
+        : _vboID(0)
     {
         GLCall(glGenBuffers(1, &_vboID));
         GLCall(glBindBuffer(GL_ARRAY_BUFFER, _vboID));
@@ -16,12 +17,12 @@ namespace Core
         GLCall(glDeleteBuffers(1, &_vboID));
     }
 
-    void VertexBuffer::Bind()
+    void VertexBuffer::Bind() const
     {
         GLCall(glBindBuffer(GL_ARRAY_BUFFER, _vboID));
     }
 
-    void VertexBuffer::Unbind()
+    void VertexBuffer::Unbind() const
     {
         GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
     }

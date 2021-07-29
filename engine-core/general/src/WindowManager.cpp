@@ -7,7 +7,7 @@ namespace Core
     void WindowManager::CreateWindow()
     {
         if(!glfwInit())
-            LOG(ERROR) << "GLFW could not be initialized! GLFW_Error: " << glfwGetError(NULL);
+            LOG(ERROR) << "GLFW could not be initialized! GLFW_Error: " << glfwGetError(nullptr);
         else
             LOG(INFO) << "GLFW initialized!";
             
@@ -16,10 +16,10 @@ namespace Core
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);    
 
-        _window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, _windowName.c_str(), NULL, NULL);
+        _window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, _windowName.c_str(), nullptr, nullptr);
 
         if(!_window)
-            LOG(ERROR) << "Window could not be created! GLFW_Error: " << glfwGetError(NULL);
+            LOG(ERROR) << "Window could not be created! GLFW_Error: " << glfwGetError(nullptr);
         else
             LOG(INFO) << "GLFW Window created!";      
 
@@ -69,7 +69,7 @@ namespace Core
     void WindowManager::CalcFrametime()
     {
         //Calculate frametime
-        float currentFrame = glfwGetTime();
+        double currentFrame = glfwGetTime();
         _deltaTime = currentFrame - _lastFrame;
         _lastFrame = currentFrame;
         
@@ -90,7 +90,7 @@ namespace Core
     // ----- Public -----
 
     WindowManager::WindowManager()
-        : _windowName("GameEngine Default"), _window(NULL), _isRunning(false), _deltaTime(0.0f), _lastFrame(0.0f), _frameCounter(0), _dtAccumulated(0.0f), _fpsAvg(0.0f)
+    : _windowName("GameEngine Default"), _window(nullptr), _isRunning(false), _deltaTime(0.0f), _lastFrame(0.0f), _frameCounter(0), _dtAccumulated(0.0f), _fpsAvg(0.0f)
     {
         CreateWindow();
     }
@@ -106,7 +106,7 @@ namespace Core
         glfwSetWindowTitle(_window, title.c_str());
     }
 
-    bool WindowManager::WindowIsRunning()
+    bool WindowManager::WindowIsRunning() const
     {
         return _isRunning;
     }
@@ -125,17 +125,17 @@ namespace Core
     }
 
 
-    float WindowManager::GetDeltaTime()
+    double WindowManager::GetDeltaTime() const
     {
         return _deltaTime;
     }
 
-    float WindowManager::GetFps()
+    double WindowManager::GetFps() const
     {
         return _fpsAvg;
     }
 
-    unsigned int WindowManager::GetFrameCounter()
+    unsigned int WindowManager::GetFrameCounter() const
     {
         return _frameCounter;
     }

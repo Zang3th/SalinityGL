@@ -17,5 +17,5 @@ class GreenWorldInterface : public Core::UserInterface
 
     public:
         GreenWorldInterface(Core::Ref<Core::WindowManager> window, Core::Ref<Core::Renderer> renderer);
-        void AddElements();
+        void AddElements() override;
 };

@@ -5,9 +5,9 @@ namespace Core
     // ----- Public -----
 
     Renderer::Renderer()
-        : _drawcalls(0), _drawnVertices(0)
+    : _drawcalls(0), _drawnVertices(0), _orthoProjection(glm::ortho(0.0f, (float)WINDOW_WIDTH, (float)WINDOW_HEIGHT, 0.0f, -1.0f, 1.0f))
     {
-        _orthoProjection = glm::ortho(0.0f, (float)WINDOW_WIDTH, (float)WINDOW_HEIGHT, 0.0f, -1.0f, 1.0f);
+
     }
 
     void Renderer::Prepare()
@@ -20,7 +20,7 @@ namespace Core
         _spriteBuffer.clear();
     }
 
-    void Renderer::Submit(Ref<Sprite> sprite)
+    void Renderer::Submit(const Ref<Sprite> sprite)
     {
         _spriteBuffer.push_back(sprite);
     }
@@ -32,19 +32,19 @@ namespace Core
         else{
             GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));}
 
-        for(auto sprite : _spriteBuffer)
+        for(const auto& sprite : _spriteBuffer)
         {
             _drawnVertices += sprite->Draw(_orthoProjection);
             _drawcalls++;
         }
     }
 
-    unsigned int Renderer::GetDrawcalls()
+    unsigned int Renderer::GetDrawcalls() const
     {
         return _drawcalls;
     }
 
-    unsigned int Renderer::GetDrawnVertices()
+    unsigned int Renderer::GetDrawnVertices() const
     {
         return _drawnVertices;
     }

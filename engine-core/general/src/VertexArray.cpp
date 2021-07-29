@@ -5,6 +5,7 @@ namespace Core
     // ----- Public -----
 
     VertexArray::VertexArray()
+        : _vaoID(0)
     {
         GLCall(glGenVertexArrays(1, &_vaoID));
     }
@@ -14,12 +15,12 @@ namespace Core
         GLCall(glDeleteVertexArrays(1, &_vaoID));
     }
 
-    void VertexArray::Bind()
+    void VertexArray::Bind() const
     {
         GLCall(glBindVertexArray(_vaoID));
     }
 
-    void VertexArray::Unbind()
+    void VertexArray::Unbind() const
     {
         GLCall(glBindVertexArray(0));
     }

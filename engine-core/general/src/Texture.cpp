@@ -5,6 +5,7 @@ namespace Core
     // ----- Public -----
 
     Texture::Texture(const std::string& filepath)
+        : _textureID(0)
     {
         int width, height, comp;
         unsigned char* localBuffer = stbi_load(filepath.c_str(), &width, &height, &comp, 0);
@@ -52,19 +53,19 @@ namespace Core
         GLCall(glDeleteTextures(1, &_textureID));
     }
 
-    void Texture::Bind()
+    void Texture::Bind() const
     {
         GLCall(glActiveTexture(GL_TEXTURE0));
         GLCall(glBindTexture(GL_TEXTURE_2D, _textureID));
     }
 
-    void Texture::BindToSlot(unsigned int slot)
+    void Texture::BindToSlot(const unsigned int slot) const
     {
         GLCall(glActiveTexture(GL_TEXTURE0 + slot));
         GLCall(glBindTexture(GL_TEXTURE_2D, _textureID));
     }
 
-    void Texture::Unbind()
+    void Texture::Unbind() const
     {
         GLCall(glBindTexture(GL_TEXTURE_2D, 0));
     }

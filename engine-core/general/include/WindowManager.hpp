@@ -13,11 +13,11 @@ namespace Core
             std::string _windowName;
             GLFWwindow* _window;
             bool _isRunning;
-            float _deltaTime;
-            float _lastFrame;
+            double _deltaTime;
+            double _lastFrame;
             unsigned int _frameCounter;
-            float _dtAccumulated;
-            float _fpsAvg;
+            double _dtAccumulated;
+            double _fpsAvg;
 
             void CreateWindow();
             void PollEvents();
@@ -29,12 +29,12 @@ namespace Core
             WindowManager();
             ~WindowManager();
             void SetWindowTitle(const std::string& title);
-            bool WindowIsRunning();
+            bool WindowIsRunning() const;
             void PrepareFrame();   
             void SwapBuffers();
-            float GetDeltaTime();
-            float GetFps();
-            unsigned int GetFrameCounter();
+            double GetDeltaTime() const;
+            double GetFps() const;
+            unsigned int GetFrameCounter() const;
             GLFWwindow* GetWindow();
     };
 }

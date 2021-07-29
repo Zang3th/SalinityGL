@@ -8,8 +8,8 @@ namespace Core
     {
         const char* src = source.c_str();
 
-        GLCall(unsigned int id = glCreateShader(shaderType));
-        GLCall(glShaderSource(id, 1, &src, NULL));
+        GLCall(unsigned int id = glCreateShader(shaderType))
+        GLCall(glShaderSource(id, 1, &src, nullptr));
         GLCall(glCompileShader(id));
 
         //Errorhandling
@@ -128,12 +128,12 @@ namespace Core
         GLCall(glDeleteProgram(_shaderID));
     }
 
-    void Shader::Bind()
+    void Shader::Bind() const
     {
         GLCall(glUseProgram(_shaderID));
     }
 
-    void Shader::Unbind()
+    void Shader::Unbind() const
     {
         GLCall(glUseProgram(0));
     }   

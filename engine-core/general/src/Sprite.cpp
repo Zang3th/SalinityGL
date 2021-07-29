@@ -28,7 +28,7 @@ namespace Core
 
         //Create vbo, send it data and configure vao
         VertexBuffer vbo(vertices, sizeof(vertices));
-        vao->DefineAttributes(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+        vao->DefineAttributes(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), nullptr);
 
         //Unbind vao
         vao->Unbind();

@@ -13,20 +13,20 @@ void GreenWorldApp::LoadResources()
 GreenWorldApp::GreenWorldApp()
 {
     //Window-Settings
-    _windowManager = MakeScope<Core::WindowManager>();
+    _windowManager = Core::MakeScope<Core::WindowManager>();
     _windowManager->SetWindowTitle("GreenWorld Demo Application");
 
     //Renderer
-    _renderer = MakeRef<Core::Renderer>();
+    _renderer = Core::MakeRef<Core::Renderer>();
 
     //UI
-    _userInterface = MakeScope<GreenWorldInterface>(_windowManager, _renderer);
+    _userInterface = Core::MakeScope<GreenWorldInterface>(_windowManager, _renderer);
 
     //Resources
     LoadResources();
 
     //Create test sprite
-    _testSprite = MakeRef<Core::Sprite>
+    _testSprite = Core::MakeRef<Core::Sprite>
     (
         _resourceManager.GetTexture("StoneTexture"),
         _resourceManager.GetShader("SpriteShader"),
@@ -35,6 +35,13 @@ GreenWorldApp::GreenWorldApp()
         0.0f,
         glm::vec3(0.37f, 0.77, 0.29f)
     );
+
+    //Initialize profiler results map
+    Core::ProfileResults::_results["Prepare frame"] = 0.0f;
+    Core::ProfileResults::_results["Render graphics"] = 0.0f;
+    Core::ProfileResults::_results["Render UI"] = 0.0f;
+    Core::ProfileResults::_results["Move sprite"] = 0.0f;
+    Core::ProfileResults::_results["End frame"] = 0.0f;
 }
 
 bool GreenWorldApp::IsRunning()
@@ -45,21 +52,36 @@ bool GreenWorldApp::IsRunning()
 void GreenWorldApp::Update()
 {
     //Prepare frame
-    _windowManager->PrepareFrame();    
-    _userInterface->PrepareFrame();
-    _renderer->Prepare();
+    {
+        Core::PROFILE_SCOPE("Prepare frame");
+        _windowManager->PrepareFrame();
+        _renderer->Prepare();
+        _userInterface->PrepareFrame();
+    }
 
-    //Add elements
-    _renderer->Submit(_testSprite);
-    _userInterface->AddElements();
+    //Render graphics
+    {
+        Core::PROFILE_SCOPE("Render graphics");
+        _renderer->Submit(_testSprite);
+        _renderer->Flush();
+    }
 
-    //Render stuff
-    _renderer->Flush();
-    _userInterface->Render();
+    //Render UI (always after graphics)
+    {
+        Core::PROFILE_SCOPE("Render UI");
+        _userInterface->AddElements();
+        _userInterface->Render();
+    }
 
     //Move sprite
-    _testSprite->Translate(glm::vec2(30.0f * _windowManager->GetDeltaTime(), 0.0f));
+    {
+        Core::PROFILE_SCOPE("Move sprite");
+        _testSprite->Translate(glm::vec2(30.0f * _windowManager->GetDeltaTime(), 0.0f));
+    }
 
     //End frame
-    _windowManager->SwapBuffers();
+    {
+        Core::PROFILE_SCOPE("End frame");
+        _windowManager->SwapBuffers();
+    }
 }

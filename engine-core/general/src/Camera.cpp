@@ -31,28 +31,28 @@ namespace Core
         float velocity = _movementSpeed * deltaTime;
 
         if (direction == FORWARD)
-            Position += _front * velocity;
+            _position += _front * velocity;
 
         if (direction == BACKWARD)
-            Position -= _front * velocity;
+            _position -= _front * velocity;
 
         if (direction == LEFT)
-            Position -= _right * velocity;
+            _position -= _right * velocity;
 
         if (direction == RIGHT)
-            Position += _right * velocity;
+            _position += _right * velocity;
 
         if (direction == UP)
-            Position += _up * velocity;
+            _position += _up * velocity;
 
         if (direction == DOWN)
-            Position -= _up * velocity;
+            _position -= _up * velocity;
     }
 
     void Camera::ProcessMouseMovement(float xOffset, float yOffset)
     {
-        xOffset *= MouseSensitivity;
-        yOffset *= MouseSensitivity;
+        xOffset *= _mouseSensitivity;
+        yOffset *= _mouseSensitivity;
 
         _yaw += xOffset;
         _pitch += yOffset;

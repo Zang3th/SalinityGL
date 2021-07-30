@@ -13,10 +13,8 @@ namespace Core
 {
     class ErrorManager
     {
-        private:
-            ErrorManager() = default;
-            
         public:
+            ErrorManager() = delete;
             static void GLClearError();
             static bool GLLogCall(const char* function, const char* file, int line);
     };

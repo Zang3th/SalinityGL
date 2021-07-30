@@ -2,9 +2,9 @@
 cmake_minimum_required(VERSION 3.16)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
-set(CMAKE_BUILD_TYPE "Release")
+set(CMAKE_BUILD_TYPE "Debug")
 project(GameEngine)
-set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wpedantic --std=c++17")
+set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wpedantic --std=c++17 -g")
 set(LINKER_FLAGS "-lglfw3 -lX11 -ldl -lGL -pthread")
 
 # Source files

@@ -31,7 +31,7 @@ namespace Core
                 DOWN
             };
 
-            Camera(glm::vec3 position, float yaw, float pitch);
+            Camera(glm::vec3 position, float yaw, float pitch, float movementSpeed);
             inline glm::mat4 GetViewMatrix(){return glm::lookAt(_position, _position + _front, _up);}
             void ProcessKeyboard(Camera_Movement direction, float deltaTime);
             void ProcessMouseMovement(float xOffset, float yOffset);

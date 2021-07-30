@@ -65,11 +65,15 @@ void GreenWorldInterface::AddElements()
             ImGui::Text("Application average %.2f ms/frame (%.1f FPS)", _window->GetDeltaTime() * 1000.0f, _window->GetFps());
 
             ImGui::Separator();
-            ImGui::PlotVar("", _window->GetDeltaTime() * 1000, 0.0f, 30.0f);
+            ImGui::PlotVar("", (float)_window->GetDeltaTime() * 1000.0f, 0.0f, 30.0f);
             ImGui::Separator();
 
             ImGui::Text("Drawcalls: %d", _renderer->GetDrawcalls());
-            ImGui::Text("Vertices: %d", _renderer->GetDrawnVertices());
+            ImGui::Text("Vertices:  %d", _renderer->GetDrawnVertices());
+            ImGui::Separator();
+
+            for(auto const& entry : Core::ProfileResults::_results)
+                ImGui::Text("%.3fms - %s", entry.second, entry.first);
 
             ImGui::End();
         }

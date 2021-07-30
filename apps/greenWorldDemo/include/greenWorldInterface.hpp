@@ -4,6 +4,7 @@
 #include "../../../engine-core/general/include/CoreDefines.hpp"
 #include "../../../engine-core/general/include/Renderer.hpp"
 #include "../../../engine-core/vendor/imgui/imgui_plot_var.h"
+#include "../../../engine-core/general/include/Profiler.hpp"
 
 class GreenWorldInterface : public Core::UserInterface
 {

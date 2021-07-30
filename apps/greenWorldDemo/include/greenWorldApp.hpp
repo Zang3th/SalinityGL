@@ -5,6 +5,7 @@
 #include "../../../engine-core/general/include/Renderer.hpp"
 #include "../../../engine-core/general/include/CoreDefines.hpp"
 #include "../../../engine-core/general/include/Sprite.hpp"
+#include "../../../engine-core/general/include/Profiler.hpp"
 #include "greenWorldInterface.hpp"
 
 class GreenWorldApp

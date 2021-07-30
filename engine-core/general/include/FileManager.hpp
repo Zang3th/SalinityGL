@@ -10,6 +10,7 @@ namespace Core
     class FileManager
     {
         public:
+            FileManager() = delete;
             static std::string FileToString(const std::string& filepath);
     };
 }

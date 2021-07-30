@@ -53,7 +53,7 @@ namespace ImGui
         int current_frame = GetFrameCount();
         if (pvd.LastFrame != current_frame)
         {
-            PlotLines("##plot", &pvd.Data[0], buffer_size, pvd.DataInsertIdx, NULL, scale_min, scale_max, ImVec2(400, 80));
+            PlotLines("##plot", &pvd.Data[0], buffer_size, pvd.DataInsertIdx, nullptr, scale_min, scale_max, ImVec2(400, 80));
             pvd.LastFrame = current_frame;
         }
         

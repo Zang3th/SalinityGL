@@ -1,20 +1,11 @@
-#include "include/greenWorldApp.hpp"
+#include "include/GW_App.hpp"
 
-INITIALIZE_EASYLOGGINGPP
+INIT_GREENWORLD_APP
 
 int main()
 {
-    //Add colorful terminal logging
-    el::Loggers::addFlag(el::LoggingFlag::ColoredTerminalOutput);
-
-    //Configure logger
-    el::Configurations defaultConf;
-    defaultConf.setToDefault();
-    defaultConf.setGlobally(el::ConfigurationType::Format, "%datetime{%H:%m:%s} [%level] [%fbase] %msg");
-    el::Loggers::reconfigureLogger("default", defaultConf);
-
     //Create app
-    GreenWorldApp greenWorldApp;
+    GW::App greenWorldApp;
 
     //Start app
     while(greenWorldApp.IsRunning())

@@ -15,8 +15,8 @@ namespace Core
     {
         private:
             Ref<VertexArray> _vao;
-            Ref<Texture> _texture;
-            Ref<Shader> _shader;
+            Texture* _texture;
+            Shader* _shader;
             glm::vec2 _position;
             glm::vec2 _size;
             float _rotation;
@@ -28,7 +28,7 @@ namespace Core
             glm::mat4 CreateModelMatrix(glm::vec2 position, glm::vec2 size, float rotation);
 
         public:
-            Sprite(Ref<Texture> texture, Ref<Shader> shader, glm::vec2 position, glm::vec2 size, float rotation, glm::vec3 color);
+            Sprite(Texture* texture, Shader* shader, glm::vec2 position, glm::vec2 size, float rotation, glm::vec3 color);
             unsigned int Draw(glm::mat4 projection);
             void Translate(glm::vec2 position);
     };

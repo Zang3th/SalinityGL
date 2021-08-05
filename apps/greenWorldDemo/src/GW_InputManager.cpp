@@ -4,8 +4,8 @@ namespace GW
 {
     // ----- Private -----
 
-    Core::Ref<Core::WindowManager> InputManager::_window;
-    Core::Ref<Core::Camera> InputManager::_camera;
+    Core::WindowManager* InputManager::_window;
+    Core::Camera* InputManager::_camera;
     bool InputManager::_windowInFocus;
     double InputManager::_lastX, InputManager::_lastY;
 
@@ -45,7 +45,7 @@ namespace GW
 
     // ----- Public -----
 
-    void InputManager::Init(Core::Ref<Core::WindowManager> window, Core::Ref<Core::Camera> camera)
+    void InputManager::Init(Core::WindowManager* window, Core::Camera* camera)
     {
         //Set static member variables
         _window = window;

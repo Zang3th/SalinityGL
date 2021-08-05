@@ -20,7 +20,7 @@ namespace GW
 
     // ----- Public -----
 
-    Interface::Interface(Core::Ref<Core::WindowManager> window, Core::Ref<Core::Renderer> renderer)
+    Interface::Interface(Core::WindowManager* window, Core::Renderer* renderer)
     : Core::UserInterface(window), _renderer(renderer), _showOverlay(true)
     {
         //Flags

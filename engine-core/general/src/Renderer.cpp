@@ -20,14 +20,14 @@ namespace Core
         _spriteBuffer.clear();
     }
 
-    void Renderer::Submit(const Ref<Sprite> sprite)
+    void Renderer::Submit(Sprite* sprite)
     {
         _spriteBuffer.push_back(sprite);
     }
 
     void Renderer::Flush()
     {
-        if(WireframeRendering == true){
+        if(WireframeRendering){
             GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));}
         else{
             GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));}

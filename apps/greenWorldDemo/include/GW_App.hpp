@@ -18,12 +18,12 @@ namespace GW
     class App
     {
         private:
-            Core::Ref<Core::WindowManager> _windowManager;
-            Core::ResourceManager _resourceManager;
-            Core::Ref<Core::Camera> _camera;
+            Core::Scope<Core::WindowManager> _windowManager;
+            Core::Scope<Core::Renderer> _renderer;
+            Core::Scope<Core::Camera> _camera;
+            Core::Scope<Core::Sprite> _testSprite;
             Core::Scope<Interface> _userInterface;
-            Core::Ref<Core::Renderer> _renderer;
-            Core::Ref<Core::Sprite> _testSprite;
+            Core::ResourceManager _resourceManager;
 
             void ConfigureLogger();
             void LoadResources();

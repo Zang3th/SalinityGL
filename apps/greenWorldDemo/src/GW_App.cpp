@@ -30,26 +30,26 @@ namespace GW
         ConfigureLogger();
 
         //Window-Management
-        _windowManager = Core::MakeRef<Core::WindowManager>();
+        _windowManager = Core::MakeScope<Core::WindowManager>();
         _windowManager->SetWindowTitle("GreenWorld Demo Application");
 
         //3D-Camera
-        _camera = Core::MakeRef<Core::Camera>(glm::vec3(0.0f, 0.0f, 0.0f), 0.0f, 0.0f, 15.0f);
+        _camera = Core::MakeScope<Core::Camera>(glm::vec3(0.0f, 0.0f, 0.0f), 0.0f, 0.0f, 15.0f);
 
         //Input-Management
-        InputManager::Init(_windowManager, _camera);
+        InputManager::Init(_windowManager.get(), _camera.get());
 
         //Renderer
-        _renderer = Core::MakeRef<Core::Renderer>();
+        _renderer = Core::MakeScope<Core::Renderer>();
 
         //UI
-        _userInterface = Core::MakeScope<Interface>(_windowManager, _renderer);
+        _userInterface = Core::MakeScope<Interface>(_windowManager.get(), _renderer.get());
 
         //Resources
         LoadResources();
 
         //Create test sprite
-        _testSprite = Core::MakeRef<Core::Sprite>
+        _testSprite = Core::MakeScope<Core::Sprite>
         (
             _resourceManager.GetTexture("StoneTexture"),
             _resourceManager.GetShader("SpriteShader"),
@@ -85,7 +85,7 @@ namespace GW
         //Render graphics
         {
             Core::PROFILE_SCOPE("Render graphics");
-            _renderer->Submit(_testSprite);
+            _renderer->Submit(_testSprite.get());
             _renderer->Flush();
         }
 

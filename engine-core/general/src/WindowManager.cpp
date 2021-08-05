@@ -103,7 +103,7 @@ namespace Core
     void WindowManager::SetWindowTitle(const std::string& title)
     {
         _windowName = title;
-        glfwSetWindowTitle(_window, title.c_str());
+        glfwSetWindowTitle(_window, _windowName.c_str());
     }
 
     bool WindowManager::WindowIsRunning() const

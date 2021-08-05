@@ -15,7 +15,7 @@ namespace Core
     }
 
     template<typename T>
-    using Ref = std::shared_ptr<T>;
+        using Ref = std::shared_ptr<T>;
 
     template<typename T, typename ... Args>
     constexpr Ref<T> MakeRef(Args&& ... args)

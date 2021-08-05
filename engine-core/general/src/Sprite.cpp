@@ -57,7 +57,7 @@ namespace Core
 
     // ----- Public -----
 
-    Sprite::Sprite(Ref<Texture> texture, Ref<Shader> shader, glm::vec2 position, glm::vec2 size, float rotation, glm::vec3 color)
+    Sprite::Sprite(Texture* texture, Shader* shader, glm::vec2 position, glm::vec2 size, float rotation, glm::vec3 color)
         : _texture(texture), _shader(shader), _position(position), _size(size), _rotation(rotation), _color(color), _vertices(0)
     {
         _vao = CreateSpriteVao();

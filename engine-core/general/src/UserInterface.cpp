@@ -4,7 +4,7 @@ namespace Core
 {
     // ----- Public -----
 
-    UserInterface::UserInterface(Ref<WindowManager> window)
+    UserInterface::UserInterface(WindowManager* window)
         : _window(window)
     {
         //Setup ImGui

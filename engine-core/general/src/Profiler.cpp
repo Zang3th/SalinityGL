@@ -25,7 +25,7 @@ namespace Core
 
         _stopped = true;
 
-        float duration = (end - start) * 0.001f;
+        float duration = (float)(end - start) * 0.001f;
         ProfileResults::_results[_scopeName] = duration;
     }
 }

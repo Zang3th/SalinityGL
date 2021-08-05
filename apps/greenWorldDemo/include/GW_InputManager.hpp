@@ -12,13 +12,13 @@ namespace GW
             static void MousePosCallback(GLFWwindow* window, double xPos, double yPos);
             static void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
 
-            static Core::Ref<Core::WindowManager> _window;
-            static Core::Ref<Core::Camera> _camera;
+            static Core::WindowManager* _window;
+            static Core::Camera* _camera;
             static bool _windowInFocus;
             static double _lastX, _lastY;
 
         public:
             InputManager() = delete;
-            static void Init(Core::Ref<Core::WindowManager> window, Core::Ref<Core::Camera> camera);
+            static void Init(Core::WindowManager* window, Core::Camera* camera);
     };
 }

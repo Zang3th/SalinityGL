@@ -8,9 +8,9 @@ namespace Core
     {
         //Calculate the new front vector
         glm::vec3 front;
-        front.x = cos(glm::radians(_yaw)) * cos(glm::radians(_pitch));
-        front.y = sin(glm::radians(_pitch));
-        front.z = sin(glm::radians(_yaw)) * cos(glm::radians(_pitch));
+        front.x = (float)(cos(glm::radians(_yaw)) * cos(glm::radians(_pitch)));
+        front.y = (float)(sin(glm::radians(_pitch)));
+        front.z = (float)(sin(glm::radians(_yaw)) * cos(glm::radians(_pitch)));
         _front = glm::normalize(front);
 
         //Also, re-calculate the right and up vector

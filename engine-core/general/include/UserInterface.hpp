@@ -11,10 +11,10 @@ namespace Core
     class UserInterface
     {   
         protected:
-            Ref<WindowManager> _window;
+            WindowManager* _window;
 
         public:
-            UserInterface(Ref<WindowManager> window);
+            UserInterface(WindowManager* window);
             ~UserInterface();
             void PrepareFrame();
             virtual void AddElements() = 0;

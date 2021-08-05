@@ -11,7 +11,7 @@ namespace GW
     class Interface : public Core::UserInterface
     {
         private:
-            Core::Ref<Core::Renderer> _renderer;
+            Core::Renderer* _renderer;
             bool _showOverlay;
             ImVec2 _overlayPos, _overlayPosPivot;
             ImGuiWindowFlags _windowFlags;
@@ -19,7 +19,7 @@ namespace GW
             void CalcOverlayPosition();
 
         public:
-            Interface(Core::Ref<Core::WindowManager> window, Core::Ref<Core::Renderer> renderer);
+            Interface(Core::WindowManager* window, Core::Renderer* renderer);
             void AddElements() override;
     };
 }

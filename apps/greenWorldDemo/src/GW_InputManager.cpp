@@ -50,10 +50,33 @@ namespace GW
         //Set static member variables
         _window = window;
         _camera = camera;
-        _windowInFocus = true;
+        _windowInFocus = false;
 
         //Set callbacks
         glfwSetCursorPosCallback(_window->GetWindow(), MousePosCallback);
         glfwSetMouseButtonCallback(_window->GetWindow(), MouseButtonCallback);
+    }
+
+    void InputManager::ProcessInput()
+    {
+        auto dt = (float)_window->GetDeltaTime();
+
+        if (glfwGetKey(_window->GetWindow(), GLFW_KEY_W) == GLFW_PRESS)
+            _camera->ProcessKeyboard(_camera->FORWARD, dt);
+
+        if (glfwGetKey(_window->GetWindow(), GLFW_KEY_S) == GLFW_PRESS)
+            _camera->ProcessKeyboard(_camera->BACKWARD, dt);
+
+        if (glfwGetKey(_window->GetWindow(), GLFW_KEY_D) == GLFW_PRESS)
+            _camera->ProcessKeyboard(_camera->RIGHT, dt);
+
+        if (glfwGetKey(_window->GetWindow(), GLFW_KEY_A) == GLFW_PRESS)
+            _camera->ProcessKeyboard(_camera->LEFT, dt);
+
+        if (glfwGetKey(_window->GetWindow(), GLFW_KEY_SPACE) == GLFW_PRESS)
+            _camera->ProcessKeyboard(_camera->UP, dt);
+
+        if (glfwGetKey(_window->GetWindow(), GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
+            _camera->ProcessKeyboard(_camera->DOWN, dt);
     }
 }

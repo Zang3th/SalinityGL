@@ -24,7 +24,7 @@ namespace Core
         };
 
         //Set vertice count accordingly
-        _vertices = 6;
+        _verticeCount = 6;
 
         //Create vbo, send it data and configure vao
         VertexBuffer vbo(vertices, sizeof(vertices));
@@ -58,13 +58,13 @@ namespace Core
     // ----- Public -----
 
     Sprite::Sprite(Texture* texture, Shader* shader, glm::vec2 position, glm::vec2 size, float rotation, glm::vec3 color)
-        : _texture(texture), _shader(shader), _position(position), _size(size), _rotation(rotation), _color(color), _vertices(0)
+    : _texture(texture), _shader(shader), _position(position), _size(size), _rotation(rotation), _color(color), _verticeCount(0)
     {
         _vao = CreateSpriteVao();
         _model = CreateModelMatrix(_position, _size, _rotation);
     }
 
-    unsigned int Sprite::Draw(glm::mat4 projection)
+    unsigned int Sprite::Draw(const glm::mat4& projection)
     {
         _shader->Bind();
         
@@ -77,14 +77,14 @@ namespace Core
         _vao->Bind();
 
         //Render quad
-        GLCall(glDrawArrays(GL_TRIANGLES, 0, _vertices));
+        GLCall(glDrawArrays(GL_TRIANGLES, 0, _verticeCount));
 
         _vao->Unbind();
         _texture->Unbind();
         _shader->Unbind();
 
         //Return rendered vertices
-        return _vertices;
+        return _verticeCount;
     }
 
     void Sprite::Translate(glm::vec2 position)

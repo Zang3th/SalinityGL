@@ -12,6 +12,7 @@ namespace GW
     {
         private:
             Core::Renderer* _renderer;
+            Core::Camera* _camera;
             bool _showOverlay;
             ImVec2 _overlayPos, _overlayPosPivot;
             ImGuiWindowFlags _windowFlags;
@@ -19,7 +20,7 @@ namespace GW
             void CalcOverlayPosition();
 
         public:
-            Interface(Core::WindowManager* window, Core::Renderer* renderer);
+            Interface(Core::WindowManager* window, Core::Renderer* renderer, Core::Camera* camera);
             void AddElements() override;
     };
 }

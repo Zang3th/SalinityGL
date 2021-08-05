@@ -4,8 +4,8 @@ namespace Core
 {
     // ----- Public -----
 
-    Renderer::Renderer()
-    : _drawcalls(0), _drawnVertices(0), _orthoProjection(glm::ortho(0.0f, (float)WINDOW_WIDTH, (float)WINDOW_HEIGHT, 0.0f, -1.0f, 1.0f))
+    Renderer::Renderer(Camera* camera)
+    : _camera(camera), _drawcalls(0), _drawnVertices(0), _orthoProjection(glm::ortho(0.0f, (float)WINDOW_WIDTH, (float)WINDOW_HEIGHT, 0.0f, -1.0f, 1.0f)), _perspProjection(glm::perspective(glm::radians(45.0f), (float)WINDOW_WIDTH/(float)WINDOW_HEIGHT, 0.1f, 1000.0f))
     {
 
     }
@@ -16,8 +16,9 @@ namespace Core
         _drawcalls = 0;
         _drawnVertices = 0;
 
-        //Clear sprite buffer
+        //Clear buffers
         _spriteBuffer.clear();
+        _modelBuffer.clear();
     }
 
     void Renderer::Submit(Sprite* sprite)
@@ -25,13 +26,27 @@ namespace Core
         _spriteBuffer.push_back(sprite);
     }
 
+    void Renderer::Submit(Model* model)
+    {
+        _modelBuffer.push_back(model);
+    }
+
     void Renderer::Flush()
     {
+        //Check for Wireframe-Mode
         if(WireframeRendering){
             GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));}
         else{
             GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));}
 
+        //Render models
+        for(const auto& model : _modelBuffer)
+        {
+            _drawnVertices += model->Draw(_perspProjection, _camera->GetViewMatrix(), _camera->GetPosition());
+            _drawcalls++;
+        }
+
+        //Render sprites
         for(const auto& sprite : _spriteBuffer)
         {
             _drawnVertices += sprite->Draw(_orthoProjection);

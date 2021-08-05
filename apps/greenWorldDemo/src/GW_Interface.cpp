@@ -20,8 +20,8 @@ namespace GW
 
     // ----- Public -----
 
-    Interface::Interface(Core::WindowManager* window, Core::Renderer* renderer)
-    : Core::UserInterface(window), _renderer(renderer), _showOverlay(true)
+    Interface::Interface(Core::WindowManager* window, Core::Renderer* renderer, Core::Camera* camera)
+    : Core::UserInterface(window), _renderer(renderer), _camera(camera), _showOverlay(true)
     {
         //Flags
         _windowFlags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav | ImGuiWindowFlags_NoMove;
@@ -64,16 +64,22 @@ namespace GW
         
             if(ImGui::Begin("Example: Simple overlay", &_showOverlay, _windowFlags))
             {
+                //Application stats
                 ImGui::Text("Application average %.2f ms/frame (%.1f FPS)", _window->GetDeltaTime() * 1000.0f, _window->GetFps());
-
                 ImGui::Separator();
                 ImGui::PlotVar("", (float)_window->GetDeltaTime() * 1000.0f, 0.0f, 30.0f);
                 ImGui::Separator();
-
                 ImGui::Text("Drawcalls: %d", _renderer->GetDrawcalls());
                 ImGui::Text("Vertices:  %d", _renderer->GetDrawnVertices());
                 ImGui::Separator();
 
+                //Camera stats
+                ImGui::Text("Camera-Position (X: %.1f, Y: %.1f, Z: %.1f)", _camera->GetPosition().x, _camera->GetPosition().y, _camera->GetPosition().z);
+                ImGui::Text("Camera-Yaw: %.1f, Camera-Pitch: %.1f", _camera->GetYaw(), _camera->GetPitch());
+                ImGui::Text("Camera-Front  (X: %.1f, Y: %.1f, Z: %.1f)", _camera->GetFront().x, _camera->GetFront().y, _camera->GetFront().z);
+                ImGui::Separator();
+
+                //Profiling/Timing-Results
                 for(auto const& entry : Core::ProfileResults::_results)
                     ImGui::Text("%.3fms - %s", entry.second, entry.first);
 

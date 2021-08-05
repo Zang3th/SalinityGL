@@ -20,5 +20,6 @@ namespace GW
         public:
             InputManager() = delete;
             static void Init(Core::WindowManager* window, Core::Camera* camera);
+            static void ProcessInput();
     };
 }

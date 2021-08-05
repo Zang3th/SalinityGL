@@ -7,6 +7,8 @@
 #include "../../../engine-core/general/include/Sprite.hpp"
 #include "../../../engine-core/general/include/Profiler.hpp"
 #include "../../../engine-core/general/include/Camera.hpp"
+#include "../../../engine-core/general/include/Mesh.hpp"
+#include "../../../engine-core/general/include/Model.hpp"
 
 #include "GW_Interface.hpp"
 #include "GW_InputManager.hpp"
@@ -21,8 +23,9 @@ namespace GW
             Core::Scope<Core::WindowManager> _windowManager;
             Core::Scope<Core::Renderer> _renderer;
             Core::Scope<Core::Camera> _camera;
-            Core::Scope<Core::Sprite> _testSprite;
             Core::Scope<Interface> _userInterface;
+            Core::Scope<Core::Sprite> _testSprite;
+            Core::Scope<Core::Model> _testModel;
             Core::ResourceManager _resourceManager;
 
             void ConfigureLogger();

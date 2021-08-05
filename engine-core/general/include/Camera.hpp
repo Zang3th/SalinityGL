@@ -36,6 +36,7 @@ namespace Core
             void ProcessKeyboard(Camera_Movement direction, float deltaTime);
             void ProcessMouseMovement(float xOffset, float yOffset);
             glm::vec3 GetPosition() const;
+            glm::vec3 GetFront() const;
             float GetYaw() const;
             float GetPitch() const;
     };

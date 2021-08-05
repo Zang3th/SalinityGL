@@ -79,6 +79,11 @@ namespace Core
         return _position;
     }
 
+    glm::vec3 Camera::GetFront() const
+    {
+        return _front;
+    }
+
     float Camera::GetYaw() const
     {
         return _yaw;

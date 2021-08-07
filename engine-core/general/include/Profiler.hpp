@@ -22,6 +22,7 @@ namespace Core
     {
         public:
             ProfileResults() = delete;
+            inline static void AddFunctionScope(const char* func){_results[func] = 1.0f;}
             static std::map<const char*, float> _results;
     };
 

@@ -39,27 +39,6 @@ namespace Core
         _isRunning = true; //Start application
     }
 
-    void WindowManager::PollEvents()
-    {
-        glfwPollEvents();
-    }
-
-    void WindowManager::ProcessEvents()
-    {
-        if(glfwWindowShouldClose(_window))
-        {
-            _isRunning = false; 
-            LOG(INFO) << "Quitting!";
-        }
-
-        if(glfwGetKey(_window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        {
-            glfwSetWindowShouldClose(_window, true);
-            _isRunning = false; 
-            LOG(INFO) << "Quitting!";
-        }
-    }
-
     void WindowManager::Prepare()
     {
         GLCall(glClearColor(0.0, 0.0, 0.0, 1.0));
@@ -114,9 +93,28 @@ namespace Core
     void WindowManager::PrepareFrame()
     {
         CalcFrametime();
-        PollEvents();
-        ProcessEvents();
         Prepare();
+    }
+
+    void WindowManager::PollEvents()
+    {
+        glfwPollEvents();
+    }
+
+    void WindowManager::ProcessEvents()
+    {
+        if(glfwWindowShouldClose(_window))
+        {
+            _isRunning = false;
+            LOG(INFO) << "Quitting!";
+        }
+
+        if(glfwGetKey(_window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        {
+            glfwSetWindowShouldClose(_window, true);
+            _isRunning = false;
+            LOG(INFO) << "Quitting!";
+        }
     }
 
     void WindowManager::SwapBuffers()

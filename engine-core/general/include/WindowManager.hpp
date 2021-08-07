@@ -20,8 +20,6 @@ namespace Core
             double _fpsAvg;
 
             void CreateWindow();
-            void PollEvents();
-            void ProcessEvents();
             void Prepare();
             void CalcFrametime();    
 
@@ -30,7 +28,9 @@ namespace Core
             ~WindowManager();
             void SetWindowTitle(const std::string& title);
             bool WindowIsRunning() const;
-            void PrepareFrame();   
+            void PrepareFrame();
+            void PollEvents();
+            void ProcessEvents();
             void SwapBuffers();
             double GetDeltaTime() const;
             double GetFps() const;

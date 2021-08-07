@@ -6,13 +6,35 @@
    - Simple OpenGL-Wrapper functions
       - Located in the engine-core
    - Example applications that use the wrapper functions
+     - GreenWorld: Demo Nature-Scene (3D)
    - Written in C++17 with OpenGL 4.5
 
 ### General functionalities
-   - Currently none
+   - Basic OpenGL-Wrapping (VAO, VBO, IBO, Shaders, Textures, Errorhandling)
+     - Windowcreation
+     - 2D Sprite-Renderer
+     - 3D Model-Renderer
+     - Camerasystem
+   - File-Management
+   - Profiler
+   - UI
    
 ### Example applications  
-   - Currently none
+   - GreenWorld
+     - Planned to be a demo nature scene to show the capabilities of the engine
+
+### ToDo's
+   - Loading of GLTF-Models
+   - Audiomanager for sounds and backgroundmusic
+   - Cubemaps
+   - Instanced-Rendering
+   - Lighting
+     - Blinn-Phong
+     - Shadows
+     - Normalmapping
+     - HDR/Bloom 
+   - Water-Rendering
+   - And a lot more ...
 
 ### Credits
    - [Easylogging++](https://github.com/amrayn/easyloggingpp)
@@ -35,7 +57,10 @@
       - Clone the repository and execute the .sln file
             
 ### License:
-   - This code is provided under a BSD-style license. See the file LICENSE for details.
+   - This code is provided under the MIT License. See the file LICENSE for details.
+
+### Current look of the GreenWorld App:
+![GreenWorld](res/screenshots/Screenshot_GW_003.png)
 
 ### Screenshots out of applications that I created with the old engine:
 
@@ -50,5 +75,3 @@
 #### My implementation of the game "Breakout" from "learnopengl.com":
 <img src="https://user-images.githubusercontent.com/59279641/91633530-3d1a3180-e9e9-11ea-889c-74dba8e7e700.PNG"/>
 
-### Look of the GreenWorld App:
-   ![GreenWorld](res/screenshots/Screenshot_GW_003.png)

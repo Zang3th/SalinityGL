@@ -48,6 +48,7 @@ namespace GW
         //Textures
         _resourceManager->LoadTexture("StoneTexture", "../res/textures/greenWorld/Stone.jpg");
         _resourceManager->LoadTexture("BlockTexture", "../res/textures/greenWorld/Block.jpg");
+        _resourceManager->LoadTexture("SwordTexture", "../res/models/sword/textures/Object001_mtl_baseColor.jpeg");
 
         //Shaders
         _resourceManager->LoadShader("SpriteShader", "../res/shader/greenWorld/sprite_vs.glsl", "../res/shader/greenWorld/sprite_fs.glsl");
@@ -84,6 +85,14 @@ namespace GW
             glm::vec3(1.0f, 1.0f, 1.0f),
             &mesh
         );
+
+        _testGLTF = Core::MakeScope<Core::Model>
+        (
+            _resourceManager->GetTexture("SwordTexture"),
+            _resourceManager->GetShader("ModelShader"),
+            glm::vec3(1.0f, 1.0f, 1.0f),
+            "../res/models/sword/scene.gltf"
+        );
     }
 
     bool App::IsRunning()
@@ -114,6 +123,7 @@ namespace GW
             Core::PROFILE_SCOPE("Render graphics");
             _renderer->Submit(_testSprite.get());
             _renderer->Submit(_testModel.get());
+            _renderer->Submit(_testGLTF.get());
             _renderer->Flush();
         }
 

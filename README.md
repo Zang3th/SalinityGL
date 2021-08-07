@@ -43,6 +43,7 @@
    - [GLFW](https://github.com/glfw/glfw)
    - [glm](https://github.com/g-truc/glm)
    - [imgui](https://github.com/ocornut/imgui), [imgui::plot_var](https://github.com/ocornut/imgui/wiki/plot_var_example)
+   - [json](https://github.com/nlohmann/json)
 
 ### Using & Compiling
    - Currently, only for linux (with CMake as a buildsystem)

@@ -10,6 +10,7 @@
 #include "CoreDefines.hpp"
 #include "ErrorManager.hpp"
 #include "Mesh.hpp"
+#include "Loader.hpp"
 
 namespace Core
 {
@@ -27,6 +28,7 @@ namespace Core
 
         public:
             Model(Texture* texture, Shader* shader, glm::vec3 color, Mesh* mesh);
+            Model(Texture* texture, Shader* shader, glm::vec3 color, const std::string& filepath);
             unsigned int Draw(const glm::mat4& projMatrix, const glm::mat4& viewMatrix, const glm::vec3& camPos);
     };
 }

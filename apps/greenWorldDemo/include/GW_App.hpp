@@ -26,7 +26,7 @@ namespace GW
             Core::Scope<Interface> _userInterface;
             Core::Scope<Core::ResourceManager> _resourceManager;
             Core::Scope<Core::Sprite> _testSprite;
-            Core::Scope<Core::Model> _testModel;
+            Core::Scope<Core::Model> _testModel, _testGLTF;
 
             static void ConfigureLogger();
             static void ConfigureProfiler();

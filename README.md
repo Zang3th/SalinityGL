@@ -18,13 +18,13 @@
    - File-Management
    - Profiler
    - UI
+   - Loading of GLTF-Models
    
 ### Example applications  
    - GreenWorld
      - Planned to be a demo nature scene to show the capabilities of the engine
 
 ### ToDo's
-   - Loading of GLTF-Models
    - Audiomanager for sounds and backgroundmusic
    - Cubemaps
    - Instanced-Rendering

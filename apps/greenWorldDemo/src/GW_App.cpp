@@ -44,7 +44,7 @@ namespace GW
     {
         //Textures
         Core::ResourceManager::LoadTexture("BlockTexture", "../res/textures/greenWorld/Block.jpg");
-        Core::ResourceManager::LoadTexture("SwordTexture", "../res/models/sword/textures/Object001_mtl_baseColor.jpeg");
+        Core::ResourceManager::LoadTexture("SwordTexture", "../res/models/greenWorld/sword/textures/Object001_mtl_baseColor.jpeg");
 
         //Shaders
         Core::ResourceManager::LoadShader("ModelShader", "../res/shader/greenWorld/model_vs.glsl", "../res/shader/greenWorld/model_fs.glsl");
@@ -57,7 +57,7 @@ namespace GW
 
         //Fill meshes with data
         Core::MeshCreator::CreatePlane(20, 1.0f, &plane);
-        Core::MeshCreator::CreateFromGLTF("../res/models/sword/scene.gltf", &sword);
+        Core::MeshCreator::CreateFromGLTF("../res/models/greenWorld/sword/scene.gltf", &sword);
 
         //Create models out of meshes
         _models.emplace_back(Core::Model(Core::ResourceManager::GetTexture("BlockTexture"), Core::ResourceManager::GetShader("ModelShader"), &plane));

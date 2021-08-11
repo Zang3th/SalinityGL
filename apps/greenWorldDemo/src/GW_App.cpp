@@ -71,6 +71,8 @@ namespace GW
         ConfigureLogger();
         ConfigureProfiler();
         InitModules();
+
+        //Call after init because these methods depend on OpenGL-Initialization
         LoadResources();
         CreateModels();
     }

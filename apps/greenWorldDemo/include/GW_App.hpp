@@ -11,10 +11,10 @@
 #include "../../../engine-core/general/include/MeshCreator.hpp"
 #include "../../../engine-core/general/include/Model.hpp"
 
-#include <vector>
-
 #include "GW_Interface.hpp"
 #include "GW_InputManager.hpp"
+
+#include <vector>
 
 namespace GW
 {
@@ -31,8 +31,8 @@ namespace GW
 
             static void ConfigureLogger();
             static void ConfigureProfiler();
+            static void LoadResources();
             void InitModules();
-            void LoadResources();
             void CreateModels();
 
         public:

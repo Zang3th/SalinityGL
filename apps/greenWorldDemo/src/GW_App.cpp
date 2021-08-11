@@ -32,27 +32,36 @@ namespace GW
         _windowManager->SetWindowTitle("GreenWorld Demo Application");
 
         //Camera & Renderer
-        _camera = Core::MakeScope<Core::Camera>(glm::vec3(-11.0f, 17.0f, 9.0f), 0.0f, -37.0f, 15.0f);
+        _camera = Core::MakeScope<Core::Camera>(glm::vec3(-55.0f, 58.0f, 29.0f), 0.0f, -37.0f, 15.0f);
         _renderer = Core::MakeScope<Core::Renderer>(_camera.get());
 
         //Input & UI
         InputManager::Init(_windowManager.get(), _camera.get());
         _userInterface = Core::MakeScope<Interface>(_windowManager.get(), _renderer.get(), _camera.get());
-
-        //Resources
-        _resourceManager = Core::MakeScope<Core::ResourceManager>();
     }
 
     void App::LoadResources()
     {
         //Textures
-        _resourceManager->LoadTexture("StoneTexture", "../res/textures/greenWorld/Stone.jpg");
-        _resourceManager->LoadTexture("BlockTexture", "../res/textures/greenWorld/Block.jpg");
-        _resourceManager->LoadTexture("SwordTexture", "../res/models/sword/textures/Object001_mtl_baseColor.jpeg");
+        Core::ResourceManager::LoadTexture("BlockTexture", "../res/textures/greenWorld/Block.jpg");
+        Core::ResourceManager::LoadTexture("SwordTexture", "../res/models/sword/textures/Object001_mtl_baseColor.jpeg");
 
         //Shaders
-        _resourceManager->LoadShader("SpriteShader", "../res/shader/greenWorld/sprite_vs.glsl", "../res/shader/greenWorld/sprite_fs.glsl");
-        _resourceManager->LoadShader("ModelShader", "../res/shader/greenWorld/model_vs.glsl", "../res/shader/greenWorld/model_fs.glsl");
+        Core::ResourceManager::LoadShader("ModelShader", "../res/shader/greenWorld/model_vs.glsl", "../res/shader/greenWorld/model_fs.glsl");
+    }
+
+    void App::CreateModels()
+    {
+        //Create meshes
+        Core::Mesh plane, sword;
+
+        //Fill meshes with data
+        Core::MeshCreator::CreatePlane(20, 1.0f, &plane);
+        Core::MeshCreator::CreateFromGLTF("../res/models/sword/scene.gltf", &sword);
+
+        //Create models out of meshes
+        _models.emplace_back(Core::Model(Core::ResourceManager::GetTexture("BlockTexture"), Core::ResourceManager::GetShader("ModelShader"), &plane));
+        _models.emplace_back(Core::Model(Core::ResourceManager::GetTexture("SwordTexture"), Core::ResourceManager::GetShader("ModelShader"), &sword));
     }
 
     // ----- Public -----
@@ -63,36 +72,12 @@ namespace GW
         ConfigureProfiler();
         InitModules();
         LoadResources();
+        CreateModels();
+    }
 
-        //Create test sprite
-        _testSprite = Core::MakeScope<Core::Sprite>
-        (
-            _resourceManager->GetTexture("StoneTexture"),
-            _resourceManager->GetShader("SpriteShader"),
-            glm::vec2(1500.0f, 700.0f),
-            glm::vec2(300.0f, 300.0f),
-            0.0f,
-            glm::vec3(0.37f, 0.77, 0.29f)
-        );
-
-        //Create mesh and model
-        Core::Mesh mesh;
-        mesh.CreatePlane(20, 1.0f);
-        _testModel = Core::MakeScope<Core::Model>
-        (
-            _resourceManager->GetTexture("BlockTexture"),
-            _resourceManager->GetShader("ModelShader"),
-            glm::vec3(1.0f, 1.0f, 1.0f),
-            &mesh
-        );
-
-        _testGLTF = Core::MakeScope<Core::Model>
-        (
-            _resourceManager->GetTexture("SwordTexture"),
-            _resourceManager->GetShader("ModelShader"),
-            glm::vec3(1.0f, 1.0f, 1.0f),
-            "../res/models/sword/scene.gltf"
-        );
+    App::~App()
+    {
+        Core::ResourceManager::CleanUp();
     }
 
     bool App::IsRunning()
@@ -102,41 +87,36 @@ namespace GW
 
     void App::Update()
     {
-        //Process events
-        {
-            Core::PROFILE_SCOPE("Process events");
+        {   Core::PROFILE_SCOPE("Process events");
+
             _windowManager->PollEvents();
             _windowManager->ProcessEvents();
             InputManager::ProcessInput();
         }
 
-        //Prepare frame
-        {
-            Core::PROFILE_SCOPE("Prepare frame");
+        {   Core::PROFILE_SCOPE("Prepare frame");
+
             _windowManager->PrepareFrame();
             _renderer->Prepare();
             _userInterface->PrepareFrame();
         }
 
-        //Render graphics
-        {
-            Core::PROFILE_SCOPE("Render graphics");
-            _renderer->Submit(_testSprite.get());
-            _renderer->Submit(_testModel.get());
-            _renderer->Submit(_testGLTF.get());
+        {   Core::PROFILE_SCOPE("Render graphics");
+
+            for(const auto& model : _models)
+                _renderer->Submit(&model);
+
             _renderer->Flush();
         }
 
-        //Render UI (always after graphics)
-        {
-            Core::PROFILE_SCOPE("Render UI");
+        {   Core::PROFILE_SCOPE("Render UI");
+
             _userInterface->AddElements();
             _userInterface->Render();
         }
 
-        //End frame
-        {
-            Core::PROFILE_SCOPE("End frame");
+        {   Core::PROFILE_SCOPE("End frame");
+
             _windowManager->SwapBuffers();
         }
     }

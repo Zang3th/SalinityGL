@@ -21,12 +21,12 @@ namespace Core
         _modelBuffer.clear();
     }
 
-    void Renderer::Submit(Sprite* sprite)
+    void Renderer::Submit(const Sprite* sprite)
     {
         _spriteBuffer.push_back(sprite);
     }
 
-    void Renderer::Submit(Model* model)
+    void Renderer::Submit(const Model* model)
     {
         _modelBuffer.push_back(model);
     }

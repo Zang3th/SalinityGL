@@ -29,7 +29,7 @@ namespace Core
 
         public:
             Sprite(Texture* texture, Shader* shader, glm::vec2 position, glm::vec2 size, float rotation, glm::vec3 color);
-            unsigned int Draw(const glm::mat4& projection);
+            unsigned int Draw(const glm::mat4& projection) const;
             void Translate(glm::vec2 position);
     };
 }

@@ -9,14 +9,15 @@ namespace Core
 {
     class ResourceManager
     {
-        private:
-            std::map<std::string, Scope<Texture>> _textureStorage;
-            std::map<std::string, Scope<Shader>> _shaderStorage;
+        public:
+            inline static std::map<std::string, Texture*> _textureStorage = std::map<std::string, Texture*>();
+            inline static std::map<std::string, Shader*> _shaderStorage = std::map<std::string, Shader*>();
 
         public:
-            void LoadTexture(const std::string& name, const std::string& filepath);
-            Texture* GetTexture(const std::string& name);
-            void LoadShader(const std::string& name, const std::string& vsFilepath, const std::string& fsFilepath);
-            Shader* GetShader(const std::string& name);
+            static void LoadTexture(const std::string& name, const std::string& filepath);
+            static Texture* GetTexture(const std::string& name);
+            static void LoadShader(const std::string& name, const std::string& vsFilepath, const std::string& fsFilepath);
+            static Shader* GetShader(const std::string& name);
+            static void CleanUp();
     };
 }

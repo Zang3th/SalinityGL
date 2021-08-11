@@ -34,22 +34,13 @@ namespace Core
 
     // ----- Public -----
 
-    Model::Model(Texture* texture, Shader* shader, glm::vec3 color, Mesh* mesh)
-        : _texture(texture), _shader(shader), _color(color), _model(glm::mat4(1.0f)), _verticeCount(0)
+    Model::Model(Texture* texture, Shader* shader, Mesh* mesh)
+        : _texture(texture), _shader(shader), _model(glm::mat4(1.0f)), _verticeCount(0)
     {
         _vao = CreateVaoFromMesh(mesh);
     }
 
-    Model::Model(Texture* texture, Shader* shader, glm::vec3 color, const std::string& filepath)
-        : _texture(texture), _shader(shader), _color(color), _model(glm::mat4(1.0f)), _verticeCount(0)
-    {
-        Mesh mesh;
-        Loader loader;
-        loader.GLTFToMesh(filepath, &mesh);
-        _vao = CreateVaoFromMesh(&mesh);
-    }
-
-    unsigned int Model::Draw(const glm::mat4& projMatrix, const glm::mat4& viewMatrix, const glm::vec3& camPos)
+    unsigned int Model::Draw(const glm::mat4& projMatrix, const glm::mat4& viewMatrix, const glm::vec3& camPos) const
     {
         _shader->Bind();
 
@@ -58,7 +49,6 @@ namespace Core
         _shader->SetUniformMat4f("model", _model);
         _shader->SetUniformMat4f("projection", projMatrix);
         _shader->SetUniformVec3f("viewPos", camPos);
-        _shader->SetUniformVec3f("color", _color);
 
         _texture->Bind();
         _vao->Bind();

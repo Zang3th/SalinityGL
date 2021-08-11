@@ -8,7 +8,10 @@
 #include "../../../engine-core/general/include/Profiler.hpp"
 #include "../../../engine-core/general/include/Camera.hpp"
 #include "../../../engine-core/general/include/Mesh.hpp"
+#include "../../../engine-core/general/include/MeshCreator.hpp"
 #include "../../../engine-core/general/include/Model.hpp"
+
+#include <vector>
 
 #include "GW_Interface.hpp"
 #include "GW_InputManager.hpp"
@@ -24,17 +27,17 @@ namespace GW
             Core::Scope<Core::Renderer> _renderer;
             Core::Scope<Core::Camera> _camera;
             Core::Scope<Interface> _userInterface;
-            Core::Scope<Core::ResourceManager> _resourceManager;
-            Core::Scope<Core::Sprite> _testSprite;
-            Core::Scope<Core::Model> _testModel, _testGLTF;
+            std::vector<Core::Model> _models;
 
             static void ConfigureLogger();
             static void ConfigureProfiler();
             void InitModules();
             void LoadResources();
+            void CreateModels();
 
         public:
             App();
+            ~App();
             bool IsRunning();
             void Update();
     };

@@ -1,9 +1,9 @@
 #include "IndexBuffer.hpp"
 
-// ----- Public -----
-
 namespace Core
 {
+    // ----- Public -----
+
     IndexBuffer::IndexBuffer(const void* data, unsigned int size)
         : _iboID(0)
     {

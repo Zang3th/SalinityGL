@@ -2,6 +2,8 @@
 
 namespace Core
 {
+    // ----- Public -----
+
     std::map<const char*, float> ProfileResults::_results;
 
     Profiler::Profiler(const char* name)

@@ -18,14 +18,14 @@ namespace Core
             unsigned int _drawnVertices;
             glm::mat4 _orthoProjection;
             glm::mat4 _perspProjection;
-            std::vector<Sprite*> _spriteBuffer;
-            std::vector<Model*> _modelBuffer;
+            std::vector<const Sprite*> _spriteBuffer;
+            std::vector<const Model*> _modelBuffer;
 
         public:
             Renderer(Camera* camera);
             void Prepare();
-            void Submit(Sprite* sprite);
-            void Submit(Model* model);
+            void Submit(const Sprite* sprite);
+            void Submit(const Model* model);
             void Flush();
             unsigned int GetDrawcalls() const;
             unsigned int GetDrawnVertices() const;

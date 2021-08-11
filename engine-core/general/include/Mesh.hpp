@@ -12,8 +12,5 @@ namespace Core
             std::vector<glm::vec2> texCoords;
             std::vector<glm::uvec3> indices;
             std::vector<glm::vec3> normals;
-
-        Mesh() = default;
-        void CreatePlane(unsigned int size, float tileSize);
     };
 }

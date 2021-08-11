@@ -1,9 +1,9 @@
 #include "ErrorManager.hpp"
 
-// ----- Public -----
-
 namespace Core
 {
+    // ----- Public -----
+
 	void ErrorManager::GLClearError()
 	{
 		while (glGetError() != GL_NO_ERROR);

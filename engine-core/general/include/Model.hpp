@@ -10,7 +10,6 @@
 #include "CoreDefines.hpp"
 #include "ErrorManager.hpp"
 #include "Mesh.hpp"
-#include "Loader.hpp"
 
 namespace Core
 {
@@ -20,15 +19,13 @@ namespace Core
             Ref<VertexArray> _vao;
             Texture* _texture;
             Shader* _shader;
-            glm::vec3 _color;
             glm::mat4 _model;
             unsigned int _verticeCount;
 
             Ref<VertexArray> CreateVaoFromMesh(Mesh* mesh);
 
         public:
-            Model(Texture* texture, Shader* shader, glm::vec3 color, Mesh* mesh);
-            Model(Texture* texture, Shader* shader, glm::vec3 color, const std::string& filepath);
-            unsigned int Draw(const glm::mat4& projMatrix, const glm::mat4& viewMatrix, const glm::vec3& camPos);
+            Model(Texture* texture, Shader* shader, Mesh* mesh);
+            unsigned int Draw(const glm::mat4& projMatrix, const glm::mat4& viewMatrix, const glm::vec3& camPos) const;
     };
 }

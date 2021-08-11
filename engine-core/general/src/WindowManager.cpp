@@ -35,6 +35,8 @@ namespace Core
         GLCall(glEnable(GL_MULTISAMPLE));    
         GLCall(glEnable(GL_BLEND)); //Enable blending to render transparent textures
         GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+        GLCall(glEnable(GL_DEPTH_TEST));
+        GLCall(glDepthFunc(GL_LEQUAL));
     
         _isRunning = true; //Start application
     }

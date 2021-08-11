@@ -27,7 +27,6 @@ namespace Core
             void LoadMesh(Mesh* mesh);
 
         public:
-            Loader() = default;
             void GLTFToMesh(const std::string& filepath, Mesh* mesh);
     };
 }

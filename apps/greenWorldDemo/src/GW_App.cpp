@@ -48,6 +48,7 @@ namespace GW
 
         //Shaders
         Core::ResourceManager::LoadShader("ModelShader", "../res/shader/greenWorld/model_vs.glsl", "../res/shader/greenWorld/model_fs.glsl");
+        Core::ResourceManager::LoadShader("CubemapShader", "../res/shader/greenWorld/cubemap_vs.glsl", "../res/shader/greenWorld/cubemap_fs.glsl");
     }
 
     void App::CreateModels()
@@ -64,6 +65,21 @@ namespace GW
         _models.emplace_back(Core::Model(Core::ResourceManager::GetTexture("SwordTexture"), Core::ResourceManager::GetShader("ModelShader"), &sword));
     }
 
+    void App::CreateCubemap()
+    {
+        std::vector<const char*> faces
+        {
+            "../res/textures/greenWorld/cubemap/graycloud_xp.jpg", //Right
+            "../res/textures/greenWorld/cubemap/graycloud_xn.jpg", //Left
+            "../res/textures/greenWorld/cubemap/graycloud_yp.jpg", //Top
+            "../res/textures/greenWorld/cubemap/graycloud_yn.jpg", //Bottom
+            "../res/textures/greenWorld/cubemap/graycloud_zp.jpg", //Front
+            "../res/textures/greenWorld/cubemap/graycloud_zn.jpg"  //Back
+        };
+
+        _cubemap = Core::MakeScope<Core::Cubemap>(faces, Core::ResourceManager::GetShader("CubemapShader"));
+    }
+
     // ----- Public -----
 
     App::App()
@@ -75,6 +91,7 @@ namespace GW
         //Call after init because these methods depend on OpenGL-Initialization
         LoadResources();
         CreateModels();
+        CreateCubemap();
     }
 
     App::~App()
@@ -108,6 +125,7 @@ namespace GW
             for(const auto& model : _models)
                 _renderer->Submit(&model);
 
+            _renderer->Submit(_cubemap.get());
             _renderer->Flush();
         }
 

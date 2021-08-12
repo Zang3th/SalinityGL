@@ -7,17 +7,17 @@ namespace Core
     Texture::Texture(const std::string& filepath)
         : _textureID(0)
     {
-        int width, height, comp;
-        unsigned char* localBuffer = stbi_load(filepath.c_str(), &width, &height, &comp, 0);
+        int width, height, nrChannels;
+        unsigned char* localBuffer = stbi_load(filepath.c_str(), &width, &height, &nrChannels, 0);
 
         if(localBuffer)
         {
             GLenum format = 0;
-            if(comp == 1)
+            if(nrChannels == 1)
                 format = GL_RED;
-            else if(comp == 3)
+            else if(nrChannels == 3)
                 format = GL_RGB;
-            else if(comp == 4)
+            else if(nrChannels == 4)
                 format = GL_RGBA;
             else
                 LOG(ERROR) << "Imageformat is not supported: " << filepath;      

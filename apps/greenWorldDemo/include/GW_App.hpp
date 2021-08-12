@@ -10,6 +10,7 @@
 #include "../../../engine-core/general/include/Mesh.hpp"
 #include "../../../engine-core/general/include/MeshCreator.hpp"
 #include "../../../engine-core/general/include/Model.hpp"
+#include "../../../engine-core/general/include/Cubemap.hpp"
 
 #include "GW_Interface.hpp"
 #include "GW_InputManager.hpp"
@@ -27,6 +28,8 @@ namespace GW
             Core::Scope<Core::Renderer> _renderer;
             Core::Scope<Core::Camera> _camera;
             Core::Scope<Interface> _userInterface;
+
+            Core::Scope<Core::Cubemap> _cubemap;
             std::vector<Core::Model> _models;
 
             static void ConfigureLogger();
@@ -34,6 +37,7 @@ namespace GW
             static void LoadResources();
             void InitModules();
             void CreateModels();
+            void CreateCubemap();
 
         public:
             App();

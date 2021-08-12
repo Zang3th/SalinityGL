@@ -5,7 +5,7 @@ namespace Core
     // ----- Public -----
 
     Renderer::Renderer(Camera* camera)
-    : _camera(camera), _drawcalls(0), _drawnVertices(0), _orthoProjection(glm::ortho(0.0f, (float)WINDOW_WIDTH, (float)WINDOW_HEIGHT, 0.0f, -1.0f, 1.0f)), _perspProjection(glm::perspective(glm::radians(45.0f), (float)WINDOW_WIDTH/(float)WINDOW_HEIGHT, 0.1f, 1000.0f))
+    : _camera(camera), _drawcalls(0), _drawnVertices(0), _orthoProjection(glm::ortho(0.0f, (float)WINDOW_WIDTH, (float)WINDOW_HEIGHT, 0.0f, -1.0f, 1.0f)), _perspProjection(glm::perspective(glm::radians(45.0f), (float)WINDOW_WIDTH/(float)WINDOW_HEIGHT, 0.1f, 500.0f))
     {
 
     }
@@ -19,6 +19,9 @@ namespace Core
         //Clear buffers
         _spriteBuffer.clear();
         _modelBuffer.clear();
+
+        //Delete old cubemap
+        _cubemap = nullptr;
     }
 
     void Renderer::Submit(const Sprite* sprite)
@@ -29,6 +32,11 @@ namespace Core
     void Renderer::Submit(const Model* model)
     {
         _modelBuffer.push_back(model);
+    }
+
+    void Renderer::Submit(const Cubemap* cubemap)
+    {
+        _cubemap = cubemap;
     }
 
     void Renderer::Flush()
@@ -50,6 +58,13 @@ namespace Core
         for(const auto& sprite : _spriteBuffer)
         {
             _drawnVertices += sprite->Draw(_orthoProjection);
+            _drawcalls++;
+        }
+
+        //Render cubemap last (if it exists)
+        if(_cubemap)
+        {
+            _drawnVertices += _cubemap->Draw(_perspProjection, _camera->GetViewMatrix());
             _drawcalls++;
         }
     }

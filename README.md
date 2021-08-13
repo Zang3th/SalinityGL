@@ -19,6 +19,7 @@
    - Profiler
    - UI
    - Loading of GLTF-Models
+   - Cubemaps/Skyboxes
    
 ### Example applications  
    - GreenWorld
@@ -26,7 +27,6 @@
 
 ### ToDo's
    - Audiomanager for sounds and backgroundmusic
-   - Cubemaps
    - Instanced-Rendering
    - Lighting
      - Blinn-Phong
@@ -61,7 +61,7 @@
    - This code is provided under the MIT License. See the file LICENSE for details.
 
 ### Current look of the GreenWorld App:
-![GreenWorld](res/screenshots/greenWorld/Screenshot_GW_003.png)
+![GreenWorld](res/screenshots/greenWorld/Screenshot_GW_004.png)
 
 ### Screenshots out of applications that I created with the old engine:
 
@@ -75,4 +75,3 @@
 
 #### My implementation of the game "Breakout" from "learnopengl.com":
 <img src="https://user-images.githubusercontent.com/59279641/91633530-3d1a3180-e9e9-11ea-889c-74dba8e7e700.PNG"/>
-

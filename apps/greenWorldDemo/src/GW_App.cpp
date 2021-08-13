@@ -32,7 +32,7 @@ namespace GW
         _windowManager->SetWindowTitle("GreenWorld Demo Application");
 
         //Camera & Renderer
-        _camera = Core::MakeScope<Core::Camera>(glm::vec3(-61.0f, 48.0f, 76.0f), -29.0f, -23.0f, 15.0f);
+        _camera = Core::MakeScope<Core::Camera>(glm::vec3(-61.0f, 48.0f, 76.0f), -29.0f, -23.0f, 25.0f);
         _renderer = Core::MakeScope<Core::Renderer>(_camera.get());
 
         //Input & UI
@@ -55,20 +55,29 @@ namespace GW
     void App::CreateModels()
     {
         //Create meshes
-        Core::Mesh terrain, water, bridge;
+        Core::Mesh terrainMesh, waterMesh, bridgeMesh;
 
         //Create heightmap
         Core::Heightmap heightmap("../res/textures/greenWorld/heightmap/Heightmap64.bmp");
 
         //Fill meshes with data
-        Core::MeshCreator::CreateTerrain(PLANE_SIZE - 1, 1.0f, &terrain, &heightmap);
-        Core::MeshCreator::CreateTerrain(PLANE_SIZE - 1, 1.0f, &water);
-        Core::MeshCreator::CreateFromGLTF("../res/models/greenWorld/bridge/scene.gltf", &bridge);
+        Core::MeshCreator::CreateTerrain(PLANE_SIZE - 1, 1.0f, &terrainMesh, &heightmap);
+        Core::MeshCreator::CreateTerrain(PLANE_SIZE - 1, 1.0f, &waterMesh);
+        Core::MeshCreator::CreateFromGLTF("../res/models/greenWorld/bridge/scene.gltf", &bridgeMesh);
 
         //Create models out of meshes
-        _models.emplace_back(Core::Model(Core::ResourceManager::GetTexture("GrassTexture"), Core::ResourceManager::GetShader("ModelShader"), &terrain));
-        _models.emplace_back(Core::Model(Core::ResourceManager::GetTexture("WaterTexture"), Core::ResourceManager::GetShader("ModelShader"), &water));
-        _models.emplace_back(Core::Model(Core::ResourceManager::GetTexture("BridgeTexture"), Core::ResourceManager::GetShader("ModelShader"), &bridge));
+        Core::Model terrainModel(Core::ResourceManager::GetTexture("GrassTexture"), Core::ResourceManager::GetShader("ModelShader"), &terrainMesh);
+        Core::Model waterModel(Core::ResourceManager::GetTexture("WaterTexture"), Core::ResourceManager::GetShader("ModelShader"), &waterMesh);
+        Core::Model bridgeModel(Core::ResourceManager::GetTexture("BridgeTexture"), Core::ResourceManager::GetShader("ModelShader"), &bridgeMesh);
+
+        //Translate, rotate and scale models
+        bridgeModel.SetPosition(glm::vec3(0.0f, 0.0f, 0.0f), 90.0f, glm::vec3(0.0f, 0.0f, 1.0f));
+        bridgeModel.SetPosition(glm::vec3(15.0f, -20.0f, 50.0f), 90.0f, glm::vec3(0.0f, 1.0f, 0.0f), 2.0f);
+
+        //Save models in model vector
+        _models.push_back(terrainModel);
+        _models.push_back(waterModel);
+        _models.push_back(bridgeModel);
     }
 
     void App::CreateCubemap()

@@ -32,6 +32,18 @@ namespace Core
         return vao;
     }
 
+    void Model::SetModelMatrix(const glm::vec3& position, const float angle, const glm::vec3& axis, const float size)
+    {
+        //Translate
+        _model = glm::translate(_model, position);
+
+        //Rotate
+        _model = glm::rotate(_model, glm::radians(angle), axis);
+
+        //Scale
+        _model = glm::scale(_model, glm::vec3(size));
+    }
+
     // ----- Public -----
 
     Model::Model(Texture* texture, Shader* shader, Mesh* mesh)
@@ -62,5 +74,10 @@ namespace Core
 
         //Return rendered vertices
         return _verticeCount;
+    }
+
+    void Model::SetPosition(const glm::vec3& position, const float angle, const glm::vec3& axis, const float size)
+    {
+        SetModelMatrix(position, angle, axis, size);
     }
 }

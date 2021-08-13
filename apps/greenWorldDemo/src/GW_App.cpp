@@ -32,7 +32,7 @@ namespace GW
         _windowManager->SetWindowTitle("GreenWorld Demo Application");
 
         //Camera & Renderer
-        _camera = Core::MakeScope<Core::Camera>(glm::vec3(-55.0f, 58.0f, 29.0f), 0.0f, -37.0f, 15.0f);
+        _camera = Core::MakeScope<Core::Camera>(glm::vec3(-61.0f, 48.0f, 76.0f), -29.0f, -23.0f, 15.0f);
         _renderer = Core::MakeScope<Core::Renderer>(_camera.get());
 
         //Input & UI
@@ -43,8 +43,9 @@ namespace GW
     void App::LoadResources()
     {
         //Textures
-        Core::ResourceManager::LoadTexture("BlockTexture", "../res/textures/greenWorld/Block.jpg");
-        Core::ResourceManager::LoadTexture("SwordTexture", "../res/models/greenWorld/sword/textures/Object001_mtl_baseColor.jpeg");
+        Core::ResourceManager::LoadTexture("GrassTexture", "../res/textures/greenWorld/Grass.jpg");
+        Core::ResourceManager::LoadTexture("WaterTexture", "../res/textures/greenWorld/Water.jpg");
+        Core::ResourceManager::LoadTexture("BridgeTexture", "../res/models/greenWorld/bridge/textures/Material_baseColor.jpg");
 
         //Shaders
         Core::ResourceManager::LoadShader("ModelShader", "../res/shader/greenWorld/model_vs.glsl", "../res/shader/greenWorld/model_fs.glsl");
@@ -54,15 +55,20 @@ namespace GW
     void App::CreateModels()
     {
         //Create meshes
-        Core::Mesh plane, sword;
+        Core::Mesh terrain, water, bridge;
+
+        //Create heightmap
+        Core::Heightmap heightmap("../res/textures/greenWorld/heightmap/Heightmap64.bmp");
 
         //Fill meshes with data
-        Core::MeshCreator::CreatePlane(20, 1.0f, &plane);
-        Core::MeshCreator::CreateFromGLTF("../res/models/greenWorld/sword/scene.gltf", &sword);
+        Core::MeshCreator::CreateTerrain(PLANE_SIZE - 1, 1.0f, &terrain, &heightmap);
+        Core::MeshCreator::CreateTerrain(PLANE_SIZE - 1, 1.0f, &water);
+        Core::MeshCreator::CreateFromGLTF("../res/models/greenWorld/bridge/scene.gltf", &bridge);
 
         //Create models out of meshes
-        _models.emplace_back(Core::Model(Core::ResourceManager::GetTexture("BlockTexture"), Core::ResourceManager::GetShader("ModelShader"), &plane));
-        _models.emplace_back(Core::Model(Core::ResourceManager::GetTexture("SwordTexture"), Core::ResourceManager::GetShader("ModelShader"), &sword));
+        _models.emplace_back(Core::Model(Core::ResourceManager::GetTexture("GrassTexture"), Core::ResourceManager::GetShader("ModelShader"), &terrain));
+        _models.emplace_back(Core::Model(Core::ResourceManager::GetTexture("WaterTexture"), Core::ResourceManager::GetShader("ModelShader"), &water));
+        _models.emplace_back(Core::Model(Core::ResourceManager::GetTexture("BridgeTexture"), Core::ResourceManager::GetShader("ModelShader"), &bridge));
     }
 
     void App::CreateCubemap()
@@ -116,7 +122,7 @@ namespace GW
         {   Core::PROFILE_SCOPE("Prepare frame");
 
             _windowManager->PrepareFrame();
-            _renderer->Prepare();
+            _renderer->PrepareFrame();
             _userInterface->PrepareFrame();
         }
 

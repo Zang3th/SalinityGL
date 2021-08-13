@@ -37,7 +37,7 @@ namespace Core
                 GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_LOD_BIAS, 0));
                 GLCall(glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 4.0f));
 
-                LOG(INFO) << "Successfully load texture at: " << filepath;
+                LOG(INFO) << "Successfully load texture at: " << filepath << " (X: " << width << " | Y: " << height << " | Channel: " << nrChannels << ")";
             }        
         }
         else

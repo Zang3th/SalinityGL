@@ -25,7 +25,7 @@ namespace Core
 
         public:
             Renderer(Camera* camera);
-            void Prepare();
+            void PrepareFrame();
             void Submit(const Sprite* sprite);
             void Submit(const Model* model);
             void Submit(const Cubemap* cubemap);

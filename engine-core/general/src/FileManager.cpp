@@ -17,7 +17,7 @@ namespace Core
             file.read(&content[0], content.size());
             file.close();
 
-            LOG(INFO) << "Successfully read file at: " << filepath << " | Size: " << content.size();
+            LOG(INFO) << "Successfully read file at: " << filepath << " (Size: " << content.size() << ")";
             return(content);
         }
         else

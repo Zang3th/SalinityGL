@@ -11,6 +11,7 @@
 #include "../../../engine-core/general/include/MeshCreator.hpp"
 #include "../../../engine-core/general/include/Model.hpp"
 #include "../../../engine-core/general/include/Cubemap.hpp"
+#include "../../../engine-core/general/include/Heightmap.hpp"
 
 #include "GW_Interface.hpp"
 #include "GW_InputManager.hpp"

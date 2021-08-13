@@ -4,7 +4,7 @@ namespace Core
 {
     // ----- Public -----
 
-    void MeshCreator::CreatePlane(const unsigned int size, const float tileSize, Mesh* mesh)
+    void MeshCreator::CreateTerrain(const unsigned int size, const float tileSize, Mesh* mesh, Heightmap* heightmap)
     {
         for (unsigned int j = 0; j <= size; ++j)
         {
@@ -13,6 +13,15 @@ namespace Core
                 auto xPos = (float)i;
                 auto yPos = 0.0f;
                 auto zPos = (float)j;
+
+                if(heightmap)
+                    yPos = ((float)heightmap->GetValueAtF(i, j) * 5) - 12.0f;
+
+                //Bend edges down
+                if(i == 0 || i == size)
+                    yPos = -10.0f;
+                if(j == 0 || j == size)
+                    yPos = -10.0f;
 
                 mesh->vertices.emplace_back(glm::vec3(xPos * tileSize, yPos, zPos * tileSize));
                 mesh->texCoords.emplace_back(glm::vec2(xPos, zPos));

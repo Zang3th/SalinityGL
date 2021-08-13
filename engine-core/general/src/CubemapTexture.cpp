@@ -29,7 +29,7 @@ namespace Core
                 if(format != 0)
                 {
                     GLCall(glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, localBuffer));
-                    LOG(INFO) << "Successfully load cubemap texture at: " << faces[i];
+                    LOG(INFO) << "Successfully load texture at: " << faces[i] << " (X: " << width << " | Y: " << height << " | Channel: " << nrChannels << ")";
                     stbi_image_free(localBuffer);
                 }
             }

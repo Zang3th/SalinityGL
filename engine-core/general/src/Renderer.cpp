@@ -10,7 +10,7 @@ namespace Core
 
     }
 
-    void Renderer::Prepare()
+    void Renderer::PrepareFrame()
     {
         //Reset render stats for current frame
         _drawcalls = 0;

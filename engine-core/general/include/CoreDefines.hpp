@@ -26,6 +26,7 @@ namespace Core
     //Global defines
     #define WINDOW_WIDTH 1920
     #define WINDOW_HEIGHT 1080
+    #define PLANE_SIZE 64
 
     //Extern settings
     extern bool WireframeRendering;    

@@ -71,8 +71,10 @@ namespace GW
         Core::Model bridgeModel(Core::ResourceManager::GetTexture("BridgeTexture"), Core::ResourceManager::GetShader("ModelShader"), &bridgeMesh);
 
         //Translate, rotate and scale models
-        bridgeModel.SetPosition(glm::vec3(0.0f, 0.0f, 0.0f), 90.0f, glm::vec3(0.0f, 0.0f, 1.0f));
-        bridgeModel.SetPosition(glm::vec3(15.0f, -20.0f, 50.0f), 90.0f, glm::vec3(0.0f, 1.0f, 0.0f), 2.0f);
+        bridgeModel.IncreasePosition(glm::vec3(15.0f, 15.0f, 49.0f));
+        bridgeModel.IncreaseRotation(0.0f, 0.0f, 90.0f);
+        bridgeModel.IncreaseRotation(-90.0f, 0.0f, 0.0f);
+        bridgeModel.IncreaseSize(2.0f);
 
         //Save models in model vector
         _models.push_back(terrainModel);

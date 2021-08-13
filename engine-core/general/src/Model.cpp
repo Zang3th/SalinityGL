@@ -32,22 +32,28 @@ namespace Core
         return vao;
     }
 
-    void Model::SetModelMatrix(const glm::vec3& position, const float angle, const glm::vec3& axis, const float size)
+    void Model::SetModelMatrix()
     {
+        glm::mat4 model(1.0f);
+
         //Translate
-        _model = glm::translate(_model, position);
+        model = glm::translate(model, _position);
 
         //Rotate
-        _model = glm::rotate(_model, glm::radians(angle), axis);
+        model = glm::rotate(model, glm::radians(_rotationX), glm::vec3(1.0f, 0.0f, 0.0f));
+        model = glm::rotate(model, glm::radians(_rotationY), glm::vec3(0.0f, 1.0f, 0.0f));
+        model = glm::rotate(model, glm::radians(_rotationZ), glm::vec3(0.0f, 0.0f, 1.0f));
 
         //Scale
-        _model = glm::scale(_model, glm::vec3(size));
+        model = glm::scale(model, glm::vec3(_size));
+
+        _model = model;
     }
 
     // ----- Public -----
 
     Model::Model(Texture* texture, Shader* shader, Mesh* mesh)
-        : _texture(texture), _shader(shader), _model(glm::mat4(1.0f)), _verticeCount(0)
+    : _texture(texture), _shader(shader), _model(glm::mat4(1.0f)), _verticeCount(0), _position(0.0f), _rotationX(0.0f), _rotationY(0.0f), _rotationZ(0.0f), _size(1.0f)
     {
         _vao = CreateVaoFromMesh(mesh);
     }
@@ -76,8 +82,23 @@ namespace Core
         return _verticeCount;
     }
 
-    void Model::SetPosition(const glm::vec3& position, const float angle, const glm::vec3& axis, const float size)
+    void Model::IncreasePosition(const glm::vec3& position)
     {
-        SetModelMatrix(position, angle, axis, size);
+        _position += position;
+        SetModelMatrix();
+    }
+
+    void Model::IncreaseRotation(float rotX, float rotY, float rotZ)
+    {
+        _rotationX += rotX;
+        _rotationY += rotY;
+        _rotationZ += rotZ;
+        SetModelMatrix();
+    }
+
+    void Model::IncreaseSize(float size)
+    {
+        _size *= size;
+        SetModelMatrix();
     }
 }

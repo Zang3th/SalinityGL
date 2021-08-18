@@ -10,7 +10,7 @@ namespace Core
     {
         public:
             MeshCreator() = delete;
-            static void CreateTerrain(unsigned int size, float tileSize, Mesh* mesh, Heightmap* heightmap = nullptr);
+            static void CreatePlane(unsigned int x, unsigned int z, float tileSize, float edgeDepth, Mesh* mesh, const Heightmap* heightmap = nullptr);
             static void CreateFromGLTF(const std::string& filepath, Mesh* mesh);
     };
 }

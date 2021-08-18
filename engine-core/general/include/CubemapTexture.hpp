@@ -2,7 +2,7 @@
 
 #include "stb_image.hpp"
 #include "ErrorManager.hpp"
-#include <vector>
+#include <array>
 
 namespace Core
 {
@@ -12,7 +12,7 @@ namespace Core
             unsigned int _textureID;
 
         public:
-            CubemapTexture(std::vector<const char*>& faces);
+            explicit CubemapTexture(std::array<const char*, 6>& faces);
             ~CubemapTexture();
             void Bind() const;
             void Unbind() const;

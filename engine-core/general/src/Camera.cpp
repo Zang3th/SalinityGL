@@ -21,7 +21,15 @@ namespace Core
     // ----- Public -----
 
     Camera::Camera(glm::vec3 position, float yaw, float pitch, float movementSpeed)
-    : _position(position), _front(0.0f), _up(0.0f), _right(0.0f), _worldUp(0.0f, 1.0f, 0.0f), _yaw(yaw), _pitch(pitch), _movementSpeed(movementSpeed), _mouseSensitivity(0.1f)
+        :   _position(position),
+            _front(0.0f),
+            _up(0.0f),
+            _right(0.0f),
+            _worldUp(0.0f, 1.0f, 0.0f),
+            _yaw(yaw),
+            _pitch(pitch),
+            _movementSpeed(movementSpeed),
+            _mouseSensitivity(0.1f)
     {
         UpdateCameraVectors();
     }

@@ -5,7 +5,12 @@ namespace Core
     // ----- Public -----
 
     Renderer::Renderer(Camera* camera)
-    : _camera(camera), _drawcalls(0), _drawnVertices(0), _orthoProjection(glm::ortho(0.0f, (float)WINDOW_WIDTH, (float)WINDOW_HEIGHT, 0.0f, -1.0f, 1.0f)), _perspProjection(glm::perspective(glm::radians(45.0f), (float)WINDOW_WIDTH/(float)WINDOW_HEIGHT, 0.1f, 500.0f))
+        :   _orthoProjection(glm::ortho(0.0f, (float)WINDOW_WIDTH, (float)WINDOW_HEIGHT, 0.0f, -1.0f, 1.0f)),
+            _perspProjection(glm::perspective(glm::radians(45.0f), (float)WINDOW_WIDTH/(float)WINDOW_HEIGHT, 0.1f, 500.0f)),
+            _camera(camera),
+            _cubemap(nullptr),
+            _drawcalls(0),
+            _drawnVertices(0)
     {
 
     }

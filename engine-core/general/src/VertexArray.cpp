@@ -5,7 +5,7 @@ namespace Core
     // ----- Public -----
 
     VertexArray::VertexArray()
-        : _vaoID(0)
+        :   _vaoID(0)
     {
         GLCall(glGenVertexArrays(1, &_vaoID));
     }

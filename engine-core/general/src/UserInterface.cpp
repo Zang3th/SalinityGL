@@ -4,8 +4,8 @@ namespace Core
 {
     // ----- Public -----
 
-    UserInterface::UserInterface(WindowManager* window)
-        : _window(window)
+    UserInterface::UserInterface(const WindowManager* window)
+        :   _window(window)
     {
         //Setup ImGui
         IMGUI_CHECKVERSION();

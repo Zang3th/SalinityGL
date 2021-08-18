@@ -4,10 +4,8 @@ namespace GW
 {
     // ----- Private -----
 
-    Core::WindowManager* InputManager::_window;
-    Core::Camera* InputManager::_camera;
-    bool InputManager::_windowInFocus;
-    double InputManager::_lastX, InputManager::_lastY;
+    const Core::WindowManager*  InputManager::_window;
+          Core::Camera*         InputManager::_camera;
 
     void InputManager::MousePosCallback(GLFWwindow* window, double xPos, double yPos)
     {
@@ -45,7 +43,7 @@ namespace GW
 
     // ----- Public -----
 
-    void InputManager::Init(Core::WindowManager* window, Core::Camera* camera)
+    void InputManager::Init(const Core::WindowManager* window, Core::Camera* camera)
     {
         //Set static member variables
         _window = window;

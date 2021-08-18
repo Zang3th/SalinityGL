@@ -14,7 +14,7 @@ namespace Core
             ~VertexArray();
             void Bind() const;
             void Unbind() const;
-            void DefineAttributes(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const void* offset);
-            void AttributeDivisor(GLuint index, GLuint divisor);
+            static void DefineAttributes(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const void* offset);
+            static void AttributeDivisor(GLuint index, GLuint divisor);
     };
 }

@@ -11,12 +11,12 @@ namespace Core
     class Shader
     {
         private:
-            unsigned int _shaderID;
-            std::unordered_map<std::string, int> _uniformLocationCache;
+            unsigned int                            _shaderID;
+            std::unordered_map<std::string, int>    _uniformLocationCache;
 
-            int Compile(unsigned int shaderType, const std::string& source);
-            int Build(unsigned int vsID, unsigned int fsID);
-            int Create(const std::string& vsFilepath, const std::string& fsFilepath);
+            static int Compile(unsigned int shaderType, const std::string& source);
+            static int Build(unsigned int vsID, unsigned int fsID);
+            static int Create(const std::string& vsFilepath, const std::string& fsFilepath);
             int GetUniformLocation(const std::string& name);
 
         public:

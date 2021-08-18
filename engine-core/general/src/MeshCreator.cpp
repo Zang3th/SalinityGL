@@ -4,33 +4,31 @@ namespace Core
 {
     // ----- Public -----
 
-    void MeshCreator::CreateTerrain(const unsigned int size, const float tileSize, Mesh* mesh, Heightmap* heightmap)
+    void MeshCreator::CreatePlane(const unsigned int x, const unsigned int z, const float tileSize, const float edgeDepth, Mesh* mesh, const Heightmap* heightmap)
     {
-        for (unsigned int j = 0; j <= size; ++j)
+        for (unsigned int j = 0; j <= z; ++j)
         {
-            for (unsigned int i = 0; i <= size; ++i)
+            for (unsigned int i = 0; i <= x; ++i)
             {
                 auto xPos = (float)i;
                 auto yPos = 0.0f;
                 auto zPos = (float)j;
 
                 if(heightmap)
-                    yPos = ((float)heightmap->GetValueAtF(i, j) * 5) - 12.0f;
+                    yPos = ((float)heightmap->GetValueAt(i, j) * 5) - 12.0f;
 
                 //Bend edges down
-                if(i == 0 || i == size)
-                    yPos = -10.0f;
-                if(j == 0 || j == size)
-                    yPos = -10.0f;
+                if(i == 0 || i == x || j == 0 || j == z)
+                    yPos = edgeDepth;
 
                 mesh->vertices.emplace_back(glm::vec3(xPos * tileSize, yPos, zPos * tileSize));
                 mesh->texCoords.emplace_back(glm::vec2(xPos, zPos));
                 mesh->normals.emplace_back(glm::vec3(0.0f, 1.0f, 0.0f));
 
-                if ((j != size) && (i != size))
+                if ((j != z) && (i != x))
                 {
-                    unsigned int row1 = j * (size + 1);
-                    unsigned int row2 = (j + 1) * (size + 1);
+                    unsigned int row1 = j * (x + 1);
+                    unsigned int row2 = (j + 1) * (x + 1);
 
                     //Triangle 1
                     mesh->indices.emplace_back(glm::uvec3(row1 + i, row1 + i + 1, row2 + i + 1));

@@ -8,15 +8,15 @@ namespace Core
     class Camera
     {
         private:
-            glm::vec3 _position;
-            glm::vec3 _front;
-            glm::vec3 _up;
-            glm::vec3 _right;
-            glm::vec3 _worldUp;
-            float _yaw;
-            float _pitch;
-            float _movementSpeed;
-            float _mouseSensitivity;
+            glm::vec3   _position;
+            glm::vec3   _front;
+            glm::vec3   _up;
+            glm::vec3   _right;
+            glm::vec3   _worldUp;
+            float       _yaw;
+            float       _pitch;
+            float       _movementSpeed;
+            float       _mouseSensitivity;
 
             void UpdateCameraVectors();
 
@@ -35,9 +35,9 @@ namespace Core
             inline glm::mat4 GetViewMatrix(){return glm::lookAt(_position, _position + _front, _up);}
             void ProcessKeyboard(Camera_Movement direction, float deltaTime);
             void ProcessMouseMovement(float xOffset, float yOffset);
-            glm::vec3 GetPosition() const;
-            glm::vec3 GetFront() const;
-            float GetYaw() const;
-            float GetPitch() const;
+            [[nodiscard]] glm::vec3 GetPosition() const;
+            [[nodiscard]] glm::vec3 GetFront() const;
+            [[nodiscard]] float GetYaw() const;
+            [[nodiscard]] float GetPitch() const;
     };
 }

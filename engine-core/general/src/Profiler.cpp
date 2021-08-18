@@ -4,10 +4,9 @@ namespace Core
 {
     // ----- Public -----
 
-    std::map<const char*, float> ProfileResults::_results;
-
     Profiler::Profiler(const char* name)
-        : _scopeName(name), _stopped(false)
+        :   _scopeName(name),
+            _stopped(false)
     {
         _startTime = std::chrono::high_resolution_clock::now();
     }

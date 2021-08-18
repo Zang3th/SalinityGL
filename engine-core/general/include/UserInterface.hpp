@@ -11,13 +11,13 @@ namespace Core
     class UserInterface
     {   
         protected:
-            WindowManager* _window;
+            const WindowManager* _window;
 
         public:
-            UserInterface(WindowManager* window);
+            explicit UserInterface(const WindowManager* window);
             ~UserInterface();
-            void PrepareFrame();
+            static void PrepareFrame();
             virtual void AddElements() = 0;
-            void Render();
+            static void Render();
     };
 }

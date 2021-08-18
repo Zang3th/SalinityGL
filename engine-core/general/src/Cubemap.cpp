@@ -70,8 +70,9 @@ namespace Core
 
     // ----- Public -----
 
-    Cubemap::Cubemap(std::vector<const char*>& faces, Shader* shader)
-        : _shader(shader), _verticeCount(0)
+    Cubemap::Cubemap(std::array<const char*, 6>& faces, Shader* shader)
+        :   _shader(shader),
+            _verticeCount(0)
     {
         _vao = CreateVao();
         _cubemapTexture = MakeScope<CubemapTexture>(faces);
@@ -81,7 +82,7 @@ namespace Core
     {
         _shader->Bind();
 
-        //Drop last column
+        //Remove translation section
         glm::mat4 view = glm::mat4(glm::mat3(viewMatrix));
 
         //Set uniforms

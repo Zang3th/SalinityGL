@@ -14,23 +14,23 @@ namespace Core
     class Renderer
     {
         private:
-            Camera* _camera;
-            unsigned int _drawcalls;
-            unsigned int _drawnVertices;
-            glm::mat4 _orthoProjection;
-            glm::mat4 _perspProjection;
-            std::vector<const Sprite*> _spriteBuffer;
-            std::vector<const Model*> _modelBuffer;
-            const Cubemap* _cubemap;
+            std::vector<const Sprite*>  _spriteBuffer;
+            std::vector<const Model*>   _modelBuffer;
+            glm::mat4                   _orthoProjection;
+            glm::mat4                   _perspProjection;
+            Camera*                     _camera;
+            const Cubemap*              _cubemap;
+            unsigned int                _drawcalls;
+            unsigned int                _drawnVertices;
 
         public:
-            Renderer(Camera* camera);
+            explicit Renderer(Camera* camera);
             void PrepareFrame();
             void Submit(const Sprite* sprite);
             void Submit(const Model* model);
             void Submit(const Cubemap* cubemap);
             void Flush();
-            unsigned int GetDrawcalls() const;
-            unsigned int GetDrawnVertices() const;
+            [[nodiscard]] unsigned int GetDrawcalls() const;
+            [[nodiscard]] unsigned int GetDrawnVertices() const;
     };
 }

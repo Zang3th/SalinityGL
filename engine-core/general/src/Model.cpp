@@ -52,8 +52,14 @@ namespace Core
 
     // ----- Public -----
 
-    Model::Model(Texture* texture, Shader* shader, Mesh* mesh)
-    : _texture(texture), _shader(shader), _model(glm::mat4(1.0f)), _verticeCount(0), _position(0.0f), _rotationX(0.0f), _rotationY(0.0f), _rotationZ(0.0f), _size(1.0f)
+    Model::Model(const Texture* texture, Shader* shader, Mesh* mesh)
+        :   _model(glm::mat4(1.0f)),
+            _position(0.0f),
+            _texture(texture),
+            _shader(shader),
+            _verticeCount(0),
+            _rotationX(0.0f), _rotationY(0.0f), _rotationZ(0.0f),
+            _size(1.0f)
     {
         _vao = CreateVaoFromMesh(mesh);
     }
@@ -88,7 +94,7 @@ namespace Core
         SetModelMatrix();
     }
 
-    void Model::IncreaseRotation(float rotX, float rotY, float rotZ)
+    void Model::IncreaseRotation(const float& rotX, const float& rotY, const float& rotZ)
     {
         _rotationX += rotX;
         _rotationY += rotY;
@@ -96,7 +102,7 @@ namespace Core
         SetModelMatrix();
     }
 
-    void Model::IncreaseSize(float size)
+    void Model::IncreaseSize(const float& size)
     {
         _size *= size;
         SetModelMatrix();

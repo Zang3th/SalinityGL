@@ -32,9 +32,7 @@ namespace Core
             LOG(INFO) << "OpenGL " << GLVersion.major << "." << GLVersion.minor << " loaded via glad!";
     
         GLCall(glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT));  
-        GLCall(glEnable(GL_MULTISAMPLE));    
-        GLCall(glEnable(GL_BLEND)); //Enable blending to render transparent textures
-        GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+        GLCall(glEnable(GL_MULTISAMPLE));
         GLCall(glEnable(GL_DEPTH_TEST));
         GLCall(glDepthFunc(GL_LEQUAL));
     
@@ -71,7 +69,14 @@ namespace Core
     // ----- Public -----
 
     WindowManager::WindowManager()
-    : _windowName("GameEngine Default"), _window(nullptr), _isRunning(false), _deltaTime(0.0f), _lastFrame(0.0f), _frameCounter(0), _dtAccumulated(0.0f), _fpsAvg(0.0f)
+        :   _window(nullptr),
+            _windowName("GameEngine Default"),
+            _deltaTime(0.0f),
+            _lastFrame(0.0f),
+            _dtAccumulated(0.0f),
+            _fpsAvg(0.0f),
+            _frameCounter(0),
+            _isRunning(false)
     {
         CreateWindow();
     }
@@ -140,7 +145,7 @@ namespace Core
         return _frameCounter;
     }
 
-    GLFWwindow* WindowManager::GetWindow()
+    GLFWwindow* WindowManager::GetWindow() const
     {
         return _window;
     }

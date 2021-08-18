@@ -11,7 +11,7 @@ namespace Core
     {
         public:
             inline static std::map<std::string, Texture*> _textureStorage = std::map<std::string, Texture*>();
-            inline static std::map<std::string, Shader*> _shaderStorage = std::map<std::string, Shader*>();
+            inline static std::map<std::string, Shader*>  _shaderStorage  = std::map<std::string, Shader*>();
 
         public:
             static void LoadTexture(const std::string& name, const std::string& filepath);

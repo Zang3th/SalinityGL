@@ -17,6 +17,7 @@
 #include "GW_InputManager.hpp"
 
 #include <vector>
+#include <array>
 
 namespace GW
 {
@@ -25,13 +26,12 @@ namespace GW
     class App
     {
         private:
-            Core::Scope<Core::WindowManager> _windowManager;
-            Core::Scope<Core::Renderer> _renderer;
-            Core::Scope<Core::Camera> _camera;
-            Core::Scope<Interface> _userInterface;
-
-            Core::Scope<Core::Cubemap> _cubemap;
-            std::vector<Core::Model> _models;
+            Core::Scope<Core::WindowManager>    _windowManager;
+            Core::Scope<Core::Renderer>         _renderer;
+            Core::Scope<Core::Camera>           _camera;
+            Core::Scope<Interface>              _userInterface;
+            Core::Scope<Core::Cubemap>          _cubemap;
+            std::vector<Core::Model>            _models;
 
             static void ConfigureLogger();
             static void ConfigureProfiler();

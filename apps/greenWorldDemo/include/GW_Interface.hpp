@@ -11,16 +11,16 @@ namespace GW
     class Interface : public Core::UserInterface
     {
         private:
-            Core::Renderer* _renderer;
-            Core::Camera* _camera;
-            bool _showOverlay;
-            ImVec2 _overlayPos, _overlayPosPivot;
-            ImGuiWindowFlags _windowFlags;
+            ImVec2                  _overlayPos, _overlayPosPivot;
+            const Core::Renderer*   _renderer;
+            const Core::Camera*     _camera;
+            ImGuiWindowFlags        _windowFlags;
+            bool                    _showOverlay;
 
             void CalcOverlayPosition();
 
         public:
-            Interface(Core::WindowManager* window, Core::Renderer* renderer, Core::Camera* camera);
+            Interface(const Core::WindowManager* window, const Core::Renderer* renderer, const Core::Camera* camera);
             void AddElements() override;
     };
 }

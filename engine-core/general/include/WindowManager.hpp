@@ -10,31 +10,31 @@ namespace Core
     class WindowManager
     {
         private:
-            std::string _windowName;
-            GLFWwindow* _window;
-            bool _isRunning;
-            double _deltaTime;
-            double _lastFrame;
-            unsigned int _frameCounter;
-            double _dtAccumulated;
-            double _fpsAvg;
+            GLFWwindow*     _window;
+            std::string     _windowName;
+            double          _deltaTime;
+            double          _lastFrame;
+            double          _dtAccumulated;
+            double          _fpsAvg;
+            unsigned int    _frameCounter;
+            bool            _isRunning;
 
             void CreateWindow();
-            void Prepare();
+            static void Prepare();
             void CalcFrametime();    
 
         public:
             WindowManager();
             ~WindowManager();
             void SetWindowTitle(const std::string& title);
-            bool WindowIsRunning() const;
+            [[nodiscard]] bool WindowIsRunning() const;
             void PrepareFrame();
-            void PollEvents();
+            static void PollEvents();
             void ProcessEvents();
             void SwapBuffers();
-            double GetDeltaTime() const;
-            double GetFps() const;
-            unsigned int GetFrameCounter() const;
-            GLFWwindow* GetWindow();
+            [[nodiscard]] double GetDeltaTime() const;
+            [[nodiscard]] double GetFps() const;
+            [[nodiscard]] unsigned int GetFrameCounter() const;
+            [[nodiscard]] GLFWwindow* GetWindow() const;
     };
 }

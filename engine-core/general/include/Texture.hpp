@@ -3,19 +3,18 @@
 #include "stb_image.hpp"
 #include "ErrorManager.hpp"
 
-//Anisotropic filtering is implemented as an extension and isn't included in OpenGL Core
-//So I need to define the value myself or include the extension
-#define GL_TEXTURE_MAX_ANISOTROPY_EXT 0x84FE
-
 namespace Core
 {
+    //Anisotropic filtering is implemented as an extension and isn't included in OpenGL Core
+    #define GL_TEXTURE_MAX_ANISOTROPY_EXT 0x84FE
+
     class Texture
     {
         private:
             unsigned int _textureID;
 
         public:
-            Texture(const std::string& filepath);
+            explicit Texture(const std::string& filepath);
             ~Texture();
             void Bind() const;
             void BindToSlot(unsigned int slot) const;

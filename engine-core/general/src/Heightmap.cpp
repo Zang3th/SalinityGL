@@ -2,6 +2,8 @@
 
 namespace Core
 {
+    // ----- Public -----
+
     Heightmap::Heightmap(const std::string& filepath)
     {
         int width, height, nrChannels;
@@ -15,6 +17,10 @@ namespace Core
             {
                 LOG(ERROR) << "Heightmap is too small: " << filepath;
             }
+            else if(nrChannels != 3)
+            {
+                LOG(ERROR) << "Heightmap doesn't have 3 channels: " << filepath;
+            }
             else
             {
                 //Save image into buffer
@@ -23,27 +29,27 @@ namespace Core
                 {
                     for(int j = 0; j < height; j++)
                     {
-                        float x = (float)localBuffer[count] / 255;
-                        float y = (float)localBuffer[count + 1] / 255;
-                        float z = (float)localBuffer[count + 2] / 255;
+                        float x = (float)localBuffer[count] / 255.0f;
+                        float y = (float)localBuffer[count + 1] / 255.0f;
+                        float z = (float)localBuffer[count + 2] / 255.0f;
                         _heightArray[i][j] = x + y + z;
                         count+=3;
                     }
                 }
-                LOG(INFO) << "Successfully load heightmap at: " << filepath << " (X: " << width << " | Y: " << height << " | Channel: " << nrChannels << ")";
+                LOG(INFO) << "Successfully load heightmap texture at: " << filepath << " (X: " << width << " | Y: " << height << " | Channel: " << nrChannels << ")";
             }
         }
         else
         {
-            LOG(ERROR) << "Failed to load heightmap at: " << filepath;
+            LOG(ERROR) << "Failed to load heightmap texture at: " << filepath;
         }
 
         stbi_image_free(localBuffer);
     }
 
-    float Heightmap::GetValueAtF(const unsigned int x, const unsigned int z) const
+    float Heightmap::GetValueAt(const unsigned int x, const unsigned int z) const
     {
-        if(x < PLANE_SIZE && z < PLANE_SIZE)
+        if(x > 0 && x < PLANE_SIZE && z > 0 && z < PLANE_SIZE)
             return _heightArray[x][z];
 
         return 0;

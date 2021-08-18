@@ -2,7 +2,7 @@
 
 #include "stb_image.hpp"
 #include "CoreDefines.hpp"
-#include "ErrorManager.hpp"
+#include "../../vendor/include/easylogging++.hpp"
 
 namespace Core
 {
@@ -12,7 +12,7 @@ namespace Core
             float _heightArray[PLANE_SIZE][PLANE_SIZE];
 
         public:
-            Heightmap(const std::string& filepath);
-            float GetValueAtF(unsigned int x, unsigned int z) const;
+            explicit Heightmap(const std::string& filepath);
+            [[nodiscard]] float GetValueAt(unsigned int x, unsigned int z) const;
     };
 }

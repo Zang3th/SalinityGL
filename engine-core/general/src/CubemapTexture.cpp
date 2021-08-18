@@ -4,8 +4,8 @@ namespace Core
 {
     // ----- Public -----
 
-    CubemapTexture::CubemapTexture(std::vector<const char*>& faces)
-        : _textureID(0)
+    CubemapTexture::CubemapTexture(std::array<const char*, 6>& faces)
+        :   _textureID(0)
     {
         GLCall(glGenTextures(1, &_textureID));
         Bind();
@@ -29,15 +29,15 @@ namespace Core
                 if(format != 0)
                 {
                     GLCall(glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, localBuffer));
-                    LOG(INFO) << "Successfully load texture at: " << faces[i] << " (X: " << width << " | Y: " << height << " | Channel: " << nrChannels << ")";
-                    stbi_image_free(localBuffer);
+                    LOG(INFO) << "Successfully load cubemap texture at: " << faces[i] << " (X: " << width << " | Y: " << height << " | Channel: " << nrChannels << ")";
                 }
             }
             else
             {
                 LOG(ERROR) << "Failed to load cubemap texture at: " << faces[i];
-                stbi_image_free(localBuffer);
             }
+
+            stbi_image_free(localBuffer);
         }
 
         //Texture parameters

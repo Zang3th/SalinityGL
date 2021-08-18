@@ -5,10 +5,12 @@ namespace Core
     // ----- Public -----
 
     Texture::Texture(const std::string& filepath)
-        : _textureID(0)
+        :   _textureID(0)
     {
         int width, height, nrChannels;
+        stbi_set_flip_vertically_on_load(true);
         unsigned char* localBuffer = stbi_load(filepath.c_str(), &width, &height, &nrChannels, 0);
+        stbi_set_flip_vertically_on_load(false);
 
         if(localBuffer)
         {

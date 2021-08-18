@@ -12,7 +12,7 @@ namespace GW
         //Configure logger
         el::Configurations defaultConf;
         defaultConf.setToDefault();
-        defaultConf.setGlobally(el::ConfigurationType::Format, "%datetime{%H:%m:%s} [%level] [%fbase] %msg");
+        defaultConf.setGlobally(el::ConfigurationType::Format, "%datetime{%H:%m:%s} [%level] %msg");
         el::Loggers::reconfigureLogger("default", defaultConf);
     }
 
@@ -32,7 +32,7 @@ namespace GW
         _windowManager->SetWindowTitle("GreenWorld Demo Application");
 
         //Camera & Renderer
-        _camera = Core::MakeScope<Core::Camera>(glm::vec3(-61.0f, 48.0f, 76.0f), -29.0f, -23.0f, 25.0f);
+        _camera = Core::MakeScope<Core::Camera>(glm::vec3(-63.0f, 35.0f, 70.0f), -23.0f, -16.0f, 25.0f);
         _renderer = Core::MakeScope<Core::Renderer>(_camera.get());
 
         //Input & UI
@@ -43,6 +43,7 @@ namespace GW
     void App::LoadResources()
     {
         //Textures
+        Core::ResourceManager::LoadTexture("DirtTexture", "../res/textures/greenWorld/Dirt.jpg");
         Core::ResourceManager::LoadTexture("GrassTexture", "../res/textures/greenWorld/Grass.jpg");
         Core::ResourceManager::LoadTexture("WaterTexture", "../res/textures/greenWorld/Water.jpg");
         Core::ResourceManager::LoadTexture("BridgeTexture", "../res/models/greenWorld/bridge/textures/Material_baseColor.jpg");
@@ -55,28 +56,33 @@ namespace GW
     void App::CreateModels()
     {
         //Create meshes
-        Core::Mesh terrainMesh, waterMesh, bridgeMesh;
+        Core::Mesh dirtMesh, terrainMesh, waterMesh, bridgeMesh;
 
         //Create heightmap
         Core::Heightmap heightmap("../res/textures/greenWorld/heightmap/Heightmap64.bmp");
 
         //Fill meshes with data
-        Core::MeshCreator::CreateTerrain(PLANE_SIZE - 1, 1.0f, &terrainMesh, &heightmap);
-        Core::MeshCreator::CreateTerrain(PLANE_SIZE - 1, 1.0f, &waterMesh);
+        Core::MeshCreator::CreatePlane(PLANE_SIZE + 1, PLANE_SIZE + 1, 1.0f, -8.0f, &dirtMesh);
+        Core::MeshCreator::CreatePlane(PLANE_SIZE - 1, PLANE_SIZE - 1, 1.0f, -0.5f, &terrainMesh, &heightmap);
+        Core::MeshCreator::CreatePlane(PLANE_SIZE - 1, PLANE_SIZE - 48, 1.0f, -1.0f, &waterMesh);
         Core::MeshCreator::CreateFromGLTF("../res/models/greenWorld/bridge/scene.gltf", &bridgeMesh);
 
         //Create models out of meshes
+        Core::Model dirtModel(Core::ResourceManager::GetTexture("DirtTexture"), Core::ResourceManager::GetShader("ModelShader"), &dirtMesh);
         Core::Model terrainModel(Core::ResourceManager::GetTexture("GrassTexture"), Core::ResourceManager::GetShader("ModelShader"), &terrainMesh);
         Core::Model waterModel(Core::ResourceManager::GetTexture("WaterTexture"), Core::ResourceManager::GetShader("ModelShader"), &waterMesh);
         Core::Model bridgeModel(Core::ResourceManager::GetTexture("BridgeTexture"), Core::ResourceManager::GetShader("ModelShader"), &bridgeMesh);
 
         //Translate, rotate and scale models
+        dirtModel.IncreasePosition(glm::vec3(-1.0f, -0.5f, -1.0f));
+        waterModel.IncreasePosition(glm::vec3(0.0f, 0.5f, 19.0f));
         bridgeModel.IncreasePosition(glm::vec3(15.0f, 15.0f, 49.0f));
         bridgeModel.IncreaseRotation(0.0f, 0.0f, 90.0f);
         bridgeModel.IncreaseRotation(-90.0f, 0.0f, 0.0f);
         bridgeModel.IncreaseSize(2.0f);
 
         //Save models in model vector
+        _models.push_back(dirtModel);
         _models.push_back(terrainModel);
         _models.push_back(waterModel);
         _models.push_back(bridgeModel);
@@ -84,7 +90,7 @@ namespace GW
 
     void App::CreateCubemap()
     {
-        std::vector<const char*> faces
+        std::array<const char*, 6> faces
         {
             "../res/textures/greenWorld/cubemap/graycloud_xp.jpg", //Right
             "../res/textures/greenWorld/cubemap/graycloud_xn.jpg", //Left

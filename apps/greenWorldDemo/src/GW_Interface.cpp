@@ -20,12 +20,13 @@ namespace GW
 
     // ----- Public -----
 
-    Interface::Interface(Core::WindowManager* window, Core::Renderer* renderer, Core::Camera* camera)
-    : Core::UserInterface(window), _renderer(renderer), _camera(camera), _showOverlay(true)
+    Interface::Interface(const Core::WindowManager* window, const Core::Renderer* renderer, const Core::Camera* camera)
+        :   Core::UserInterface(window),
+            _renderer(renderer),
+            _camera(camera),
+            _windowFlags(ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav | ImGuiWindowFlags_NoMove),
+            _showOverlay(true)
     {
-        //Flags
-        _windowFlags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav | ImGuiWindowFlags_NoMove;
-  
         //Load custom font
         ImGuiIO& io = ImGui::GetIO();
         io.Fonts->AddFontFromFileTTF("../res/fonts/JetBrainsMono-Medium.ttf", 18);

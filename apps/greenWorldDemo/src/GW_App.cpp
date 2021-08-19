@@ -38,6 +38,12 @@ namespace GW
         //Input & UI
         InputManager::Init(_windowManager.get(), _camera.get());
         _userInterface = Core::MakeScope<Interface>(_windowManager.get(), _renderer.get(), _camera.get());
+
+        //Audio
+        _audioManager = Core::MakeScope<Core::AudioManager>();
+        _audioManager->SetListenerPosition(_camera->GetPosition(), _camera->GetFront(), _camera->GetUp());
+        _audioManager->PlaySound2D("../res/audio/greenWorld/music/WakingStars.wav", true, 1.0f);
+        _audioManager->PlaySound3D("../res/audio/greenWorld/sounds/Step.wav", glm::vec3(0.0f, 0.0f, 0.0f), true, 30.0f, 0.1);
     }
 
     void App::LoadResources()
@@ -134,6 +140,7 @@ namespace GW
             _windowManager->PollEvents();
             _windowManager->ProcessEvents();
             InputManager::ProcessInput();
+            _audioManager->SetListenerPosition(_camera->GetPosition(), _camera->GetFront(), _camera->GetUp());
         }
 
         {   Core::PROFILE_SCOPE("Prepare frame");

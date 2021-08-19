@@ -94,7 +94,7 @@ namespace Core
         SetModelMatrix();
     }
 
-    void Model::IncreaseRotation(const float& rotX, const float& rotY, const float& rotZ)
+    void Model::IncreaseRotation(const float rotX, const float rotY, const float rotZ)
     {
         _rotationX += rotX;
         _rotationY += rotY;
@@ -102,7 +102,7 @@ namespace Core
         SetModelMatrix();
     }
 
-    void Model::IncreaseSize(const float& size)
+    void Model::IncreaseSize(const float size)
     {
         _size *= size;
         SetModelMatrix();

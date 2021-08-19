@@ -49,7 +49,7 @@ namespace Core
 
     float Heightmap::GetValueAt(const unsigned int x, const unsigned int z) const
     {
-        if(x > 0 && x < PLANE_SIZE && z > 0 && z < PLANE_SIZE)
+        if(x < PLANE_SIZE && z < PLANE_SIZE)
             return _heightArray[x][z];
 
         return 0;

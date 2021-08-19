@@ -32,7 +32,7 @@ namespace Core
             Model(const Texture* texture, Shader* shader, Mesh* mesh);
             [[nodiscard]] unsigned int Draw(const glm::mat4& projMatrix, const glm::mat4& viewMatrix, const glm::vec3& camPos) const;
             void IncreasePosition(const glm::vec3& position);
-            void IncreaseRotation(const float& rotX, const float& rotY, const float& rotZ);
-            void IncreaseSize(const float& size);
+            void IncreaseRotation(float rotX, float rotY, float rotZ);
+            void IncreaseSize(float size);
     };
 }

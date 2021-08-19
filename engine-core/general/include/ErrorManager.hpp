@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../../vendor/include/glad.hpp"
-#include "../../vendor/include/easylogging++.hpp"
+#include "glad.hpp"
+#include "easylogging++.hpp"
 #include <csignal>
 
 #define ASSERT(x) if(!(x)) raise(SIGTRAP);

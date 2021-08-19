@@ -37,6 +37,7 @@ namespace Core
             void ProcessMouseMovement(float xOffset, float yOffset);
             [[nodiscard]] glm::vec3 GetPosition() const;
             [[nodiscard]] glm::vec3 GetFront() const;
+            [[nodiscard]] glm::vec3 GetUp() const;
             [[nodiscard]] float GetYaw() const;
             [[nodiscard]] float GetPitch() const;
     };

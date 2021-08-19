@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../../vendor/include/easylogging++.hpp"
-#include "../../vendor/include/json.hpp"
+#include "easylogging++.hpp"
+#include "json.hpp"
 #include "Mesh.hpp"
 #include "FileManager.hpp"
 #include <glm/glm.hpp>

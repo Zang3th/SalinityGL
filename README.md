@@ -20,13 +20,13 @@
    - UI
    - Loading of GLTF-Models
    - Cubemaps/Skyboxes
+   - Audiomanager for sounds and backgroundmusic
    
 ### Example applications  
    - GreenWorld
      - Planned to be a demo nature scene to show the capabilities of the engine
 
 ### ToDo's
-   - Audiomanager for sounds and backgroundmusic
    - Instanced-Rendering
    - Lighting
      - Blinn-Phong
@@ -37,18 +37,21 @@
    - And a lot more ...
 
 ### Credits
+#### Source or library included
    - [Easylogging++](https://github.com/amrayn/easyloggingpp)
    - [stb_image](https://github.com/nothings/stb/blob/master/stb_image.h)
    - [glad](https://github.com/Dav1dde/glad)
-   - [GLFW](https://github.com/glfw/glfw)
-   - [glm](https://github.com/g-truc/glm)
    - [imgui](https://github.com/ocornut/imgui), [imgui::plot_var](https://github.com/ocornut/imgui/wiki/plot_var_example)
    - [json](https://github.com/nlohmann/json)
+   - [irrKlang](https://www.ambiera.com/irrklang/)
+#### Extern dependencies
+   - [glfw](https://github.com/glfw/glfw)
+   - [glm](https://github.com/g-truc/glm)
 
 ### Using & Compiling
    - Currently, only for linux (with CMake as a buildsystem)
       - Clone the repository
-      - Install the extern dependencies (glm, GLFW) 
+      - Install the extern dependencies (listed above) 
          - Take a look at the credits to find the repositories
       - mkdir build
       - cd build/

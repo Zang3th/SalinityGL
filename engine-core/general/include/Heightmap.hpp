@@ -2,7 +2,7 @@
 
 #include "stb_image.hpp"
 #include "CoreDefines.hpp"
-#include "../../vendor/include/easylogging++.hpp"
+#include "easylogging++.hpp"
 
 namespace Core
 {

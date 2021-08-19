@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../../../engine-core/general/include/WindowManager.hpp"
-#include "../../../engine-core/general/include/Camera.hpp"
-#include "../../../engine-core/general/include/CoreDefines.hpp"
+#include "WindowManager.hpp"
+#include "Camera.hpp"
+#include "CoreDefines.hpp"
 
 namespace GW
 {

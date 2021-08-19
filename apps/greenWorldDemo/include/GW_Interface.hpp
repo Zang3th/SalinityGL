@@ -1,10 +1,10 @@
 #pragma once
 
-#include "../../../engine-core/general/include/UserInterface.hpp"
-#include "../../../engine-core/general/include/CoreDefines.hpp"
-#include "../../../engine-core/general/include/Renderer.hpp"
-#include "../../../engine-core/vendor/imgui/imgui_plot_var.h"
-#include "../../../engine-core/general/include/Profiler.hpp"
+#include "UserInterface.hpp"
+#include "CoreDefines.hpp"
+#include "Renderer.hpp"
+#include "imgui_plot_var.h"
+#include "Profiler.hpp"
 
 namespace GW
 {

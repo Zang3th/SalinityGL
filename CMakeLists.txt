@@ -9,25 +9,14 @@ set(LINKER_FLAGS "-lX11 -ldl -pthread")
 
 # Packages
 find_package(OpenGL REQUIRED)
-if(NOT OpenGL_FOUND)
-    message(Error "OpenGL not found")
-endif(NOT OpenGL_FOUND)
-
 find_package(glfw3 3.3 REQUIRED)
-if(NOT glfw3_FOUND)
-    message(Error "glfw3 not found")
-endif(NOT glfw3_FOUND)
-
 find_package(glm REQUIRED)
-if(NOT glm_FOUND)
-    message(Error "glm not found")
-endif(NOT glm_FOUND)
 
 # Source files
 file(GLOB_RECURSE SRC_GREENWORLD apps/greenWorldDemo/src/*.cpp)
 file(GLOB_RECURSE SRC_ENGINE engine-core/general/src/*.cpp)
 file(GLOB_RECURSE SRC_VENDOR engine-core/vendor/src/*.cpp)
-file(GLOB_RECURSE SRC_IMGUI engine-core/vendor/imgui/*.cpp)
+file(GLOB_RECURSE SRC_IMGUI engine-core/vendor/imgui/src/*.cpp)
 
 # Static library
 add_library(GameEngine STATIC ${SRC_ENGINE} ${SRC_VENDOR} ${SRC_IMGUI})
@@ -35,7 +24,8 @@ add_library(GameEngine STATIC ${SRC_ENGINE} ${SRC_VENDOR} ${SRC_IMGUI})
 # Include directories for the library
 target_include_directories(GameEngine PUBLIC engine-core/general/include)
 target_include_directories(GameEngine PUBLIC engine-core/vendor/include)
-target_include_directories(GameEngine PUBLIC engine-core/imgui/include)
+target_include_directories(GameEngine PUBLIC engine-core/vendor/imgui/include)
+target_include_directories(GameEngine PUBLIC engine-core/vendor/irrKlang/include)
 
 # Executable
 add_executable(greenWorldDemo apps/greenWorldDemo/greenWorldDemo.cpp ${SRC_GREENWORLD})
@@ -50,6 +40,9 @@ target_link_libraries(greenWorldDemo PUBLIC GameEngine)
 target_link_libraries(greenWorldDemo PUBLIC OpenGL::GL)
 target_link_libraries(greenWorldDemo PUBLIC glfw)
 target_link_libraries(greenWorldDemo PUBLIC glm::glm)
+
+# Link against dynamic libraries
+target_link_libraries(greenWorldDemo PUBLIC ${CMAKE_SOURCE_DIR}/engine-core/vendor/irrKlang/libIrrKlang.so)
 
 # General linker flags
 target_link_libraries(greenWorldDemo PUBLIC ${LINKER_FLAGS})

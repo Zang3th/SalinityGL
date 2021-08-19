@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../vendor/include/easylogging++.hpp"
+#include "easylogging++.hpp"
 #include <string>
 #include <fstream>
 #include <sstream>

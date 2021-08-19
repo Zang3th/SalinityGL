@@ -1,17 +1,18 @@
 #pragma once
 
-#include "../../../engine-core/general/include/WindowManager.hpp"
-#include "../../../engine-core/general/include/ResourceManager.hpp"
-#include "../../../engine-core/general/include/Renderer.hpp"
-#include "../../../engine-core/general/include/CoreDefines.hpp"
-#include "../../../engine-core/general/include/Sprite.hpp"
-#include "../../../engine-core/general/include/Profiler.hpp"
-#include "../../../engine-core/general/include/Camera.hpp"
-#include "../../../engine-core/general/include/Mesh.hpp"
-#include "../../../engine-core/general/include/MeshCreator.hpp"
-#include "../../../engine-core/general/include/Model.hpp"
-#include "../../../engine-core/general/include/Cubemap.hpp"
-#include "../../../engine-core/general/include/Heightmap.hpp"
+#include "WindowManager.hpp"
+#include "ResourceManager.hpp"
+#include "Renderer.hpp"
+#include "CoreDefines.hpp"
+#include "Sprite.hpp"
+#include "Profiler.hpp"
+#include "Camera.hpp"
+#include "Mesh.hpp"
+#include "MeshCreator.hpp"
+#include "Model.hpp"
+#include "Cubemap.hpp"
+#include "Heightmap.hpp"
+#include "AudioManager.hpp"
 
 #include "GW_Interface.hpp"
 #include "GW_InputManager.hpp"
@@ -30,6 +31,7 @@ namespace GW
             Core::Scope<Core::Renderer>         _renderer;
             Core::Scope<Core::Camera>           _camera;
             Core::Scope<Interface>              _userInterface;
+            Core::Scope<Core::AudioManager>     _audioManager;
             Core::Scope<Core::Cubemap>          _cubemap;
             std::vector<Core::Model>            _models;
 

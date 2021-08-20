@@ -37,22 +37,19 @@
    - And a lot more ...
 
 ### Credits
-#### Source or library included
-   - [Easylogging++](https://github.com/amrayn/easyloggingpp)
-   - [stb_image](https://github.com/nothings/stb/blob/master/stb_image.h)
    - [glad](https://github.com/Dav1dde/glad)
+   - [glfw](https://github.com/glfw/glfw)
+   - [Easylogging++](https://github.com/amrayn/easyloggingpp)
+   - [glm](https://github.com/g-truc/glm)   
+   - [stb_image](https://github.com/nothings/stb/blob/master/stb_image.h)   
    - [imgui](https://github.com/ocornut/imgui), [imgui::plot_var](https://github.com/ocornut/imgui/wiki/plot_var_example)
    - [json](https://github.com/nlohmann/json)
-   - [irrKlang](https://www.ambiera.com/irrklang/)
-#### Extern dependencies
-   - [glfw](https://github.com/glfw/glfw)
-   - [glm](https://github.com/g-truc/glm)
+   - [irrKlang](https://www.ambiera.com/irrklang/)   
 
 ### Using & Compiling
    - Currently, only for linux (with CMake as a buildsystem)
       - Clone the repository
-      - Install the extern dependencies (listed above) 
-         - Take a look at the credits to find the repositories
+      - Install the external dependencies if needed (OpenGL)
       - mkdir build
       - cd build/
       - cmake ..

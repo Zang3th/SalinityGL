@@ -42,8 +42,8 @@ namespace GW
         //Audio
         _audioManager = Core::MakeScope<Core::AudioManager>();
         _audioManager->SetListenerPosition(_camera->GetPosition(), _camera->GetFront(), _camera->GetUp());
-        _audioManager->PlaySound2D("../res/audio/greenWorld/music/WakingStars.wav", true, 1.0f);
-        _audioManager->PlaySound3D("../res/audio/greenWorld/sounds/Step.wav", glm::vec3(0.0f, 0.0f, 0.0f), true, 30.0f, 0.1);
+        _audioManager->PlaySound2D("../res/audio/greenWorld/music/TrueBlueSky.wav", true, 1.0f);
+        _audioManager->PlaySound3D("../res/audio/greenWorld/sounds/River.wav", glm::vec3(30.0f, 2.0f, 26.0f), true, 20.0f, 1.5);
     }
 
     void App::LoadResources()

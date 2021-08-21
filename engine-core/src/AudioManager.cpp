@@ -62,7 +62,7 @@ namespace Core
         _engine->setListenerPosition
         (
             irrklang::vec3df(pos.x, pos.y, pos.z),
-            irrklang::vec3df(front.x, front.y, front.z),
+            irrklang::vec3df(-front.x, front.y, front.z),
             irrklang::vec3df(0, 0, 0),
             irrklang::vec3df(up.x, up.y, up.z)
         );

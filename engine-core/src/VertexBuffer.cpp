@@ -4,7 +4,7 @@ namespace Core
 {
     // ----- Public -----
 
-    VertexBuffer::VertexBuffer(const void* data, unsigned int size)
+    VertexBuffer::VertexBuffer(const void* data, const unsigned int size)
         :   _vboID(0)
     {
         GLCall(glGenBuffers(1, &_vboID));

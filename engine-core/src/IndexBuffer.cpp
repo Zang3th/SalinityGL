@@ -4,7 +4,7 @@ namespace Core
 {
     // ----- Public -----
 
-    IndexBuffer::IndexBuffer(const void* data, unsigned int size)
+    IndexBuffer::IndexBuffer(const void* data, const unsigned int size)
         :   _iboID(0)
     {
         GLCall(glGenBuffers(1, &_iboID));

@@ -70,7 +70,7 @@ namespace Core
         _model = CreateModelMatrix(_position, _size, _rotation);
     }
 
-    unsigned int Sprite::Draw(const glm::mat4& projection) const
+    uint32 Sprite::Draw(const glm::mat4& projection) const
     {
         _shader->Bind();
         

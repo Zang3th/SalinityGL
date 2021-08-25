@@ -29,7 +29,7 @@ namespace Core
             GLCall(glDeleteTextures(1, _textureID.get()));}
     }
 
-    void FrameBuffer::Bind(const unsigned int width, const unsigned int height) const
+    void FrameBuffer::Bind(const uint32 width, const uint32 height) const
     {
         GLCall(glBindTexture(GL_TEXTURE_2D, 0));
         GLCall(glBindFramebuffer(GL_FRAMEBUFFER, _fboID));
@@ -42,9 +42,9 @@ namespace Core
         GLCall(glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT));
     }
 
-    void FrameBuffer::CreateTextureAttachment(const unsigned int width, const unsigned int height)
+    void FrameBuffer::CreateTextureAttachment(const uint32 width, const uint32 height)
     {
-        _textureID = MakeScope<unsigned int>();
+        _textureID = MakeScope<uint32>();
         GLCall(glGenTextures(1, _textureID.get()));
         GLCall(glBindTexture(GL_TEXTURE_2D, *(_textureID.get())));
         GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr));
@@ -53,9 +53,9 @@ namespace Core
         GLCall(glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, *(_textureID.get()), 0));
     }
 
-    void FrameBuffer::CreateDepthTextureAttachment(const unsigned int width, const unsigned int height)
+    void FrameBuffer::CreateDepthTextureAttachment(const uint32 width, const uint32 height)
     {
-        _depthTextureID = MakeScope<unsigned int>();
+        _depthTextureID = MakeScope<uint32>();
         GLCall(glGenTextures(1, _depthTextureID.get()));
         GLCall(glBindTexture(GL_TEXTURE_2D, *(_depthTextureID.get())));
         GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr));
@@ -64,9 +64,9 @@ namespace Core
         GLCall(glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, *(_depthTextureID.get()), 0));
     }
 
-    void FrameBuffer::CreateRenderBufferAttachment(const unsigned int width, const unsigned int height)
+    void FrameBuffer::CreateRenderBufferAttachment(const uint32 width, const uint32 height)
     {
-        _renderBufferID = MakeScope<unsigned int>();
+        _renderBufferID = MakeScope<uint32>();
         GLCall(glGenRenderbuffers(1, _renderBufferID.get()));
         GLCall(glBindRenderbuffer(GL_RENDERBUFFER, *(_renderBufferID.get())));
         GLCall(glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height));

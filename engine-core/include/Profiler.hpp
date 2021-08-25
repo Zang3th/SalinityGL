@@ -2,6 +2,7 @@
 
 #include <chrono>
 #include <map>
+#include <string>
 
 namespace Core
 {
@@ -10,12 +11,12 @@ namespace Core
     class Profiler
     {
         private:
-            const char* _scopeName;
+            const std::string _scopeName;
             std::chrono::time_point<std::chrono::high_resolution_clock> _startTime;
             bool _stopped;
 
         public:
-            explicit Profiler(const char* name);
+            explicit Profiler(const std::string& name);
             ~Profiler();
             void Stop();
     };
@@ -24,7 +25,7 @@ namespace Core
     {
         public:
             ProfileResults() = delete;
-            inline static void AddFunctionScope(const char* func){_results[func] = 1.0f;}
-            inline static std::map<const char*, float> _results = std::map<const char*, float>();
+            inline static void AddFunctionScope(const std::string& func){_results[func] = 1.0f;}
+            inline static std::map<const std::string, float> _results = std::map<const std::string, float>();
     };
 }

@@ -11,7 +11,7 @@ namespace Core
         vao->Bind();
 
         //Set vertice count accordingly
-        _verticeCount = mesh->indices.size() * 3;
+        _verticeCount = mesh->indices.size();
 
         //Create vbo's, send it data and configure vao
         VertexBuffer vbo1(&mesh->vertices[0], mesh->vertices.size() * sizeof(glm::vec3));
@@ -24,7 +24,7 @@ namespace Core
         vao->DefineAttributes(2, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), nullptr);
 
         //Create ibo
-        IndexBuffer ibo(&mesh->indices[0], mesh->indices.size() * sizeof(glm::uvec3));
+        IndexBuffer ibo(&mesh->indices[0], mesh->indices.size() * sizeof(uint32));
 
         //Unbind vao
         vao->Unbind();
@@ -64,7 +64,7 @@ namespace Core
         _vao = CreateVaoFromMesh(mesh);
     }
 
-    unsigned int Model::Draw(const glm::mat4& projMatrix, const glm::mat4& viewMatrix, const glm::vec3& camPos) const
+    uint32 Model::Draw(const glm::mat4& projMatrix, const glm::mat4& viewMatrix, const glm::vec3& camPos) const
     {
         _shader->Bind();
 

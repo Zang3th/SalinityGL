@@ -21,8 +21,8 @@ namespace Core
             glm::mat4                   _perspProjection;
             Camera*                     _camera;
             const Cubemap*              _cubemap;
-            unsigned int                _drawcalls;
-            unsigned int                _drawnVertices;
+            uint32                      _drawcalls;
+            uint32                      _drawnVertices;
 
         public:
             explicit Renderer(Camera* camera);
@@ -31,7 +31,7 @@ namespace Core
             void Submit(const Model* model);
             void Submit(const Cubemap* cubemap);
             void Flush();
-            [[nodiscard]] unsigned int GetDrawcalls() const;
-            [[nodiscard]] unsigned int GetDrawnVertices() const;
+            [[nodiscard]] uint32 GetDrawcalls() const;
+            [[nodiscard]] uint32 GetDrawnVertices() const;
     };
 }

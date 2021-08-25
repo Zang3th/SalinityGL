@@ -21,7 +21,7 @@ namespace Core
             glm::vec3           _position;
             const Texture*      _texture;
             Shader*             _shader;
-            unsigned int        _verticeCount;
+            uint32              _verticeCount;
             float               _rotationX, _rotationY, _rotationZ;
             float               _size;
 
@@ -30,7 +30,7 @@ namespace Core
 
         public:
             Model(const Texture* texture, Shader* shader, Mesh* mesh);
-            [[nodiscard]] unsigned int Draw(const glm::mat4& projMatrix, const glm::mat4& viewMatrix, const glm::vec3& camPos) const;
+            [[nodiscard]] uint32 Draw(const glm::mat4& projMatrix, const glm::mat4& viewMatrix, const glm::vec3& camPos) const;
             void IncreasePosition(const glm::vec3& position);
             void IncreaseRotation(float rotX, float rotY, float rotZ);
             void IncreaseSize(float size);

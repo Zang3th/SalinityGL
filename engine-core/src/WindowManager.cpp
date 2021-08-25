@@ -140,7 +140,7 @@ namespace Core
         return _fpsAvg;
     }
 
-    unsigned int WindowManager::GetFrameCounter() const
+    uint32 WindowManager::GetFrameCounter() const
     {
         return _frameCounter;
     }

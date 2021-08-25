@@ -22,14 +22,14 @@ namespace Core
             glm::vec2           _position;
             glm::vec2           _size;
             float               _rotation;
-            unsigned int        _verticeCount;
+            uint32              _verticeCount;
 
             Ref<VertexArray> CreateSpriteVao();
             static glm::mat4 CreateModelMatrix(glm::vec2 position, glm::vec2 size, float rotation);
 
         public:
             Sprite(const Texture* texture, Shader* shader, glm::vec2 position, glm::vec2 size, float rotation, glm::vec3 color);
-            [[nodiscard]] unsigned int Draw(const glm::mat4& projection) const;
+            [[nodiscard]] uint32 Draw(const glm::mat4& projection) const;
             void Translate(const glm::vec2& position);
     };
 }

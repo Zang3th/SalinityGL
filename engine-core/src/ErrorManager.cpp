@@ -9,7 +9,7 @@ namespace Core
 		while (glGetError() != GL_NO_ERROR);
 	}
 
-	bool ErrorManager::GLLogCall(const char* function, const char* file, int line)
+	bool ErrorManager::GLLogCall(const char* function, const char* file, uint32 line)
 	{
 		while (GLenum error = glGetError())
 		{

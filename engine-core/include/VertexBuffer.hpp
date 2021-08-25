@@ -7,10 +7,10 @@ namespace Core
     class VertexBuffer
     {
         private:
-            unsigned int _vboID;
+            uint32 _vboID;
 
         public:
-            VertexBuffer(const void* data, unsigned int size);
+        VertexBuffer(const void* data, uint32 size);
             ~VertexBuffer();
             void Bind() const;
             void Unbind() const;

@@ -8,16 +8,16 @@ namespace Core
     class FrameBuffer
     {
         private:
-            unsigned int _fboID;
-            Scope<unsigned int> _textureID, _depthTextureID, _renderBufferID;
+            uint32          _fboID;
+            Scope<uint32>   _textureID, _depthTextureID, _renderBufferID;
 
         public:
             FrameBuffer();
             ~FrameBuffer();
-            void Bind(unsigned int width, unsigned int height) const;
+            void Bind(uint32 width, uint32 height) const;
             void Unbind() const;
-            void CreateTextureAttachment(unsigned int width, unsigned int height);
-            void CreateDepthTextureAttachment(unsigned int width, unsigned int height);
-            void CreateRenderBufferAttachment(unsigned int width, unsigned int height);
+            void CreateTextureAttachment(uint32 width, uint32 height);
+            void CreateDepthTextureAttachment(uint32 width, uint32 height);
+            void CreateRenderBufferAttachment(uint32 width, uint32 height);
     };
 }

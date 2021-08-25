@@ -74,12 +74,12 @@ namespace Core
         }
     }
 
-    unsigned int Renderer::GetDrawcalls() const
+    uint32 Renderer::GetDrawcalls() const
     {
         return _drawcalls;
     }
 
-    unsigned int Renderer::GetDrawnVertices() const
+    uint32 Renderer::GetDrawnVertices() const
     {
         return _drawnVertices;
     }

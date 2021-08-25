@@ -15,7 +15,7 @@ namespace Core
             double          _lastFrame;
             double          _dtAccumulated;
             double          _fpsAvg;
-            unsigned int    _frameCounter;
+            uint32          _frameCounter;
             bool            _isRunning;
 
             void CreateWindow();
@@ -33,7 +33,7 @@ namespace Core
             void SwapBuffers();
             [[nodiscard]] double GetDeltaTime() const;
             [[nodiscard]] double GetFps() const;
-            [[nodiscard]] unsigned int GetFrameCounter() const;
+            [[nodiscard]] uint32 GetFrameCounter() const;
             [[nodiscard]] GLFWwindow* GetWindow() const;
     };
 }

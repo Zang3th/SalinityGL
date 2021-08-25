@@ -16,7 +16,7 @@ namespace GW
             inline static bool                  _windowInFocus  = bool();
 
             static void MousePosCallback(GLFWwindow* window, double xPos, double yPos);
-            static void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
+            static void MouseButtonCallback(GLFWwindow* window, Core::int32 button, Core::int32 action, Core::int32 mods);
 
         public:
             InputManager() = delete;

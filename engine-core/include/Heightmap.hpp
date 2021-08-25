@@ -13,6 +13,6 @@ namespace Core
 
         public:
             explicit Heightmap(const std::string& filepath);
-            [[nodiscard]] float GetValueAt(unsigned int x, unsigned int z) const;
+            [[nodiscard]] float GetValueAt(uint16 x, uint16 z) const;
     };
 }

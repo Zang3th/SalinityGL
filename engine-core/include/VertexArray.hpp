@@ -7,7 +7,7 @@ namespace Core
     class VertexArray
     {
         private:
-            unsigned int _vaoID;
+            uint32 _vaoID;
 
         public:
             VertexArray();

@@ -70,7 +70,7 @@ namespace Core
 
     // ----- Public -----
 
-    Cubemap::Cubemap(std::array<const char*, 6>& faces, Shader* shader)
+    Cubemap::Cubemap(std::array<const std::string, 6>& faces, Shader* shader)
         :   _shader(shader),
             _verticeCount(0)
     {
@@ -78,7 +78,7 @@ namespace Core
         _cubemapTexture = MakeScope<CubemapTexture>(faces);
     }
 
-    unsigned int Cubemap::Draw(const glm::mat4& projMatrix, const glm::mat4& viewMatrix) const
+    uint32 Cubemap::Draw(const glm::mat4& projMatrix, const glm::mat4& viewMatrix) const
     {
         _shader->Bind();
 

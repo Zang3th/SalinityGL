@@ -25,7 +25,7 @@ namespace GW
         }
     }
 
-    void InputManager::MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
+    void InputManager::MouseButtonCallback(GLFWwindow* window, Core::int32 button, Core::int32 action, Core::int32 mods)
     {
         //_lastY needs to be greater than 27 to not trigger on the titlebar
         if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS && _lastY > 27)

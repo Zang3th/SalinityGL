@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <cstdint>
 
 namespace Core
 {
@@ -27,6 +28,14 @@ namespace Core
     #define WINDOW_WIDTH    1920
     #define WINDOW_HEIGHT   1080
     #define PLANE_SIZE      64
+
+    //Datatypes
+    typedef int8_t int8;
+    typedef int16_t int16;
+    typedef int32_t int32;
+    typedef uint8_t uint8;
+    typedef uint16_t uint16;
+    typedef uint32_t uint32;
 
     //Extern settings
     extern bool WireframeRendering;    

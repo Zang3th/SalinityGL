@@ -7,7 +7,7 @@ namespace Core
     Texture::Texture(const std::string& filepath)
         :   _textureID(0)
     {
-        int width, height, nrChannels;
+        int32 width, height, nrChannels;
         stbi_set_flip_vertically_on_load(true);
         unsigned char* localBuffer = stbi_load(filepath.c_str(), &width, &height, &nrChannels, 0);
         stbi_set_flip_vertically_on_load(false);
@@ -61,7 +61,7 @@ namespace Core
         GLCall(glBindTexture(GL_TEXTURE_2D, _textureID));
     }
 
-    void Texture::BindToSlot(const unsigned int slot) const
+    void Texture::BindToSlot(const uint32 slot) const
     {
         GLCall(glActiveTexture(GL_TEXTURE0 + slot));
         GLCall(glBindTexture(GL_TEXTURE_2D, _textureID));

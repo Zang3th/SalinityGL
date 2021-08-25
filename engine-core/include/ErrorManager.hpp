@@ -2,6 +2,7 @@
 
 #include "glad.hpp"
 #include "easylogging++.hpp"
+#include "CoreDefines.hpp"
 
 #include <csignal>
 
@@ -17,6 +18,6 @@ namespace Core
         public:
             ErrorManager() = delete;
             static void GLClearError();
-            static bool GLLogCall(const char* function, const char* file, int line);
+            static bool GLLogCall(const char* function, const char* file, uint32 line);
     };
 }

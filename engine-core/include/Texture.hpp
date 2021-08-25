@@ -11,13 +11,13 @@ namespace Core
     class Texture
     {
         private:
-            unsigned int _textureID;
+            uint32 _textureID;
 
         public:
             explicit Texture(const std::string& filepath);
             ~Texture();
             void Bind() const;
-            void BindToSlot(unsigned int slot) const;
+            void BindToSlot(uint32 slot) const;
             void Unbind() const;
     };
 }

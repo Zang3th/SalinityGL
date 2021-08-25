@@ -4,22 +4,22 @@ namespace Core
 {
     // ----- Private -----
 
-    int Shader::Compile(unsigned int shaderType, const std::string& source)
+    int32 Shader::Compile(uint32 shaderType, const std::string& source)
     {
         const char* src = source.c_str();
 
-        GLCall(unsigned int id = glCreateShader(shaderType))
+        GLCall(uint32 id = glCreateShader(shaderType))
         GLCall(glShaderSource(id, 1, &src, nullptr));
         GLCall(glCompileShader(id));
 
         //Errorhandling
-        int result;
+        int32 result;
         GLCall(glGetShaderiv(id, GL_COMPILE_STATUS, &result));
 
         if(result == GL_FALSE)
         {
             //Get error message length
-            int length;
+            int32 length;
             GLCall(glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length));
 
             //Get error message
@@ -39,20 +39,20 @@ namespace Core
         return id;
     }
 
-    int Shader::Build(unsigned int vsID, unsigned int fsID)
+    int32 Shader::Build(uint32 vsID, uint32 fsID)
     {
-        GLCall(unsigned int programID = glCreateProgram());
+        GLCall(uint32 programID = glCreateProgram());
         GLCall(glAttachShader(programID, vsID));
         GLCall(glAttachShader(programID, fsID));
         GLCall(glLinkProgram(programID));
 
         //Errorhandling
-        int result;
+        int32 result;
         GLCall(glGetProgramiv(programID, GL_LINK_STATUS, &result));
         if(!result)
         {
             //Get error message length
-            int length;
+            int32 length;
             GLCall(glGetProgramiv(programID, GL_INFO_LOG_LENGTH, &length));
 
             //Get error message
@@ -80,7 +80,7 @@ namespace Core
         return programID;
     }
 
-    int Shader::Create(const std::string& vsFilepath, const std::string& fsFilepath)
+    int32 Shader::Create(const std::string& vsFilepath, const std::string& fsFilepath)
     {
         //Read in shader files
         std::string vsSource = FileManager::FileToString(vsFilepath);
@@ -90,14 +90,14 @@ namespace Core
             return -1;
 
         //Compile shader
-        int vsID = Compile(GL_VERTEX_SHADER, vsSource);
-        int fsID = Compile(GL_FRAGMENT_SHADER, fsSource);
+        int32 vsID = Compile(GL_VERTEX_SHADER, vsSource);
+        int32 fsID = Compile(GL_FRAGMENT_SHADER, fsSource);
 
         if(vsID < 0 || fsID < 0)
             return -2;
 
         //Build shader into program
-        int programID = Build(vsID, fsID);     
+        int32 programID = Build(vsID, fsID);
 
         if(programID < 0)
             return -3;
@@ -105,13 +105,13 @@ namespace Core
         return programID;    
     }
 
-    int Shader::GetUniformLocation(const std::string& name)
+    int32 Shader::GetUniformLocation(const std::string& name)
     {
         //Check if uniform is in cache, otherwise cache it and return the location
         if (_uniformLocationCache.find(name) != _uniformLocationCache.end())
                 return _uniformLocationCache[name];
 
-        GLCall(int location = glGetUniformLocation(_shaderID, name.c_str()));
+        GLCall(int32 location = glGetUniformLocation(_shaderID, name.c_str()));
         _uniformLocationCache[name] = location;
         return location;
     }
@@ -138,7 +138,7 @@ namespace Core
         GLCall(glUseProgram(0));
     }   
 
-    void Shader::SetUniform1i(const std::string& name, int value)
+    void Shader::SetUniform1i(const std::string& name, int32 value)
     {
         GLCall(glUniform1i(GetUniformLocation(name), value));
     }

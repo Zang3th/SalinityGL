@@ -40,8 +40,8 @@ namespace Core
         }
     }
 
-    void MeshCreator::CreateFromOBJ(const std::string& filepath, Mesh* mesh)
+    void MeshCreator::CreateFromObj(const std::string& filename, const std::string& baseFilepath, Mesh* mesh)
     {
-
+        ObjLoader::ObjToMesh(filename, baseFilepath, mesh);
     }
 }

@@ -24,17 +24,17 @@ namespace Core
                 else if(nrChannels == 4)
                     format = GL_RGBA;
                 else
-                    LOG(ERROR) << "Imageformat is not supported: " << faces[i];
+                    LOG(ERROR) << "Failed:   Imageformat is not supported | " << faces[i];
 
                 if(format != 0)
                 {
                     GLCall(glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, localBuffer));
-                    LOG(INFO) << "Successfully load cubemap texture at: " << faces[i] << " (X: " << width << " | Y: " << height << " | Channel: " << nrChannels << ")";
+                    LOG(INFO) << "Loaded:   Cubemap-Texture | " << faces[i] << " (X: " << width << " | Y: " << height << " | Channels: " << nrChannels << ")";
                 }
             }
             else
             {
-                LOG(ERROR) << "Failed to load cubemap texture at: " << faces[i];
+                LOG(ERROR) << "Failed:   Cubemap-Texture-Loading | " << faces[i];
             }
 
             stbi_image_free(localBuffer);

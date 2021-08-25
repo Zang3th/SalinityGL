@@ -27,15 +27,14 @@ namespace Core
             GLCall(glGetShaderInfoLog(id, length, &length, msg.get()));
 
             //Log error message
-            LOG(ERROR) << "Failed to compile shader: " << shaderType;
-            LOG(ERROR) << "Error: " << std::string(msg.get());
+            LOG(ERROR) << "Failed:  Shader-Compilation | " << shaderType << " | "<< std::string(msg.get());
 
             //Free resources and return
             GLCall(glDeleteShader(id));
             return -1;
         }
 
-        LOG(INFO) << "Successfully compiled shader: " << shaderType;
+        LOG(INFO) << "Compiled: Shader | " << shaderType;
         return id;
     }
 
@@ -60,8 +59,7 @@ namespace Core
             GLCall(glGetProgramInfoLog(programID, length, &length, msg.get()));
 
             //Log error message
-            LOG(ERROR) << "Failed to link shader: " << programID;
-            LOG(ERROR) << "Error: " << std::string(msg.get());
+            LOG(ERROR) << "Failed:  Shader-Linking | " << programID << " | "<< std::string(msg.get());
 
             //Free resources and return
             GLCall(glDeleteProgram(programID));
@@ -76,7 +74,7 @@ namespace Core
         GLCall(glDeleteShader(vsID));
         GLCall(glDeleteShader(fsID));
 
-        LOG(INFO) << "Successfully linked shader to program: " << programID;
+        LOG(INFO) << "Linked:   Program | " << programID;
         return programID;
     }
 

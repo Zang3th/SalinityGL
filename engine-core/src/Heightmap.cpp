@@ -15,11 +15,11 @@ namespace Core
         {
             if(width < PLANE_SIZE || height < PLANE_SIZE)
             {
-                LOG(ERROR) << "Heightmap is too small: " << filepath;
+                LOG(ERROR) << "Failed:   Heightmap is too small | " << filepath;
             }
             else if(nrChannels != 3)
             {
-                LOG(ERROR) << "Heightmap doesn't have 3 channels: " << filepath;
+                LOG(ERROR) << "Failed:   Heightmap doesn't have 3 channels | " << filepath;
             }
             else
             {
@@ -36,12 +36,13 @@ namespace Core
                         count += 3;
                     }
                 }
-                LOG(INFO) << "Successfully load heightmap texture at: " << filepath << " (X: " << width << " | Y: " << height << " | Channel: " << nrChannels << ")";
+
+                LOG(INFO) << "Loaded:   Heightmap-Texture | " << filepath << " (X: " << width << " | Y: " << height << " | Channels: " << nrChannels << ")";
             }
         }
         else
         {
-            LOG(ERROR) << "Failed to load heightmap texture at: " << filepath;
+            LOG(ERROR) << "Failed:   Heightmap-Texture-Loading | " << filepath;
         }
 
         stbi_image_free(localBuffer);

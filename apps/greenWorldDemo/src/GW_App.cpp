@@ -12,7 +12,7 @@ namespace GW
         //Configure logger
         el::Configurations defaultConf;
         defaultConf.setToDefault();
-        defaultConf.setGlobally(el::ConfigurationType::Format, "%datetime{%H:%m:%s} [%level] %msg");
+        defaultConf.setGlobally(el::ConfigurationType::Format, "%datetime{%s:%g} [%level] %msg");
         el::Loggers::reconfigureLogger("default", defaultConf);
     }
 
@@ -80,6 +80,11 @@ namespace GW
         //Save models in model vector
         _models.push_back(terrainModel);
         _models.push_back(waterModel);
+
+
+        Core::Mesh obj;
+        Core::MeshCreator::CreateFromObj("farmhouse_obj", "../res/models/greenWorld/Farmhouse", &obj);
+
     }
 
     void App::CreateCubemap()

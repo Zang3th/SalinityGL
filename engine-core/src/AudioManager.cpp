@@ -11,9 +11,9 @@ namespace Core
         _engine = irrklang::createIrrKlangDevice();
 
         if (!_engine)
-            LOG(ERROR) << "IrrKlang could not be initialized!";
+            LOG(ERROR) << "Failed:   Irrklang-Initialization";
         else
-            LOG(INFO) << "IrrKlang initialized!";
+            LOG(INFO) << "Loaded:   Irrklang";
     }
 
     AudioManager::~AudioManager()
@@ -35,10 +35,10 @@ namespace Core
             sound->setVolume(volume);
             _sounds.push_back(sound);
 
-            LOG(INFO) << "Successfully played 2D-Sound at: " << filepath;
+            LOG(INFO) << "Loaded:   2D-Sound | " << filepath;
         }
         else
-            LOG(ERROR) << "Failed to play 2D-Sound at: " << filepath;
+            LOG(ERROR) << "Failed:   2D-Sound | " << filepath;
     }
 
     void AudioManager::PlaySound3D(const std::string& filepath, const glm::vec3& position, const bool loop, const float distance, const float volume)
@@ -51,10 +51,10 @@ namespace Core
             sound->setVolume(volume);
             _sounds.push_back(sound);
 
-            LOG(INFO) << "Successfully played 3D-Sound at: " << filepath;
+            LOG(INFO) << "Loaded:   3D-Sound | " << filepath;
         }
         else
-            LOG(ERROR) << "Failed to play 3D-Sound at: " << filepath;
+            LOG(ERROR) << "Failed:   3D-Sound | " << filepath;
     }
 
     void AudioManager::SetListenerPosition(const glm::vec3& pos, const glm::vec3& front, const glm::vec3& up)

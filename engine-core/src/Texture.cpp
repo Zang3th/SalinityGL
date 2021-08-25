@@ -22,7 +22,7 @@ namespace Core
             else if(nrChannels == 4)
                 format = GL_RGBA;
             else
-                LOG(ERROR) << "Imageformat is not supported: " << filepath;      
+                LOG(ERROR) << "Failed:   Imageformat is not supported | " << filepath;
 
             if(format != 0)
             {
@@ -39,12 +39,12 @@ namespace Core
                 GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_LOD_BIAS, 0));
                 GLCall(glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 4.0f));
 
-                LOG(INFO) << "Successfully load texture at: " << filepath << " (X: " << width << " | Y: " << height << " | Channel: " << nrChannels << ")";
+                LOG(INFO) << "Loaded:   Texture | " << filepath << " (X: " << width << " | Y: " << height << " | Channels: " << nrChannels << ")";
             }        
         }
         else
         {
-            LOG(ERROR) << "Failed to load texture at: " << filepath;
+            LOG(ERROR) << "Failed:   Texture-Loading | " << filepath;
         }
 
         stbi_image_free(localBuffer);

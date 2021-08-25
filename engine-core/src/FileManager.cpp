@@ -17,12 +17,12 @@ namespace Core
             file.read(&content[0], content.size());
             file.close();
 
-            LOG(INFO) << "Successfully read file at: " << filepath << " (Size: " << content.size() << ")";
+            LOG(INFO) << "Loaded:   File | " << filepath << " (Size: " << content.size() << ")";
             return(content);
         }
         else
         {
-            LOG(ERROR) << "Could not open file: " << filepath;
+            LOG(ERROR) << "Failed:   File-Loading | " <<  filepath;
             return "FILE_ERROR";
         }
     }    

@@ -22,8 +22,6 @@
 
 namespace GW
 {
-    #define INIT_GREENWORLD_APP INITIALIZE_EASYLOGGINGPP
-
     class App
     {
         private:

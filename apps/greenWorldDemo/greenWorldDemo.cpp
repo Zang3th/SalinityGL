@@ -1,7 +1,5 @@
 #include "include/GW_App.hpp"
 
-INIT_GREENWORLD_APP
-
 int main()
 {
     //Create app

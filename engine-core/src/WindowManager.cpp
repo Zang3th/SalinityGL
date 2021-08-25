@@ -7,9 +7,9 @@ namespace Core
     void WindowManager::CreateWindow()
     {
         if(!glfwInit())
-            LOG(ERROR) << "GLFW could not be initialized! GLFW_Error: " << glfwGetError(nullptr);
+            LOG(ERROR) << "Failed:   GLFW-Initialization | " << glfwGetError(nullptr);
         else
-            LOG(INFO) << "GLFW initialized!";
+            LOG(INFO) << "Loaded:   GLFW";
             
         glfwWindowHint(GLFW_SAMPLES, 8);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -19,17 +19,17 @@ namespace Core
         _window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, _windowName.c_str(), nullptr, nullptr);
 
         if(!_window)
-            LOG(ERROR) << "Window could not be created! GLFW_Error: " << glfwGetError(nullptr);
+            LOG(ERROR) << "Failed:   GLFW-Window-Creation | " << glfwGetError(nullptr);
         else
-            LOG(INFO) << "GLFW Window created!";      
+            LOG(INFO) << "Created:  GLFW-Window";
 
         glfwMakeContextCurrent(_window);  
         glfwSwapInterval(1);
 
         if(!gladLoadGL()) 
-            LOG(ERROR) << "Couldn't load OpenGL via glad!";
-        else   
-            LOG(INFO) << "OpenGL " << GLVersion.major << "." << GLVersion.minor << " loaded via glad!";
+            LOG(ERROR) << "Failed:   OpenGL-Loading with glad";
+        else
+            LOG(INFO) << "Loaded:   OpenGL " << GLVersion.major << "." << GLVersion.minor << " with glad";
     
         GLCall(glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT));  
         GLCall(glEnable(GL_MULTISAMPLE));
@@ -70,7 +70,7 @@ namespace Core
 
     WindowManager::WindowManager()
         :   _window(nullptr),
-            _windowName("GameEngine Default"),
+            _windowName("GameEngine-Default"),
             _deltaTime(0.0f),
             _lastFrame(0.0f),
             _dtAccumulated(0.0f),
@@ -113,14 +113,14 @@ namespace Core
         if(glfwWindowShouldClose(_window))
         {
             _isRunning = false;
-            LOG(INFO) << "Quitting!";
+            LOG(INFO) << "Quit application";
         }
 
         if(glfwGetKey(_window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         {
             glfwSetWindowShouldClose(_window, true);
             _isRunning = false;
-            LOG(INFO) << "Quitting!";
+            LOG(INFO) << "Quit application";
         }
     }
 

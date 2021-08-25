@@ -52,10 +52,10 @@ namespace Core
 
     // ----- Public -----
 
-    Model::Model(const Texture* texture, Shader* shader, Mesh* mesh)
+    Model::Model(Mesh* mesh, Shader* shader)
         :   _model(glm::mat4(1.0f)),
             _position(0.0f),
-            _texture(texture),
+            _diffuseTexture(mesh->diffuseTexture),
             _shader(shader),
             _verticeCount(0),
             _rotationX(0.0f), _rotationY(0.0f), _rotationZ(0.0f),
@@ -74,14 +74,14 @@ namespace Core
         _shader->SetUniformMat4f("projection", projMatrix);
         _shader->SetUniformVec3f("viewPos", camPos);
 
-        _texture->Bind();
+        _diffuseTexture->Bind();
         _vao->Bind();
 
         //Render model
         GLCall(glDrawElements(GL_TRIANGLES, _verticeCount, GL_UNSIGNED_INT, nullptr));
 
         _vao->Unbind();
-        _texture->Unbind();
+        _diffuseTexture->Unbind();
         _shader->Unbind();
 
         //Return rendered vertices

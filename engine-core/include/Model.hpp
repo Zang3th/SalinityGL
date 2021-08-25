@@ -19,7 +19,7 @@ namespace Core
             Ref<VertexArray>    _vao;
             glm::mat4           _model;
             glm::vec3           _position;
-            const Texture*      _texture;
+            const Texture*      _diffuseTexture;
             Shader*             _shader;
             uint32              _verticeCount;
             float               _rotationX, _rotationY, _rotationZ;
@@ -29,7 +29,7 @@ namespace Core
             void SetModelMatrix();
 
         public:
-            Model(const Texture* texture, Shader* shader, Mesh* mesh);
+            Model(Mesh* mesh, Shader* shader);
             [[nodiscard]] uint32 Draw(const glm::mat4& projMatrix, const glm::mat4& viewMatrix, const glm::vec3& camPos) const;
             void IncreasePosition(const glm::vec3& position);
             void IncreaseRotation(float rotX, float rotY, float rotZ);

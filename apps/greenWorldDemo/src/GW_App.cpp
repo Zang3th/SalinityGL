@@ -70,9 +70,13 @@ namespace GW
         Core::MeshCreator::CreatePlane(PLANE_SIZE - 1, PLANE_SIZE - 1, 1.0f, &terrainMesh, &heightmap);
         Core::MeshCreator::CreatePlane(PLANE_SIZE - 1, PLANE_SIZE - 40, 1.0f, &waterMesh);
 
+        //Add textures to meshes
+        terrainMesh.diffuseTexture = Core::ResourceManager::GetTexture("GrassTexture");
+        waterMesh.diffuseTexture = Core::ResourceManager::GetTexture("WaterTexture");
+
         //Create models out of meshes
-        Core::Model terrainModel(Core::ResourceManager::GetTexture("GrassTexture"), Core::ResourceManager::GetShader("ModelShader"), &terrainMesh);
-        Core::Model waterModel(Core::ResourceManager::GetTexture("WaterTexture"), Core::ResourceManager::GetShader("ModelShader"), &waterMesh);
+        Core::Model terrainModel(&terrainMesh, Core::ResourceManager::GetShader("ModelShader"));
+        Core::Model waterModel(&waterMesh, Core::ResourceManager::GetShader("ModelShader"));
 
         //Translate, rotate and scale models
         waterModel.IncreasePosition(glm::vec3(0.0f, 14.0f, 15.0f));
@@ -81,9 +85,11 @@ namespace GW
         _models.push_back(terrainModel);
         _models.push_back(waterModel);
 
-
+        //Test the obj-Loader
         Core::Mesh obj;
         Core::MeshCreator::CreateFromObj("farmhouse_obj", "../res/models/greenWorld/Farmhouse", &obj);
+        Core::Model objModel(&obj, Core::ResourceManager::GetShader("ModelShader"));
+        _models.push_back(objModel);
 
     }
 

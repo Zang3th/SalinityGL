@@ -7,6 +7,8 @@
 #include "CoreDefines.hpp"
 #include "tiny_obj_loader.hpp"
 
+#include <vector>
+
 namespace Core
 {
     class ObjLoader

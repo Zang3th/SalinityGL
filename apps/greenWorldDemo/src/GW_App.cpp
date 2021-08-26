@@ -32,7 +32,7 @@ namespace GW
         _windowManager->SetWindowTitle("GreenWorld Demo Application");
 
         //Camera & Renderer
-        _camera = Core::MakeScope<Core::Camera>(glm::vec3(-86.0f, 70.0f, 109.0f), -41.0f, -17.0f, 35.0f);
+        _camera = Core::MakeScope<Core::Camera>(glm::vec3(-53.0f, 59.0f, 21.0f), 24.0f, -21.0f, 35.0f);
         _renderer = Core::MakeScope<Core::Renderer>(_camera.get());
 
         //Input & UI
@@ -60,40 +60,57 @@ namespace GW
 
     void App::CreateModels()
     {
-        //Create meshes
-        Core::Mesh terrainMesh, waterMesh;
-
-        //Create heightmap
-        Core::Heightmap heightmap("../res/textures/greenWorld/heightmap/Heightmap64.bmp");
-
-        //Fill meshes with data
-        Core::MeshCreator::CreatePlane(PLANE_SIZE - 1, PLANE_SIZE - 1, 1.0f, &terrainMesh, &heightmap);
-        Core::MeshCreator::CreatePlane(PLANE_SIZE - 1, PLANE_SIZE - 40, 1.0f, &waterMesh);
-
-        //Add textures to meshes
-        terrainMesh.diffuseTexture = Core::ResourceManager::GetTexture("GrassTexture");
-        waterMesh.diffuseTexture = Core::ResourceManager::GetTexture("WaterTexture");
-
-        //Create models out of meshes
-        Core::Model terrainModel(&terrainMesh, Core::ResourceManager::GetShader("ModelShader"));
-        Core::Model waterModel(&waterMesh, Core::ResourceManager::GetShader("ModelShader"));
-
-        //Translate, rotate and scale models
-        waterModel.ChangePosition(glm::vec3(0.0f, 14.0f, 15.0f));
-
-        //Save models in model vector
-        //_models.push_back(terrainModel);
-        //_models.push_back(waterModel);
-
-        //Test the obj-Loader
-        std::vector<Core::Mesh> meshes;
-        Core::MeshCreator::CreateFromObj("OldHouse", "../res/models/greenWorld/OldHouse", &meshes);
-        for(auto& mesh : meshes)
+        //Create terrain
         {
-            Core::Model meshModel(&mesh, Core::ResourceManager::GetShader("ModelShader"));
-            meshModel.ChangeSize(0.3f);
-            _models.push_back(meshModel);
+            Core::Mesh terrainMesh;
+            Core::Heightmap heightmap("../res/textures/greenWorld/heightmap/Heightmap128.bmp");
+            Core::MeshCreator::CreatePlane(PLANE_SIZE - 1, PLANE_SIZE - 1, 1.0f, &terrainMesh, &heightmap);
+            terrainMesh.diffuseTexture = Core::ResourceManager::GetTexture("GrassTexture");
+            Core::Model terrainModel(&terrainMesh, Core::ResourceManager::GetShader("ModelShader"));
+            _models.push_back(terrainModel);
         }
+
+        //Create water
+        {
+            Core::Mesh waterMesh;
+            Core::MeshCreator::CreatePlane(PLANE_SIZE - 100, PLANE_SIZE - 1, 1.0f, &waterMesh);
+            waterMesh.diffuseTexture = Core::ResourceManager::GetTexture("WaterTexture");
+            Core::Model waterModel(&waterMesh, Core::ResourceManager::GetShader("ModelShader"));
+            waterModel.ChangePosition(glm::vec3(25.0f, 14.0f, 0.0f));
+            _models.push_back(waterModel);
+        }
+
+        //Create house
+        {
+            std::vector<Core::Mesh> meshes;
+            Core::MeshCreator::CreateFromObj("OldHouse", "../res/models/greenWorld/OldHouse", &meshes);
+            for(auto& mesh : meshes)
+            {
+                Core::Model meshModel(&mesh, Core::ResourceManager::GetShader("ModelShader"));
+                meshModel.ChangeSize(0.15f);
+                meshModel.ChangeRotation(0.0f, -90.0f, 0.0f);
+                meshModel.ChangePosition(glm::vec3(105.0f, 15.5f, 85.0f));
+                _models.push_back(meshModel);
+            }
+        }
+
+        //Create bridge
+        {
+            std::vector<Core::Mesh> meshes;
+            Core::MeshCreator::CreateFromObj("Bridge", "../res/models/greenWorld/Bridge", &meshes);
+            for(auto& mesh : meshes)
+            {
+                Core::Model meshModel(&mesh, Core::ResourceManager::GetShader("ModelShader"));
+                meshModel.ChangeSize(2.0f);
+                meshModel.ChangeRotation(0.0f, -90.0f, 0.0f);
+                meshModel.ChangePosition(glm::vec3(38.0f, 15.0f, 40.0f));
+                _models.push_back(meshModel);
+            }
+        }
+
+        //Submit models
+        for(const auto& model : _models)
+            _renderer->Submit(&model);
     }
 
     void App::CreateCubemap()
@@ -109,6 +126,7 @@ namespace GW
         };
 
         _cubemap = Core::MakeScope<Core::Cubemap>(faces, Core::ResourceManager::GetShader("CubemapShader"));
+        _renderer->Submit(_cubemap.get());
     }
 
     // ----- Public -----
@@ -154,10 +172,6 @@ namespace GW
 
         {   Core::PROFILE_SCOPE("Render graphics");
 
-            for(const auto& model : _models)
-                _renderer->Submit(&model);
-
-            _renderer->Submit(_cubemap.get());
             _renderer->Flush();
         }
 

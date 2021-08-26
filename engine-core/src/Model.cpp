@@ -60,6 +60,7 @@ namespace Core
             _bumpTexture(mesh->bumpTexture),
             _shader(shader),
             _verticeCount(0),
+            _gotAlphaMask(mesh->gotAlphaMask),
             _rotationX(0.0f), _rotationY(0.0f), _rotationZ(0.0f),
             _size(1.0f)
     {
@@ -77,14 +78,13 @@ namespace Core
         _shader->SetUniformVec3f("viewPos", camPos);
         _shader->SetUniform1i("diffuseTexture", 0);
         _shader->SetUniform1i("alphaMask", 1);
-        _shader->SetUniform1i("gotAlphaMask", 0);
+        _shader->SetUniform1i("gotAlphaMask", _gotAlphaMask);
 
         _diffuseTexture->BindToSlot(0);
-        if(_alphaMask)
-        {
+
+        if(_gotAlphaMask == 1)
             _alphaMask->BindToSlot(1);
-            _shader->SetUniform1i("gotAlphaMask", 1);
-        }
+
         _vao->Bind();
 
         //Render model

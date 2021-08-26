@@ -36,7 +36,7 @@ newmtl Standard_1
 	Kd 0.5880 0.5880 0.5880
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka House Texture.jpg
-	map_Kd House Texture.jpg
+	map_Ka House Texture.png
+	map_Kd House Texture.png
 	map_bump House Texture Bump Map.jpg
 	bump House Texture Bump Map.jpg

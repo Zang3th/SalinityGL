@@ -24,6 +24,7 @@ namespace Core
             const Texture*      _bumpTexture;
             Shader*             _shader;
             uint32              _verticeCount;
+            int32               _gotAlphaMask;
             float               _rotationX, _rotationY, _rotationZ;
             float               _size;
 

@@ -17,5 +17,6 @@ namespace Core
         Texture*                diffuseTexture;
         Texture*                alphaMask;
         Texture*                bumpTexture;
+        int32                   gotAlphaMask;
     };
 }

@@ -20,13 +20,6 @@ namespace Core
         //Reset render stats for current frame
         _drawcalls = 0;
         _drawnVertices = 0;
-
-        //Clear buffers
-        _spriteBuffer.clear();
-        _modelBuffer.clear();
-
-        //Delete old cubemap
-        _cubemap = nullptr;
     }
 
     void Renderer::Submit(const Sprite* sprite)

@@ -27,7 +27,7 @@ namespace Core
     //Global defines
     #define WINDOW_WIDTH    1920
     #define WINDOW_HEIGHT   1080
-    #define PLANE_SIZE      64
+    #define PLANE_SIZE      128
 
     //Datatypes
     typedef int8_t int8;

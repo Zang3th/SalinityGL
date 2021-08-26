@@ -40,6 +40,7 @@ namespace Core
             mesh.diffuseTexture = nullptr;
             mesh.alphaMask = nullptr;
             mesh.bumpTexture = nullptr;
+            mesh.gotAlphaMask = 0;
 
             //Iterate over all indices
             for(const auto& index : shapes.at(i).mesh.indices)
@@ -86,6 +87,7 @@ namespace Core
                 std::string textureName = filename + "Texture";
                 ResourceManager::LoadTexture(textureName, textureFilepath);
                 mesh.alphaMask = ResourceManager::GetTexture(textureName);
+                mesh.gotAlphaMask = 1;
             }
 
             //Check for bump map

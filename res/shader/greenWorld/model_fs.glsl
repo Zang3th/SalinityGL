@@ -13,17 +13,17 @@ uniform vec3 viewPos;
 void main()
 {
     vec4 color = texture(diffuseTexture, texCoords);
-    float alphaValue = 1.0;
+    float alphaValue = color.a;
 
-    //Check for alpha mask
+    //Check for alpha mask and apply it
     if(gotAlphaMask == 1)
     {
         vec4 mask  = texture(alphaMask, texCoords);
         alphaValue = mask.r + mask.g + mask.b;
     }
 
-    fragColor = vec4(color.rgb, alphaValue);
-
-    if(fragColor.a < 0.5)
+    if(alphaValue < 0.5)
         discard;
+
+    fragColor = vec4(color.rgb, alphaValue);
 }

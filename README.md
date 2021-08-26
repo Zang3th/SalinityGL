@@ -20,13 +20,13 @@
    - UI
    - Cubemaps/Skyboxes
    - Audiomanager for sounds and backgroundmusic
+   - Loading of OBJ-Models
    
 ### Example applications  
    - GreenWorld
      - Planned to be a demo nature scene to show the capabilities of the engine
 
 ### ToDo's
-   - Loading of OBJ-Models
    - Instanced-Rendering
    - Lighting
      - Blinn-Phong

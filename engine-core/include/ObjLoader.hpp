@@ -15,6 +15,6 @@ namespace Core
     {
         public:
             ObjLoader() = delete;
-            static void ObjToMesh(const std::string& filename, const std::string& baseFilepath, Mesh* mesh);
+            static void ObjToMesh(const std::string& filename, const std::string& baseFilepath, std::vector<Mesh>* meshes);
     };
 }

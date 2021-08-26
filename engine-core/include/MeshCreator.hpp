@@ -4,6 +4,8 @@
 #include "Heightmap.hpp"
 #include "ObjLoader.hpp"
 
+#include <vector>
+
 namespace Core
 {
     class MeshCreator
@@ -11,6 +13,6 @@ namespace Core
         public:
             MeshCreator() = delete;
             static void CreatePlane(uint32 x, uint32 z, float tileSize, Mesh* mesh, const Heightmap* heightmap = nullptr);
-            static void CreateFromObj(const std::string& filename, const std::string& baseFilepath, Mesh* mesh);
+            static void CreateFromObj(const std::string& filename, const std::string& baseFilepath, std::vector<Mesh>* meshes);
     };
 }

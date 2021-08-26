@@ -86,11 +86,13 @@ namespace GW
         _models.push_back(waterModel);
 
         //Test the obj-Loader
-        Core::Mesh obj;
-        Core::MeshCreator::CreateFromObj("farmhouse_obj", "../res/models/greenWorld/Farmhouse", &obj);
-        Core::Model objModel(&obj, Core::ResourceManager::GetShader("ModelShader"));
-        _models.push_back(objModel);
-
+        std::vector<Core::Mesh> meshes;
+        Core::MeshCreator::CreateFromObj("OldHouse", "../res/models/greenWorld/OldHouse", &meshes);
+        for(auto& mesh : meshes)
+        {
+            Core::Model meshModel(&mesh, Core::ResourceManager::GetShader("ModelShader"));
+            _models.push_back(meshModel);
+        }
     }
 
     void App::CreateCubemap()

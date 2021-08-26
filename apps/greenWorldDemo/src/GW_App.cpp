@@ -32,7 +32,7 @@ namespace GW
         _windowManager->SetWindowTitle("GreenWorld Demo Application");
 
         //Camera & Renderer
-        _camera = Core::MakeScope<Core::Camera>(glm::vec3(-63.0f, 35.0f, 70.0f), -23.0f, -16.0f, 25.0f);
+        _camera = Core::MakeScope<Core::Camera>(glm::vec3(-86.0f, 70.0f, 109.0f), -41.0f, -17.0f, 35.0f);
         _renderer = Core::MakeScope<Core::Renderer>(_camera.get());
 
         //Input & UI
@@ -79,11 +79,11 @@ namespace GW
         Core::Model waterModel(&waterMesh, Core::ResourceManager::GetShader("ModelShader"));
 
         //Translate, rotate and scale models
-        waterModel.IncreasePosition(glm::vec3(0.0f, 14.0f, 15.0f));
+        waterModel.ChangePosition(glm::vec3(0.0f, 14.0f, 15.0f));
 
         //Save models in model vector
-        _models.push_back(terrainModel);
-        _models.push_back(waterModel);
+        //_models.push_back(terrainModel);
+        //_models.push_back(waterModel);
 
         //Test the obj-Loader
         std::vector<Core::Mesh> meshes;
@@ -91,6 +91,7 @@ namespace GW
         for(auto& mesh : meshes)
         {
             Core::Model meshModel(&mesh, Core::ResourceManager::GetShader("ModelShader"));
+            meshModel.ChangeSize(0.3f);
             _models.push_back(meshModel);
         }
     }

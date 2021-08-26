@@ -15,7 +15,7 @@ namespace Core
         std::vector<glm::vec3>  normals;
         std::vector<uint32>     indices;
         Texture*                diffuseTexture;
+        Texture*                alphaMask;
         Texture*                bumpTexture;
-        Texture*                blendMask;
     };
 }

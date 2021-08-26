@@ -35,6 +35,8 @@ namespace Core
         GLCall(glEnable(GL_MULTISAMPLE));
         GLCall(glEnable(GL_DEPTH_TEST));
         GLCall(glDepthFunc(GL_LEQUAL));
+        GLCall(glEnable(GL_BLEND));
+        GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
     
         _isRunning = true; //Start application
     }

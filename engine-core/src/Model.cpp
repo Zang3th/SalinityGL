@@ -56,6 +56,8 @@ namespace Core
         :   _model(glm::mat4(1.0f)),
             _position(0.0f),
             _diffuseTexture(mesh->diffuseTexture),
+            _alphaMask(mesh->alphaMask),
+            _bumpTexture(mesh->bumpTexture),
             _shader(shader),
             _verticeCount(0),
             _rotationX(0.0f), _rotationY(0.0f), _rotationZ(0.0f),
@@ -73,8 +75,16 @@ namespace Core
         _shader->SetUniformMat4f("model", _model);
         _shader->SetUniformMat4f("projection", projMatrix);
         _shader->SetUniformVec3f("viewPos", camPos);
+        _shader->SetUniform1i("diffuseTexture", 0);
+        _shader->SetUniform1i("alphaMask", 1);
+        _shader->SetUniform1i("gotAlphaMask", 0);
 
-        _diffuseTexture->Bind();
+        _diffuseTexture->BindToSlot(0);
+        if(_alphaMask)
+        {
+            _alphaMask->BindToSlot(1);
+            _shader->SetUniform1i("gotAlphaMask", 1);
+        }
         _vao->Bind();
 
         //Render model
@@ -88,13 +98,13 @@ namespace Core
         return _verticeCount;
     }
 
-    void Model::IncreasePosition(const glm::vec3& position)
+    void Model::ChangePosition(const glm::vec3& position)
     {
         _position += position;
         SetModelMatrix();
     }
 
-    void Model::IncreaseRotation(const float rotX, const float rotY, const float rotZ)
+    void Model::ChangeRotation(const float rotX, const float rotY, const float rotZ)
     {
         _rotationX += rotX;
         _rotationY += rotY;
@@ -102,7 +112,7 @@ namespace Core
         SetModelMatrix();
     }
 
-    void Model::IncreaseSize(const float size)
+    void Model::ChangeSize(const float size)
     {
         _size *= size;
         SetModelMatrix();

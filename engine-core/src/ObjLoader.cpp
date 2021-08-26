@@ -36,6 +36,11 @@ namespace Core
             //Create new mesh
             Mesh mesh;
 
+            //Init with default values
+            mesh.diffuseTexture = nullptr;
+            mesh.alphaMask = nullptr;
+            mesh.bumpTexture = nullptr;
+
             //Iterate over all indices
             for(const auto& index : shapes.at(i).mesh.indices)
             {
@@ -73,6 +78,16 @@ namespace Core
                 mesh.diffuseTexture = ResourceManager::GetTexture(textureName);
             }
 
+            //Check for alpha mask
+            if(!materials[i].alpha_texname.empty())
+            {
+                //Load alpha mask
+                std::string textureFilepath = baseFilepath + "/" + materials[i].alpha_texname;
+                std::string textureName = filename + "Texture";
+                ResourceManager::LoadTexture(textureName, textureFilepath);
+                mesh.alphaMask = ResourceManager::GetTexture(textureName);
+            }
+
             //Check for bump map
             if(!materials[i].bump_texname.empty())
             {
@@ -81,16 +96,6 @@ namespace Core
                 std::string textureName = filename + "Texture";
                 ResourceManager::LoadTexture(textureName, textureFilepath);
                 mesh.bumpTexture = ResourceManager::GetTexture(textureName);
-            }
-
-            //Check for blend mask
-            if(!materials[i].alpha_texname.empty())
-            {
-                //Load blend mask
-                std::string textureFilepath = baseFilepath + "/" + materials[i].alpha_texname;
-                std::string textureName = filename + "Texture";
-                ResourceManager::LoadTexture(textureName, textureFilepath);
-                mesh.blendMask = ResourceManager::GetTexture(textureName);
             }
 
             //Copy mesh into meshes vector

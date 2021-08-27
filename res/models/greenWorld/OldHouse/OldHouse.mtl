@@ -10,9 +10,7 @@ newmtl Standard_2
 	Kd 0.5880 0.5880 0.5880
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka Plants 2.jpg
-	map_Kd Plants 2.jpg
-	map_d Plants 2 Mask.jpg
+	map_Kd Plants 2.png
 
 newmtl Standard_3
 	Ns 10.0000
@@ -23,9 +21,7 @@ newmtl Standard_3
 	Kd 0.5880 0.5880 0.5880
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka Plants 1.jpg
-	map_Kd Plants 1.jpg
-	map_d Plants 1 Mask.jpg
+	map_Kd Plants 1.png
 
 newmtl Standard_1
 	Ns 10.0000
@@ -36,7 +32,5 @@ newmtl Standard_1
 	Kd 0.5880 0.5880 0.5880
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka House Texture.png
 	map_Kd House Texture.png
 	map_bump House Texture Bump Map.jpg
-	bump House Texture Bump Map.jpg

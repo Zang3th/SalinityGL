@@ -11,12 +11,12 @@ namespace Core
     class Profiler
     {
         private:
-            const std::string _scopeName;
+            const char* _scopeName;
             std::chrono::time_point<std::chrono::high_resolution_clock> _startTime;
             bool _stopped;
 
         public:
-            explicit Profiler(const std::string& name);
+            explicit Profiler(const char* name);
             ~Profiler();
             void Stop();
     };
@@ -25,7 +25,7 @@ namespace Core
     {
         public:
             ProfileResults() = delete;
-            inline static void AddFunctionScope(const std::string& func){_results[func] = 1.0f;}
-            inline static std::map<const std::string, float> _results = std::map<const std::string, float>();
+            inline static void AddFunctionScope(const char* func){_results[func] = 0.0f;}
+            inline static std::map<const char*, float> _results = std::map<const char*, float>();
     };
 }

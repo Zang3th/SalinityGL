@@ -20,11 +20,10 @@ namespace Core
             glm::mat4           _model;
             glm::vec3           _position;
             const Texture*      _diffuseTexture;
-            const Texture*      _alphaMask;
-            const Texture*      _bumpTexture;
+            const Texture*      _normalMap;
             Shader*             _shader;
             uint32              _verticeCount;
-            int32               _gotAlphaMask;
+            int32               _gotNormalMap;
             float               _rotationX, _rotationY, _rotationZ;
             float               _size;
 

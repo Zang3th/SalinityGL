@@ -4,7 +4,7 @@ namespace Core
 {
     // ----- Public -----
 
-    Profiler::Profiler(const std::string& name)
+    Profiler::Profiler(const char* name)
         :   _scopeName(name),
             _stopped(false)
     {

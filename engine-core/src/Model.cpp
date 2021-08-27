@@ -56,11 +56,10 @@ namespace Core
         :   _model(glm::mat4(1.0f)),
             _position(0.0f),
             _diffuseTexture(mesh->diffuseTexture),
-            _alphaMask(mesh->alphaMask),
-            _bumpTexture(mesh->bumpTexture),
+            _normalMap(mesh->normalMap),
             _shader(shader),
             _verticeCount(0),
-            _gotAlphaMask(mesh->gotAlphaMask),
+            _gotNormalMap(mesh->gotNormalMap),
             _rotationX(0.0f), _rotationY(0.0f), _rotationZ(0.0f),
             _size(1.0f)
     {
@@ -77,13 +76,13 @@ namespace Core
         _shader->SetUniformMat4f("projection", projMatrix);
         _shader->SetUniformVec3f("viewPos", camPos);
         _shader->SetUniform1i("diffuseTexture", 0);
-        _shader->SetUniform1i("alphaMask", 1);
-        _shader->SetUniform1i("gotAlphaMask", _gotAlphaMask);
+        _shader->SetUniform1i("normalMap", 1);
+        _shader->SetUniform1i("gotAlphaMask", _gotNormalMap);
 
         _diffuseTexture->BindToSlot(0);
 
-        if(_gotAlphaMask == 1)
-            _alphaMask->BindToSlot(1);
+        if(_gotNormalMap == 1)
+            _normalMap->BindToSlot(1);
 
         _vao->Bind();
 

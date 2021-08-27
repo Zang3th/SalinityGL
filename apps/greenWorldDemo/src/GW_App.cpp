@@ -108,6 +108,33 @@ namespace GW
             }
         }
 
+        //Create tree
+        {
+            std::vector<Core::Mesh> meshes;
+            Core::MeshCreator::CreateFromObj("Tree", "../res/models/greenWorld/Tree", &meshes);
+            for(auto& mesh : meshes)
+            {
+                Core::Model meshModel(&mesh, Core::ResourceManager::GetShader("ModelShader"));
+                meshModel.ChangeSize(0.07f);
+                meshModel.ChangePosition(glm::vec3(100.0f, 17.0f, 28.0f));
+                _models.push_back(meshModel);
+            }
+        }
+
+        //Create well
+        {
+            std::vector<Core::Mesh> meshes;
+            Core::MeshCreator::CreateFromObj("Well", "../res/models/greenWorld/Well", &meshes);
+            for(auto& mesh : meshes)
+            {
+                Core::Model meshModel(&mesh, Core::ResourceManager::GetShader("ModelShader"));
+                meshModel.ChangeSize(0.05f);
+                meshModel.ChangeRotation(0.0f, -45.0f, 0.0f);
+                meshModel.ChangePosition(glm::vec3(75.0f, 30.0f, 75.0f));
+                _models.push_back(meshModel);
+            }
+        }
+
         //Submit models
         for(const auto& model : _models)
             _renderer->Submit(&model);

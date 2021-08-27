@@ -82,7 +82,7 @@ namespace GW
 
                 //Profiling/Timing-Results
                 for(auto const& entry : Core::ProfileResults::_results)
-                    ImGui::Text("%.3fms - %s", entry.second, entry.first.c_str());
+                    ImGui::Text("%.3fms - %s", entry.second, entry.first);
 
                 ImGui::End();
             }

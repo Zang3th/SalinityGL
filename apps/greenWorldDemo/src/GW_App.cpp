@@ -32,7 +32,7 @@ namespace GW
         _windowManager->SetWindowTitle("GreenWorld Demo Application");
 
         //Camera & Renderer
-        _camera = Core::MakeScope<Core::Camera>(glm::vec3(-53.0f, 59.0f, 21.0f), 24.0f, -21.0f, 35.0f);
+        _camera = Core::MakeScope<Core::Camera>(glm::vec3(-29.0f, 45.0f, 20.0f), 24.0f, -15.0f, 35.0f);
         _renderer = Core::MakeScope<Core::Renderer>(_camera.get());
 
         //Input & UI

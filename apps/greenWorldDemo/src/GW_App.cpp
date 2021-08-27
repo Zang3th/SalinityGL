@@ -43,13 +43,12 @@ namespace GW
         _audioManager = Core::MakeScope<Core::AudioManager>();
         _audioManager->SetListenerPosition(_camera->GetPosition(), _camera->GetFront(), _camera->GetUp());
         _audioManager->PlaySound2D("../res/audio/greenWorld/music/TrueBlueSky.wav", true, 1.0f);
-        _audioManager->PlaySound3D("../res/audio/greenWorld/sounds/River.wav", glm::vec3(30.0f, 2.0f, 26.0f), true, 20.0f, 1.5);
+        _audioManager->PlaySound3D("../res/audio/greenWorld/sounds/River.wav", glm::vec3(39.0f, 14.0f, 56.0f), true, 40.0f, 1.5);
     }
 
     void App::LoadResources()
     {
         //Textures
-        Core::ResourceManager::LoadTexture("DirtTexture", "../res/textures/greenWorld/Dirt.jpg");
         Core::ResourceManager::LoadTexture("GrassTexture", "../res/textures/greenWorld/Grass.jpg");
         Core::ResourceManager::LoadTexture("WaterTexture", "../res/textures/greenWorld/Water.jpg");
 
@@ -116,7 +115,7 @@ namespace GW
             {
                 Core::Model meshModel(&mesh, Core::ResourceManager::GetShader("ModelShader"));
                 meshModel.ChangeSize(0.07f);
-                meshModel.ChangePosition(glm::vec3(100.0f, 17.0f, 28.0f));
+                meshModel.ChangePosition(glm::vec3(100.0f, 16.0f, 28.0f));
                 _models.push_back(meshModel);
             }
         }

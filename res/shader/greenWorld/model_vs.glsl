@@ -6,6 +6,7 @@ layout(location = 2) in vec3 normalsIn;
 
 out vec2 texCoords;
 out vec3 normals;
+out vec3 fragPos;
 
 uniform mat4 model;
 uniform mat4 view;
@@ -15,7 +16,7 @@ void main()
 {
     texCoords = texCoordsIn;
     normals = mat3(transpose(inverse(model))) * normalsIn;
-    vec4 fragPos = model * vec4(vertexIn, 1.0f);
+    fragPos = vec3(model * vec4(vertexIn, 1.0f));
 
-    gl_Position = projection * view * vec4(vec3(fragPos), 1.0f);
+    gl_Position = projection * view * vec4(fragPos, 1.0f);
 }

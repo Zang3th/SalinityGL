@@ -20,6 +20,7 @@ namespace GW
     {
         Core::ProfileResults::AddFunctionScope("Process events");
         Core::ProfileResults::AddFunctionScope("Prepare frame");
+        Core::ProfileResults::AddFunctionScope("Create shadows");
         Core::ProfileResults::AddFunctionScope("Render graphics");
         Core::ProfileResults::AddFunctionScope("Render UI");
         Core::ProfileResults::AddFunctionScope("End frame");
@@ -44,28 +45,28 @@ namespace GW
         _audioManager->SetListenerPosition(_camera->GetPosition(), _camera->GetFront(), _camera->GetUp());
         _audioManager->PlaySound2D("../res/audio/greenWorld/music/TrueBlueSky.wav", true, 1.0f);
         _audioManager->PlaySound3D("../res/audio/greenWorld/sounds/River.wav", glm::vec3(39.0f, 14.0f, 56.0f), true, 40.0f, 1.5);
+
+        //Shadow-Rendering
+        Core::ResourceManager::LoadShader("ShadowShader", "../res/shader/greenWorld/shadow_vs.glsl", "../res/shader/greenWorld/shadow_fs.glsl");
+        _shadowRenderer = Core::MakeScope<Core::ShadowRenderer>(Core::ResourceManager::GetShader("ShadowShader"), 1024, 1024, glm::vec3(64.0f, 20.0f, 64.0f));
     }
 
-    void App::LoadResources()
+    void App::CreateModels()
     {
         //Textures
         Core::ResourceManager::LoadTexture("GrassTexture", "../res/textures/greenWorld/Grass.jpg");
         Core::ResourceManager::LoadTexture("WaterTexture", "../res/textures/greenWorld/Water.jpg");
 
-        //Shaders
+        //Shader
         Core::ResourceManager::LoadShader("ModelShader", "../res/shader/greenWorld/model_vs.glsl", "../res/shader/greenWorld/model_fs.glsl");
-        Core::ResourceManager::LoadShader("CubemapShader", "../res/shader/greenWorld/cubemap_vs.glsl", "../res/shader/greenWorld/cubemap_fs.glsl");
-    }
 
-    void App::CreateModels()
-    {
         //Create terrain
         {
             Core::Mesh terrainMesh;
             Core::Heightmap heightmap("../res/textures/greenWorld/heightmap/Heightmap128.bmp");
             Core::MeshCreator::CreatePlane(PLANE_SIZE - 1, PLANE_SIZE - 1, 1.0f, &terrainMesh, &heightmap);
             terrainMesh.diffuseTexture = Core::ResourceManager::GetTexture("GrassTexture");
-            Core::Model terrainModel(&terrainMesh, Core::ResourceManager::GetShader("ModelShader"));
+            Core::Model terrainModel(&terrainMesh);
             _models.push_back(terrainModel);
         }
 
@@ -74,7 +75,7 @@ namespace GW
             Core::Mesh waterMesh;
             Core::MeshCreator::CreatePlane(PLANE_SIZE - 100, PLANE_SIZE - 1, 1.0f, &waterMesh);
             waterMesh.diffuseTexture = Core::ResourceManager::GetTexture("WaterTexture");
-            Core::Model waterModel(&waterMesh, Core::ResourceManager::GetShader("ModelShader"));
+            Core::Model waterModel(&waterMesh);
             waterModel.ChangePosition(glm::vec3(25.0f, 14.0f, 0.0f));
             _models.push_back(waterModel);
         }
@@ -85,7 +86,7 @@ namespace GW
             Core::MeshCreator::CreateFromObj("OldHouse", "../res/models/greenWorld/OldHouse", &meshes);
             for(auto& mesh : meshes)
             {
-                Core::Model meshModel(&mesh, Core::ResourceManager::GetShader("ModelShader"));
+                Core::Model meshModel(&mesh);
                 meshModel.ChangeSize(0.15f);
                 meshModel.ChangeRotation(0.0f, -90.0f, 0.0f);
                 meshModel.ChangePosition(glm::vec3(105.0f, 15.5f, 85.0f));
@@ -99,7 +100,7 @@ namespace GW
             Core::MeshCreator::CreateFromObj("Bridge", "../res/models/greenWorld/Bridge", &meshes);
             for(auto& mesh : meshes)
             {
-                Core::Model meshModel(&mesh, Core::ResourceManager::GetShader("ModelShader"));
+                Core::Model meshModel(&mesh);
                 meshModel.ChangeSize(2.0f);
                 meshModel.ChangeRotation(0.0f, -90.0f, 0.0f);
                 meshModel.ChangePosition(glm::vec3(38.0f, 15.0f, 40.0f));
@@ -113,7 +114,7 @@ namespace GW
             Core::MeshCreator::CreateFromObj("Tree", "../res/models/greenWorld/Tree", &meshes);
             for(auto& mesh : meshes)
             {
-                Core::Model meshModel(&mesh, Core::ResourceManager::GetShader("ModelShader"));
+                Core::Model meshModel(&mesh);
                 meshModel.ChangeSize(0.07f);
                 meshModel.ChangePosition(glm::vec3(100.0f, 16.0f, 28.0f));
                 _models.push_back(meshModel);
@@ -126,7 +127,7 @@ namespace GW
             Core::MeshCreator::CreateFromObj("Well", "../res/models/greenWorld/Well", &meshes);
             for(auto& mesh : meshes)
             {
-                Core::Model meshModel(&mesh, Core::ResourceManager::GetShader("ModelShader"));
+                Core::Model meshModel(&mesh);
                 meshModel.ChangeSize(0.05f);
                 meshModel.ChangeRotation(0.0f, -45.0f, 0.0f);
                 meshModel.ChangePosition(glm::vec3(75.0f, 30.0f, 75.0f));
@@ -141,6 +142,8 @@ namespace GW
 
     void App::CreateCubemap()
     {
+        Core::ResourceManager::LoadShader("CubemapShader", "../res/shader/greenWorld/cubemap_vs.glsl", "../res/shader/greenWorld/cubemap_fs.glsl");
+
         std::array<const std::string, 6> faces
         {
             "../res/textures/greenWorld/cubemap/graycloud_xp.jpg", //Right
@@ -155,6 +158,34 @@ namespace GW
         _renderer->Submit(_cubemap.get());
     }
 
+    void App::CreateSprites()
+    {
+        Core::ResourceManager::LoadShader("SpriteShader", "../res/shader/greenWorld/sprite_vs.glsl", "../res/shader/greenWorld/sprite_fs.glsl");
+
+        _testSprite1 = Core::MakeScope<Core::Sprite>
+        (
+            Core::ResourceManager::GetTexture("WaterTexture"),
+            Core::ResourceManager::GetShader("SpriteShader"),
+            glm::vec2(1600.0f, 450.0f),
+            glm::vec2(250.0f, 250.0f),
+            0.0f,
+            glm::vec3(1.0f, 1.0f, 1.0f)
+        );
+
+        _testSprite2 = Core::MakeScope<Core::Sprite>
+        (
+            Core::ResourceManager::GetTexture("WaterTexture"),
+            Core::ResourceManager::GetShader("SpriteShader"),
+            glm::vec2(1600.0f, 750.0f),
+            glm::vec2(250.0f, 250.0f),
+            0.0f,
+            glm::vec3(1.0f, 1.0f, 1.0f)
+        );
+
+        _renderer->Submit(_testSprite1.get());
+        _renderer->Submit(_testSprite2.get());
+    }
+
     // ----- Public -----
 
     App::App()
@@ -164,9 +195,9 @@ namespace GW
         InitModules();
 
         //Call after init because these methods depend on OpenGL-Initialization
-        LoadResources();
         CreateModels();
         CreateCubemap();
+        CreateSprites();
     }
 
     App::~App()
@@ -191,14 +222,29 @@ namespace GW
 
         {   Core::PROFILE_SCOPE("Prepare frame");
 
-            _windowManager->PrepareFrame();
+            _windowManager->Prepare();
+            _windowManager->CalcFrametime();
             _renderer->PrepareFrame();
             _userInterface->PrepareFrame();
         }
 
+        {   Core::PROFILE_SCOPE("Create shadows");
+
+            _shadowRenderer->StartFrame();
+
+            // Render scene
+            _renderer->Flush(_shadowRenderer->GetShader());
+            // Clear buffers
+            _windowManager->Prepare();
+
+            _shadowRenderer->EndFrame();
+        }
+
         {   Core::PROFILE_SCOPE("Render graphics");
 
-            _renderer->Flush();
+            _testSprite1->SetTexture(_shadowRenderer->GetDepthTexture());
+            _testSprite2->SetTexture(_shadowRenderer->GetDepthTexture());
+            _renderer->Flush(Core::ResourceManager::GetShader("ModelShader"));
         }
 
         {   Core::PROFILE_SCOPE("Render UI");

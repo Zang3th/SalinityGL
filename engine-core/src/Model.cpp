@@ -52,12 +52,11 @@ namespace Core
 
     // ----- Public -----
 
-    Model::Model(Mesh* mesh, Shader* shader)
+    Model::Model(Mesh* mesh)
         :   _model(glm::mat4(1.0f)),
             _position(0.0f),
             _diffuseTexture(mesh->diffuseTexture),
             _normalMap(mesh->normalMap),
-            _shader(shader),
             _verticeCount(0),
             _gotNormalMap(mesh->gotNormalMap),
             _rotationX(0.0f), _rotationY(0.0f), _rotationZ(0.0f),
@@ -66,18 +65,18 @@ namespace Core
         _vao = CreateVaoFromMesh(mesh);
     }
 
-    uint32 Model::Draw(const glm::mat4& projMatrix, const glm::mat4& viewMatrix, const glm::vec3& camPos) const
+    uint32 Model::Draw(Shader* shader, const glm::mat4& projMatrix, const glm::mat4& viewMatrix, const glm::vec3& camPos) const
     {
-        _shader->Bind();
+        shader->Bind();
 
         //Set uniforms
-        _shader->SetUniformMat4f("view", viewMatrix);
-        _shader->SetUniformMat4f("model", _model);
-        _shader->SetUniformMat4f("projection", projMatrix);
-        _shader->SetUniformVec3f("viewPos", camPos);
-        _shader->SetUniform1i("diffuseTexture", 0);
-        _shader->SetUniform1i("normalMap", 1);
-        _shader->SetUniform1i("gotAlphaMask", _gotNormalMap);
+        shader->SetUniformMat4f("view", viewMatrix);
+        shader->SetUniformMat4f("model", _model);
+        shader->SetUniformMat4f("projection", projMatrix);
+        shader->SetUniformVec3f("viewPos", camPos);
+        shader->SetUniform1i("diffuseTexture", 0);
+        shader->SetUniform1i("normalMap", 1);
+        shader->SetUniform1i("gotAlphaMask", _gotNormalMap);
 
         _diffuseTexture->BindToSlot(0);
 
@@ -91,7 +90,7 @@ namespace Core
 
         _vao->Unbind();
         _diffuseTexture->Unbind();
-        _shader->Unbind();
+        shader->Unbind();
 
         //Return rendered vertices
         return _verticeCount;

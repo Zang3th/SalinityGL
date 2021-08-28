@@ -41,33 +41,6 @@ namespace Core
         _isRunning = true; //Start application
     }
 
-    void WindowManager::Prepare()
-    {
-        GLCall(glClearColor(0.0, 0.0, 0.0, 1.0));
-        GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
-    }
-
-    void WindowManager::CalcFrametime()
-    {
-        //Calculate frametime
-        double currentFrame = glfwGetTime();
-        _deltaTime = currentFrame - _lastFrame;
-        _lastFrame = currentFrame;
-        
-        //Accumulate to average the fps
-        _frameCounter++;
-        _dtAccumulated += _deltaTime;
-
-        if(_frameCounter > 160)
-        {
-            _fpsAvg = 1 / (_dtAccumulated / _frameCounter);         
-
-            //Reset
-            _frameCounter = 0;
-            _dtAccumulated = 0.0f;
-        } 
-    }
-
     // ----- Public -----
 
     WindowManager::WindowManager()
@@ -99,10 +72,31 @@ namespace Core
         return _isRunning;
     }
 
-    void WindowManager::PrepareFrame()
+    void WindowManager::Prepare()
     {
-        CalcFrametime();
-        Prepare();
+        GLCall(glClearColor(0.0, 0.0, 0.0, 1.0));
+        GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
+    }
+
+    void WindowManager::CalcFrametime()
+    {
+        //Calculate frametime
+        double currentFrame = glfwGetTime();
+        _deltaTime = currentFrame - _lastFrame;
+        _lastFrame = currentFrame;
+
+        //Accumulate to average the fps
+        _frameCounter++;
+        _dtAccumulated += _deltaTime;
+
+        if(_frameCounter > 160)
+        {
+            _fpsAvg = 1 / (_dtAccumulated / _frameCounter);
+
+            //Reset
+            _frameCounter = 0;
+            _dtAccumulated = 0.0f;
+        }
     }
 
     void WindowManager::PollEvents()

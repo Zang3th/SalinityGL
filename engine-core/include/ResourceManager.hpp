@@ -16,6 +16,7 @@ namespace Core
 
         public:
             static void LoadTexture(const std::string& name, const std::string& filepath);
+            static void LoadDepthTexture(const std::string& name, const uint32 width, const uint32 height);
             static Texture* GetTexture(const std::string& name);
             static void LoadShader(const std::string& name, const std::string& vsFilepath, const std::string& fsFilepath);
             static Shader* GetShader(const std::string& name);

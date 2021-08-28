@@ -70,8 +70,10 @@ namespace GW
                 ImGui::Separator();
                 ImGui::PlotVar("", (float)_window->GetDeltaTime() * 1000.0f, 0.0f, 30.0f);
                 ImGui::Separator();
-                ImGui::Text("Drawcalls: %d", _renderer->GetDrawcalls());
-                ImGui::Text("Vertices:  %d", _renderer->GetDrawnVertices());
+                Core::uint32 renderPasses = _renderer->GetRenderPasses();
+                ImGui::Text("Render-Passes: %d", _renderer->GetRenderPasses());
+                ImGui::Text("Drawcalls per pass: %d (Total: %d)", _renderer->GetDrawcalls() / renderPasses, _renderer->GetDrawcalls());
+                ImGui::Text("Vertices per pass:  %d (Total: %d)", _renderer->GetDrawnVertices() / renderPasses , _renderer->GetDrawnVertices());
                 ImGui::Separator();
 
                 //Camera stats

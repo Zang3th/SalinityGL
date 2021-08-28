@@ -57,7 +57,7 @@ namespace Core
 
     // ----- Public -----
 
-    Sprite::Sprite(const Texture* texture, Shader* shader, glm::vec2 position, glm::vec2 size, float rotation, glm::vec3 color)
+    Sprite::Sprite(Texture* texture, Shader* shader, glm::vec2 position, glm::vec2 size, float rotation, glm::vec3 color)
         :   _color(color),
             _texture(texture),
             _shader(shader),
@@ -98,5 +98,10 @@ namespace Core
         glm::vec2 newPosition = glm::vec2(_position.x + position.x, _position.y + position.y);
         _model = CreateModelMatrix(newPosition, _size, _rotation);
         _position = newPosition;
+    }
+
+    void Sprite::SetTexture(Texture* texture)
+    {
+        _texture = texture;
     }
 }

@@ -20,6 +20,7 @@ namespace Core
         //Reset render stats for current frame
         _drawcalls = 0;
         _drawnVertices = 0;
+        _renderPasses = 0;
     }
 
     void Renderer::Submit(const Sprite* sprite)
@@ -37,7 +38,7 @@ namespace Core
         _cubemap = cubemap;
     }
 
-    void Renderer::Flush()
+    void Renderer::Flush(Shader* modelShader)
     {
         //Check for Wireframe-Mode
         if(WireframeRendering){
@@ -48,7 +49,7 @@ namespace Core
         //Render models
         for(const auto& model : _modelBuffer)
         {
-            _drawnVertices += model->Draw(_perspProjection, _camera->GetViewMatrix(), _camera->GetPosition());
+            _drawnVertices += model->Draw(modelShader, _perspProjection, _camera->GetViewMatrix(), _camera->GetPosition());
             _drawcalls++;
         }
 
@@ -65,6 +66,9 @@ namespace Core
             _drawnVertices += _cubemap->Draw(_perspProjection, _camera->GetViewMatrix());
             _drawcalls++;
         }
+
+        //Increase render pass counter
+        _renderPasses++;
     }
 
     uint32 Renderer::GetDrawcalls() const
@@ -75,5 +79,10 @@ namespace Core
     uint32 Renderer::GetDrawnVertices() const
     {
         return _drawnVertices;
+    }
+
+    uint32 Renderer::GetRenderPasses() const
+    {
+        return _renderPasses;
     }
 }

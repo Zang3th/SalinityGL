@@ -6,7 +6,16 @@ namespace Core
 
     void ResourceManager::LoadTexture(const std::string& name, const std::string& filepath)
     {
-        _textureStorage[name] = new Texture(filepath);
+        Texture* texture = new Texture();
+        texture->InitFromFile(filepath);
+        _textureStorage[name] = texture;
+    }
+
+    void ResourceManager::LoadDepthTexture(const std::string& name, const uint32 width, const uint32 height)
+    {
+        Texture* texture = new Texture();
+        texture->InitAsDepthTexture(width, height);
+        _textureStorage[name] = texture;
     }
 
     Texture* ResourceManager::GetTexture(const std::string& name)

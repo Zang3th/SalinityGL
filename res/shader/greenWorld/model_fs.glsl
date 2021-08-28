@@ -14,7 +14,7 @@ uniform vec3 viewPos;
 const float ambientStrength = 0.3;
 const float diffuseStrength = 0.7;
 const float specularStrength = 0.5;
-const vec3 lightPos = vec3(250.0, 750.0, -250.0);
+const vec3 lightPos = vec3(64.0, 20.0, 64.0);
 const vec3 lightColor = vec3(1.0, 1.0, 1.0);
 const float shininess = 2.0;
 

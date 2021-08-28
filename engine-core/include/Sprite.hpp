@@ -17,7 +17,7 @@ namespace Core
             Ref<VertexArray>    _vao;
             glm::mat4           _model;
             glm::vec3           _color;
-            const Texture*      _texture;
+            Texture*            _texture;
             Shader*             _shader;
             glm::vec2           _position;
             glm::vec2           _size;
@@ -28,8 +28,9 @@ namespace Core
             static glm::mat4 CreateModelMatrix(glm::vec2 position, glm::vec2 size, float rotation);
 
         public:
-            Sprite(const Texture* texture, Shader* shader, glm::vec2 position, glm::vec2 size, float rotation, glm::vec3 color);
+            Sprite(Texture* texture, Shader* shader, glm::vec2 position, glm::vec2 size, float rotation, glm::vec3 color);
             [[nodiscard]] uint32 Draw(const glm::mat4& projection) const;
             void Translate(const glm::vec2& position);
+            void SetTexture(Texture* texture);
     };
 }

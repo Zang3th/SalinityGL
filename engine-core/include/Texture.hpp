@@ -14,10 +14,13 @@ namespace Core
             uint32 _textureID;
 
         public:
-            explicit Texture(const std::string& filepath);
+            Texture();
             ~Texture();
+            void InitFromFile(const std::string& filepath);
+            void InitAsDepthTexture(uint32 width, uint32 height);
             void Bind() const;
             void BindToSlot(uint32 slot) const;
+            [[nodiscard]] uint32 GetTextureID() const;
             void Unbind() const;
     };
 }

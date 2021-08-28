@@ -19,15 +19,14 @@ namespace Core
             bool            _isRunning;
 
             void CreateWindow();
-            static void Prepare();
-            void CalcFrametime();    
 
         public:
             WindowManager();
             ~WindowManager();
             void SetWindowTitle(const std::string& title);
             [[nodiscard]] bool WindowIsRunning() const;
-            void PrepareFrame();
+            static void Prepare();
+            void CalcFrametime();
             static void PollEvents();
             void ProcessEvents();
             void SwapBuffers();

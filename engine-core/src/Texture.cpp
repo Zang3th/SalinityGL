@@ -4,8 +4,18 @@ namespace Core
 {
     // ----- Public -----
 
-    Texture::Texture(const std::string& filepath)
+    Texture::Texture()
         :   _textureID(0)
+    {
+
+    }
+
+    Texture::~Texture()
+    {
+        GLCall(glDeleteTextures(1, &_textureID));
+    }
+
+    void Texture::InitFromFile(const std::string &filepath)
     {
         int32 width, height, nrChannels;
         stbi_set_flip_vertically_on_load(true);
@@ -40,7 +50,7 @@ namespace Core
                 GLCall(glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 4.0f));
 
                 LOG(INFO) << "Loaded:   Texture | " << filepath << " (X: " << width << " | Y: " << height << " | Channels: " << nrChannels << ")";
-            }        
+            }
         }
         else
         {
@@ -50,9 +60,18 @@ namespace Core
         stbi_image_free(localBuffer);
     }
 
-    Texture::~Texture()
+    void Texture::InitAsDepthTexture(const uint32 width, const uint32 height)
     {
-        GLCall(glDeleteTextures(1, &_textureID));
+        //Create depth texture
+        GLCall(glGenTextures(1, &_textureID));
+        Bind();
+        GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr));
+
+        //Configure depth texture
+        GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST));
+        GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST));
+        GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT));
+        GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT));
     }
 
     void Texture::Bind() const
@@ -65,6 +84,11 @@ namespace Core
     {
         GLCall(glActiveTexture(GL_TEXTURE0 + slot));
         GLCall(glBindTexture(GL_TEXTURE_2D, _textureID));
+    }
+
+    uint32 Texture::GetTextureID() const
+    {
+        return _textureID;
     }
 
     void Texture::Unbind() const

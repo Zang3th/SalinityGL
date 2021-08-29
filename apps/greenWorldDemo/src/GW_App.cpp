@@ -48,7 +48,7 @@ namespace GW
 
         //Shadow-Rendering
         Core::ResourceManager::LoadShader("ShadowShader", "../res/shader/greenWorld/shadow_vs.glsl", "../res/shader/greenWorld/shadow_fs.glsl");
-        _shadowRenderer = Core::MakeScope<Core::ShadowRenderer>(Core::ResourceManager::GetShader("ShadowShader"), 1024, 1024, glm::vec3(64.0f, 20.0f, 64.0f));
+        _shadowRenderer = Core::MakeScope<Core::ShadowRenderer>(Core::ResourceManager::GetShader("ShadowShader"), 2048, 2048, glm::vec3(140.0f, 60.0f, 60.0f));
     }
 
     void App::CreateModels()
@@ -162,28 +162,17 @@ namespace GW
     {
         Core::ResourceManager::LoadShader("SpriteShader", "../res/shader/greenWorld/sprite_vs.glsl", "../res/shader/greenWorld/sprite_fs.glsl");
 
-        _testSprite1 = Core::MakeScope<Core::Sprite>
+        _testSprite = Core::MakeScope<Core::Sprite>
         (
             Core::ResourceManager::GetTexture("WaterTexture"),
             Core::ResourceManager::GetShader("SpriteShader"),
-            glm::vec2(1600.0f, 450.0f),
-            glm::vec2(250.0f, 250.0f),
+            glm::vec2(1350.0f, 50.0f),
+            glm::vec2(512.0f, 512.0f),
             0.0f,
             glm::vec3(1.0f, 1.0f, 1.0f)
         );
 
-        _testSprite2 = Core::MakeScope<Core::Sprite>
-        (
-            Core::ResourceManager::GetTexture("WaterTexture"),
-            Core::ResourceManager::GetShader("SpriteShader"),
-            glm::vec2(1600.0f, 750.0f),
-            glm::vec2(250.0f, 250.0f),
-            0.0f,
-            glm::vec3(1.0f, 1.0f, 1.0f)
-        );
-
-        _renderer->Submit(_testSprite1.get());
-        _renderer->Submit(_testSprite2.get());
+        _renderer->Submit(_testSprite.get());
     }
 
     // ----- Public -----
@@ -230,21 +219,19 @@ namespace GW
 
         {   Core::PROFILE_SCOPE("Create shadows");
 
+            // Render scene to shadow framebuffer
             _shadowRenderer->StartFrame();
+            _renderer->FlushModels(_shadowRenderer->GetShader());
+            _shadowRenderer->EndFrame();
 
-            // Render scene
-            _renderer->Flush(_shadowRenderer->GetShader());
             // Clear buffers
             _windowManager->Prepare();
-
-            _shadowRenderer->EndFrame();
         }
 
         {   Core::PROFILE_SCOPE("Render graphics");
 
-            _testSprite1->SetTexture(_shadowRenderer->GetDepthTexture());
-            _testSprite2->SetTexture(_shadowRenderer->GetDepthTexture());
-            _renderer->Flush(Core::ResourceManager::GetShader("ModelShader"));
+            _testSprite->SetTexture(_shadowRenderer->GetDepthTexture());
+            _renderer->FlushEverything(Core::ResourceManager::GetShader("ModelShader"));
         }
 
         {   Core::PROFILE_SCOPE("Render UI");

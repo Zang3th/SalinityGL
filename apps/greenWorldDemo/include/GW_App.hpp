@@ -34,7 +34,7 @@ namespace GW
             Core::Scope<Core::AudioManager>     _audioManager;
             Core::Scope<Core::ShadowRenderer>   _shadowRenderer;
             Core::Scope<Core::Cubemap>          _cubemap;
-            Core::Scope<Core::Sprite>           _testSprite1, _testSprite2;
+            Core::Scope<Core::Sprite>           _testSprite;
             std::vector<Core::Model>            _models;
 
             static void ConfigureLogger();

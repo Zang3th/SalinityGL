@@ -5,12 +5,13 @@ namespace Core
     // ----- Public -----
 
     Renderer::Renderer(Camera* camera)
-        :   _orthoProjection(glm::ortho(0.0f, (float)WINDOW_WIDTH, (float)WINDOW_HEIGHT, 0.0f, -1.0f, 1.0f)),
+        :   _orthoProjection(glm::ortho(0.0f, (float)WINDOW_WIDTH, 0.0f, (float)WINDOW_HEIGHT, -1.0f, 1.0f)),
             _perspProjection(glm::perspective(glm::radians(45.0f), (float)WINDOW_WIDTH/(float)WINDOW_HEIGHT, 0.1f, 500.0f)),
             _camera(camera),
             _cubemap(nullptr),
             _drawcalls(0),
-            _drawnVertices(0)
+            _drawnVertices(0),
+            _renderPasses(0)
     {
 
     }
@@ -38,7 +39,7 @@ namespace Core
         _cubemap = cubemap;
     }
 
-    void Renderer::Flush(Shader* modelShader)
+    void Renderer::FlushModels(Shader* modelShader)
     {
         //Check for Wireframe-Mode
         if(WireframeRendering){
@@ -53,22 +54,35 @@ namespace Core
             _drawcalls++;
         }
 
+        //Increase render pass counter
+        _renderPasses++;
+    }
+
+    void Renderer::FlushSprites()
+    {
         //Render sprites
         for(const auto& sprite : _spriteBuffer)
         {
             _drawnVertices += sprite->Draw(_orthoProjection);
             _drawcalls++;
         }
+    }
 
+    void Renderer::FlushCubemap()
+    {
         //Render cubemap last (if it exists)
         if(_cubemap)
         {
             _drawnVertices += _cubemap->Draw(_perspProjection, _camera->GetViewMatrix());
             _drawcalls++;
         }
+    }
 
-        //Increase render pass counter
-        _renderPasses++;
+    void Renderer::FlushEverything(Shader* modelShader)
+    {
+        FlushModels(modelShader);
+        FlushSprites();
+        FlushCubemap();
     }
 
     uint32 Renderer::GetDrawcalls() const

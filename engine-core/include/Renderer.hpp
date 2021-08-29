@@ -32,7 +32,10 @@ namespace Core
             void Submit(const Sprite* sprite);
             void Submit(const Model* model);
             void Submit(const Cubemap* cubemap);
-            void Flush(Shader* modelShader);
+            void FlushModels(Shader* modelShader);
+            void FlushSprites();
+            void FlushCubemap();
+            void FlushEverything(Shader* modelShader);
             [[nodiscard]] uint32 GetDrawcalls() const;
             [[nodiscard]] uint32 GetDrawnVertices() const;
             [[nodiscard]] uint32 GetRenderPasses() const;

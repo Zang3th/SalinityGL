@@ -48,7 +48,7 @@ namespace Core
 
         //Attach depth texture
         GLCall(glBindFramebuffer(GL_FRAMEBUFFER, _fboID));
-        GLCall(glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, _depthTexture->GetTextureID(), 0));
+        GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, _depthTexture->GetTextureID(), 0));
         GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
     }
 

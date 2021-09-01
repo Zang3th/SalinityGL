@@ -14,7 +14,7 @@ namespace Core
             uint32 _textureID;
 
         public:
-            explicit CubemapTexture(std::array<const std::string, 6>& faces);
+            explicit CubemapTexture(const std::array<const char*, 6>& faces);
             ~CubemapTexture();
             void Bind() const;
             void Unbind() const;

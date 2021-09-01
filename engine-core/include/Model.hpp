@@ -26,11 +26,11 @@ namespace Core
             float               _rotationX, _rotationY, _rotationZ;
             float               _size;
 
-            Ref<VertexArray> CreateVaoFromMesh(Mesh* mesh);
+            static Ref<VertexArray> CreateVaoFromMesh(Mesh* mesh);
             void SetModelMatrix();
 
         public:
-            Model(Mesh* mesh);
+            explicit Model(Mesh* mesh);
             [[nodiscard]] uint32 Draw(Shader* shader, const glm::mat4& projMatrix, const glm::mat4& viewMatrix, const glm::vec3& camPos) const;
             void ChangePosition(const glm::vec3& position);
             void ChangeRotation(float rotX, float rotY, float rotZ);

@@ -55,12 +55,9 @@ namespace Core
         Ref<VertexArray> vao = MakeRef<VertexArray>();
         vao->Bind();
 
-        //Set vertice count accordingly
-        _verticeCount = 36;
-
         //Create vbo, send it data and configure vao
         VertexBuffer vbo(&skyboxVertices, sizeof(skyboxVertices));
-        _vao->DefineAttributes(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
+        vao->DefineAttributes(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
 
         //Unbind vao
         vao->Unbind();
@@ -70,12 +67,13 @@ namespace Core
 
     // ----- Public -----
 
-    Cubemap::Cubemap(std::array<const std::string, 6>& faces, Shader* shader)
-        :   _shader(shader),
-            _verticeCount(0)
+    Cubemap::Cubemap(const std::array<const char*, 6>& faces, Shader* shader)
+        :   _vao(CreateVao()),
+            _cubemapTexture(MakeScope<CubemapTexture>(faces)),
+            _shader(shader),
+            _verticeCount(36)
     {
-        _vao = CreateVao();
-        _cubemapTexture = MakeScope<CubemapTexture>(faces);
+
     }
 
     uint32 Cubemap::Draw(const glm::mat4& projMatrix, const glm::mat4& viewMatrix) const

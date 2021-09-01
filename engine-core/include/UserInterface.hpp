@@ -15,7 +15,7 @@ namespace Core
 
         public:
             explicit UserInterface(const WindowManager* window);
-            ~UserInterface();
+            virtual ~UserInterface();
             static void PrepareFrame();
             virtual void AddElements() = 0;
             static void Render();

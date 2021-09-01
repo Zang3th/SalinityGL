@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Logger.hpp"
 #include "WindowManager.hpp"
 #include "ResourceManager.hpp"
 #include "Renderer.hpp"
@@ -37,8 +38,6 @@ namespace GW
             Core::Scope<Core::Sprite>           _testSprite;
             std::vector<Core::Model>            _models;
 
-            static void ConfigureLogger();
-            static void ConfigureProfiler();
             void InitModules();
             void CreateModels();
             void CreateCubemap();

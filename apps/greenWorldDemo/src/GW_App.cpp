@@ -4,30 +4,11 @@ namespace GW
 {
     // ----- Private -----
 
-    void App::ConfigureLogger()
-    {
-        //Add colorful terminal logging
-        el::Loggers::addFlag(el::LoggingFlag::ColoredTerminalOutput);
-
-        //Configure logger
-        el::Configurations defaultConf;
-        defaultConf.setToDefault();
-        defaultConf.setGlobally(el::ConfigurationType::Format, "%datetime{%s:%g} [%level] %msg");
-        el::Loggers::reconfigureLogger("default", defaultConf);
-    }
-
-    void App::ConfigureProfiler()
-    {
-        Core::ProfileResults::AddFunctionScope("Process events");
-        Core::ProfileResults::AddFunctionScope("Prepare frame");
-        Core::ProfileResults::AddFunctionScope("Create shadows");
-        Core::ProfileResults::AddFunctionScope("Render graphics");
-        Core::ProfileResults::AddFunctionScope("Render UI");
-        Core::ProfileResults::AddFunctionScope("End frame");
-    }
-
     void App::InitModules()
     {
+        //Logging
+        Core::Logger::Init();
+
         //Window
         _windowManager = Core::MakeScope<Core::WindowManager>();
         _windowManager->SetWindowTitle("GreenWorld Demo Application");
@@ -144,7 +125,7 @@ namespace GW
     {
         Core::ResourceManager::LoadShader("CubemapShader", "../res/shader/greenWorld/cubemap_vs.glsl", "../res/shader/greenWorld/cubemap_fs.glsl");
 
-        std::array<const std::string, 6> faces
+        const std::array<const char*, 6> faces
         {
             "../res/textures/greenWorld/cubemap/graycloud_xp.jpg", //Right
             "../res/textures/greenWorld/cubemap/graycloud_xn.jpg", //Left
@@ -166,11 +147,11 @@ namespace GW
         (
             Core::ResourceManager::GetTexture("WaterTexture"),
             Core::ResourceManager::GetShader("SpriteShader"),
-            glm::vec2(1350.0f, 50.0f),
-            glm::vec2(512.0f, 512.0f),
-            0.0f,
             glm::vec3(1.0f, 1.0f, 1.0f)
         );
+
+        _testSprite->ChangePosition(glm::vec2(1350.0f, 50.0f));
+        _testSprite->ChangeSize(glm::vec2(512.0f, 512.0f));
 
         _renderer->Submit(_testSprite.get());
     }
@@ -179,8 +160,7 @@ namespace GW
 
     App::App()
     {
-        ConfigureLogger();
-        ConfigureProfiler();
+        //ConfigureProfiler();
         InitModules();
 
         //Call after init because these methods depend on OpenGL-Initialization

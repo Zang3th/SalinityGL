@@ -12,7 +12,7 @@ namespace Core
     class ShadowRenderer
     {
         private:
-            glm::mat4           _lightProjection;
+            glm::mat4           _orthoProjection, _lightView, _lightProjection;
             Scope<FrameBuffer>  _fbo;
             Shader*             _shader;
             uint32              _shadowWidth;

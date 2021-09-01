@@ -29,7 +29,7 @@ namespace Core
         if(!gladLoadGL()) 
             LOG(ERROR) << "Failed:   OpenGL-Loading with glad";
         else
-            LOG(INFO) << "Loaded:   OpenGL " << GLVersion.major << "." << GLVersion.minor << " with glad";
+            LOG(INFO) << "Loaded:   OpenGL with glad | " << glGetString(GL_VENDOR) << " | " << glGetString(GL_RENDERER) << " | " << glGetString(GL_VERSION);
     
         GLCall(glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT));  
         GLCall(glEnable(GL_MULTISAMPLE));
@@ -37,6 +37,12 @@ namespace Core
         GLCall(glDepthFunc(GL_LEQUAL));
         GLCall(glEnable(GL_BLEND));
         GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+
+        //Enable extensive debugging information (available since OpenGL 4.3)
+        GLCall(glEnable(GL_DEBUG_OUTPUT));
+        GLCall(glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS));
+        GLCall(glDebugMessageCallback(ErrorManager::OpenGLMessageCallback, nullptr));
+        GLCall(glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, nullptr, GL_FALSE));
     
         _isRunning = true; //Start application
     }
@@ -65,6 +71,7 @@ namespace Core
     {
         _windowName = title;
         glfwSetWindowTitle(_window, _windowName.c_str());
+        LOG(INFO) << "Changed:  Window-Title | " << title;
     }
 
     bool WindowManager::WindowIsRunning() const
@@ -109,14 +116,14 @@ namespace Core
         if(glfwWindowShouldClose(_window))
         {
             _isRunning = false;
-            LOG(INFO) << "Quit application";
+            LOG(INFO) << "Closed:   " << _windowName;
         }
 
         if(glfwGetKey(_window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         {
             glfwSetWindowShouldClose(_window, true);
             _isRunning = false;
-            LOG(INFO) << "Quit application";
+            LOG(INFO) << "Closed:   " << _windowName;
         }
     }
 

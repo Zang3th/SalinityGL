@@ -21,6 +21,6 @@ namespace GW
 
         public:
             Interface(const Core::WindowManager* window, const Core::Renderer* renderer, const Core::Camera* camera);
-            void AddElements() override;
+            void AddElements() final;
     };
 }

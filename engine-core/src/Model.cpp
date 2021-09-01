@@ -10,9 +10,6 @@ namespace Core
         Ref<VertexArray> vao = MakeRef<VertexArray>();
         vao->Bind();
 
-        //Set vertice count accordingly
-        _verticeCount = mesh->indices.size();
-
         //Create vbo's, send it data and configure vao
         VertexBuffer vbo1(&mesh->vertices[0], mesh->vertices.size() * sizeof(glm::vec3));
         vao->DefineAttributes(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), nullptr);
@@ -53,16 +50,17 @@ namespace Core
     // ----- Public -----
 
     Model::Model(Mesh* mesh)
-        :   _model(glm::mat4(1.0f)),
+        :   _vao(CreateVaoFromMesh(mesh)),
+            _model(glm::mat4(1.0f)),
             _position(0.0f),
             _diffuseTexture(mesh->diffuseTexture),
             _normalMap(mesh->normalMap),
-            _verticeCount(0),
+            _verticeCount(mesh->indices.size()),
             _gotNormalMap(mesh->gotNormalMap),
             _rotationX(0.0f), _rotationY(0.0f), _rotationZ(0.0f),
             _size(1.0f)
     {
-        _vao = CreateVaoFromMesh(mesh);
+
     }
 
     uint32 Model::Draw(Shader* shader, const glm::mat4& projMatrix, const glm::mat4& viewMatrix, const glm::vec3& camPos) const
@@ -76,7 +74,7 @@ namespace Core
         shader->SetUniformVec3f("viewPos", camPos);
         shader->SetUniform1i("diffuseTexture", 0);
         shader->SetUniform1i("normalMap", 1);
-        shader->SetUniform1i("gotAlphaMask", _gotNormalMap);
+        shader->SetUniform1i("gotNormalMap", _gotNormalMap);
 
         _diffuseTexture->BindToSlot(0);
 

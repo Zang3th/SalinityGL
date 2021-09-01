@@ -1,6 +1,6 @@
 #pragma once
 
-#include "easylogging++.hpp"
+#include "Logger.hpp"
 #include "Mesh.hpp"
 #include "ResourceManager.hpp"
 #include "glm.hpp"

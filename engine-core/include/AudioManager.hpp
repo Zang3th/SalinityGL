@@ -2,7 +2,7 @@
 
 #include "irrKlang.h"
 #include "glm.hpp"
-#include "easylogging++.hpp"
+#include "Logger.hpp"
 
 #include <vector>
 

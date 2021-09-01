@@ -83,8 +83,10 @@ namespace GW
                 ImGui::Separator();
 
                 //Profiling/Timing-Results
-                for(auto const& entry : Core::ProfileResults::_results)
+                for(auto const& entry : Core::Profiler::_results)
                     ImGui::Text("%.3fms - %s", entry.second, entry.first);
+
+                ImGui::Separator();
 
                 ImGui::End();
             }

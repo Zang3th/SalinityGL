@@ -17,10 +17,10 @@ namespace Core
             Shader*                 _shader;
             uint32                  _verticeCount;
 
-            Ref<VertexArray> CreateVao();
+            static Ref<VertexArray> CreateVao();
 
         public:
-            Cubemap(std::array<const std::string, 6>& faces, Shader* shader);
+            Cubemap(const std::array<const char*, 6>& faces, Shader* shader);
             [[nodiscard]] uint32 Draw(const glm::mat4& projMatrix, const glm::mat4& viewMatrix) const;
     };
 }

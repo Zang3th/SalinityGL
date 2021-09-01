@@ -4,7 +4,7 @@ namespace Core
 {
     // ----- Public -----
 
-    CubemapTexture::CubemapTexture(std::array<const std::string, 6>& faces)
+    CubemapTexture::CubemapTexture(const std::array<const char*, 6>& faces)
         :   _textureID(0)
     {
         GLCall(glGenTextures(1, &_textureID));
@@ -13,7 +13,7 @@ namespace Core
         int32 width, height, nrChannels;
         for (uint32 i = 0; i < faces.size(); i++)
         {
-            unsigned char* localBuffer = stbi_load(faces[i].c_str(), &width, &height, &nrChannels, 0);
+            unsigned char* localBuffer = stbi_load(faces[i], &width, &height, &nrChannels, 0);
             if(localBuffer)
             {
                 GLenum format = 0;

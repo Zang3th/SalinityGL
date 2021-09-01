@@ -1,5 +1,4 @@
 #include "ObjLoader.hpp"
-#include <iostream>
 
 namespace Core
 {

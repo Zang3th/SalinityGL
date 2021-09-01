@@ -1,6 +1,6 @@
 #pragma once
 
-#include "easylogging++.hpp"
+#include "Logger.hpp"
 
 #include <string>
 #include <fstream>

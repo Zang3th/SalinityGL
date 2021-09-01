@@ -24,13 +24,15 @@ namespace Core
             float               _rotation;
             uint32              _verticeCount;
 
-            Ref<VertexArray> CreateSpriteVao();
-            static glm::mat4 CreateModelMatrix(glm::vec2 position, glm::vec2 size, float rotation);
+            static Ref<VertexArray> CreateSpriteVao();
+            void SetModelMatrix();
 
         public:
-            Sprite(Texture* texture, Shader* shader, glm::vec2 position, glm::vec2 size, float rotation, glm::vec3 color);
+            Sprite(Texture* texture, Shader* shader, glm::vec3 color);
             [[nodiscard]] uint32 Draw(const glm::mat4& projection) const;
-            void Translate(const glm::vec2& position);
+            void ChangePosition(const glm::vec2& position);
+            void ChangeRotation(float rotation);
+            void ChangeSize(const glm::vec2& size);
             void SetTexture(Texture* texture);
     };
 }

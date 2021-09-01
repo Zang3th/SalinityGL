@@ -1,7 +1,7 @@
 #pragma once
 
 #include "glad.hpp"
-#include "easylogging++.hpp"
+#include "Logger.hpp"
 #include "CoreDefines.hpp"
 
 #include <csignal>
@@ -19,5 +19,15 @@ namespace Core
             ErrorManager() = delete;
             static void GLClearError();
             static bool GLLogCall(const char* function, const char* file, uint32 line);
+            static void OpenGLMessageCallback
+            (
+                unsigned source,
+                unsigned type,
+                unsigned id,
+                unsigned severity,
+                int length,
+                const char* message,
+                const void* userParam
+            );
     };
 }

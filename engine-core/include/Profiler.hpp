@@ -13,19 +13,10 @@ namespace Core
         private:
             const char* _scopeName;
             std::chrono::time_point<std::chrono::high_resolution_clock> _startTime;
-            bool _stopped;
 
         public:
             explicit Profiler(const char* name);
             ~Profiler();
-            void Stop();
-    };
-
-    class ProfileResults
-    {
-        public:
-            ProfileResults() = delete;
-            inline static void AddFunctionScope(const char* func){_results[func] = 0.0f;}
             inline static std::map<const char*, float> _results = std::map<const char*, float>();
     };
 }

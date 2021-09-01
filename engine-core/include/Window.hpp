@@ -6,7 +6,7 @@
 
 namespace Core
 {
-    class WindowManager
+    class Window
     {
         private:
             GLFWwindow*     _window;
@@ -21,11 +21,11 @@ namespace Core
             void CreateWindow();
 
         public:
-            WindowManager();
-            ~WindowManager();
-            void SetWindowTitle(const std::string& title);
-            [[nodiscard]] bool WindowIsRunning() const;
-            static void Prepare();
+            Window();
+            ~Window();
+            void SetTitle(const std::string& title);
+            [[nodiscard]] bool IsRunning() const;
+            static void ClearBuffers();
             void CalcFrametime();
             static void PollEvents();
             void ProcessEvents();

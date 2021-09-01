@@ -1,6 +1,6 @@
 #pragma once
 
-#include "WindowManager.hpp"
+#include "Window.hpp"
 #include "Camera.hpp"
 #include "CoreDefines.hpp"
 
@@ -9,7 +9,7 @@ namespace GW
     class InputManager
     {
         private:
-            static const Core::WindowManager*   _window;
+            static const Core::Window*          _window;
             static       Core::Camera*          _camera;
             inline static double                _lastX          = double();
             inline static double                _lastY          = double();
@@ -20,7 +20,7 @@ namespace GW
 
         public:
             InputManager() = delete;
-            static void Init(const Core::WindowManager* window, Core::Camera* camera);
+            static void Init(const Core::Window* window, Core::Camera* camera);
             static void ProcessInput();
     };
 }

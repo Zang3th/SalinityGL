@@ -4,18 +4,18 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include "CoreDefines.hpp"
-#include "WindowManager.hpp"
+#include "Window.hpp"
 
 namespace Core
 {
-    class UserInterface
+    class BaseInterface
     {   
         protected:
-            const WindowManager* _window;
+            const Window* _window;
 
         public:
-            explicit UserInterface(const WindowManager* window);
-            virtual ~UserInterface();
+            explicit BaseInterface(const Window* window);
+            virtual ~BaseInterface();
             static void PrepareFrame();
             virtual void AddElements() = 0;
             static void Render();

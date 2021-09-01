@@ -1,10 +1,10 @@
-#include "WindowManager.hpp"
+#include "Window.hpp"
 
 namespace Core
 {
     // ----- Private -----
 
-    void WindowManager::CreateWindow()
+    void Window::CreateWindow()
     {
         if(!glfwInit())
             LOG(ERROR) << "Failed:   GLFW-Initialization | " << glfwGetError(nullptr);
@@ -49,7 +49,7 @@ namespace Core
 
     // ----- Public -----
 
-    WindowManager::WindowManager()
+    Window::Window()
         :   _window(nullptr),
             _windowName("GameEngine-Default"),
             _deltaTime(0.0f),
@@ -62,30 +62,30 @@ namespace Core
         CreateWindow();
     }
 
-    WindowManager::~WindowManager()
+    Window::~Window()
     {
         glfwTerminate();
     }
 
-    void WindowManager::SetWindowTitle(const std::string& title)
+    void Window::SetTitle(const std::string& title)
     {
         _windowName = title;
         glfwSetWindowTitle(_window, _windowName.c_str());
         LOG(INFO) << "Changed:  Window-Title | " << title;
     }
 
-    bool WindowManager::WindowIsRunning() const
+    bool Window::IsRunning() const
     {
         return _isRunning;
     }
 
-    void WindowManager::Prepare()
+    void Window::ClearBuffers()
     {
         GLCall(glClearColor(0.0, 0.0, 0.0, 1.0));
         GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
     }
 
-    void WindowManager::CalcFrametime()
+    void Window::CalcFrametime()
     {
         //Calculate frametime
         double currentFrame = glfwGetTime();
@@ -106,12 +106,12 @@ namespace Core
         }
     }
 
-    void WindowManager::PollEvents()
+    void Window::PollEvents()
     {
         glfwPollEvents();
     }
 
-    void WindowManager::ProcessEvents()
+    void Window::ProcessEvents()
     {
         if(glfwWindowShouldClose(_window))
         {
@@ -127,28 +127,28 @@ namespace Core
         }
     }
 
-    void WindowManager::SwapBuffers()
+    void Window::SwapBuffers()
     {
         glfwSwapBuffers(_window);
     }
 
 
-    double WindowManager::GetDeltaTime() const
+    double Window::GetDeltaTime() const
     {
         return _deltaTime;
     }
 
-    double WindowManager::GetFps() const
+    double Window::GetFps() const
     {
         return _fpsAvg;
     }
 
-    uint32 WindowManager::GetFrameCounter() const
+    uint32 Window::GetFrameCounter() const
     {
         return _frameCounter;
     }
 
-    GLFWwindow* WindowManager::GetWindow() const
+    GLFWwindow* Window::GetWindow() const
     {
         return _window;
     }

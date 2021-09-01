@@ -4,7 +4,7 @@ namespace Core
 {
     // ----- Private -----
 
-    int32 Shader::Compile(uint32 shaderType, const std::string& source)
+    uint32 Shader::Compile(uint32 shaderType, const std::string& source)
     {
         const char* src = source.c_str();
 
@@ -31,14 +31,16 @@ namespace Core
 
             //Free resources and return
             GLCall(glDeleteShader(id));
-            return -1;
+        }
+        else
+        {
+            LOG(INFO) << "Compiled: Shader | " << shaderType;
         }
 
-        LOG(INFO) << "Compiled: Shader | " << shaderType;
         return id;
     }
 
-    int32 Shader::Build(uint32 vsID, uint32 fsID)
+    uint32 Shader::Build(uint32 vsID, uint32 fsID)
     {
         GLCall(uint32 programID = glCreateProgram());
         GLCall(glAttachShader(programID, vsID));
@@ -63,7 +65,10 @@ namespace Core
 
             //Free resources and return
             GLCall(glDeleteProgram(programID));
-            return -1;
+        }
+        else
+        {
+            LOG(INFO) << "Linked:   Program | " << programID;
         }
 
         GLCall(glValidateProgram(programID));
@@ -74,33 +79,21 @@ namespace Core
         GLCall(glDeleteShader(vsID));
         GLCall(glDeleteShader(fsID));
 
-        LOG(INFO) << "Linked:   Program | " << programID;
         return programID;
     }
 
-    int32 Shader::Create(const std::string& vsFilepath, const std::string& fsFilepath)
+    uint32 Shader::Create(const std::string& vsFilepath, const std::string& fsFilepath)
     {
         //Read in shader files
         std::string vsSource = FileManager::FileToString(vsFilepath);
         std::string fsSource = FileManager::FileToString(fsFilepath);
 
-        if(vsSource == "FILE_ERROR" || fsSource == "FILE_ERROR")
-            return -1;
-
         //Compile shader
-        int32 vsID = Compile(GL_VERTEX_SHADER, vsSource);
-        int32 fsID = Compile(GL_FRAGMENT_SHADER, fsSource);
-
-        if(vsID < 0 || fsID < 0)
-            return -2;
+        uint32 vsID = Compile(GL_VERTEX_SHADER, vsSource);
+        uint32 fsID = Compile(GL_FRAGMENT_SHADER, fsSource);
 
         //Build shader into program
-        int32 programID = Build(vsID, fsID);
-
-        if(programID < 0)
-            return -3;
-
-        return programID;    
+        return Build(vsID, fsID);
     }
 
     int32 Shader::GetUniformLocation(const std::string& name)
@@ -117,8 +110,9 @@ namespace Core
     // ----- Public -----
 
     Shader::Shader(const std::string& vsFilepath, const std::string& fsFilepath)
+        :   _shaderID(Create(vsFilepath, fsFilepath))
     {
-        _shaderID = Create(vsFilepath, fsFilepath);
+
     }
 
     Shader::~Shader()
@@ -159,5 +153,10 @@ namespace Core
     void Shader::SetUniformVec3f(const std::string& name, const glm::vec3& vec)
     {
         GLCall(glUniform3fv(GetUniformLocation(name), 1, &vec[0]));
+    }
+
+    uint32 Shader::GetShaderID() const
+    {
+        return _shaderID;
     }
 }

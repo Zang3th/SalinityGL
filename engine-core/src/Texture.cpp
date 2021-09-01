@@ -2,25 +2,13 @@
 
 namespace Core
 {
-    // ----- Public -----
-
-    Texture::Texture()
-        :   _textureID(0)
-    {
-
-    }
-
-    Texture::~Texture()
-    {
-        GLCall(glDeleteTextures(1, &_textureID));
-    }
+    // ----- Private -----
 
     void Texture::InitFromFile(const std::string &filepath)
     {
         int32 width, height, nrChannels;
         stbi_set_flip_vertically_on_load(true);
         unsigned char* localBuffer = stbi_load(filepath.c_str(), &width, &height, &nrChannels, 0);
-        stbi_set_flip_vertically_on_load(false);
 
         if(localBuffer)
         {
@@ -60,20 +48,45 @@ namespace Core
         stbi_image_free(localBuffer);
     }
 
-    void Texture::InitAsDepthTexture(const uint32 width, const uint32 height)
+    void Texture::InitWithAttribute(const uint32 width, const uint32 height, const Texture_Attribute attribute)
     {
-        //Create depth texture
+        //Resolve attribute
+        GLenum component = 0;
+
+        if(attribute == DEPTH)
+            component = GL_DEPTH_COMPONENT;
+
+        //Create texture
         GLCall(glGenTextures(1, &_textureID));
         Bind();
-        GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr));
+        GLCall(glTexImage2D(GL_TEXTURE_2D, 0, component, width, height, 0, component, GL_FLOAT, nullptr));
 
-        //Configure depth texture
+        //Configure texture
         GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST));
         GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST));
         GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT));
         GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT));
 
-        LOG(INFO) << "Created:  Depth-Texture | (X: " << width << " | Y: " << height << ")";
+        LOG(INFO) << "Created:  Texture | (X: " << width << " | Y: " << height << " | Type: " << std::to_string(component) << ")";
+    }
+
+    // ----- Public -----
+
+    Texture::Texture(const std::string &filepath)
+        :   _textureID(0)
+    {
+        InitFromFile(filepath);
+    }
+
+    Texture::Texture(const uint32 width, const uint32 height, const Texture_Attribute attribute)
+        :   _textureID(0)
+    {
+        InitWithAttribute(width, height, attribute);
+    }
+
+    Texture::~Texture()
+    {
+        GLCall(glDeleteTextures(1, &_textureID));
     }
 
     void Texture::Bind() const

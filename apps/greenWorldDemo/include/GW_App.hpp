@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Logger.hpp"
-#include "WindowManager.hpp"
+#include "Window.hpp"
 #include "ResourceManager.hpp"
 #include "Renderer.hpp"
 #include "CoreDefines.hpp"
@@ -13,7 +13,7 @@
 #include "Model.hpp"
 #include "Cubemap.hpp"
 #include "Heightmap.hpp"
-#include "AudioManager.hpp"
+#include "Audio.hpp"
 #include "Sprite.hpp"
 #include "ShadowRenderer.hpp"
 
@@ -28,15 +28,16 @@ namespace GW
     class App
     {
         private:
-            Core::Scope<Core::WindowManager>    _windowManager;
+            Core::Scope<Core::Window>           _window;
             Core::Scope<Core::Renderer>         _renderer;
             Core::Scope<Core::Camera>           _camera;
-            Core::Scope<Interface>              _userInterface;
-            Core::Scope<Core::AudioManager>     _audioManager;
+            Core::Scope<Core::Audio>            _audio;
             Core::Scope<Core::ShadowRenderer>   _shadowRenderer;
             Core::Scope<Core::Cubemap>          _cubemap;
             Core::Scope<Core::Sprite>           _testSprite;
             std::vector<Core::Model>            _models;
+
+            Core::Scope<Interface>              _interface;
 
             void InitModules();
             void CreateModels();

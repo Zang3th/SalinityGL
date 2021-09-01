@@ -1,10 +1,10 @@
-#include "AudioManager.hpp"
+#include "Audio.hpp"
 
 namespace Core
 {
     // ----- Public -----
 
-    AudioManager::AudioManager()
+    Audio::Audio()
         :   _engine(nullptr)
     {
         //Init library
@@ -16,7 +16,7 @@ namespace Core
             LOG(INFO) << "Loaded:   Irrklang";
     }
 
-    AudioManager::~AudioManager()
+    Audio::~Audio()
     {
         //Release resources
         for(auto& sound : _sounds)
@@ -26,7 +26,7 @@ namespace Core
             _engine->drop();
     }
 
-    void AudioManager::PlaySound2D(const std::string& filepath, const bool loop, const float volume)
+    void Audio::PlaySound2D(const std::string& filepath, const bool loop, const float volume)
     {
         irrklang::ISound* sound = _engine->play2D(filepath.c_str(), loop, false, true);
 
@@ -41,7 +41,7 @@ namespace Core
             LOG(ERROR) << "Failed:   2D-Sound | " << filepath;
     }
 
-    void AudioManager::PlaySound3D(const std::string& filepath, const glm::vec3& position, const bool loop, const float distance, const float volume)
+    void Audio::PlaySound3D(const std::string& filepath, const glm::vec3& position, const bool loop, const float distance, const float volume)
     {
         irrklang::ISound* sound = _engine->play3D(filepath.c_str(), irrklang::vec3df(position.x, position.y, position.z), loop, false, true);
 
@@ -57,7 +57,7 @@ namespace Core
             LOG(ERROR) << "Failed:   3D-Sound | " << filepath;
     }
 
-    void AudioManager::SetListenerPosition(const glm::vec3& pos, const glm::vec3& front, const glm::vec3& up)
+    void Audio::SetListenerPosition(const glm::vec3& pos, const glm::vec3& front, const glm::vec3& up)
     {
         _engine->setListenerPosition
         (

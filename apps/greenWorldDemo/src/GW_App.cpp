@@ -10,22 +10,22 @@ namespace GW
         Core::Logger::Init();
 
         //Window
-        _windowManager = Core::MakeScope<Core::WindowManager>();
-        _windowManager->SetWindowTitle("GreenWorld Demo Application");
+        _window = Core::MakeScope<Core::Window>();
+        _window->SetTitle("GreenWorld Demo Application");
 
         //Camera & Renderer
         _camera = Core::MakeScope<Core::Camera>(glm::vec3(-29.0f, 45.0f, 20.0f), 24.0f, -15.0f, 35.0f);
         _renderer = Core::MakeScope<Core::Renderer>(_camera.get());
 
         //Input & UI
-        InputManager::Init(_windowManager.get(), _camera.get());
-        _userInterface = Core::MakeScope<Interface>(_windowManager.get(), _renderer.get(), _camera.get());
+        InputManager::Init(_window.get(), _camera.get());
+        _interface = Core::MakeScope<Interface>(_window.get(), _renderer.get(), _camera.get());
 
         //Audio
-        _audioManager = Core::MakeScope<Core::AudioManager>();
-        _audioManager->SetListenerPosition(_camera->GetPosition(), _camera->GetFront(), _camera->GetUp());
-        _audioManager->PlaySound2D("../res/audio/greenWorld/music/TrueBlueSky.wav", true, 1.0f);
-        _audioManager->PlaySound3D("../res/audio/greenWorld/sounds/River.wav", glm::vec3(39.0f, 14.0f, 56.0f), true, 40.0f, 1.5);
+        _audio = Core::MakeScope<Core::Audio>();
+        _audio->SetListenerPosition(_camera->GetPosition(), _camera->GetFront(), _camera->GetUp());
+        _audio->PlaySound2D("../res/audio/greenWorld/music/TrueBlueSky.wav", true, 1.0f);
+        _audio->PlaySound3D("../res/audio/greenWorld/sounds/River.wav", glm::vec3(39.0f, 14.0f, 56.0f), true, 40.0f, 1.5);
 
         //Shadow-Rendering
         Core::ResourceManager::LoadShader("ShadowShader", "../res/shader/greenWorld/shadow_vs.glsl", "../res/shader/greenWorld/shadow_fs.glsl");
@@ -150,8 +150,8 @@ namespace GW
             glm::vec3(1.0f, 1.0f, 1.0f)
         );
 
-        _testSprite->ChangePosition(glm::vec2(1350.0f, 50.0f));
-        _testSprite->ChangeSize(glm::vec2(512.0f, 512.0f));
+        _testSprite->ChangePosition(glm::vec2(10.0f, 10.0f));
+        _testSprite->ChangeSize(glm::vec2(280.0f, 280.0f));
 
         _renderer->Submit(_testSprite.get());
     }
@@ -176,25 +176,25 @@ namespace GW
 
     bool App::IsRunning()
     {
-        return _windowManager->WindowIsRunning();
+        return _window->IsRunning();
     }
 
     void App::Update()
     {
         {   Core::PROFILE_SCOPE("Process events");
 
-            _windowManager->PollEvents();
-            _windowManager->ProcessEvents();
+            _window->PollEvents();
+            _window->ProcessEvents();
             InputManager::ProcessInput();
-            _audioManager->SetListenerPosition(_camera->GetPosition(), _camera->GetFront(), _camera->GetUp());
+            _audio->SetListenerPosition(_camera->GetPosition(), _camera->GetFront(), _camera->GetUp());
         }
 
         {   Core::PROFILE_SCOPE("Prepare frame");
 
-            _windowManager->Prepare();
-            _windowManager->CalcFrametime();
+            _window->ClearBuffers();
+            _window->CalcFrametime();
             _renderer->PrepareFrame();
-            _userInterface->PrepareFrame();
+            _interface->PrepareFrame();
         }
 
         {   Core::PROFILE_SCOPE("Create shadows");
@@ -205,7 +205,7 @@ namespace GW
             _shadowRenderer->EndFrame();
 
             // Clear buffers
-            _windowManager->Prepare();
+            _window->ClearBuffers();
         }
 
         {   Core::PROFILE_SCOPE("Render graphics");
@@ -216,13 +216,13 @@ namespace GW
 
         {   Core::PROFILE_SCOPE("Render UI");
 
-            _userInterface->AddElements();
-            _userInterface->Render();
+            _interface->AddElements();
+            _interface->Render();
         }
 
         {   Core::PROFILE_SCOPE("End frame");
 
-            _windowManager->SwapBuffers();
+            _window->SwapBuffers();
         }
     }
 }

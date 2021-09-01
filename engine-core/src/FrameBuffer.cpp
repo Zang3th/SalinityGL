@@ -40,7 +40,7 @@ namespace Core
     void FrameBuffer::CreateDepthTextureAttachment(const uint32 width, const uint32 height)
     {
         //Create texture name
-        std::string textureName = "depthTexture_" + std::to_string(_fboID);
+        std::string textureName = "DepthTexture_" + std::to_string(_fboID);
 
         //Create depth texture
         ResourceManager::LoadDepthTexture(textureName, width, height);

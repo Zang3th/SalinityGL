@@ -10,14 +10,22 @@ namespace Core
 
     class Texture
     {
+        public:
+            enum Texture_Attribute
+            {
+                DEPTH
+            };
+
         private:
             uint32 _textureID;
 
-        public:
-            Texture();
-            ~Texture();
             void InitFromFile(const std::string& filepath);
-            void InitAsDepthTexture(uint32 width, uint32 height);
+            void InitWithAttribute(uint32 width, uint32 height, Texture_Attribute attribute);
+
+        public:
+            explicit Texture(const std::string& filepath);
+            Texture(uint32 width, uint32 height, Texture_Attribute attribute);
+            ~Texture();
             void Bind() const;
             void BindToSlot(uint32 slot) const;
             [[nodiscard]] uint32 GetTextureID() const;

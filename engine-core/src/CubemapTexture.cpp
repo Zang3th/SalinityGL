@@ -7,6 +7,7 @@ namespace Core
     CubemapTexture::CubemapTexture(const std::array<const char*, 6>& faces)
         :   _textureID(0)
     {
+        stbi_set_flip_vertically_on_load(false);
         GLCall(glGenTextures(1, &_textureID));
         Bind();
 
@@ -46,6 +47,8 @@ namespace Core
         GLCall(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
         GLCall(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
         GLCall(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE));
+
+        stbi_set_flip_vertically_on_load(true);
     }
 
     CubemapTexture::~CubemapTexture()

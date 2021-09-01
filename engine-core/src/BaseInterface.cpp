@@ -1,10 +1,10 @@
-#include "UserInterface.hpp"
+#include "BaseInterface.hpp"
 
 namespace Core
 {
     // ----- Public -----
 
-    UserInterface::UserInterface(const WindowManager* window)
+    BaseInterface::BaseInterface(const Window* window)
         :   _window(window)
     {
         //Setup ImGui
@@ -14,21 +14,21 @@ namespace Core
         ImGui_ImplOpenGL3_Init("#version 450");
     }
 
-    UserInterface::~UserInterface()
+    BaseInterface::~BaseInterface()
     {
         ImGui_ImplOpenGL3_Shutdown();
         ImGui_ImplGlfw_Shutdown();
         ImGui::DestroyContext();
     }
 
-    void UserInterface::PrepareFrame()
+    void BaseInterface::PrepareFrame()
     {
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
     }
 
-    void UserInterface::Render()
+    void BaseInterface::Render()
     {
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

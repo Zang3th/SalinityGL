@@ -23,7 +23,7 @@
    
 ### Example applications  
    - GreenWorld
-     - Demo nature scene
+     - Demo Nature-Scene
 
 ### ToDo's
    - Instanced-Rendering

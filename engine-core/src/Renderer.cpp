@@ -39,7 +39,7 @@ namespace Core
         _cubemap = cubemap;
     }
 
-    void Renderer::FlushModels(Shader* modelShader)
+    void Renderer::FlushModels(Shader* modelShader, const glm::mat4& lightProjection)
     {
         //Check for Wireframe-Mode
         if(WireframeRendering){
@@ -50,7 +50,7 @@ namespace Core
         //Render models
         for(const auto& model : _modelBuffer)
         {
-            _drawnVertices += model->Draw(modelShader, _perspProjection, _camera->GetViewMatrix(), _camera->GetPosition());
+            _drawnVertices += model->Draw(modelShader, _perspProjection, _camera->GetViewMatrix(), _camera->GetPosition(), lightProjection);
             _drawcalls++;
         }
 
@@ -78,9 +78,9 @@ namespace Core
         }
     }
 
-    void Renderer::FlushEverything(Shader* modelShader)
+    void Renderer::FlushEverything(Shader* modelShader, const glm::mat4& lightProjection)
     {
-        FlushModels(modelShader);
+        FlushModels(modelShader, lightProjection);
         FlushSprites();
         FlushCubemap();
     }

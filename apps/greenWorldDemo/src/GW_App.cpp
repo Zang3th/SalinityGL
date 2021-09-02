@@ -14,7 +14,7 @@ namespace GW
         _window->SetTitle("GreenWorld Demo Application");
 
         //Camera & Renderer
-        _camera = Core::MakeScope<Core::Camera>(glm::vec3(-108.0f, 122.0f, 5.0f), 24.0f, -33.0f, 25.0f);
+        _camera = Core::MakeScope<Core::Camera>(glm::vec3(-101.0f, 92.0f, 32.0f), 16.0f, -31.0f, 25.0f);
         _renderer = Core::MakeScope<Core::Renderer>(_camera.get());
 
         //Input & UI
@@ -29,7 +29,7 @@ namespace GW
 
         //Shadow-Rendering
         Core::ResourceManager::LoadShader("ShadowShader", "../res/shader/greenWorld/shadow_vs.glsl", "../res/shader/greenWorld/shadow_fs.glsl");
-        _shadowRenderer = Core::MakeScope<Core::ShadowRenderer>(Core::ResourceManager::GetShader("ShadowShader"), 2048, 2048, glm::vec3(140.0f, 60.0f, 60.0f));
+        _shadowRenderer = Core::MakeScope<Core::ShadowRenderer>(Core::ResourceManager::GetShader("ShadowShader"), 2048, 2048, glm::vec3(143.0f, 175.0f, -15.0f));
     }
 
     void App::CreateModels()
@@ -41,23 +41,29 @@ namespace GW
         //Shader
         Core::ResourceManager::LoadShader("ModelShader", "../res/shader/greenWorld/model_vs.glsl", "../res/shader/greenWorld/model_fs.glsl");
 
+        //Shadow-Map
+        Core::Texture* shadowMap = _shadowRenderer->GetDepthTexture();
+
         //Create terrain
         {
             Core::Mesh terrainMesh;
             Core::Heightmap heightmap("../res/textures/greenWorld/heightmap/Heightmap128.bmp");
-            Core::MeshCreator::CreatePlane(PLANE_SIZE - 1, PLANE_SIZE - 1, 1.0f, &terrainMesh, &heightmap);
+            Core::MeshCreator::CreatePlane(PLANE_SIZE, PLANE_SIZE, 1.0f, &terrainMesh, &heightmap);
             terrainMesh.diffuseTexture = Core::ResourceManager::GetTexture("GrassTexture");
+            terrainMesh.shadowMap = shadowMap;
             Core::Model terrainModel(&terrainMesh);
+            terrainModel.ChangePosition(glm::vec3(0.0f, 0.0f, 0.0f));
             _models.push_back(terrainModel);
         }
 
         //Create water
         {
             Core::Mesh waterMesh;
-            Core::MeshCreator::CreatePlane(PLANE_SIZE - 100, PLANE_SIZE - 1, 1.0f, &waterMesh);
+            Core::MeshCreator::CreatePlane(PLANE_SIZE - 100, PLANE_SIZE, 1.0f, &waterMesh);
             waterMesh.diffuseTexture = Core::ResourceManager::GetTexture("WaterTexture");
+            waterMesh.shadowMap = shadowMap;
             Core::Model waterModel(&waterMesh);
-            waterModel.ChangePosition(glm::vec3(25.0f, 14.5f, 0.0f));
+            waterModel.ChangePosition(glm::vec3(25.0f, 2.8f, 0.0f));
             _models.push_back(waterModel);
         }
 
@@ -67,10 +73,11 @@ namespace GW
             Core::MeshCreator::CreateFromObj("Pyramid", "../res/models/greenWorld/Pyramid", &meshes);
             for(auto& mesh : meshes)
             {
+                mesh.shadowMap = shadowMap;
                 Core::Model meshModel(&mesh);
                 meshModel.ChangeSize(12.7f);
                 meshModel.ChangeRotation(180.0f, 0.0f, 0.0f);
-                meshModel.ChangePosition(glm::vec3(128.0f, 14.0f, 1.0f));
+                meshModel.ChangePosition(glm::vec3(128.0f, 2.5f, 1.0f));
                 _models.push_back(meshModel);
             }
         }
@@ -81,10 +88,11 @@ namespace GW
             Core::MeshCreator::CreateFromObj("OldHouse", "../res/models/greenWorld/OldHouse", &meshes);
             for(auto& mesh : meshes)
             {
+                mesh.shadowMap = shadowMap;
                 Core::Model meshModel(&mesh);
                 meshModel.ChangeSize(0.15f);
                 meshModel.ChangeRotation(0.0f, -90.0f, 0.0f);
-                meshModel.ChangePosition(glm::vec3(105.0f, 15.5f, 85.0f));
+                meshModel.ChangePosition(glm::vec3(105.0f, 3.0f, 85.0f));
                 _models.push_back(meshModel);
             }
         }
@@ -95,10 +103,11 @@ namespace GW
             Core::MeshCreator::CreateFromObj("Bridge", "../res/models/greenWorld/Bridge", &meshes);
             for(auto& mesh : meshes)
             {
+                mesh.shadowMap = shadowMap;
                 Core::Model meshModel(&mesh);
                 meshModel.ChangeSize(2.0f);
                 meshModel.ChangeRotation(0.0f, -90.0f, 0.0f);
-                meshModel.ChangePosition(glm::vec3(38.0f, 15.0f, 40.0f));
+                meshModel.ChangePosition(glm::vec3(38.0f, 3.0f, 40.0f));
                 _models.push_back(meshModel);
             }
         }
@@ -109,9 +118,10 @@ namespace GW
             Core::MeshCreator::CreateFromObj("Tree", "../res/models/greenWorld/Tree", &meshes);
             for(auto& mesh : meshes)
             {
+                mesh.shadowMap = shadowMap;
                 Core::Model meshModel(&mesh);
                 meshModel.ChangeSize(0.07f);
-                meshModel.ChangePosition(glm::vec3(100.0f, 16.0f, 28.0f));
+                meshModel.ChangePosition(glm::vec3(100.0f, 3.0f, 28.0f));
                 _models.push_back(meshModel);
             }
         }
@@ -122,10 +132,11 @@ namespace GW
             Core::MeshCreator::CreateFromObj("Well", "../res/models/greenWorld/Well", &meshes);
             for(auto& mesh : meshes)
             {
+                mesh.shadowMap = shadowMap;
                 Core::Model meshModel(&mesh);
                 meshModel.ChangeSize(0.05f);
                 meshModel.ChangeRotation(0.0f, -45.0f, 0.0f);
-                meshModel.ChangePosition(glm::vec3(75.0f, 30.0f, 75.0f));
+                meshModel.ChangePosition(glm::vec3(75.0f, 18.0f, 75.0f));
                 _models.push_back(meshModel);
             }
         }
@@ -214,7 +225,7 @@ namespace GW
 
             // Render scene to shadow framebuffer
             _shadowRenderer->StartFrame();
-            _renderer->FlushModels(_shadowRenderer->GetShader());
+            _renderer->FlushModels(_shadowRenderer->GetShader(), _shadowRenderer->GetLightProjection());
             _shadowRenderer->EndFrame();
 
             // Clear buffers
@@ -224,7 +235,7 @@ namespace GW
         {   Core::PROFILE_SCOPE("Render graphics");
 
             _testSprite->SetTexture(_shadowRenderer->GetDepthTexture());
-            _renderer->FlushEverything(Core::ResourceManager::GetShader("ModelShader"));
+            _renderer->FlushEverything(Core::ResourceManager::GetShader("ModelShader"), _shadowRenderer->GetLightProjection());
         }
 
         {   Core::PROFILE_SCOPE("Render UI");

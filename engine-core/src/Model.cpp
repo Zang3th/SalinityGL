@@ -55,6 +55,7 @@ namespace Core
             _position(0.0f),
             _diffuseTexture(mesh->diffuseTexture),
             _normalMap(mesh->normalMap),
+            _shadowMap(mesh->shadowMap),
             _verticeCount(mesh->indices.size()),
             _gotNormalMap(mesh->gotNormalMap),
             _rotationX(0.0f), _rotationY(0.0f), _rotationZ(0.0f),
@@ -63,7 +64,7 @@ namespace Core
 
     }
 
-    uint32 Model::Draw(Shader* shader, const glm::mat4& projMatrix, const glm::mat4& viewMatrix, const glm::vec3& camPos) const
+    uint32 Model::Draw(Shader* shader, const glm::mat4& projMatrix, const glm::mat4& viewMatrix, const glm::vec3& camPos, const glm::mat4& lightProjection) const
     {
         shader->Bind();
 
@@ -72,14 +73,18 @@ namespace Core
         shader->SetUniformMat4f("model", _model);
         shader->SetUniformMat4f("projection", projMatrix);
         shader->SetUniformVec3f("viewPos", camPos);
+        shader->SetUniformMat4f("lightProjection", lightProjection);
         shader->SetUniform1i("diffuseTexture", 0);
         shader->SetUniform1i("normalMap", 1);
+        shader->SetUniform1i("shadowMap", 2);
         shader->SetUniform1i("gotNormalMap", _gotNormalMap);
 
         _diffuseTexture->BindToSlot(0);
 
         if(_gotNormalMap == 1)
             _normalMap->BindToSlot(1);
+
+        _shadowMap->BindToSlot(2);
 
         _vao->Bind();
 

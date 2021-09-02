@@ -24,5 +24,6 @@ namespace Core
             void EndFrame();
             Shader* GetShader();
             [[nodiscard]] Texture* GetDepthTexture() const;
+            [[nodiscard]] glm::mat4 GetLightProjection() const;
     };
 }

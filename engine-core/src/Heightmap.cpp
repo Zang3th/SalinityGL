@@ -52,6 +52,12 @@ namespace Core
     {
         if(x < PLANE_SIZE && z < PLANE_SIZE)
             return _heightArray[x][z];
+        else if(x-1 < PLANE_SIZE && z < PLANE_SIZE)
+            return _heightArray[x-1][z];
+        else if(x < PLANE_SIZE && z-1 < PLANE_SIZE)
+            return _heightArray[x][z-1];
+        else if(x-1 < PLANE_SIZE && z-1 < PLANE_SIZE)
+            return _heightArray[x-1][z-1];
 
         return 0;
     }

@@ -70,7 +70,7 @@ namespace Core
                 auto zPos = (float)j;
 
                 if(heightmap)
-                    yPos = ((float)heightmap->GetValueAt(i, j) * 5);
+                    yPos = (float)heightmap->GetValueAt(i, j);
 
                 mesh->vertices.emplace_back(glm::vec3(xPos * tileSize, yPos, zPos * tileSize));
                 mesh->texCoords.emplace_back(glm::vec2(xPos, zPos));

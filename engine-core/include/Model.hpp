@@ -21,6 +21,7 @@ namespace Core
             glm::vec3           _position;
             const Texture*      _diffuseTexture;
             const Texture*      _normalMap;
+            const Texture*      _shadowMap;
             uint32              _verticeCount;
             int32               _gotNormalMap;
             float               _rotationX, _rotationY, _rotationZ;
@@ -31,7 +32,7 @@ namespace Core
 
         public:
             explicit Model(Mesh* mesh);
-            [[nodiscard]] uint32 Draw(Shader* shader, const glm::mat4& projMatrix, const glm::mat4& viewMatrix, const glm::vec3& camPos) const;
+            [[nodiscard]] uint32 Draw(Shader* shader, const glm::mat4& projMatrix, const glm::mat4& viewMatrix, const glm::vec3& camPos, const glm::mat4& lightProjection) const;
             void ChangePosition(const glm::vec3& position);
             void ChangeRotation(float rotX, float rotY, float rotZ);
             void ChangeSize(float size);

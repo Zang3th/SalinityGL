@@ -66,6 +66,8 @@ namespace Core
         GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST));
         GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT));
         GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT));
+        float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+        GLCall(glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor));
 
         LOG(INFO) << "Created:  Texture | (X: " << width << " | Y: " << height << " | Type: " << std::to_string(component) << ")";
     }

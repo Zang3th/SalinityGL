@@ -16,6 +16,7 @@ namespace Core
         std::vector<uint32>     indices;
         Texture*                diffuseTexture;
         Texture*                normalMap;
+        Texture*                shadowMap;
         int32                   gotNormalMap;
     };
 }

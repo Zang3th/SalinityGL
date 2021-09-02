@@ -14,7 +14,7 @@ namespace GW
         _window->SetTitle("GreenWorld Demo Application");
 
         //Camera & Renderer
-        _camera = Core::MakeScope<Core::Camera>(glm::vec3(-29.0f, 45.0f, 20.0f), 24.0f, -15.0f, 35.0f);
+        _camera = Core::MakeScope<Core::Camera>(glm::vec3(-108.0f, 122.0f, 5.0f), 24.0f, -33.0f, 25.0f);
         _renderer = Core::MakeScope<Core::Renderer>(_camera.get());
 
         //Input & UI
@@ -57,8 +57,22 @@ namespace GW
             Core::MeshCreator::CreatePlane(PLANE_SIZE - 100, PLANE_SIZE - 1, 1.0f, &waterMesh);
             waterMesh.diffuseTexture = Core::ResourceManager::GetTexture("WaterTexture");
             Core::Model waterModel(&waterMesh);
-            waterModel.ChangePosition(glm::vec3(25.0f, 14.0f, 0.0f));
+            waterModel.ChangePosition(glm::vec3(25.0f, 14.5f, 0.0f));
             _models.push_back(waterModel);
+        }
+
+        //Create ground
+        {
+            std::vector<Core::Mesh> meshes;
+            Core::MeshCreator::CreateFromObj("Pyramid", "../res/models/greenWorld/Pyramid", &meshes);
+            for(auto& mesh : meshes)
+            {
+                Core::Model meshModel(&mesh);
+                meshModel.ChangeSize(12.7f);
+                meshModel.ChangeRotation(180.0f, 0.0f, 0.0f);
+                meshModel.ChangePosition(glm::vec3(128.0f, 14.0f, 1.0f));
+                _models.push_back(meshModel);
+            }
         }
 
         //Create house
@@ -160,7 +174,6 @@ namespace GW
 
     App::App()
     {
-        //ConfigureProfiler();
         InitModules();
 
         //Call after init because these methods depend on OpenGL-Initialization

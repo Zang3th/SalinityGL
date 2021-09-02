@@ -25,9 +25,9 @@ namespace Core
 
         //Additional error checking to catch edge cases
         if(!warn.empty())
-            LOG(WARNING) << "Failed:   " << warn << " | " << objFullFilepath;
+            LOG(WARNING) << "Failed:   " << warn;
         if(!err.empty())
-            LOG(ERROR) << "Failed:   " << err << " | " << objFullFilepath;
+            LOG(ERROR) << "Failed:   " << err;
 
         //Iterate over all shapes
         for(uint32 i = 0; i < shapes.size(); i++)

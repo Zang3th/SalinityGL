@@ -1,16 +1,15 @@
 # GameEngine in C++ with OpenGL
 
-## I'm currently rewriting the whole engine. Everything before commit 67cf366 was deleted!
-
 ### Objectives:
-   - Simple OpenGL-Wrapper functions
+   - Thin abstraction layer for 2D/3D-Rendering
+   - OpenGL-Wrapper-Functions
       - Located in the engine-core
-   - Example applications that use the wrapper functions
-     - GreenWorld: Demo Nature-Scene (3D)
    - Written in C++17 with OpenGL 4.5
+   - Example applications that use the wrapper functions
+     - GreenWorld: Demo Nature-Scene (3D)   
 
 ### General functionalities
-   - Basic OpenGL-Wrapping (VAO, VBO, IBO, Shaders, Textures, Errorhandling)
+   - Basic OpenGL-Wrapping (VAO, VBO, IBO, FBO, Shaders, Textures, Errorhandling)
      - Windowcreation
      - 2D Sprite-Renderer
      - 3D Model-Renderer
@@ -19,17 +18,17 @@
    - Profiler
    - UI
    - Cubemaps/Skyboxes
-   - Audiomanager for sounds and backgroundmusic
+   - Audio
    - Loading of OBJ-Models
    
 ### Example applications  
    - GreenWorld
-     - Planned to be a demo nature scene to show the capabilities of the engine
+     - Demo nature scene
 
 ### ToDo's
    - Instanced-Rendering
    - Lighting
-     - Blinn-Phong
+     - Blinn-Phong (X)
      - Shadows
      - Normalmapping
      - HDR/Bloom 
@@ -39,7 +38,7 @@
 ### Credits
    - [glad](https://github.com/Dav1dde/glad)
    - [glfw](https://github.com/glfw/glfw)
-   - [Easylogging++](https://github.com/amrayn/easyloggingpp)
+   - [easylogging++](https://github.com/amrayn/easyloggingpp)
    - [glm](https://github.com/g-truc/glm)   
    - [stb_image](https://github.com/nothings/stb/blob/master/stb_image.h)   
    - [imgui](https://github.com/ocornut/imgui), [imgui::plot_var](https://github.com/ocornut/imgui/wiki/plot_var_example)
@@ -53,17 +52,15 @@
       - mkdir build
       - cd build/
       - cmake ..
-      - make            
-   - Not recommended but there is an old version of the engine (everything before commit 67cf366) that builds on Windows
-      - Clone the repository and execute the .sln file
+      - make
             
 ### License:
    - This code is provided under the MIT License. See the file LICENSE for details.
 
 ### Current look of the GreenWorld App:
-![GreenWorld](res/screenshots/greenWorld/Screenshot_GW_008.png)
+![GreenWorld](res/screenshots/greenWorld/Screenshot_GW_009.png)
 
-### Screenshots out of applications that I created with the old engine:
+### Some projects that I created with an old version of the engine:
 
 #### 3D-World with lighting, models and single raycasting to raise/sink tiles
 <img src="https://user-images.githubusercontent.com/59279641/77147299-375d0f00-6a8d-11ea-9db8-0d94d04d178b.PNG"/>

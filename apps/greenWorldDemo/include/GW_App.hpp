@@ -8,14 +8,12 @@
 #include "Sprite.hpp"
 #include "Profiler.hpp"
 #include "Camera.hpp"
-#include "Mesh.hpp"
-#include "MeshCreator.hpp"
 #include "Model.hpp"
 #include "Cubemap.hpp"
-#include "Heightmap.hpp"
 #include "Audio.hpp"
 #include "Sprite.hpp"
 #include "ShadowRenderer.hpp"
+#include "ModelManager.hpp"
 
 #include "GW_Interface.hpp"
 #include "GW_InputManager.hpp"
@@ -29,13 +27,11 @@ namespace GW
     {
         private:
             Core::Scope<Core::Window>           _window;
-            Core::Scope<Core::Renderer>         _renderer;
             Core::Scope<Core::Camera>           _camera;
             Core::Scope<Core::Audio>            _audio;
             Core::Scope<Core::ShadowRenderer>   _shadowRenderer;
             Core::Scope<Core::Cubemap>          _cubemap;
             Core::Scope<Core::Sprite>           _testSprite;
-            std::vector<Core::Model>            _models;
 
             Core::Scope<Interface>              _interface;
 

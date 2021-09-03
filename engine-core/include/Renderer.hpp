@@ -16,28 +16,32 @@ namespace Core
     class Renderer
     {
         private:
-            std::vector<const Sprite*>  _spriteBuffer;
-            std::vector<const Model*>   _modelBuffer;
-            glm::mat4                   _orthoProjection;
-            glm::mat4                   _perspProjection;
-            Camera*                     _camera;
-            const Cubemap*              _cubemap;
-            uint32                      _drawcalls;
-            uint32                      _drawnVertices;
-            uint32                      _renderPasses;
+            static const Cubemap*   _cubemap;
+            static Camera*          _camera;
+            inline static uint32    _drawcalls              = uint32();
+            inline static uint32    _drawnVertices          = uint32();
+            inline static uint32    _modelRenderPasses      = uint32();
+            inline static uint32    _spriteRenderPasses     = uint32();
+            inline static uint32    _cubemapRenderPasses    = uint32();
+            inline static glm::mat4 _orthoProjection = glm::ortho(0.0f, (float)WINDOW_WIDTH, 0.0f, (float)WINDOW_HEIGHT, -1.0f, 1.0f);
+            inline static glm::mat4 _perspProjection = glm::perspective(glm::radians(45.0f), (float)WINDOW_WIDTH/(float)WINDOW_HEIGHT, 0.1f, 500.0f);
+            inline static std::vector<const Model*>  _modelBuffer  = std::vector<const Model*>();
+            inline static std::vector<const Sprite*> _spriteBuffer = std::vector<const Sprite*>();
 
         public:
-            explicit Renderer(Camera* camera);
-            void PrepareFrame();
-            void Submit(const Sprite* sprite);
-            void Submit(const Model* model);
-            void Submit(const Cubemap* cubemap);
-            void FlushModels(Shader* modelShader, const glm::mat4& lightProjection);
-            void FlushSprites();
-            void FlushCubemap();
-            void FlushEverything(Shader* modelShader, const glm::mat4& lightProjection);
-            [[nodiscard]] uint32 GetDrawcalls() const;
-            [[nodiscard]] uint32 GetDrawnVertices() const;
-            [[nodiscard]] uint32 GetRenderPasses() const;
+            Renderer() = delete;
+            static void Init(Camera* camera);
+            static void PrepareFrame();
+            static void Submit(const Model* model);
+            static void Submit(const Sprite* sprite);
+            static void Submit(const Cubemap* cubemap);
+            static void FlushModels(Shader* modelShader, const glm::mat4& lightProjection);
+            static void FlushSprites();
+            static void FlushCubemap();
+            static uint32 GetDrawcalls();
+            static uint32 GetDrawnVertices();
+            static uint32 GetModelRenderPasses();
+            static uint32 GetSpriteRenderPasses();
+            static uint32 GetCubemapRenderPasses();
     };
 }

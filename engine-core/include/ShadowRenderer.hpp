@@ -14,15 +14,13 @@ namespace Core
         private:
             glm::mat4           _orthoProjection, _lightView, _lightProjection;
             Scope<FrameBuffer>  _fbo;
-            Shader*             _shader;
             uint32              _shadowWidth;
             uint32              _shadowHeight;
 
         public:
-            ShadowRenderer(Shader* shader, uint32 width, uint32 height, glm::vec3 lightPos);
-            void StartFrame();
+            ShadowRenderer(uint32 width, uint32 height, glm::vec3 lightPos);
+            void StartFrame(Shader* shader);
             void EndFrame();
-            Shader* GetShader();
             [[nodiscard]] Texture* GetDepthTexture() const;
             [[nodiscard]] glm::mat4 GetLightProjection() const;
     };

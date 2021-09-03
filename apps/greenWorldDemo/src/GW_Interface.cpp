@@ -66,9 +66,8 @@ namespace GW
 
     // ----- Public -----
 
-    Interface::Interface(const Core::Window* window, const Core::Renderer* renderer, const Core::Camera* camera)
+    Interface::Interface(const Core::Window* window, const Core::Camera* camera)
         :   Core::BaseInterface(window),
-            _renderer(renderer),
             _camera(camera),
             _windowFlags(ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav | ImGuiWindowFlags_NoMove),
             _windowAlphaValue(0.65f),
@@ -129,12 +128,11 @@ namespace GW
                     //Render stats
                     ImGui::NewLine();
                     ImGui::Separator();
-                    Core::uint32 renderPasses = _renderer->GetRenderPasses();
-                    ImGui::Text("Render-Passes total: %d", _renderer->GetRenderPasses());
-                    ImGui::Text("Drawcalls per pass:  %d", _renderer->GetDrawcalls() / renderPasses);
-                    ImGui::Text("Drawcalls total:     %d", _renderer->GetDrawcalls());
-                    ImGui::Text("Vertices per pass:   %d", _renderer->GetDrawnVertices() / renderPasses);
-                    ImGui::Text("Vertices total:      %d", _renderer->GetDrawnVertices());
+                    ImGui::Text("Drawcalls total:       %d", Core::Renderer::GetDrawcalls());
+                    ImGui::Text("Vertices total:        %d", Core::Renderer::GetDrawnVertices());
+                    ImGui::Text("Model render passes:   %d", Core::Renderer::GetModelRenderPasses());
+                    ImGui::Text("Sprite render passes:  %d", Core::Renderer::GetSpriteRenderPasses());
+                    ImGui::Text("Cubemap render passes: %d", Core::Renderer::GetCubemapRenderPasses());
                     ImGui::Separator();
 
                     //Camera stats

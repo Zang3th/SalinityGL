@@ -14,7 +14,6 @@ namespace GW
         private:
             ImVec2                  _sidebarPos, _shaderFieldPos, _texFieldPos;
             ImVec2                  _overlaySize, _bottomFieldSizes, _overlayPivot;
-            const Core::Renderer*   _renderer;
             const Core::Camera*     _camera;
             ImGuiWindowFlags        _windowFlags;
             float                   _windowAlphaValue;
@@ -25,7 +24,7 @@ namespace GW
             void SetOverlayParameters();
 
         public:
-            Interface(const Core::Window* window, const Core::Renderer* renderer, const Core::Camera* camera);
+            Interface(const Core::Window* window, const Core::Camera* camera);
             void AddElements() final;
     };
 }

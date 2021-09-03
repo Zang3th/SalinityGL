@@ -13,13 +13,17 @@ namespace GW
         _window = Core::MakeScope<Core::Window>();
         _window->SetTitle("GreenWorld Demo Application");
 
-        //Camera & Renderer
+        //Camera
         _camera = Core::MakeScope<Core::Camera>(glm::vec3(-101.0f, 92.0f, 32.0f), 16.0f, -31.0f, 25.0f);
-        _renderer = Core::MakeScope<Core::Renderer>(_camera.get());
 
-        //Input & UI
+        //Renderer (static)
+        Core::Renderer::Init(_camera.get());
+
+        //Input (static)
         InputManager::Init(_window.get(), _camera.get());
-        _interface = Core::MakeScope<Interface>(_window.get(), _renderer.get(), _camera.get());
+
+        //UI
+        _interface = Core::MakeScope<Interface>(_window.get(), _camera.get());
 
         //Audio
         _audio = Core::MakeScope<Core::Audio>();
@@ -29,121 +33,89 @@ namespace GW
 
         //Shadow-Rendering
         Core::ResourceManager::LoadShader("ShadowShader", "../res/shader/greenWorld/shadow_vs.glsl", "../res/shader/greenWorld/shadow_fs.glsl");
-        _shadowRenderer = Core::MakeScope<Core::ShadowRenderer>(Core::ResourceManager::GetShader("ShadowShader"), 2048, 2048, glm::vec3(143.0f, 175.0f, -15.0f));
+        _shadowRenderer = Core::MakeScope<Core::ShadowRenderer>(2048, 2048, glm::vec3(143.0f, 175.0f, -15.0f));
+
+        //Model-Management
+        Core::ResourceManager::LoadShader("ModelShader", "../res/shader/greenWorld/model_vs.glsl", "../res/shader/greenWorld/model_fs.glsl");
+        Core::ModelManager::Init(_shadowRenderer.get());
     }
 
     void App::CreateModels()
     {
-        //Textures
-        Core::ResourceManager::LoadTexture("GrassTexture", "../res/textures/greenWorld/Grass.jpg");
-        Core::ResourceManager::LoadTexture("WaterTexture", "../res/textures/greenWorld/Water.jpg");
+        //Terrain
+        Core::Renderer::Submit
+        (
+            Core::ModelManager::AddTerrain
+            (
+                PLANE_SIZE,
+                PLANE_SIZE,
+                1.0f,
+                "GrassTexture",
+                "../res/textures/greenWorld/Grass.jpg",
+                "../res/textures/greenWorld/heightmap/Heightmap128.bmp"
+            )
+        );
 
-        //Shader
-        Core::ResourceManager::LoadShader("ModelShader", "../res/shader/greenWorld/model_vs.glsl", "../res/shader/greenWorld/model_fs.glsl");
+        //Water
+        auto water = Core::ModelManager::AddPlane
+        (
+            PLANE_SIZE - 100,
+            PLANE_SIZE,
+            1.0f,
+            "WaterTexture",
+            "../res/textures/greenWorld/Water.jpg"
+        );
+        water->ChangePosition(glm::vec3(25.0f, 2.8f, 0.0f));
+        Core::Renderer::Submit(water);
 
-        //Shadow-Map
-        Core::Texture* shadowMap = _shadowRenderer->GetDepthTexture();
-
-        //Create terrain
+        //Ground
+        auto ground = Core::ModelManager::AddObject("Pyramid", "../res/models/greenWorld/Pyramid");
+        for(const auto& model : ground)
         {
-            Core::Mesh terrainMesh;
-            Core::Heightmap heightmap("../res/textures/greenWorld/heightmap/Heightmap128.bmp");
-            Core::MeshCreator::CreatePlane(PLANE_SIZE, PLANE_SIZE, 1.0f, &terrainMesh, &heightmap);
-            terrainMesh.diffuseTexture = Core::ResourceManager::GetTexture("GrassTexture");
-            terrainMesh.shadowMap = shadowMap;
-            Core::Model terrainModel(&terrainMesh);
-            terrainModel.ChangePosition(glm::vec3(0.0f, 0.0f, 0.0f));
-            _models.push_back(terrainModel);
+            model->ChangeSize(12.7f);
+            model->ChangeRotation(180.0f, 0.0f, 0.0f);
+            model->ChangePosition(glm::vec3(128.0f, 2.5f, 1.0f));
+            Core::Renderer::Submit(model);
         }
 
-        //Create water
+        //House
+        auto house = Core::ModelManager::AddObject("OldHouse", "../res/models/greenWorld/OldHouse");
+        for(const auto& model : house)
         {
-            Core::Mesh waterMesh;
-            Core::MeshCreator::CreatePlane(PLANE_SIZE - 100, PLANE_SIZE, 1.0f, &waterMesh);
-            waterMesh.diffuseTexture = Core::ResourceManager::GetTexture("WaterTexture");
-            waterMesh.shadowMap = shadowMap;
-            Core::Model waterModel(&waterMesh);
-            waterModel.ChangePosition(glm::vec3(25.0f, 2.8f, 0.0f));
-            _models.push_back(waterModel);
+            model->ChangeSize(0.15f);
+            model->ChangeRotation(0.0f, -90.0f, 0.0f);
+            model->ChangePosition(glm::vec3(105.0f, 3.0f, 85.0f));
+            Core::Renderer::Submit(model);
         }
 
-        //Create ground
+        //Bridge
+        auto bridge = Core::ModelManager::AddObject("Bridge", "../res/models/greenWorld/Bridge");
+        for(const auto& model : bridge)
         {
-            std::vector<Core::Mesh> meshes;
-            Core::MeshCreator::CreateFromObj("Pyramid", "../res/models/greenWorld/Pyramid", &meshes);
-            for(auto& mesh : meshes)
-            {
-                mesh.shadowMap = shadowMap;
-                Core::Model meshModel(&mesh);
-                meshModel.ChangeSize(12.7f);
-                meshModel.ChangeRotation(180.0f, 0.0f, 0.0f);
-                meshModel.ChangePosition(glm::vec3(128.0f, 2.5f, 1.0f));
-                _models.push_back(meshModel);
-            }
+            model->ChangeSize(2.0f);
+            model->ChangeRotation(0.0f, -90.0f, 0.0f);
+            model->ChangePosition(glm::vec3(38.0f, 3.0f, 40.0f));
+            Core::Renderer::Submit(model);
         }
 
-        //Create house
+        //Tree
+        auto tree = Core::ModelManager::AddObject("Tree", "../res/models/greenWorld/Tree");
+        for(const auto& model : tree)
         {
-            std::vector<Core::Mesh> meshes;
-            Core::MeshCreator::CreateFromObj("OldHouse", "../res/models/greenWorld/OldHouse", &meshes);
-            for(auto& mesh : meshes)
-            {
-                mesh.shadowMap = shadowMap;
-                Core::Model meshModel(&mesh);
-                meshModel.ChangeSize(0.15f);
-                meshModel.ChangeRotation(0.0f, -90.0f, 0.0f);
-                meshModel.ChangePosition(glm::vec3(105.0f, 3.0f, 85.0f));
-                _models.push_back(meshModel);
-            }
+            model->ChangeSize(0.07f);
+            model->ChangePosition(glm::vec3(100.0f, 3.0f, 28.0f));
+            Core::Renderer::Submit(model);
         }
 
-        //Create bridge
+        //Well
+        auto well = Core::ModelManager::AddObject("Well", "../res/models/greenWorld/Well");
+        for(const auto& model : well)
         {
-            std::vector<Core::Mesh> meshes;
-            Core::MeshCreator::CreateFromObj("Bridge", "../res/models/greenWorld/Bridge", &meshes);
-            for(auto& mesh : meshes)
-            {
-                mesh.shadowMap = shadowMap;
-                Core::Model meshModel(&mesh);
-                meshModel.ChangeSize(2.0f);
-                meshModel.ChangeRotation(0.0f, -90.0f, 0.0f);
-                meshModel.ChangePosition(glm::vec3(38.0f, 3.0f, 40.0f));
-                _models.push_back(meshModel);
-            }
+            model->ChangeSize(0.05f);
+            model->ChangeRotation(0.0f, -45.0f, 0.0f);
+            model->ChangePosition(glm::vec3(75.0f, 18.0f, 75.0f));
+            Core::Renderer::Submit(model);
         }
-
-        //Create tree
-        {
-            std::vector<Core::Mesh> meshes;
-            Core::MeshCreator::CreateFromObj("Tree", "../res/models/greenWorld/Tree", &meshes);
-            for(auto& mesh : meshes)
-            {
-                mesh.shadowMap = shadowMap;
-                Core::Model meshModel(&mesh);
-                meshModel.ChangeSize(0.07f);
-                meshModel.ChangePosition(glm::vec3(100.0f, 3.0f, 28.0f));
-                _models.push_back(meshModel);
-            }
-        }
-
-        //Create well
-        {
-            std::vector<Core::Mesh> meshes;
-            Core::MeshCreator::CreateFromObj("Well", "../res/models/greenWorld/Well", &meshes);
-            for(auto& mesh : meshes)
-            {
-                mesh.shadowMap = shadowMap;
-                Core::Model meshModel(&mesh);
-                meshModel.ChangeSize(0.05f);
-                meshModel.ChangeRotation(0.0f, -45.0f, 0.0f);
-                meshModel.ChangePosition(glm::vec3(75.0f, 18.0f, 75.0f));
-                _models.push_back(meshModel);
-            }
-        }
-
-        //Submit models
-        for(const auto& model : _models)
-            _renderer->Submit(&model);
     }
 
     void App::CreateCubemap()
@@ -161,7 +133,7 @@ namespace GW
         };
 
         _cubemap = Core::MakeScope<Core::Cubemap>(faces, Core::ResourceManager::GetShader("CubemapShader"));
-        _renderer->Submit(_cubemap.get());
+        Core::Renderer::Submit(_cubemap.get());
     }
 
     void App::CreateSprites()
@@ -170,7 +142,7 @@ namespace GW
 
         _testSprite = Core::MakeScope<Core::Sprite>
         (
-            Core::ResourceManager::GetTexture("WaterTexture"),
+            _shadowRenderer->GetDepthTexture(),
             Core::ResourceManager::GetShader("SpriteShader"),
             glm::vec3(1.0f, 1.0f, 1.0f)
         );
@@ -178,7 +150,7 @@ namespace GW
         _testSprite->ChangePosition(glm::vec2(10.0f, 10.0f));
         _testSprite->ChangeSize(glm::vec2(280.0f, 280.0f));
 
-        _renderer->Submit(_testSprite.get());
+        Core::Renderer::Submit(_testSprite.get());
     }
 
     // ----- Public -----
@@ -196,6 +168,7 @@ namespace GW
     App::~App()
     {
         Core::ResourceManager::CleanUp();
+        Core::ModelManager::CleanUp();
     }
 
     bool App::IsRunning()
@@ -217,15 +190,15 @@ namespace GW
 
             _window->ClearBuffers();
             _window->CalcFrametime();
-            _renderer->PrepareFrame();
+            Core::Renderer::PrepareFrame();
             _interface->PrepareFrame();
         }
 
         {   Core::PROFILE_SCOPE("Create shadows");
 
             // Render scene to shadow framebuffer
-            _shadowRenderer->StartFrame();
-            _renderer->FlushModels(_shadowRenderer->GetShader(), _shadowRenderer->GetLightProjection());
+            _shadowRenderer->StartFrame(Core::ResourceManager::GetShader("ShadowShader"));
+            Core::Renderer::FlushModels(Core::ResourceManager::GetShader("ShadowShader"), _shadowRenderer->GetLightProjection());
             _shadowRenderer->EndFrame();
 
             // Clear buffers
@@ -234,8 +207,9 @@ namespace GW
 
         {   Core::PROFILE_SCOPE("Render graphics");
 
-            _testSprite->SetTexture(_shadowRenderer->GetDepthTexture());
-            _renderer->FlushEverything(Core::ResourceManager::GetShader("ModelShader"), _shadowRenderer->GetLightProjection());
+            Core::Renderer::FlushModels(Core::ResourceManager::GetShader("ModelShader"), _shadowRenderer->GetLightProjection());
+            Core::Renderer::FlushSprites();
+            Core::Renderer::FlushCubemap();
         }
 
         {   Core::PROFILE_SCOPE("Render UI");

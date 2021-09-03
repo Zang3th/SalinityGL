@@ -2,26 +2,26 @@
 
 namespace Core
 {
+    // ----- Private -----
+
+    const Cubemap*  Renderer::_cubemap;
+    Camera*         Renderer::_camera;
+
     // ----- Public -----
 
-    Renderer::Renderer(Camera* camera)
-        :   _orthoProjection(glm::ortho(0.0f, (float)WINDOW_WIDTH, 0.0f, (float)WINDOW_HEIGHT, -1.0f, 1.0f)),
-            _perspProjection(glm::perspective(glm::radians(45.0f), (float)WINDOW_WIDTH/(float)WINDOW_HEIGHT, 0.1f, 500.0f)),
-            _camera(camera),
-            _cubemap(nullptr),
-            _drawcalls(0),
-            _drawnVertices(0),
-            _renderPasses(0)
+    void Renderer::Init(Camera* camera)
     {
-
+        _camera = camera;
     }
 
     void Renderer::PrepareFrame()
     {
         //Reset render stats for current frame
-        _drawcalls = 0;
-        _drawnVertices = 0;
-        _renderPasses = 0;
+        _drawcalls              = 0;
+        _drawnVertices          = 0;
+        _modelRenderPasses      = 0;
+        _spriteRenderPasses     = 0;
+        _cubemapRenderPasses    = 0;
     }
 
     void Renderer::Submit(const Sprite* sprite)
@@ -55,7 +55,7 @@ namespace Core
         }
 
         //Increase render pass counter
-        _renderPasses++;
+        _modelRenderPasses++;
     }
 
     void Renderer::FlushSprites()
@@ -66,6 +66,9 @@ namespace Core
             _drawnVertices += sprite->Draw(_orthoProjection);
             _drawcalls++;
         }
+
+        //Increase render pass counter
+        _spriteRenderPasses++;
     }
 
     void Renderer::FlushCubemap()
@@ -76,27 +79,33 @@ namespace Core
             _drawnVertices += _cubemap->Draw(_perspProjection, _camera->GetViewMatrix());
             _drawcalls++;
         }
+
+        //Increase render pass counter
+        _cubemapRenderPasses++;
     }
 
-    void Renderer::FlushEverything(Shader* modelShader, const glm::mat4& lightProjection)
-    {
-        FlushModels(modelShader, lightProjection);
-        FlushSprites();
-        FlushCubemap();
-    }
-
-    uint32 Renderer::GetDrawcalls() const
+    uint32 Renderer::GetDrawcalls()
     {
         return _drawcalls;
     }
 
-    uint32 Renderer::GetDrawnVertices() const
+    uint32 Renderer::GetDrawnVertices()
     {
         return _drawnVertices;
     }
 
-    uint32 Renderer::GetRenderPasses() const
+    uint32 Renderer::GetModelRenderPasses()
     {
-        return _renderPasses;
+        return _modelRenderPasses;
+    }
+
+    uint32 Renderer::GetSpriteRenderPasses()
+    {
+        return _spriteRenderPasses;
+    }
+
+    uint32 Renderer::GetCubemapRenderPasses()
+    {
+        return _cubemapRenderPasses;
     }
 }

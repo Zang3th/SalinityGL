@@ -15,6 +15,7 @@ namespace Core
             inline static std::map<std::string, Shader*>  _shaderStorage  = std::map<std::string, Shader*>();
 
         public:
+            ResourceManager() = delete;
             static void LoadTexture(const std::string& name, const std::string& filepath);
             static void LoadDepthTexture(const std::string& name, uint32 width, uint32 height);
             static Texture* GetTexture(const std::string& name);

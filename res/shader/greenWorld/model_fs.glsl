@@ -17,7 +17,7 @@ const float ambientStrength = 0.3;
 const float diffuseStrength = 0.6;
 const float specularStrength = 0.4;
 const float shininess = 2.0;
-const vec3  lightPos = vec3(143.0, 175.0, -15.0);
+const vec3  lightPos = vec3(150.0, 100.0, -30.0);
 const vec3  lightColor = vec3(1.0, 1.0, 1.0);
 
 float calculateShadow(vec4 fragPosInLightSpace, vec3 normal, vec3 lightDir)

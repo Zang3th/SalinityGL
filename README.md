@@ -29,7 +29,7 @@
    - Instanced-Rendering
    - Lighting
      - Blinn-Phong (X)
-     - Shadows
+     - Shadows (X)
      - Normalmapping
      - HDR/Bloom 
    - Water-Rendering

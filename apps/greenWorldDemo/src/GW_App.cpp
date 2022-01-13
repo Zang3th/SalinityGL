@@ -33,7 +33,7 @@ namespace GW
 
         //Shadow-Rendering
         Core::ResourceManager::LoadShader("ShadowShader", "../res/shader/greenWorld/shadow_vs.glsl", "../res/shader/greenWorld/shadow_fs.glsl");
-        _shadowRenderer = Core::MakeScope<Core::ShadowRenderer>(2048, 2048, glm::vec3(143.0f, 175.0f, -15.0f));
+        _shadowRenderer = Core::MakeScope<Core::ShadowRenderer>(8192, 8192, glm::vec3(150.0f, 100.0f, -30.0f));
 
         //Model-Management
         Core::ResourceManager::LoadShader("ModelShader", "../res/shader/greenWorld/model_vs.glsl", "../res/shader/greenWorld/model_fs.glsl");
@@ -84,7 +84,7 @@ namespace GW
         {
             model->ChangeSize(0.15f);
             model->ChangeRotation(0.0f, -90.0f, 0.0f);
-            model->ChangePosition(glm::vec3(105.0f, 3.0f, 85.0f));
+            model->ChangePosition(glm::vec3(105.0f, 3.1f, 85.0f));
             Core::Renderer::Submit(model);
         }
 
@@ -94,7 +94,7 @@ namespace GW
         {
             model->ChangeSize(2.0f);
             model->ChangeRotation(0.0f, -90.0f, 0.0f);
-            model->ChangePosition(glm::vec3(38.0f, 3.0f, 40.0f));
+            model->ChangePosition(glm::vec3(39.0f, 2.25f, 40.0f));
             Core::Renderer::Submit(model);
         }
 
@@ -102,8 +102,8 @@ namespace GW
         auto tree = Core::ModelManager::AddObject("Tree", "../res/models/greenWorld/Tree");
         for(const auto& model : tree)
         {
-            model->ChangeSize(0.07f);
-            model->ChangePosition(glm::vec3(100.0f, 3.0f, 28.0f));
+            model->ChangeSize(0.06f);
+            model->ChangePosition(glm::vec3(85.0f, 3.0f, 35.0f));
             Core::Renderer::Submit(model);
         }
 

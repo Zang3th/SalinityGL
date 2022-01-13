@@ -24,17 +24,17 @@ namespace Core
                 uint32 x,
                 uint32 z,
                 float  tileSize,
-                const std::string& name,
-                const std::string& textureFilepath,
-                const std::string& heightmapFilepath
+                const  std::string& name,
+                const  std::string& textureFilepath,
+                const  std::string& heightmapFilepath
             );
             static Model* AddPlane
             (
                 uint32 x,
                 uint32 z,
                 float  tileSize,
-                const std::string& name,
-                const std::string& textureFilepath
+                const  std::string& name,
+                const  std::string& textureFilepath
             );
             static std::vector<Model*> AddObject(const std::string& filename, const std::string& baseFilepath);
             static void CleanUp();

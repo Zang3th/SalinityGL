@@ -24,22 +24,31 @@ namespace Core
         _cubemapRenderPasses    = 0;
     }
 
+    void Renderer::Submit(const Model* model, bool producesShadows)
+    {
+        if(producesShadows)
+            _shadowModelBuffer.push_back(model);
+        else
+            _regularModelBuffer.push_back(model);
+    }
+
     void Renderer::Submit(const Sprite* sprite)
     {
         _spriteBuffer.push_back(sprite);
-    }
-
-    void Renderer::Submit(const Model* model)
-    {
-        _modelBuffer.push_back(model);
-    }
+    }   
 
     void Renderer::Submit(const Cubemap* cubemap)
     {
         _cubemap = cubemap;
     }
 
-    void Renderer::FlushModels(Shader* modelShader, const glm::mat4& lightProjection)
+    void Renderer::FlushAllModels(Shader* modelShader, const glm::mat4& lightProjection)
+    {
+        FlushShadowModels(modelShader, lightProjection);
+        FlushRegularModels(modelShader, lightProjection);
+    }
+    
+    void Renderer::FlushShadowModels(Shader* modelShader, const glm::mat4& lightProjection)
     {
         //Check for Wireframe-Mode
         if(WireframeRendering){
@@ -48,7 +57,26 @@ namespace Core
             GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));}
 
         //Render models
-        for(const auto& model : _modelBuffer)
+        for(const auto& model : _shadowModelBuffer)
+        {
+            _drawnVertices += model->Draw(modelShader, _perspProjection, _camera->GetViewMatrix(), _camera->GetPosition(), lightProjection);
+            _drawcalls++;
+        }
+
+        //Increase render pass counter
+        _modelRenderPasses++;
+    }
+
+    void Renderer::FlushRegularModels(Shader* modelShader, const glm::mat4& lightProjection)
+    {
+        //Check for Wireframe-Mode
+        if(WireframeRendering){
+            GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));}
+        else{
+            GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));}
+
+        //Render models
+        for(const auto& model : _regularModelBuffer)
         {
             _drawnVertices += model->Draw(modelShader, _perspProjection, _camera->GetViewMatrix(), _camera->GetPosition(), lightProjection);
             _drawcalls++;

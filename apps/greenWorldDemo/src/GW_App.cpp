@@ -28,8 +28,8 @@ namespace GW
         //Audio
         _audio = Core::MakeScope<Core::Audio>();
         _audio->SetListenerPosition(_camera->GetPosition(), _camera->GetFront(), _camera->GetUp());
-        _audio->PlaySound2D("../res/audio/greenWorld/music/TrueBlueSky.wav", true, 1.0f);
-        _audio->PlaySound3D("../res/audio/greenWorld/sounds/River.wav", glm::vec3(39.0f, 14.0f, 56.0f), true, 40.0f, 1.5);
+        //_audio->PlaySound2D("../res/audio/greenWorld/music/TrueBlueSky.wav", true, 1.0f);
+        //_audio->PlaySound3D("../res/audio/greenWorld/sounds/River.wav", glm::vec3(39.0f, 14.0f, 56.0f), true, 40.0f, 1.5);
 
         //Shadow-Rendering
         Core::ResourceManager::LoadShader("ShadowShader", "../res/shader/greenWorld/shadow_vs.glsl", "../res/shader/greenWorld/shadow_fs.glsl");
@@ -52,8 +52,9 @@ namespace GW
                 1.0f,
                 "GrassTexture",
                 "../res/textures/greenWorld/Grass.jpg",
-                "../res/textures/greenWorld/heightmap/Heightmap128.bmp"
-            )
+                "../res/textures/greenWorld/heightmap/Heightmap128_Noise.bmp"
+            ),
+            false
         );
 
         //Water
@@ -65,17 +66,15 @@ namespace GW
             "WaterTexture",
             "../res/textures/greenWorld/Water.jpg"
         );
-        water->ChangePosition(glm::vec3(25.0f, 2.8f, 0.0f));
-        Core::Renderer::Submit(water);
+        water->ChangePosition(glm::vec3(25.0f, 2.7f, 0.0f));
+        Core::Renderer::Submit(water, false);
 
         //Ground
-        auto ground = Core::ModelManager::AddObject("Pyramid", "../res/models/greenWorld/Pyramid");
+        auto ground = Core::ModelManager::AddObject("Cube", "../res/models/greenWorld/Cube");
         for(const auto& model : ground)
         {
-            model->ChangeSize(12.7f);
-            model->ChangeRotation(180.0f, 0.0f, 0.0f);
-            model->ChangePosition(glm::vec3(128.0f, 2.5f, 1.0f));
-            Core::Renderer::Submit(model);
+            model->ChangePosition(glm::vec3(0.0f, -125.0f, 0.0f));
+            Core::Renderer::Submit(model, false);
         }
 
         //House
@@ -85,7 +84,7 @@ namespace GW
             model->ChangeSize(0.15f);
             model->ChangeRotation(0.0f, -90.0f, 0.0f);
             model->ChangePosition(glm::vec3(105.0f, 3.1f, 85.0f));
-            Core::Renderer::Submit(model);
+            Core::Renderer::Submit(model, true);
         }
 
         //Bridge
@@ -95,7 +94,7 @@ namespace GW
             model->ChangeSize(2.0f);
             model->ChangeRotation(0.0f, -90.0f, 0.0f);
             model->ChangePosition(glm::vec3(39.0f, 2.25f, 40.0f));
-            Core::Renderer::Submit(model);
+            Core::Renderer::Submit(model, true);
         }
 
         //Tree
@@ -104,7 +103,7 @@ namespace GW
         {
             model->ChangeSize(0.06f);
             model->ChangePosition(glm::vec3(85.0f, 3.0f, 35.0f));
-            Core::Renderer::Submit(model);
+            Core::Renderer::Submit(model, true);
         }
 
         //Well
@@ -114,7 +113,7 @@ namespace GW
             model->ChangeSize(0.05f);
             model->ChangeRotation(0.0f, -45.0f, 0.0f);
             model->ChangePosition(glm::vec3(75.0f, 18.0f, 75.0f));
-            Core::Renderer::Submit(model);
+            Core::Renderer::Submit(model, true);
         }
     }
 
@@ -198,7 +197,7 @@ namespace GW
 
             // Render scene to shadow framebuffer
             _shadowRenderer->StartFrame(Core::ResourceManager::GetShader("ShadowShader"));
-            Core::Renderer::FlushModels(Core::ResourceManager::GetShader("ShadowShader"), _shadowRenderer->GetLightProjection());
+            Core::Renderer::FlushShadowModels(Core::ResourceManager::GetShader("ShadowShader"), _shadowRenderer->GetLightProjection());
             _shadowRenderer->EndFrame();
 
             // Clear buffers
@@ -207,7 +206,7 @@ namespace GW
 
         {   Core::PROFILE_SCOPE("Render graphics");
 
-            Core::Renderer::FlushModels(Core::ResourceManager::GetShader("ModelShader"), _shadowRenderer->GetLightProjection());
+            Core::Renderer::FlushAllModels(Core::ResourceManager::GetShader("ModelShader"), _shadowRenderer->GetLightProjection());
             Core::Renderer::FlushSprites();
             Core::Renderer::FlushCubemap();
         }

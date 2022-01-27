@@ -29,7 +29,7 @@ namespace Core
         MeshCreator::CreatePlane(x, z, tileSize, &terrainMesh, &heightmap);
 
         //Allocate and assign textures
-        ResourceManager::LoadTexture(name, textureFilepath);
+        ResourceManager::LoadTextureFromFile(name, textureFilepath);
         terrainMesh.diffuseTexture = ResourceManager::GetTexture(name);
         terrainMesh.normalMap = nullptr;
         terrainMesh.shadowMap = _shadowRenderer->GetDepthTexture();
@@ -56,7 +56,7 @@ namespace Core
         MeshCreator::CreatePlane(x, z, tileSize, &planeMesh);
 
         //Allocate and assign textures
-        ResourceManager::LoadTexture(name, textureFilepath);
+        ResourceManager::LoadTextureFromFile(name, textureFilepath);
         planeMesh.diffuseTexture = ResourceManager::GetTexture(name);
         planeMesh.normalMap = nullptr;
         planeMesh.shadowMap = _shadowRenderer->GetDepthTexture();

@@ -4,15 +4,15 @@ namespace Core
 {
     // ----- Public -----
 
-    void ResourceManager::LoadTexture(const std::string& name, const std::string& filepath)
+    void ResourceManager::LoadTexture(const std::string& name, const uint32 width, const uint32 height, GLenum format)
     {
-        Texture* texture = new Texture(filepath);
+        Texture* texture = new Texture(width, height, format);
         _textureStorage[name] = texture;
     }
 
-    void ResourceManager::LoadDepthTexture(const std::string& name, const uint32 width, const uint32 height)
+    void ResourceManager::LoadTextureFromFile(const std::string& name, const std::string& filepath)
     {
-        Texture* texture = new Texture(width, height, Texture::DEPTH);
+        Texture* texture = new Texture(filepath);
         _textureStorage[name] = texture;
     }
 

@@ -14,7 +14,7 @@ namespace GW
         _window->SetTitle("GreenWorld Demo Application");
 
         //Camera
-        _camera = Core::MakeScope<Core::Camera>(glm::vec3(-101.0f, 92.0f, 32.0f), 16.0f, -31.0f, 25.0f);
+        _camera = Core::MakeScope<Core::Camera>(glm::vec3(-118.0f, 124.0f, 71.0f), 1.0f, -36.0f, 25.0f);
 
         //Renderer (static)
         Core::Renderer::Init(_camera.get());
@@ -30,6 +30,9 @@ namespace GW
         _audio->SetListenerPosition(_camera->GetPosition(), _camera->GetFront(), _camera->GetUp());
         //_audio->PlaySound2D("../res/audio/greenWorld/music/TrueBlueSky.wav", true, 1.0f);
         //_audio->PlaySound3D("../res/audio/greenWorld/sounds/River.wav", glm::vec3(39.0f, 14.0f, 56.0f), true, 40.0f, 1.5);
+
+        //Water-Rendering
+        _waterRenderer = Core::MakeScope<Core::WaterRenderer>();
 
         //Shadow-Rendering
         Core::ResourceManager::LoadShader("ShadowShader", "../res/shader/greenWorld/shadow_vs.glsl", "../res/shader/greenWorld/shadow_fs.glsl");
@@ -68,14 +71,6 @@ namespace GW
         );
         water->ChangePosition(glm::vec3(25.0f, 2.7f, 0.0f));
         Core::Renderer::Submit(water, false);
-
-        //Ground
-        auto ground = Core::ModelManager::AddObject("Cube", "../res/models/greenWorld/Cube");
-        for(const auto& model : ground)
-        {
-            model->ChangePosition(glm::vec3(0.0f, -125.0f, 0.0f));
-            Core::Renderer::Submit(model, false);
-        }
 
         //House
         auto house = Core::ModelManager::AddObject("OldHouse", "../res/models/greenWorld/OldHouse");
@@ -138,18 +133,43 @@ namespace GW
     void App::CreateSprites()
     {
         Core::ResourceManager::LoadShader("SpriteShader", "../res/shader/greenWorld/sprite_vs.glsl", "../res/shader/greenWorld/sprite_fs.glsl");
+        Core::ResourceManager::LoadShader("SpriteShaderGrey", "../res/shader/greenWorld/sprite_vs.glsl", "../res/shader/greenWorld/sprite_grey_fs.glsl");
 
-        _testSprite = Core::MakeScope<Core::Sprite>
+        //Shadowsprite
+        _shadowSprite = Core::MakeScope<Core::Sprite>
+        (
+            _shadowRenderer->GetDepthTexture(),
+            Core::ResourceManager::GetShader("SpriteShaderGrey"),
+            glm::vec3(1.0f, 1.0f, 1.0f)
+        );
+
+        _shadowSprite->ChangePosition(glm::vec2(10.0f, 10.0f));
+        _shadowSprite->ChangeSize(glm::vec2(280.0f, 280.0f));
+        Core::Renderer::Submit(_shadowSprite.get());
+
+        //Reflectsprite
+        _reflectSprite = Core::MakeScope<Core::Sprite>
+        (
+            _waterRenderer->GetReflectTexture(),
+            Core::ResourceManager::GetShader("SpriteShader"),
+            glm::vec3(1.0f, 1.0f, 1.0f)
+        );
+
+        _reflectSprite->ChangePosition(glm::vec2(300.0f, 10.0f));
+        _reflectSprite->ChangeSize(glm::vec2(280.0f, 280.0f));
+        Core::Renderer::Submit(_reflectSprite.get());
+
+        //Refractsprite
+        _refractSprite = Core::MakeScope<Core::Sprite>
         (
             _shadowRenderer->GetDepthTexture(),
             Core::ResourceManager::GetShader("SpriteShader"),
             glm::vec3(1.0f, 1.0f, 1.0f)
         );
 
-        _testSprite->ChangePosition(glm::vec2(10.0f, 10.0f));
-        _testSprite->ChangeSize(glm::vec2(280.0f, 280.0f));
-
-        Core::Renderer::Submit(_testSprite.get());
+        _refractSprite->ChangePosition(glm::vec2(590.0f, 10.0f));
+        _refractSprite->ChangeSize(glm::vec2(280.0f, 280.0f));
+        Core::Renderer::Submit(_refractSprite.get());
     }
 
     // ----- Public -----
@@ -195,13 +215,20 @@ namespace GW
 
         {   Core::PROFILE_SCOPE("Create shadows");
 
-            // Render scene to shadow framebuffer
-            _shadowRenderer->StartFrame(Core::ResourceManager::GetShader("ShadowShader"));
+            //Render scene to shadow framebuffer
+            _shadowRenderer->StartFrame();
+            _window->ClearBuffers();
             Core::Renderer::FlushShadowModels(Core::ResourceManager::GetShader("ShadowShader"), _shadowRenderer->GetLightProjection());
             _shadowRenderer->EndFrame();
+        }
 
-            // Clear buffers
+        {   Core::PROFILE_SCOPE("Render water");
+
+            //Render scene to water framebuffers
+            _waterRenderer->StartFrame();
             _window->ClearBuffers();
+            Core::Renderer::FlushAllModels(Core::ResourceManager::GetShader("ModelShader"), _shadowRenderer->GetLightProjection());
+            _waterRenderer->EndFrame();
         }
 
         {   Core::PROFILE_SCOPE("Render graphics");

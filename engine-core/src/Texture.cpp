@@ -13,6 +13,7 @@ namespace Core
         if(localBuffer)
         {
             GLenum format = 0;
+
             if(nrChannels == 1)
                 format = GL_RED;
             else if(nrChannels == 3)
@@ -48,28 +49,14 @@ namespace Core
         stbi_image_free(localBuffer);
     }
 
-    void Texture::InitWithAttribute(const uint32 width, const uint32 height, const Texture_Attribute attribute)
+    void Texture::Init(uint32 width, uint32 height, GLenum format)
     {
-        //Resolve attribute
-        GLenum component = 0;
-
-        if(attribute == DEPTH)
-            component = GL_DEPTH_COMPONENT;
-
         //Create texture
         GLCall(glGenTextures(1, &_textureID));
         Bind();
-        GLCall(glTexImage2D(GL_TEXTURE_2D, 0, component, width, height, 0, component, GL_FLOAT, nullptr));
+        GLCall(glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, nullptr));
 
-        //Configure texture
-        GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST));
-        GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST));
-        GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT));
-        GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT));
-        float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-        GLCall(glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor));
-
-        LOG(INFO) << "Created:  Texture | (X: " << width << " | Y: " << height << " | Type: " << std::to_string(component) << ")";
+        LOG(INFO) << "Created:  Texture | (X: " << width << " | Y: " << height << " | Format: " << std::to_string(format) << ")";
     }
 
     // ----- Public -----
@@ -80,10 +67,10 @@ namespace Core
         InitFromFile(filepath);
     }
 
-    Texture::Texture(const uint32 width, const uint32 height, const Texture_Attribute attribute)
+    Texture::Texture(const uint32 width, const uint32 height, const GLenum format)
         :   _textureID(0)
     {
-        InitWithAttribute(width, height, attribute);
+        Init(width, height, format);
     }
 
     Texture::~Texture()
@@ -101,6 +88,34 @@ namespace Core
     {
         GLCall(glActiveTexture(GL_TEXTURE0 + slot));
         GLCall(glBindTexture(GL_TEXTURE_2D, _textureID));
+    }
+
+    void Texture::AddFilterNearest() const
+    {
+        Bind();
+        GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST));
+        GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST));
+    }
+
+    void Texture::AddFilterLinear() const
+    {
+        Bind();
+        GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
+        GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+    }
+
+    void Texture::AddWrapRepeat() const
+    {
+        Bind();
+        GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT));
+        GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT));
+    }
+
+    void Texture::AddBorderColor() const
+    {
+        Bind();
+        const float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+        GLCall(glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor));
     }
 
     uint32 Texture::GetTextureID() const

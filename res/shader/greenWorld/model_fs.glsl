@@ -22,7 +22,7 @@ const vec3  lightColor = vec3(1.0, 1.0, 1.0);
 
 float calculateShadow(vec4 fragPosInLightSpace, vec3 normal, vec3 lightDir)
 {
-    //Perform perspective divide
+    //Perform perspective division
     vec3 projCoords = fragPosInLightSpace.xyz / fragPosInLightSpace.w;
     //Transform to [0,1] range
     projCoords = projCoords * 0.5 + 0.5;

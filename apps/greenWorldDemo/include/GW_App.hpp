@@ -14,6 +14,7 @@
 #include "Sprite.hpp"
 #include "ShadowRenderer.hpp"
 #include "ModelManager.hpp"
+#include "WaterRenderer.hpp"
 
 #include "GW_Interface.hpp"
 #include "GW_InputManager.hpp"
@@ -31,7 +32,8 @@ namespace GW
             Core::Scope<Core::Audio>            _audio;
             Core::Scope<Core::ShadowRenderer>   _shadowRenderer;
             Core::Scope<Core::Cubemap>          _cubemap;
-            Core::Scope<Core::Sprite>           _testSprite;
+            Core::Scope<Core::Sprite>           _shadowSprite, _reflectSprite, _refractSprite;
+            Core::Scope<Core::WaterRenderer>    _waterRenderer;
 
             Core::Scope<Interface>              _interface;
 

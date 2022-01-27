@@ -19,7 +19,7 @@ namespace Core
 
         public:
             ShadowRenderer(uint32 width, uint32 height, glm::vec3 lightPos);
-            void StartFrame(Shader* shader);
+            void StartFrame();
             void EndFrame();
             [[nodiscard]] Texture* GetDepthTexture() const;
             [[nodiscard]] glm::mat4 GetLightProjection() const;

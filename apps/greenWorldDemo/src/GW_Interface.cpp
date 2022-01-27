@@ -57,11 +57,11 @@ namespace GW
         _sidebarPos = ImVec2(work_size.x, work_pos.y);
         _overlayPivot = ImVec2(1.0f, 0.0f);
 
-        _shaderFieldPos = ImVec2((float)WINDOW_WIDTH - 210.0f, (float)WINDOW_HEIGHT - 400.0f + work_pos.y);
-        _texFieldPos = ImVec2(_shaderFieldPos.x + 210.0f, _shaderFieldPos.y);
+        _shaderFieldPos = ImVec2((float)WINDOW_WIDTH - 220.0f, (float)WINDOW_HEIGHT - 440.0f + work_pos.y);
+        _texFieldPos = ImVec2(_shaderFieldPos.x + 220.0f, _shaderFieldPos.y);
 
-        _overlaySize = ImVec2(420.0f, (float)WINDOW_HEIGHT - 400.0f);
-        _bottomFieldSizes = ImVec2(_overlaySize.x / 2, 400.0f);
+        _overlaySize = ImVec2(440.0f, (float)WINDOW_HEIGHT - 440.0f);
+        _bottomFieldSizes = ImVec2(_overlaySize.x / 2, 440.0f);
     }
 
     // ----- Public -----

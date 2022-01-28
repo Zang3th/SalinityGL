@@ -6,6 +6,7 @@
 #include "Shader.hpp"
 #include "Texture.hpp"
 #include "ResourceManager.hpp"
+#include "Renderer.hpp"
 
 namespace Core
 {
@@ -16,11 +17,14 @@ namespace Core
             Scope<FrameBuffer>  _fbo;
             uint32              _shadowWidth;
             uint32              _shadowHeight;
+            Shader*             _shadowShader;
 
-        public:
-            ShadowRenderer(uint32 width, uint32 height, glm::vec3 lightPos);
             void StartFrame();
             void EndFrame();
+
+        public:
+            ShadowRenderer(uint32 width, uint32 height, glm::vec3 lightPos, Shader* shadowShader);
+            void Render();
             [[nodiscard]] Texture* GetDepthTexture() const;
             [[nodiscard]] glm::mat4 GetLightProjection() const;
     };

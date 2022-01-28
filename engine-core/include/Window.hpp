@@ -25,7 +25,6 @@ namespace Core
             ~Window();
             void SetTitle(const std::string& title);
             [[nodiscard]] bool IsRunning() const;
-            static void ClearBuffers();
             void CalcFrametime();
             static void PollEvents();
             void ProcessEvents();

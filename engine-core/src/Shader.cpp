@@ -155,6 +155,11 @@ namespace Core
         GLCall(glUniform3fv(GetUniformLocation(name), 1, &vec[0]));
     }
 
+    void Shader::SetUniformVec4f(const std::string& name, const glm::vec4& vec)
+    {
+        GLCall(glUniform4fv(GetUniformLocation(name), 1, &vec[0]));
+    }
+
     uint32 Shader::GetShaderID() const
     {
         return _shaderID;

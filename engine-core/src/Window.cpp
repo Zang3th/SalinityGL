@@ -82,12 +82,6 @@ namespace Core
         return _isRunning;
     }
 
-    void Window::ClearBuffers()
-    {
-        GLCall(glClearColor(0.0, 0.0, 0.0, 1.0));
-        GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
-    }
-
     void Window::CalcFrametime()
     {
         //Calculate frametime

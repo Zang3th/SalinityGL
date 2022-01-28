@@ -69,7 +69,7 @@ void main()
     vec4 texColor = texture(diffuseTexture, texCoords);
 
     if(texColor.a < 0.5)
-    discard;
+        discard;
 
     fragColor = vec4(calculateLight(texColor.rgb, fragPos.rgb), texColor.a);
 }

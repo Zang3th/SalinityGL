@@ -13,6 +13,7 @@ uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
 uniform mat4 lightProjection;
+uniform vec4 clipPlane;
 
 void main()
 {
@@ -20,6 +21,7 @@ void main()
     normals = transpose(inverse(mat3(model))) * normalsIn;
     fragPos = model * vec4(vertexIn, 1.0f);
     fragPosLightSpace = lightProjection * fragPos;
+    gl_ClipDistance[0] = dot(fragPos, clipPlane);
 
     gl_Position = projection * view * fragPos;
 }

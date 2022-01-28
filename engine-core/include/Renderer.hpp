@@ -41,6 +41,7 @@ namespace Core
             static void FlushRegularModels(Shader* modelShader, const glm::mat4& lightProjection);
             static void FlushSprites();
             static void FlushCubemap();
+            static void ClearBuffers();
             static uint32 GetDrawcalls();
             static uint32 GetDrawnVertices();
             static uint32 GetModelRenderPasses();

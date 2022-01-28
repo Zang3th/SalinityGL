@@ -32,11 +32,12 @@ namespace GW
         //_audio->PlaySound3D("../res/audio/greenWorld/sounds/River.wav", glm::vec3(39.0f, 14.0f, 56.0f), true, 40.0f, 1.5);
 
         //Water-Rendering
-        _waterRenderer = Core::MakeScope<Core::WaterRenderer>();
+        Core::ResourceManager::LoadShader("WaterShader", "../res/shader/greenWorld/water_vs.glsl", "../res/shader/greenWorld/water_fs.glsl");
+        _waterRenderer = Core::MakeScope<Core::WaterRenderer>(Core::ResourceManager::GetShader("WaterShader"));
 
         //Shadow-Rendering
         Core::ResourceManager::LoadShader("ShadowShader", "../res/shader/greenWorld/shadow_vs.glsl", "../res/shader/greenWorld/shadow_fs.glsl");
-        _shadowRenderer = Core::MakeScope<Core::ShadowRenderer>(8192, 8192, glm::vec3(150.0f, 100.0f, -30.0f));
+        _shadowRenderer = Core::MakeScope<Core::ShadowRenderer>(8192, 8192, glm::vec3(150.0f, 100.0f, -30.0f), Core::ResourceManager::GetShader("ShadowShader"));
 
         //Model-Management
         Core::ResourceManager::LoadShader("ModelShader", "../res/shader/greenWorld/model_vs.glsl", "../res/shader/greenWorld/model_fs.glsl");
@@ -46,19 +47,17 @@ namespace GW
     void App::CreateModels()
     {
         //Terrain
-        Core::Renderer::Submit
+        auto terrain = Core::ModelManager::AddTerrain
         (
-            Core::ModelManager::AddTerrain
-            (
-                PLANE_SIZE,
-                PLANE_SIZE,
-                1.0f,
-                "GrassTexture",
-                "../res/textures/greenWorld/Grass.jpg",
-                "../res/textures/greenWorld/heightmap/Heightmap128_Noise.bmp"
-            ),
-            false
+            PLANE_SIZE,
+            PLANE_SIZE,
+            1.0f,
+            "GrassTexture",
+            "../res/textures/greenWorld/Grass.jpg",
+            "../res/textures/greenWorld/heightmap/Heightmap128_Noise.bmp"
         );
+        terrain->ChangePosition(glm::vec3(0.0f, -2.7f, 0.0f));
+        Core::Renderer::Submit(terrain, false);
 
         //Water
         auto water = Core::ModelManager::AddPlane
@@ -69,7 +68,7 @@ namespace GW
             "WaterTexture",
             "../res/textures/greenWorld/Water.jpg"
         );
-        water->ChangePosition(glm::vec3(25.0f, 2.7f, 0.0f));
+        water->ChangePosition(glm::vec3(25.0f, 0.0f, 0.0f));
         Core::Renderer::Submit(water, false);
 
         //House
@@ -78,7 +77,7 @@ namespace GW
         {
             model->ChangeSize(0.15f);
             model->ChangeRotation(0.0f, -90.0f, 0.0f);
-            model->ChangePosition(glm::vec3(105.0f, 3.1f, 85.0f));
+            model->ChangePosition(glm::vec3(105.0f, 0.4f, 85.0f));
             Core::Renderer::Submit(model, true);
         }
 
@@ -88,7 +87,7 @@ namespace GW
         {
             model->ChangeSize(2.0f);
             model->ChangeRotation(0.0f, -90.0f, 0.0f);
-            model->ChangePosition(glm::vec3(39.0f, 2.25f, 40.0f));
+            model->ChangePosition(glm::vec3(39.0f, -0.45f, 40.0f));
             Core::Renderer::Submit(model, true);
         }
 
@@ -97,7 +96,7 @@ namespace GW
         for(const auto& model : tree)
         {
             model->ChangeSize(0.06f);
-            model->ChangePosition(glm::vec3(85.0f, 3.0f, 35.0f));
+            model->ChangePosition(glm::vec3(85.0f, 0.3f, 35.0f));
             Core::Renderer::Submit(model, true);
         }
 
@@ -107,7 +106,7 @@ namespace GW
         {
             model->ChangeSize(0.05f);
             model->ChangeRotation(0.0f, -45.0f, 0.0f);
-            model->ChangePosition(glm::vec3(75.0f, 18.0f, 75.0f));
+            model->ChangePosition(glm::vec3(75.0f, 15.3f, 75.0f));
             Core::Renderer::Submit(model, true);
         }
     }
@@ -162,7 +161,7 @@ namespace GW
         //Refractsprite
         _refractSprite = Core::MakeScope<Core::Sprite>
         (
-            _shadowRenderer->GetDepthTexture(),
+            _waterRenderer->GetRefractTexture(),
             Core::ResourceManager::GetShader("SpriteShader"),
             glm::vec3(1.0f, 1.0f, 1.0f)
         );
@@ -207,28 +206,20 @@ namespace GW
 
         {   Core::PROFILE_SCOPE("Prepare frame");
 
-            _window->ClearBuffers();
             _window->CalcFrametime();
-            Core::Renderer::PrepareFrame();
             _interface->PrepareFrame();
+            Core::Renderer::PrepareFrame();
+            Core::Renderer::ClearBuffers();
         }
 
-        {   Core::PROFILE_SCOPE("Create shadows");
+        {   Core::PROFILE_SCOPE("Render shadows");
 
-            //Render scene to shadow framebuffer
-            _shadowRenderer->StartFrame();
-            _window->ClearBuffers();
-            Core::Renderer::FlushShadowModels(Core::ResourceManager::GetShader("ShadowShader"), _shadowRenderer->GetLightProjection());
-            _shadowRenderer->EndFrame();
+            _shadowRenderer->Render();
         }
 
         {   Core::PROFILE_SCOPE("Render water");
 
-            //Render scene to water framebuffers
-            _waterRenderer->StartFrame();
-            _window->ClearBuffers();
-            Core::Renderer::FlushAllModels(Core::ResourceManager::GetShader("ModelShader"), _shadowRenderer->GetLightProjection());
-            _waterRenderer->EndFrame();
+            _waterRenderer->Render(_shadowRenderer->GetLightProjection());
         }
 
         {   Core::PROFILE_SCOPE("Render graphics");

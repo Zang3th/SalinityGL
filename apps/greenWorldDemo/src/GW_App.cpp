@@ -31,13 +31,14 @@ namespace GW
         //_audio->PlaySound2D("../res/audio/greenWorld/music/TrueBlueSky.wav", true, 1.0f);
         //_audio->PlaySound3D("../res/audio/greenWorld/sounds/River.wav", glm::vec3(39.0f, 14.0f, 56.0f), true, 40.0f, 1.5);
 
-        //Water-Rendering
-        Core::ResourceManager::LoadShader("WaterShader", "../res/shader/greenWorld/water_vs.glsl", "../res/shader/greenWorld/water_fs.glsl");
-        _waterRenderer = Core::MakeScope<Core::WaterRenderer>(Core::ResourceManager::GetShader("WaterShader"));
-
         //Shadow-Rendering
-        Core::ResourceManager::LoadShader("ShadowShader", "../res/shader/greenWorld/shadow_vs.glsl", "../res/shader/greenWorld/shadow_fs.glsl");
-        _shadowRenderer = Core::MakeScope<Core::ShadowRenderer>(8192, 8192, glm::vec3(150.0f, 100.0f, -30.0f), Core::ResourceManager::GetShader("ShadowShader"));
+        Core::ResourceManager::LoadShader("ShadowCreateShader", "../res/shader/greenWorld/shadowCreate_vs.glsl", "../res/shader/greenWorld/shadowCreate_fs.glsl");
+        _shadowRenderer = Core::MakeScope<Core::ShadowRenderer>(8192, 8192, glm::vec3(150.0f, 100.0f, -30.0f));
+
+        //Water-Rendering
+        _waterRenderer = Core::MakeScope<Core::WaterRenderer>();
+        Core::ResourceManager::LoadShader("WaterPlaneShader", "../res/shader/greenWorld/waterPlane_vs.glsl", "../res/shader/greenWorld/waterPlane_fs.glsl");
+        _waterPlaneModel = nullptr;
 
         //Model-Management
         Core::ResourceManager::LoadShader("ModelShader", "../res/shader/greenWorld/model_vs.glsl", "../res/shader/greenWorld/model_fs.glsl");
@@ -60,16 +61,13 @@ namespace GW
         Core::Renderer::Submit(terrain, false);
 
         //Water
-        auto water = Core::ModelManager::AddPlane
+        _waterPlaneModel = Core::ModelManager::AddPlaneWithoutTexture
         (
             PLANE_SIZE - 100,
             PLANE_SIZE,
-            1.0f,
-            "WaterTexture",
-            "../res/textures/greenWorld/Water.jpg"
+            1.0f
         );
-        water->ChangePosition(glm::vec3(25.0f, 0.0f, 0.0f));
-        Core::Renderer::Submit(water, false);
+        _waterPlaneModel->ChangePosition(glm::vec3(25.0f, 0.0f, 0.0f));
 
         //House
         auto house = Core::ModelManager::AddObject("OldHouse", "../res/models/greenWorld/OldHouse");
@@ -132,13 +130,13 @@ namespace GW
     void App::CreateSprites()
     {
         Core::ResourceManager::LoadShader("SpriteShader", "../res/shader/greenWorld/sprite_vs.glsl", "../res/shader/greenWorld/sprite_fs.glsl");
-        Core::ResourceManager::LoadShader("SpriteShaderGrey", "../res/shader/greenWorld/sprite_vs.glsl", "../res/shader/greenWorld/sprite_grey_fs.glsl");
+        Core::ResourceManager::LoadShader("SpriteShaderBW", "../res/shader/greenWorld/sprite_vs.glsl", "../res/shader/greenWorld/spriteBlackAndWhite_fs.glsl");
 
         //Shadowsprite
         _shadowSprite = Core::MakeScope<Core::Sprite>
         (
             _shadowRenderer->GetDepthTexture(),
-            Core::ResourceManager::GetShader("SpriteShaderGrey"),
+            Core::ResourceManager::GetShader("SpriteShaderBW"),
             glm::vec3(1.0f, 1.0f, 1.0f)
         );
 
@@ -212,19 +210,20 @@ namespace GW
             Core::Renderer::ClearBuffers();
         }
 
-        {   Core::PROFILE_SCOPE("Render shadows");
+        {   Core::PROFILE_SCOPE("Create shadows");
 
-            _shadowRenderer->Render();
+            _shadowRenderer->RenderToFramebuffer(Core::ResourceManager::GetShader("ShadowCreateShader"));
         }
 
-        {   Core::PROFILE_SCOPE("Render water");
+        {   Core::PROFILE_SCOPE("Create water");
 
-            _waterRenderer->Render(_shadowRenderer->GetLightProjection());
+            _waterRenderer->RenderToFramebuffer(Core::ResourceManager::GetShader("ModelShader"), _shadowRenderer->GetLightProjection());
         }
 
         {   Core::PROFILE_SCOPE("Render graphics");
 
             Core::Renderer::FlushAllModels(Core::ResourceManager::GetShader("ModelShader"), _shadowRenderer->GetLightProjection());
+            Core::Renderer::RenderWaterModel(_waterPlaneModel, Core::ResourceManager::GetShader("WaterPlaneShader"));
             Core::Renderer::FlushSprites();
             Core::Renderer::FlushCubemap();
         }

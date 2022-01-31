@@ -30,9 +30,9 @@ namespace Core
 
         //Allocate and assign textures
         ResourceManager::LoadTextureFromFile(name, textureFilepath);
-        terrainMesh.diffuseTexture = ResourceManager::GetTexture(name);
-        terrainMesh.normalMap = nullptr;
-        terrainMesh.shadowMap = _shadowRenderer->GetDepthTexture();
+        terrainMesh.texture1 = ResourceManager::GetTexture(name);
+        terrainMesh.texture2 = nullptr;
+        terrainMesh.texture3 = _shadowRenderer->GetDepthTexture();
         terrainMesh.gotNormalMap = false;
 
         //Create and store model
@@ -42,7 +42,7 @@ namespace Core
         return terrainModel;
     }
 
-    Model* ModelManager::AddPlane
+    Model* ModelManager::AddPlaneWithTexture
     (
         const uint32 x,
         const uint32 z,
@@ -57,9 +57,33 @@ namespace Core
 
         //Allocate and assign textures
         ResourceManager::LoadTextureFromFile(name, textureFilepath);
-        planeMesh.diffuseTexture = ResourceManager::GetTexture(name);
-        planeMesh.normalMap = nullptr;
-        planeMesh.shadowMap = _shadowRenderer->GetDepthTexture();
+        planeMesh.texture1 = ResourceManager::GetTexture(name);
+        planeMesh.texture2 = nullptr;
+        planeMesh.texture3 = _shadowRenderer->GetDepthTexture();
+        planeMesh.gotNormalMap = false;
+
+        //Create and store model
+        Model* planeModel = new Model(&planeMesh);
+        _modelStorage.push_back(planeModel);
+
+        return planeModel;
+    }
+
+    Model* ModelManager::AddPlaneWithoutTexture
+    (
+        const uint32 x,
+        const uint32 z,
+        const float  tileSize
+    )
+    {
+        //Create plane mesh
+        Mesh planeMesh;
+        MeshCreator::CreatePlane(x, z, tileSize, &planeMesh);
+
+        //Set default textures
+        planeMesh.texture1 = nullptr;
+        planeMesh.texture2 = nullptr;
+        planeMesh.texture3 = _shadowRenderer->GetDepthTexture();
         planeMesh.gotNormalMap = false;
 
         //Create and store model
@@ -81,7 +105,7 @@ namespace Core
         //Create models out of meshes and store these
         for(auto& mesh : meshes)
         {
-            mesh.shadowMap = _shadowRenderer->GetDepthTexture();
+            mesh.texture3 = _shadowRenderer->GetDepthTexture();
             Model* objModel = new Model(&mesh);
             _modelStorage.push_back(objModel);
             models.push_back(objModel);

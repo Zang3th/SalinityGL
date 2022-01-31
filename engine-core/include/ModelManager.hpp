@@ -28,13 +28,19 @@ namespace Core
                 const  std::string& textureFilepath,
                 const  std::string& heightmapFilepath
             );
-            static Model* AddPlane
+            static Model* AddPlaneWithTexture
             (
                 uint32 x,
                 uint32 z,
                 float  tileSize,
                 const  std::string& name,
                 const  std::string& textureFilepath
+            );
+            static Model* AddPlaneWithoutTexture
+            (
+                uint32 x,
+                uint32 z,
+                float  tileSize
             );
             static std::vector<Model*> AddObject(const std::string& filename, const std::string& baseFilepath);
             static void CleanUp();

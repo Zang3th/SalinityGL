@@ -44,31 +44,31 @@ namespace Core
         _refractFBO->Unbind();
     }
 
-    void WaterRenderer::RenderReflectionFrame(const glm::mat4 lightProjection)
+    void WaterRenderer::RenderReflectionFrame(Shader* modelShader, const glm::mat4 lightProjection)
     {
         //Render to reflection framebuffer
         StartReflectionFrame();
 
         Renderer::ClearBuffers();
-        _waterShader->Bind();
-        _waterShader->SetUniformVec4f("clipPlane", _reflectionClipPlane);
-        _waterShader->Unbind();
-        Renderer::FlushAllModels(_waterShader, lightProjection);
+        modelShader->Bind();
+        modelShader->SetUniformVec4f("clipPlane", _reflectionClipPlane);
+        modelShader->Unbind();
+        Renderer::FlushAllModels(modelShader, lightProjection);
         Renderer::FlushCubemap();
 
         EndReflectionFrame();
     }
 
-    void WaterRenderer::RenderRefractionFrame(const glm::mat4 lightProjection)
+    void WaterRenderer::RenderRefractionFrame(Shader* modelShader, const glm::mat4 lightProjection)
     {
         //Render to refraction framebuffer
         StartRefractionFrame();
 
         Renderer::ClearBuffers();
-        _waterShader->Bind();
-        _waterShader->SetUniformVec4f("clipPlane", _refractionClipPlane);
-        _waterShader->Unbind();
-        Renderer::FlushAllModels(_waterShader, lightProjection);
+        modelShader->Bind();
+        modelShader->SetUniformVec4f("clipPlane", _refractionClipPlane);
+        modelShader->Unbind();
+        Renderer::FlushAllModels(modelShader, lightProjection);
         Renderer::FlushCubemap();
 
         EndRefractionFrame();
@@ -76,18 +76,17 @@ namespace Core
 
     // ----- Public -----
 
-    WaterRenderer::WaterRenderer(Shader* waterShader)
-        : _waterShader(waterShader)
+    WaterRenderer::WaterRenderer()
     {
         InitReflectionFBO();
         InitRefractionFBO();
     }
 
-    void WaterRenderer::Render(const glm::mat4 lightProjection)
+    void WaterRenderer::RenderToFramebuffer(Shader* modelShader, const glm::mat4 lightProjection)
     {
         GLCall(glEnable(GL_CLIP_DISTANCE0));
-        RenderReflectionFrame(lightProjection);
-        RenderRefractionFrame(lightProjection);
+        RenderReflectionFrame(modelShader, lightProjection);
+        RenderRefractionFrame(modelShader, lightProjection);
         GLCall(glDisable(GL_CLIP_DISTANCE0));
     }
 

@@ -37,6 +37,8 @@ namespace GW
 
             Core::Scope<Interface>              _interface;
 
+            Core::Model*                        _waterPlaneModel;
+
             void InitModules();
             void CreateModels();
             void CreateCubemap();

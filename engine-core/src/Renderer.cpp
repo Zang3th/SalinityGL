@@ -29,7 +29,7 @@ namespace Core
         if(producesShadows)
             _shadowModelBuffer.push_back(model);
         else
-            _regularModelBuffer.push_back(model);
+            _modelBuffer.push_back(model);
     }
 
     void Renderer::Submit(const Sprite* sprite)
@@ -42,12 +42,25 @@ namespace Core
         _cubemap = cubemap;
     }
 
-    void Renderer::FlushAllModels(Shader* modelShader, const glm::mat4& lightProjection)
+    void Renderer::FlushModels(Shader* modelShader, const glm::mat4& lightProjection)
     {
-        FlushShadowModels(modelShader, lightProjection);
-        FlushRegularModels(modelShader, lightProjection);
+        //Check for Wireframe-Mode
+        if(WireframeRendering){
+            GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));}
+        else{
+            GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));}
+
+        //Render models
+        for(const auto& model : _modelBuffer)
+        {
+            _drawnVertices += model->DrawModel(modelShader, _perspProjection, _camera->GetViewMatrix(), _camera->GetPosition(), lightProjection);
+            _drawcalls++;
+        }
+
+        //Increase render pass counter
+        _modelRenderPasses++;
     }
-    
+
     void Renderer::FlushShadowModels(Shader* modelShader, const glm::mat4& lightProjection)
     {
         //Check for Wireframe-Mode
@@ -56,10 +69,10 @@ namespace Core
         else{
             GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));}
 
-        //Render models
+        //Render models that cast shadows
         for(const auto& model : _shadowModelBuffer)
         {
-            _drawnVertices += model->Draw(modelShader, _perspProjection, _camera->GetViewMatrix(), _camera->GetPosition(), lightProjection);
+            _drawnVertices += model->DrawModel(modelShader, _perspProjection, _camera->GetViewMatrix(), _camera->GetPosition(), lightProjection);
             _drawcalls++;
         }
 
@@ -67,7 +80,13 @@ namespace Core
         _modelRenderPasses++;
     }
 
-    void Renderer::FlushRegularModels(Shader* modelShader, const glm::mat4& lightProjection)
+    void Renderer::FlushAllModels(Shader* modelShader, const glm::mat4& lightProjection)
+    {
+        FlushShadowModels(modelShader, lightProjection);
+        FlushModels(modelShader, lightProjection);
+    }
+
+    void Renderer::RenderModel(const Model* model, Shader* modelShader, const glm::mat4& lightProjection)
     {
         //Check for Wireframe-Mode
         if(WireframeRendering){
@@ -75,12 +94,23 @@ namespace Core
         else{
             GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));}
 
-        //Render models
-        for(const auto& model : _regularModelBuffer)
-        {
-            _drawnVertices += model->Draw(modelShader, _perspProjection, _camera->GetViewMatrix(), _camera->GetPosition(), lightProjection);
-            _drawcalls++;
-        }
+        _drawnVertices += model->DrawModel(modelShader, _perspProjection, _camera->GetViewMatrix(), _camera->GetPosition(), lightProjection);
+        _drawcalls++;
+
+        //Increase render pass counter
+        _modelRenderPasses++;
+    }
+
+    void Renderer::RenderWaterModel(const Model* model, Shader* modelShader)
+    {
+        //Check for Wireframe-Mode
+        if(WireframeRendering){
+            GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));}
+        else{
+            GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));}
+
+        _drawnVertices += model->DrawWaterModel(modelShader, _perspProjection, _camera->GetViewMatrix(), _camera->GetPosition());
+        _drawcalls++;
 
         //Increase render pass counter
         _modelRenderPasses++;
@@ -88,6 +118,8 @@ namespace Core
 
     void Renderer::FlushSprites()
     {
+        GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
+
         //Render sprites
         for(const auto& sprite : _spriteBuffer)
         {
@@ -104,12 +136,13 @@ namespace Core
         //Render cubemap last (if it exists)
         if(_cubemap)
         {
+            GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
             _drawnVertices += _cubemap->Draw(_perspProjection, _camera->GetViewMatrix());
             _drawcalls++;
-        }
 
-        //Increase render pass counter
-        _cubemapRenderPasses++;
+            //Increase render pass counter
+            _cubemapRenderPasses++;
+        }
     }
 
     void Renderer::ClearBuffers()

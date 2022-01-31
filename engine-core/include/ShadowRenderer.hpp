@@ -17,14 +17,13 @@ namespace Core
             Scope<FrameBuffer>  _fbo;
             uint32              _shadowWidth;
             uint32              _shadowHeight;
-            Shader*             _shadowShader;
 
             void StartFrame();
             void EndFrame();
 
         public:
-            ShadowRenderer(uint32 width, uint32 height, glm::vec3 lightPos, Shader* shadowShader);
-            void Render();
+            ShadowRenderer(uint32 width, uint32 height, glm::vec3 lightPos);
+            void RenderToFramebuffer(Shader* shadowShader);
             [[nodiscard]] Texture* GetDepthTexture() const;
             [[nodiscard]] glm::mat4 GetLightProjection() const;
     };

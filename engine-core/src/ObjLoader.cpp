@@ -36,9 +36,9 @@ namespace Core
             Mesh mesh;
 
             //Init with default values
-            mesh.diffuseTexture = nullptr;
-            mesh.normalMap = nullptr;
-            mesh.gotNormalMap = 0;
+            mesh.texture1 = nullptr;
+            mesh.texture2 = nullptr;
+            mesh.texture3 = nullptr;
 
             //Iterate over all indices
             for(const auto& index : shapes.at(i).mesh.indices)
@@ -74,7 +74,7 @@ namespace Core
                 std::string textureFilepath = baseFilepath + "/" + materials[i].diffuse_texname;
                 std::string textureName = filename + "Texture";
                 ResourceManager::LoadTextureFromFile(textureName, textureFilepath);
-                mesh.diffuseTexture = ResourceManager::GetTexture(textureName);
+                mesh.texture1 = ResourceManager::GetTexture(textureName);
             }
 
             //Check for normal map
@@ -84,7 +84,7 @@ namespace Core
                 std::string textureFilepath = baseFilepath + "/" + materials[i].bump_texname;
                 std::string textureName = filename + "Texture";
                 ResourceManager::LoadTextureFromFile(textureName, textureFilepath);
-                mesh.normalMap = ResourceManager::GetTexture(textureName);
+                mesh.texture2 = ResourceManager::GetTexture(textureName);
                 mesh.gotNormalMap = 1;
             }
 

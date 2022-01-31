@@ -9,7 +9,7 @@ namespace Core
         _reflectFBO = MakeScope<FrameBuffer>();
         _reflectFBO->Bind();
         _reflectFBO->SetColorAttachment0();
-        _reflectFBO->CreateTextureAttachment(_reflectionWidth, _reflectionHeight);
+        _reflectFBO->CreateTextureAttachment("ReflectionTexture", _reflectionWidth, _reflectionHeight);
         _reflectFBO->CreateDepthBufferAttachment(_reflectionWidth, _reflectionHeight);
         _reflectFBO->Unbind();
     }
@@ -19,8 +19,8 @@ namespace Core
         _refractFBO = MakeScope<FrameBuffer>();
         _refractFBO->Bind();
         _refractFBO->SetColorAttachment0();
-        _refractFBO->CreateTextureAttachment(_refractionWidth, _refractionHeight);
-        _refractFBO->CreateDepthTextureAttachment(_refractionWidth, _refractionHeight);
+        _refractFBO->CreateTextureAttachment("RefractionTexture", _refractionWidth, _refractionHeight);
+        _refractFBO->CreateDepthTextureAttachment("RefractionDepthTexture", _refractionWidth, _refractionHeight);
         _refractFBO->Unbind();
     }
 

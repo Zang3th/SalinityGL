@@ -63,11 +63,12 @@ namespace GW
         //Water
         _waterPlaneModel = Core::ModelManager::AddPlaneWithoutTexture
         (
-            PLANE_SIZE - 100,
-            PLANE_SIZE,
-            1.0f
+            1,
+            1,
+            128.0f
         );
-        _waterPlaneModel->ChangePosition(glm::vec3(25.0f, 0.0f, 0.0f));
+        _waterPlaneModel->SetTexture1(_waterRenderer->GetReflectTexture());
+        _waterPlaneModel->SetTexture2(_waterRenderer->GetRefractTexture());
 
         //House
         auto house = Core::ModelManager::AddObject("OldHouse", "../res/models/greenWorld/OldHouse");

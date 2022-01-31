@@ -72,7 +72,7 @@ namespace Core
             {
                 //Load diffuse texture
                 std::string textureFilepath = baseFilepath + "/" + materials[i].diffuse_texname;
-                std::string textureName = filename + "Texture";
+                std::string textureName = filename + "DiffuseTexture";
                 ResourceManager::LoadTextureFromFile(textureName, textureFilepath);
                 mesh.texture1 = ResourceManager::GetTexture(textureName);
             }
@@ -82,7 +82,7 @@ namespace Core
             {
                 //Load bump map
                 std::string textureFilepath = baseFilepath + "/" + materials[i].bump_texname;
-                std::string textureName = filename + "Texture";
+                std::string textureName = filename + "NormalTexture";
                 ResourceManager::LoadTextureFromFile(textureName, textureFilepath);
                 mesh.texture2 = ResourceManager::GetTexture(textureName);
                 mesh.gotNormalMap = 1;

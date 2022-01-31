@@ -28,7 +28,7 @@ namespace Core
         //Create and configure framebuffer
         _fbo = MakeScope<FrameBuffer>();
         _fbo->Bind();
-        _fbo->CreateDepthTextureAttachment(_shadowWidth, _shadowHeight);
+        _fbo->CreateDepthTextureAttachment("ShadowDepthTexture", _shadowWidth, _shadowHeight);
         _fbo->DeleteColorBufferAttachment();
         _fbo->Unbind();
     }

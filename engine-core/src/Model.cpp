@@ -111,6 +111,16 @@ namespace Core
         shader->SetUniformMat4f("view", viewMatrix);
         shader->SetUniformMat4f("model", _model);
         shader->SetUniformMat4f("projection", projMatrix);
+        shader->SetUniform1i("reflectionTexture", 0);
+        shader->SetUniform1i("refractionTexture", 1);
+
+        //Reflection texture
+        if(_texture1)
+            _texture1->BindToSlot(0);
+
+        //Refraction texture
+        if(_texture2)
+            _texture2->BindToSlot(1);
 
         _vao->Bind();
 
@@ -142,5 +152,20 @@ namespace Core
     {
         _size *= size;
         SetModelMatrix();
+    }
+
+    void Model::SetTexture1(Texture* texture)
+    {
+        _texture1 = texture;
+    }
+
+    void Model::SetTexture2(Texture* texture)
+    {
+        _texture2 = texture;
+    }
+
+    void Model::SetTexture3(Texture* texture)
+    {
+        _texture2 = texture;
     }
 }

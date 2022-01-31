@@ -26,7 +26,7 @@ namespace Core
         std::string output;
 
         for (auto const& tex : _textureStorage)
-            output += std::to_string(tex.second->GetTextureID()) + ": " + tex.first + "\n";
+            output += (tex.first + "\n");
 
         return output;
     }
@@ -46,7 +46,7 @@ namespace Core
         std::string output;
 
         for (auto const& shader : _shaderStorage)
-            output += std::to_string(shader.second->GetShaderID()) + ": " + shader.first + "\n";
+            output += (shader.first + "\n");
 
         return output;
     }

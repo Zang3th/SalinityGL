@@ -4,14 +4,17 @@ namespace Core
 {
     // ----- Private -----
 
-    const Cubemap*  Renderer::_cubemap;
-    Camera*         Renderer::_camera;
+    Cubemap*  Renderer::_cubemap;
+    Camera*   Renderer::_camera;
+    Model*    Renderer::_terrainModel;
+    Model*    Renderer::_waterModel;
 
     // ----- Public -----
 
-    void Renderer::Init(Camera* camera)
+    void Renderer::Init(Camera* camera, glm::mat4 lightProjection)
     {
         _camera = camera;
+        _lightProjection = lightProjection;
     }
 
     void Renderer::PrepareFrame()
@@ -24,7 +27,7 @@ namespace Core
         _cubemapRenderPasses    = 0;
     }
 
-    void Renderer::Submit(const Model* model, bool producesShadows)
+    void Renderer::Submit(Model* model, bool producesShadows)
     {
         if(producesShadows)
             _shadowModelBuffer.push_back(model);
@@ -32,17 +35,27 @@ namespace Core
             _modelBuffer.push_back(model);
     }
 
-    void Renderer::Submit(const Sprite* sprite)
+    void Renderer::Submit(Sprite* sprite)
     {
         _spriteBuffer.push_back(sprite);
     }   
 
-    void Renderer::Submit(const Cubemap* cubemap)
+    void Renderer::Submit(Cubemap* cubemap)
     {
         _cubemap = cubemap;
     }
 
-    void Renderer::FlushModels(Shader* modelShader, const glm::mat4& lightProjection)
+    void Renderer::SubmitTerrain(Model* terrain)
+    {
+        _terrainModel = terrain;
+    }
+
+    void Renderer::SubmitWater(Model* water)
+    {
+        _waterModel = water;
+    }
+
+    void Renderer::FlushModelBuffer(Shader* modelShader)
     {
         //Check for Wireframe-Mode
         if(WireframeRendering){
@@ -53,7 +66,7 @@ namespace Core
         //Render models
         for(const auto& model : _modelBuffer)
         {
-            _drawnVertices += model->DrawModel(modelShader, _perspProjection, _camera->GetViewMatrix(), _camera->GetPosition(), lightProjection);
+            _drawnVertices += model->DrawModel(modelShader, _perspProjection, _camera->GetViewMatrix(), _camera->GetPosition(), _lightProjection);
             _drawcalls++;
         }
 
@@ -61,7 +74,7 @@ namespace Core
         _modelRenderPasses++;
     }
 
-    void Renderer::FlushShadowModels(Shader* modelShader, const glm::mat4& lightProjection)
+    void Renderer::FlushShadowModelBuffer(Shader* modelShader)
     {
         //Check for Wireframe-Mode
         if(WireframeRendering){
@@ -72,7 +85,7 @@ namespace Core
         //Render models that cast shadows
         for(const auto& model : _shadowModelBuffer)
         {
-            _drawnVertices += model->DrawModel(modelShader, _perspProjection, _camera->GetViewMatrix(), _camera->GetPosition(), lightProjection);
+            _drawnVertices += model->DrawModel(modelShader, _perspProjection, _camera->GetViewMatrix(), _camera->GetPosition(), _lightProjection);
             _drawcalls++;
         }
 
@@ -80,13 +93,13 @@ namespace Core
         _modelRenderPasses++;
     }
 
-    void Renderer::FlushAllModels(Shader* modelShader, const glm::mat4& lightProjection)
+    void Renderer::FlushAllModelBuffers(Shader* modelShader)
     {
-        FlushShadowModels(modelShader, lightProjection);
-        FlushModels(modelShader, lightProjection);
+        FlushModelBuffer(modelShader);
+        FlushShadowModelBuffer(modelShader);
     }
 
-    void Renderer::RenderModel(const Model* model, Shader* modelShader, const glm::mat4& lightProjection)
+    void Renderer::FlushTerrainModel(Shader* modelShader)
     {
         //Check for Wireframe-Mode
         if(WireframeRendering){
@@ -94,14 +107,14 @@ namespace Core
         else{
             GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));}
 
-        _drawnVertices += model->DrawModel(modelShader, _perspProjection, _camera->GetViewMatrix(), _camera->GetPosition(), lightProjection);
+        _drawnVertices += _terrainModel->DrawTerrainModel(modelShader, _perspProjection, _camera->GetViewMatrix(), _camera->GetPosition(), _lightProjection);
         _drawcalls++;
 
         //Increase render pass counter
         _modelRenderPasses++;
     }
 
-    void Renderer::RenderWaterModel(const Model* model, Shader* modelShader, float moveFactor)
+    void Renderer::FlushWaterModel(Shader* modelShader, float moveFactor)
     {
         //Check for Wireframe-Mode
         if(WireframeRendering){
@@ -109,7 +122,7 @@ namespace Core
         else{
             GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));}
 
-        _drawnVertices += model->DrawWaterModel(modelShader, _perspProjection, _camera->GetViewMatrix(), _camera->GetPosition(), moveFactor);
+        _drawnVertices += _waterModel->DrawWaterModel(modelShader, _perspProjection, _camera->GetViewMatrix(), _camera->GetPosition(), moveFactor);
         _drawcalls++;
 
         //Increase render pass counter

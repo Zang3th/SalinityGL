@@ -10,11 +10,13 @@ namespace GW
         Core::ResourceManager::LoadShader("ShadowCreateShader", "../res/shader/greenWorld/shadowCreate_vs.glsl", "../res/shader/greenWorld/shadowCreate_fs.glsl");
         Core::ResourceManager::LoadShader("WaterPlaneShader", "../res/shader/greenWorld/waterPlane_vs.glsl", "../res/shader/greenWorld/waterPlane_fs.glsl");
         Core::ResourceManager::LoadShader("ModelShader", "../res/shader/greenWorld/model_vs.glsl", "../res/shader/greenWorld/model_fs.glsl");
+        Core::ResourceManager::LoadShader("TerrainShader", "../res/shader/greenWorld/terrain_vs.glsl", "../res/shader/greenWorld/terrain_fs.glsl");
         Core::ResourceManager::LoadShader("CubemapShader", "../res/shader/greenWorld/cubemap_vs.glsl", "../res/shader/greenWorld/cubemap_fs.glsl");
         Core::ResourceManager::LoadShader("SpriteShader", "../res/shader/greenWorld/sprite_vs.glsl", "../res/shader/greenWorld/sprite_fs.glsl");
         Core::ResourceManager::LoadShader("SpriteShaderBW", "../res/shader/greenWorld/sprite_vs.glsl", "../res/shader/greenWorld/spriteBlackAndWhite_fs.glsl");
 
         //Textures
+        Core::ResourceManager::LoadTextureFromFile("ColorMap", "../res/textures/greenWorld/ColorMap.png");
         Core::ResourceManager::LoadTextureFromFile("DuDvMap", "../res/textures/greenWorld/DuDvMap.png");
     }
 
@@ -29,12 +31,6 @@ namespace GW
 
         //Camera
         _camera = Core::MakeScope<Core::Camera>(glm::vec3(-118.0f, 124.0f, 71.0f), 1.0f, -36.0f, 25.0f);
-
-        //Renderer (static)
-        Core::Renderer::Init(_camera.get());
-
-        //Input (static)
-        InputManager::Init(_window.get(), _camera.get());
 
         //UI
         _interface = Core::MakeScope<Interface>(_window.get(), _camera.get());
@@ -56,12 +52,18 @@ namespace GW
 
         //Model-Management
         Core::ModelManager::Init(_shadowRenderer.get());
+
+        //Renderer (static)
+        Core::Renderer::Init(_camera.get(), _shadowRenderer->GetLightProjection());
+
+        //Input (static)
+        InputManager::Init(_window.get(), _camera.get());
     }
 
     void App::CreateModels()
     {
         //Terrain
-        auto terrain = Core::ModelManager::AddTerrain
+        auto terrainModel = Core::ModelManager::AddTerrain
         (
             PLANE_SIZE,
             PLANE_SIZE,
@@ -70,20 +72,22 @@ namespace GW
             "../res/textures/greenWorld/Grass.jpg",
             "../res/textures/greenWorld/heightmap/Heightmap128_Noise.bmp"
         );
-        terrain->ChangePosition(glm::vec3(0.0f, -2.7f, 0.0f));
-        Core::Renderer::Submit(terrain, false);
+        terrainModel->ChangePosition(glm::vec3(0.0f, -2.7f, 0.0f));
+        terrainModel->SetTexture2(Core::ResourceManager::GetTexture("ColorMap"));
+        Core::Renderer::SubmitTerrain(terrainModel);
 
         //Water
-        _waterPlaneModel = Core::ModelManager::AddPlaneWithoutTexture
+        auto waterModel = Core::ModelManager::AddPlaneWithoutTexture
         (
             PLANE_SIZE - 112,
             PLANE_SIZE,
             1.0f
         );
-        _waterPlaneModel->ChangePosition(glm::vec3(30.5f, 0.0f, 0.0f));
-        _waterPlaneModel->SetTexture1(_waterRenderer->GetReflectTexture());
-        _waterPlaneModel->SetTexture2(_waterRenderer->GetRefractTexture());
-        _waterPlaneModel->SetTexture3(Core::ResourceManager::GetTexture("DuDvMap"));
+        waterModel->ChangePosition(glm::vec3(30.5f, 0.0f, 0.0f));
+        waterModel->SetTexture1(_waterRenderer->GetReflectTexture());
+        waterModel->SetTexture2(_waterRenderer->GetRefractTexture());
+        waterModel->SetTexture3(Core::ResourceManager::GetTexture("DuDvMap"));
+        Core::Renderer::SubmitWater(waterModel);
 
         //House
         auto house = Core::ModelManager::AddObject("OldHouse", "../res/models/greenWorld/OldHouse");
@@ -101,7 +105,7 @@ namespace GW
         {
             model->ChangeSize(2.0f);
             model->ChangeRotation(0.0f, -90.0f, 0.0f);
-            model->ChangePosition(glm::vec3(39.0f, -0.45f, 40.0f));
+            model->ChangePosition(glm::vec3(39.0f, -0.45f, 42.0f));
             Core::Renderer::Submit(model, true);
         }
 
@@ -228,17 +232,18 @@ namespace GW
 
         {   Core::PROFILE_SCOPE("Create water");
 
-            _waterRenderer->RenderToFramebuffer(Core::ResourceManager::GetShader("ModelShader"), _shadowRenderer->GetLightProjection());
+            _waterRenderer->RenderToFramebuffer(Core::ResourceManager::GetShader("TerrainShader"), Core::ResourceManager::GetShader("ModelShader"));
         }
 
         {   Core::PROFILE_SCOPE("Render graphics");
 
-            Core::Renderer::FlushAllModels(Core::ResourceManager::GetShader("ModelShader"), _shadowRenderer->GetLightProjection());
+            Core::Renderer::FlushTerrainModel(Core::ResourceManager::GetShader("TerrainShader"));
+            Core::Renderer::FlushAllModelBuffers(Core::ResourceManager::GetShader("ModelShader"));
 
             //Modify movefactor and render waterPlane
             _moveFactor += _waveSpeed * (float)_window->GetDeltaTime();
             _moveFactor  = fmod(_moveFactor, 1.0f);
-            Core::Renderer::RenderWaterModel(_waterPlaneModel, Core::ResourceManager::GetShader("WaterPlaneShader"), _moveFactor);
+            Core::Renderer::FlushWaterModel(Core::ResourceManager::GetShader("WaterPlaneShader"), _moveFactor);
 
             Core::Renderer::FlushSprites();
             Core::Renderer::FlushCubemap();

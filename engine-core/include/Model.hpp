@@ -32,6 +32,7 @@ namespace Core
             explicit Model(Mesh* mesh);
             [[nodiscard]] uint32 DrawModel(Shader* shader, const glm::mat4& projMatrix, const glm::mat4& viewMatrix, const glm::vec3& camPos, const glm::mat4& lightProjection) const;
             [[nodiscard]] uint32 DrawWaterModel(Shader* shader, const glm::mat4& projMatrix, const glm::mat4& viewMatrix, const glm::vec3& camPos, float moveFactor) const;
+            [[nodiscard]] uint32 DrawTerrainModel(Shader* shader, const glm::mat4& projMatrix, const glm::mat4& viewMatrix, const glm::vec3& camPos, const glm::mat4& lightProjection) const;
             void ChangePosition(const glm::vec3& position);
             void ChangeRotation(float rotX, float rotY, float rotZ);
             void ChangeSize(float size);

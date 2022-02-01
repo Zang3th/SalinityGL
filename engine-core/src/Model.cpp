@@ -103,6 +103,44 @@ namespace Core
         return _verticeCount;
     }
 
+    uint32 Model::DrawTerrainModel(Shader* shader, const glm::mat4& projMatrix, const glm::mat4& viewMatrix, const glm::vec3& camPos, const glm::mat4& lightProjection) const
+    {
+        shader->Bind();
+
+        //Set uniforms
+        shader->SetUniformMat4f("view", viewMatrix);
+        shader->SetUniformMat4f("model", _model);
+        shader->SetUniformMat4f("projection", projMatrix);
+        shader->SetUniformVec3f("viewPos", camPos);
+        shader->SetUniformMat4f("lightProjection", lightProjection);
+        shader->SetUniform1i("diffuseTexture", 0);
+        shader->SetUniform1i("colorMap", 1);
+        shader->SetUniform1i("shadowMap", 2);
+
+        //Diffuse texture
+        if(_texture1)
+            _texture1->BindToSlot(0);
+
+        //Normal map
+        if(_texture2)
+            _texture2->BindToSlot(1);
+
+        //Shadow map
+        if(_texture3)
+            _texture3->BindToSlot(2);
+
+        _vao->Bind();
+
+        //Render model
+        GLCall(glDrawElements(GL_TRIANGLES, _verticeCount, GL_UNSIGNED_INT, nullptr));
+
+        _vao->Unbind();
+        shader->Unbind();
+
+        //Return rendered vertices
+        return _verticeCount;
+    }
+
     uint32 Model::DrawWaterModel(Shader* shader, const glm::mat4& projMatrix, const glm::mat4& viewMatrix, const glm::vec3& camPos, float moveFactor) const
     {
         shader->Bind();

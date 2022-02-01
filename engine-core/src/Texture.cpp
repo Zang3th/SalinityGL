@@ -7,8 +7,10 @@ namespace Core
     void Texture::InitFromFile(const std::string &filepath)
     {
         int32 width, height, nrChannels;
-        stbi_set_flip_vertically_on_load(true);
+
+        ActivateTextureFlipOnLoad();
         unsigned char* localBuffer = stbi_load(filepath.c_str(), &width, &height, &nrChannels, 0);
+        DeactivateTextureFlipOnLoad();
 
         if(localBuffer)
         {
@@ -88,6 +90,16 @@ namespace Core
     {
         GLCall(glActiveTexture(GL_TEXTURE0 + slot));
         GLCall(glBindTexture(GL_TEXTURE_2D, _textureID));
+    }
+
+    void Texture::ActivateTextureFlipOnLoad() const
+    {
+        stbi_set_flip_vertically_on_load(true);
+    }
+
+    void Texture::DeactivateTextureFlipOnLoad() const
+    {
+        stbi_set_flip_vertically_on_load(false);
     }
 
     void Texture::AddFilterNearest() const

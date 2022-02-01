@@ -1,6 +1,7 @@
 #version 450 core
 
 in vec2 texCoords;
+in vec2 texCoordsTiled;
 in vec3 normals;
 in vec4 fragPos;
 in vec4 fragPosLightSpace;
@@ -8,9 +9,8 @@ in vec4 fragPosLightSpace;
 out vec4 fragColor;
 
 uniform sampler2D diffuseTexture;
-uniform sampler2D normalMap;
+uniform sampler2D colorMap;
 uniform sampler2D shadowMap;
-uniform int  gotNormalMap;
 uniform vec3 viewPos;
 
 const float ambientStrength = 0.3;
@@ -34,7 +34,7 @@ float calculateShadow(vec4 fragPosInLightSpace, vec3 normal, vec3 lightDir)
     float shadow = currentDepth - bias > closestDepth ? 1.0 : 0.0;
 
     if(projCoords.z > 1.0)
-        shadow = 0.0;
+    shadow = 0.0;
 
     return shadow;
 }
@@ -66,10 +66,12 @@ vec3 calculateLight(vec3 textureColor, vec3 fragmentPosition)
 
 void main()
 {
-    vec4 texColor = texture(diffuseTexture, texCoords);
+    vec4 texColor = texture(diffuseTexture, texCoordsTiled);
+    vec4 texColorMap = texture(colorMap, texCoords);
 
     if(texColor.a < 0.5)
         discard;
 
+    texColor = mix(texColor, texColorMap, 0.7);
     fragColor = vec4(calculateLight(texColor.rgb, fragPos.rgb), texColor.a);
 }

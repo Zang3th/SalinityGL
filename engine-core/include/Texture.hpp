@@ -22,6 +22,8 @@ namespace Core
             ~Texture();
             void Bind() const;
             void BindToSlot(uint32 slot) const;
+            void ActivateTextureFlipOnLoad() const;
+            void DeactivateTextureFlipOnLoad() const;
             void AddFilterNearest() const;
             void AddFilterLinear() const;
             void AddWrapRepeat() const;

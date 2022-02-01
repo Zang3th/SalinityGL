@@ -55,7 +55,7 @@ namespace Core
         _refractFBO->Unbind();
     }
 
-    void WaterRenderer::RenderReflectionFrame(Shader* modelShader, const glm::mat4 lightProjection)
+    void WaterRenderer::RenderReflectionFrame(Shader* modelShader)
     {
         //Render to reflection framebuffer
         StartReflectionFrame();
@@ -64,22 +64,26 @@ namespace Core
         modelShader->Bind();
         modelShader->SetUniformVec4f("clipPlane", _reflectionClipPlane);
         modelShader->Unbind();
-        Renderer::FlushAllModels(modelShader, lightProjection);
+        Renderer::FlushAllModelBuffers(modelShader);
         Renderer::FlushCubemap();
 
         EndReflectionFrame();
     }
 
-    void WaterRenderer::RenderRefractionFrame(Shader* modelShader, const glm::mat4 lightProjection)
+    void WaterRenderer::RenderRefractionFrame(Shader* terrainShader, Shader* modelShader)
     {
         //Render to refraction framebuffer
         StartRefractionFrame();
 
         Renderer::ClearBuffers();
+        terrainShader->Bind();
+        terrainShader->SetUniformVec4f("clipPlane", _refractionClipPlane);
+        terrainShader->Unbind();
         modelShader->Bind();
         modelShader->SetUniformVec4f("clipPlane", _refractionClipPlane);
         modelShader->Unbind();
-        Renderer::FlushAllModels(modelShader, lightProjection);
+        Renderer::FlushTerrainModel(terrainShader);
+        Renderer::FlushAllModelBuffers(modelShader);
 
         EndRefractionFrame();
     }
@@ -92,11 +96,11 @@ namespace Core
         InitRefractionFBO();
     }
 
-    void WaterRenderer::RenderToFramebuffer(Shader* modelShader, const glm::mat4 lightProjection)
+    void WaterRenderer::RenderToFramebuffer(Shader* terrainShader, Shader* modelShader)
     {
         GLCall(glEnable(GL_CLIP_DISTANCE0));
-        RenderReflectionFrame(modelShader, lightProjection);
-        RenderRefractionFrame(modelShader, lightProjection);
+        RenderReflectionFrame(modelShader);
+        RenderRefractionFrame(terrainShader, modelShader);
         GLCall(glDisable(GL_CLIP_DISTANCE0));
     }
 

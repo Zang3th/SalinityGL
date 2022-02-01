@@ -37,8 +37,6 @@ namespace GW
 
             Core::Scope<Interface>              _interface;
 
-            Core::Model*                        _waterPlaneModel = nullptr;
-
             const float                         _waveSpeed  = 0.03f;
                   float                         _moveFactor = 0.0f;
 

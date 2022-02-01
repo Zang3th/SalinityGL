@@ -103,7 +103,7 @@ namespace Core
         return _verticeCount;
     }
 
-    uint32 Model::DrawWaterModel(Shader* shader, const glm::mat4& projMatrix, const glm::mat4& viewMatrix, const glm::vec3& camPos) const
+    uint32 Model::DrawWaterModel(Shader* shader, const glm::mat4& projMatrix, const glm::mat4& viewMatrix, const glm::vec3& camPos, float moveFactor) const
     {
         shader->Bind();
 
@@ -113,6 +113,8 @@ namespace Core
         shader->SetUniformMat4f("projection", projMatrix);
         shader->SetUniform1i("reflectionTexture", 0);
         shader->SetUniform1i("refractionTexture", 1);
+        shader->SetUniform1i("DuDvMap", 2);
+        shader->SetUniform1f("moveFactor", moveFactor);
 
         //Reflection texture
         if(_texture1)
@@ -121,6 +123,10 @@ namespace Core
         //Refraction texture
         if(_texture2)
             _texture2->BindToSlot(1);
+
+        //DuDvMap
+        if(_texture3)
+            _texture3->BindToSlot(2);
 
         _vao->Bind();
 
@@ -166,6 +172,6 @@ namespace Core
 
     void Model::SetTexture3(Texture* texture)
     {
-        _texture2 = texture;
+        _texture3 = texture;
     }
 }

@@ -40,7 +40,7 @@ namespace Core
             static void FlushShadowModels(Shader* modelShader, const glm::mat4& lightProjection);
             static void FlushAllModels(Shader* modelShader, const glm::mat4& lightProjection);
             static void RenderModel(const Model* model, Shader* modelShader, const glm::mat4& lightProjection);
-            static void RenderWaterModel(const Model* model, Shader* modelShader);
+            static void RenderWaterModel(const Model* model, Shader* modelShader, float moveFactor);
             static void FlushSprites();
             static void FlushCubemap();
             static void ClearBuffers();

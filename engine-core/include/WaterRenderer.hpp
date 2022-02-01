@@ -13,8 +13,8 @@ namespace Core
             const uint32        _reflectionHeight = 800;
             const uint32        _refractionWidth  = 800;
             const uint32        _refractionHeight = 800;
-            const glm::vec4     _reflectionClipPlane = glm::vec4(0, 1, 0, -0.1);
-            const glm::vec4     _refractionClipPlane = glm::vec4(0, -1, 0, 0.1);
+            const glm::vec4     _reflectionClipPlane = glm::vec4(0, 1, 0, -0.3);
+            const glm::vec4     _refractionClipPlane = glm::vec4(0, -1, 0, 0.05);
 
             void InitReflectionFBO();
             void InitRefractionFBO();

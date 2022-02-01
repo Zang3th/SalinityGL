@@ -4,16 +4,18 @@ namespace Core
 {
     // ----- Public -----
 
-    void ResourceManager::LoadTexture(const std::string& name, const uint32 width, const uint32 height, GLenum format)
+    Texture* ResourceManager::LoadTexture(const std::string& name, const uint32 width, const uint32 height, GLenum format)
     {
         Texture* texture = new Texture(width, height, format);
         _textureStorage[name] = texture;
+        return texture;
     }
 
-    void ResourceManager::LoadTextureFromFile(const std::string& name, const std::string& filepath)
+    Texture* ResourceManager::LoadTextureFromFile(const std::string& name, const std::string& filepath)
     {
         Texture* texture = new Texture(filepath);
         _textureStorage[name] = texture;
+        return texture;
     }
 
     Texture* ResourceManager::GetTexture(const std::string& name)
@@ -31,9 +33,11 @@ namespace Core
         return output;
     }
 
-    void ResourceManager::LoadShader(const std::string& name, const std::string& vsFilepath, const std::string& fsFilepath)
+    Shader* ResourceManager::LoadShader(const std::string& name, const std::string& vsFilepath, const std::string& fsFilepath)
     {
-        _shaderStorage[name] = new Shader(vsFilepath, fsFilepath);
+         Shader* shader = new Shader(vsFilepath, fsFilepath);
+        _shaderStorage[name] = shader;
+        return shader;
     }
 
     Shader* ResourceManager::GetShader(const std::string& name)

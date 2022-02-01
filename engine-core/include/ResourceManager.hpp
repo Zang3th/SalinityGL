@@ -16,11 +16,11 @@ namespace Core
 
         public:
             ResourceManager() = delete;
-            static void LoadTexture(const std::string& name, uint32 width, uint32 height, GLenum format);
-            static void LoadTextureFromFile(const std::string& name, const std::string& filepath);
+            static Texture* LoadTexture(const std::string& name, uint32 width, uint32 height, GLenum format);
+            static Texture* LoadTextureFromFile(const std::string& name, const std::string& filepath);
             static Texture* GetTexture(const std::string& name);
             static std::string OutputTextureStorage();
-            static void LoadShader(const std::string& name, const std::string& vsFilepath, const std::string& fsFilepath);
+            static Shader* LoadShader(const std::string& name, const std::string& vsFilepath, const std::string& fsFilepath);
             static Shader* GetShader(const std::string& name);
             static std::string OutputShaderStorage();
             static void CleanUp();

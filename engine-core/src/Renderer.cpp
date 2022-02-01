@@ -101,7 +101,7 @@ namespace Core
         _modelRenderPasses++;
     }
 
-    void Renderer::RenderWaterModel(const Model* model, Shader* modelShader)
+    void Renderer::RenderWaterModel(const Model* model, Shader* modelShader, float moveFactor)
     {
         //Check for Wireframe-Mode
         if(WireframeRendering){
@@ -109,7 +109,7 @@ namespace Core
         else{
             GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));}
 
-        _drawnVertices += model->DrawWaterModel(modelShader, _perspProjection, _camera->GetViewMatrix(), _camera->GetPosition());
+        _drawnVertices += model->DrawWaterModel(modelShader, _perspProjection, _camera->GetViewMatrix(), _camera->GetPosition(), moveFactor);
         _drawcalls++;
 
         //Increase render pass counter

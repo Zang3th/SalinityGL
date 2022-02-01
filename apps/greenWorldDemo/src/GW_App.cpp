@@ -4,6 +4,20 @@ namespace GW
 {
     // ----- Private -----
 
+    void App::LoadResources()
+    {
+        //Shader
+        Core::ResourceManager::LoadShader("ShadowCreateShader", "../res/shader/greenWorld/shadowCreate_vs.glsl", "../res/shader/greenWorld/shadowCreate_fs.glsl");
+        Core::ResourceManager::LoadShader("WaterPlaneShader", "../res/shader/greenWorld/waterPlane_vs.glsl", "../res/shader/greenWorld/waterPlane_fs.glsl");
+        Core::ResourceManager::LoadShader("ModelShader", "../res/shader/greenWorld/model_vs.glsl", "../res/shader/greenWorld/model_fs.glsl");
+        Core::ResourceManager::LoadShader("CubemapShader", "../res/shader/greenWorld/cubemap_vs.glsl", "../res/shader/greenWorld/cubemap_fs.glsl");
+        Core::ResourceManager::LoadShader("SpriteShader", "../res/shader/greenWorld/sprite_vs.glsl", "../res/shader/greenWorld/sprite_fs.glsl");
+        Core::ResourceManager::LoadShader("SpriteShaderBW", "../res/shader/greenWorld/sprite_vs.glsl", "../res/shader/greenWorld/spriteBlackAndWhite_fs.glsl");
+
+        //Textures
+        Core::ResourceManager::LoadTextureFromFile("DuDvMap", "../res/textures/greenWorld/DuDvMap.png");
+    }
+
     void App::InitModules()
     {
         //Logging
@@ -31,17 +45,16 @@ namespace GW
         //_audio->PlaySound2D("../res/audio/greenWorld/music/TrueBlueSky.wav", true, 1.0f);
         //_audio->PlaySound3D("../res/audio/greenWorld/sounds/River.wav", glm::vec3(39.0f, 14.0f, 56.0f), true, 40.0f, 1.5);
 
+        //Resources
+        LoadResources();
+
         //Shadow-Rendering
-        Core::ResourceManager::LoadShader("ShadowCreateShader", "../res/shader/greenWorld/shadowCreate_vs.glsl", "../res/shader/greenWorld/shadowCreate_fs.glsl");
         _shadowRenderer = Core::MakeScope<Core::ShadowRenderer>(8192, 8192, glm::vec3(150.0f, 100.0f, -30.0f));
 
         //Water-Rendering
         _waterRenderer = Core::MakeScope<Core::WaterRenderer>();
-        Core::ResourceManager::LoadShader("WaterPlaneShader", "../res/shader/greenWorld/waterPlane_vs.glsl", "../res/shader/greenWorld/waterPlane_fs.glsl");
-        _waterPlaneModel = nullptr;
 
         //Model-Management
-        Core::ResourceManager::LoadShader("ModelShader", "../res/shader/greenWorld/model_vs.glsl", "../res/shader/greenWorld/model_fs.glsl");
         Core::ModelManager::Init(_shadowRenderer.get());
     }
 
@@ -63,12 +76,14 @@ namespace GW
         //Water
         _waterPlaneModel = Core::ModelManager::AddPlaneWithoutTexture
         (
-            1,
-            1,
-            128.0f
+            PLANE_SIZE - 112,
+            PLANE_SIZE,
+            1.0f
         );
+        _waterPlaneModel->ChangePosition(glm::vec3(30.5f, 0.0f, 0.0f));
         _waterPlaneModel->SetTexture1(_waterRenderer->GetReflectTexture());
         _waterPlaneModel->SetTexture2(_waterRenderer->GetRefractTexture());
+        _waterPlaneModel->SetTexture3(Core::ResourceManager::GetTexture("DuDvMap"));
 
         //House
         auto house = Core::ModelManager::AddObject("OldHouse", "../res/models/greenWorld/OldHouse");
@@ -112,8 +127,6 @@ namespace GW
 
     void App::CreateCubemap()
     {
-        Core::ResourceManager::LoadShader("CubemapShader", "../res/shader/greenWorld/cubemap_vs.glsl", "../res/shader/greenWorld/cubemap_fs.glsl");
-
         const std::array<const char*, 6> faces
         {
             "../res/textures/greenWorld/cubemap/graycloud_xp.jpg", //Right
@@ -130,9 +143,6 @@ namespace GW
 
     void App::CreateSprites()
     {
-        Core::ResourceManager::LoadShader("SpriteShader", "../res/shader/greenWorld/sprite_vs.glsl", "../res/shader/greenWorld/sprite_fs.glsl");
-        Core::ResourceManager::LoadShader("SpriteShaderBW", "../res/shader/greenWorld/sprite_vs.glsl", "../res/shader/greenWorld/spriteBlackAndWhite_fs.glsl");
-
         //Shadowsprite
         _shadowSprite = Core::MakeScope<Core::Sprite>
         (
@@ -224,7 +234,12 @@ namespace GW
         {   Core::PROFILE_SCOPE("Render graphics");
 
             Core::Renderer::FlushAllModels(Core::ResourceManager::GetShader("ModelShader"), _shadowRenderer->GetLightProjection());
-            Core::Renderer::RenderWaterModel(_waterPlaneModel, Core::ResourceManager::GetShader("WaterPlaneShader"));
+
+            //Modify movefactor and render waterPlane
+            _moveFactor += _waveSpeed * (float)_window->GetDeltaTime();
+            _moveFactor  = fmod(_moveFactor, 1.0f);
+            Core::Renderer::RenderWaterModel(_waterPlaneModel, Core::ResourceManager::GetShader("WaterPlaneShader"), _moveFactor);
+
             Core::Renderer::FlushSprites();
             Core::Renderer::FlushCubemap();
         }

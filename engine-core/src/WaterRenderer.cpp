@@ -6,21 +6,32 @@ namespace Core
 
     void WaterRenderer::InitReflectionFBO()
     {
+        //Create and configure framebuffer
         _reflectFBO = MakeScope<FrameBuffer>();
         _reflectFBO->Bind();
         _reflectFBO->SetColorAttachment0();
-        _reflectFBO->CreateTextureAttachment("ReflectionTexture", _reflectionWidth, _reflectionHeight);
         _reflectFBO->CreateDepthBufferAttachment(_reflectionWidth, _reflectionHeight);
+
+        //Create and configure texture attachment
+        Texture* reflectTexture = _reflectFBO->CreateTextureAttachment("ReflectionTexture", _reflectionWidth, _reflectionHeight);
+        reflectTexture->AddFilterLinear();
+
         _reflectFBO->Unbind();
     }
 
     void WaterRenderer::InitRefractionFBO()
     {
+        //Create and configure framebuffer
         _refractFBO = MakeScope<FrameBuffer>();
         _refractFBO->Bind();
         _refractFBO->SetColorAttachment0();
-        _refractFBO->CreateTextureAttachment("RefractionTexture", _refractionWidth, _refractionHeight);
-        _refractFBO->CreateDepthTextureAttachment("RefractionDepthTexture", _refractionWidth, _refractionHeight);
+
+        //Create and configure texture attachments
+        Texture* refractTexture =_refractFBO->CreateTextureAttachment("RefractionTexture", _refractionWidth, _refractionHeight);
+        refractTexture->AddFilterLinear();
+        Texture* refractDepthTexture = _refractFBO->CreateDepthTextureAttachment("RefractionDepthTexture", _refractionWidth, _refractionHeight);
+        refractDepthTexture->AddFilterLinear();
+
         _refractFBO->Unbind();
     }
 
@@ -69,7 +80,6 @@ namespace Core
         modelShader->SetUniformVec4f("clipPlane", _refractionClipPlane);
         modelShader->Unbind();
         Renderer::FlushAllModels(modelShader, lightProjection);
-        Renderer::FlushCubemap();
 
         EndRefractionFrame();
     }

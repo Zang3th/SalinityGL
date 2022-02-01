@@ -27,9 +27,15 @@ namespace Core
     {
         //Create and configure framebuffer
         _fbo = MakeScope<FrameBuffer>();
-        _fbo->Bind();
-        _fbo->CreateDepthTextureAttachment("ShadowDepthTexture", _shadowWidth, _shadowHeight);
         _fbo->DeleteColorBufferAttachment();
+        _fbo->Bind();
+
+        //Create and configure depth texture attachment
+        Texture* depthTexture = _fbo->CreateDepthTextureAttachment("ShadowDepthTexture", _shadowWidth, _shadowHeight);
+        depthTexture->AddFilterNearest();
+        depthTexture->AddWrapRepeat();
+        depthTexture->AddBorderColor();
+
         _fbo->Unbind();
     }
 

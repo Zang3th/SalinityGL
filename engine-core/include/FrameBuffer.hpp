@@ -19,8 +19,8 @@ namespace Core
             void Bind(uint32 width, uint32 height) const;
             void Unbind() const;
             void SetColorAttachment0();
-            void CreateTextureAttachment(const std::string& name, uint32 width, uint32 height);
-            void CreateDepthTextureAttachment(const std::string& name, uint32 width, uint32 height);
+            Texture* CreateTextureAttachment(const std::string& name, uint32 width, uint32 height);
+            Texture* CreateDepthTextureAttachment(const std::string& name, uint32 width, uint32 height);
             void CreateDepthBufferAttachment(uint32 width, uint32 height);
             void DeleteColorBufferAttachment() const;
             [[nodiscard]] Texture* GetTexture() const;

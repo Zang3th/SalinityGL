@@ -83,7 +83,7 @@ namespace Core
         //Set default textures
         planeMesh.texture1 = nullptr;
         planeMesh.texture2 = nullptr;
-        planeMesh.texture3 = _shadowRenderer->GetDepthTexture();
+        planeMesh.texture3 = nullptr;
         planeMesh.gotNormalMap = false;
 
         //Create and store model

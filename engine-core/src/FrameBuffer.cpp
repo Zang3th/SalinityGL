@@ -41,28 +41,26 @@ namespace Core
         GLCall(glDrawBuffer(GL_COLOR_ATTACHMENT0));
     }
 
-    void FrameBuffer::CreateTextureAttachment(const std::string& name, uint32 width, uint32 height)
+    Texture* FrameBuffer::CreateTextureAttachment(const std::string& name, uint32 width, uint32 height)
     {
         //Create and configure texture
-        ResourceManager::LoadTexture(name, width, height, GL_RGB);
-        _texture = ResourceManager::GetTexture(name);
-        _texture->AddFilterLinear();
+        _texture = ResourceManager::LoadTexture(name, width, height, GL_RGB);
 
         //Attach texture
         GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, _texture->GetTextureID(), 0));
+
+        return _texture;
     }
 
-    void FrameBuffer::CreateDepthTextureAttachment(const std::string& name, const uint32 width, const uint32 height)
+    Texture* FrameBuffer::CreateDepthTextureAttachment(const std::string& name, const uint32 width, const uint32 height)
     {
         //Create and configure depth texture
-        ResourceManager::LoadTexture(name, width, height, GL_DEPTH_COMPONENT);
-        _depthTexture = ResourceManager::GetTexture(name);
-        _depthTexture->AddFilterNearest();
-        _depthTexture->AddWrapRepeat();
-        _depthTexture->AddBorderColor();
+        _depthTexture = ResourceManager::LoadTexture(name, width, height, GL_DEPTH_COMPONENT);
 
         //Attach depth texture
         GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, _depthTexture->GetTextureID(), 0));
+
+        return _depthTexture;
     }
 
     void FrameBuffer::CreateDepthBufferAttachment(uint32 width, uint32 height)

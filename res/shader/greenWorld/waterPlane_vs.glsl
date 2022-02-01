@@ -11,10 +11,13 @@ uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
 
+const float tileSize = 0.05f;
+
 void main()
 {
-    texCoords = texCoordsIn;
-    fragPos = model * vec4(vertexIn, 1.0f);
+    texCoords = texCoordsIn * tileSize ;
+    fragPos   = model * vec4(vertexIn, 1.0f);
     clipSpace = projection * view * fragPos;
+
     gl_Position = clipSpace;
 }

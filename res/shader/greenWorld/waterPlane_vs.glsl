@@ -4,20 +4,24 @@ layout(location = 0) in vec3 vertexIn;
 layout(location = 1) in vec2 texCoordsIn;
 
 out vec2 texCoords;
-out vec4 fragPos;
+out vec3 fragPos;
 out vec4 clipSpace;
+out vec3 toCameraVector;
 
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
+uniform vec3 viewPos;
 
-const float tileSize = 0.05f;
+const float tileSize = 0.1f;
 
 void main()
 {
-    texCoords = texCoordsIn * tileSize ;
-    fragPos   = model * vec4(vertexIn, 1.0f);
-    clipSpace = projection * view * fragPos;
+    texCoords = texCoordsIn * tileSize;
+    vec4 worldPos = model * vec4(vertexIn, 1.0f);
+    fragPos = worldPos.xyz;
+    clipSpace = projection * view * worldPos;
+    toCameraVector = viewPos - fragPos.xyz;
 
     gl_Position = clipSpace;
 }

@@ -13,8 +13,9 @@ namespace Core
             const uint32        _reflectionHeight = 800;
             const uint32        _refractionWidth  = 800;
             const uint32        _refractionHeight = 800;
-            const glm::vec4     _reflectionClipPlane = glm::vec4(0, 1, 0, -0.3);
-            const glm::vec4     _refractionClipPlane = glm::vec4(0, -1, 0, 0.005);
+            const float         _waterHeight      = 0.1f;
+            const glm::vec4     _reflectionClipPlane = glm::vec4(0, 1, 0, -_waterHeight);
+            const glm::vec4     _refractionClipPlane = glm::vec4(0, -1, 0, _waterHeight);
 
             void InitReflectionFBO();
             void InitRefractionFBO();
@@ -22,12 +23,12 @@ namespace Core
             void EndReflectionFrame();
             void StartRefractionFrame();
             void EndRefractionFrame();
-            void RenderReflectionFrame(Shader* modelShader);
+            void RenderReflectionFrame(Shader* modelShader, Camera* camera);
             void RenderRefractionFrame(Shader* terrainShader, Shader* modelShader);
 
         public:
             explicit WaterRenderer();
-            void RenderToFramebuffer(Shader* terrainShader, Shader* modelShader);
+            void RenderToFramebuffer(Shader* terrainShader, Shader* modelShader, Camera* camera);
             [[nodiscard]] Texture* GetReflectTexture() const;
             [[nodiscard]] Texture* GetRefractTexture() const;
             [[nodiscard]] Texture* GetRefractDepthTexture() const;

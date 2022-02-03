@@ -56,6 +56,7 @@ namespace Core
             _texture1(mesh->texture1),
             _texture2(mesh->texture2),
             _texture3(mesh->texture3),
+            _texture4(nullptr),
             _verticeCount(mesh->indices.size()),
             _gotNormalMap(mesh->gotNormalMap),
             _rotationX(0.0f), _rotationY(0.0f), _rotationZ(0.0f),
@@ -149,9 +150,11 @@ namespace Core
         shader->SetUniformMat4f("view", viewMatrix);
         shader->SetUniformMat4f("model", _model);
         shader->SetUniformMat4f("projection", projMatrix);
+        shader->SetUniformVec3f("viewPos", camPos);
         shader->SetUniform1i("reflectionTexture", 0);
         shader->SetUniform1i("refractionTexture", 1);
-        shader->SetUniform1i("DuDvMap", 2);
+        shader->SetUniform1i("dudvMap", 2);
+        shader->SetUniform1i("normalMap", 3);
         shader->SetUniform1f("moveFactor", moveFactor);
 
         //Reflection texture
@@ -165,6 +168,10 @@ namespace Core
         //DuDvMap
         if(_texture3)
             _texture3->BindToSlot(2);
+
+        //NormalMap
+        if(_texture4)
+            _texture4->BindToSlot(3);
 
         _vao->Bind();
 
@@ -211,5 +218,10 @@ namespace Core
     void Model::SetTexture3(Texture* texture)
     {
         _texture3 = texture;
+    }
+
+    void Model::SetTexture4(Texture* texture)
+    {
+        _texture4 = texture;
     }
 }

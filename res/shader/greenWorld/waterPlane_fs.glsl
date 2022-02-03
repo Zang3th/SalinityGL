@@ -1,18 +1,26 @@
 #version 450 core
 
 in vec2 texCoords;
-in vec4 fragPos;
+in vec3 fragPos;
 in vec4 clipSpace;
+in vec3 toCameraVector;
 
 out vec4 fragColor;
 
 uniform float     moveFactor;
 uniform sampler2D reflectionTexture;
 uniform sampler2D refractionTexture;
-uniform sampler2D DuDvMap;
+uniform sampler2D dudvMap;
+uniform sampler2D normalMap;
+uniform vec3      viewPos;
 
-const float waveStrength = 0.01;
-const vec4  waterColor   = vec4(0.0f, 0.2f, 0.7f, 1.0f);
+const float waveStrength = 0.005;
+const vec4  waterColor = vec4(0.0, 0.3, 0.8, 1.0);
+const float fresnelReflectivness = 0.2;
+const vec3  lightPos = vec3(150.0, 100.0, -30.0);
+const vec3  lightColor = vec3(1.0, 1.0, 1.0);
+const float shininess = 100.0;
+const float specularStrength = 0.3;
 
 void main()
 {
@@ -22,9 +30,9 @@ void main()
     vec2 refractTexCoords = vec2(normalizedDeviceSpace.x, normalizedDeviceSpace.y);
 
     //Sample distortion value from DuDvMap
-    vec2 distortedTexCoords1 = ((texture(DuDvMap, vec2(texCoords.x + moveFactor, texCoords.y)).rg * 2.0) - 1.0) * waveStrength;
-    vec2 distortedTexCoords2 = ((texture(DuDvMap, vec2(-texCoords.x + moveFactor, texCoords.y) + moveFactor).rg * 2.0) - 1.0) * waveStrength;
-    vec2 totalDistortion = distortedTexCoords1 + distortedTexCoords2;
+    vec2 distortedTexCoords = (texture(dudvMap, vec2(texCoords.x + moveFactor, texCoords.y)).rg) * 0.1;
+    distortedTexCoords = texCoords + vec2(distortedTexCoords.x, distortedTexCoords.y + moveFactor);
+    vec2 totalDistortion = ((texture(dudvMap, distortedTexCoords).rg) * 2.0 - 1.0) * waveStrength;
 
     //Add distortion to the reflection and refraction texture
     reflectTexCoords += totalDistortion;
@@ -39,6 +47,25 @@ void main()
     vec4 reflectColor = texture(reflectionTexture, reflectTexCoords);
     vec4 refractColor = texture(refractionTexture, refractTexCoords);
 
-    vec4 outColor = mix(reflectColor, refractColor, 0.5f);
-    fragColor = mix(outColor, waterColor, 0.2f);
+    //Sample from normal map
+    vec4 normalMapColor = texture(normalMap, distortedTexCoords);
+    vec3 normal = vec3(normalMapColor.r * 2.0 - 1.0, normalMapColor.b * 2.0, normalMapColor.g * 2.0 - 1.0);
+    normal = normalize(normal);
+
+    //Fresnel effect
+    vec3 viewVector = normalize(toCameraVector);
+    float refractiveFactor = dot(viewVector, normal);
+    refractiveFactor = pow(refractiveFactor, fresnelReflectivness);
+    refractiveFactor = clamp(refractiveFactor, 0.0, 1.0);
+
+    //Calculate specular light
+    vec3 lightDir = normalize(lightPos - fragPos);
+    vec3 viewDir = normalize(viewPos - fragPos);
+    vec3 halfwayDir = normalize(lightDir + viewDir);
+    vec3 reflectDir = reflect(-lightDir, normal);
+    float spec = pow(max(dot(normal, halfwayDir), 0.0), shininess);
+    vec3 specular = lightColor * spec * specularStrength;
+
+    vec4 outColor = mix(reflectColor, refractColor, refractiveFactor);
+    fragColor = mix(outColor, waterColor, 0.2) + vec4(specular, 0.0);
 }

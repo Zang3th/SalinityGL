@@ -18,7 +18,7 @@ namespace Core
             float       _movementSpeed;
             float       _mouseSensitivity;
 
-            void UpdateCameraVectors();
+
 
         public:
             enum Camera_Movement
@@ -32,6 +32,7 @@ namespace Core
             };
 
             Camera(glm::vec3 position, float yaw, float pitch, float movementSpeed);
+            void Update();
             inline glm::mat4 GetViewMatrix(){return glm::lookAt(_position, _position + _front, _up);}
             void ProcessKeyboard(Camera_Movement direction, float deltaTime);
             void ProcessMouseMovement(float xOffset, float yOffset);
@@ -40,5 +41,7 @@ namespace Core
             [[nodiscard]] glm::vec3 GetUp() const;
             [[nodiscard]] float GetYaw() const;
             [[nodiscard]] float GetPitch() const;
+            void SetPosition(const glm::vec3& position);
+            void InvertPitch();
     };
 }

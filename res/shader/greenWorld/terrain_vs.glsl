@@ -18,7 +18,7 @@ uniform vec4 clipPlane;
 
 void main()
 {
-    texCoords = vec2((vertexIn.x / 2.0f) + 0.5f, (vertexIn.z / 2.0f) + 0.5f) / 64.0f;
+    texCoords = texCoordsIn / 128.0f;
     texCoordsTiled = texCoordsIn;
     normals = transpose(inverse(mat3(model))) * normalsIn;
     fragPos = model * vec4(vertexIn, 1.0f);

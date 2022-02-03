@@ -18,6 +18,7 @@ namespace GW
         //Textures
         Core::ResourceManager::LoadTextureFromFile("ColorMap", "../res/textures/greenWorld/ColorMap.png");
         Core::ResourceManager::LoadTextureFromFile("DuDvMap", "../res/textures/greenWorld/DuDvMap.png");
+        Core::ResourceManager::LoadTextureFromFile("NormalMap", "../res/textures/greenWorld/WaterNormalMap.png");
     }
 
     void App::InitModules()
@@ -87,6 +88,7 @@ namespace GW
         waterModel->SetTexture1(_waterRenderer->GetReflectTexture());
         waterModel->SetTexture2(_waterRenderer->GetRefractTexture());
         waterModel->SetTexture3(Core::ResourceManager::GetTexture("DuDvMap"));
+        waterModel->SetTexture4(Core::ResourceManager::GetTexture("NormalMap"));
         Core::Renderer::SubmitWater(waterModel);
 
         //House
@@ -232,7 +234,7 @@ namespace GW
 
         {   Core::PROFILE_SCOPE("Create water");
 
-            _waterRenderer->RenderToFramebuffer(Core::ResourceManager::GetShader("TerrainShader"), Core::ResourceManager::GetShader("ModelShader"));
+            _waterRenderer->RenderToFramebuffer(Core::ResourceManager::GetShader("TerrainShader"), Core::ResourceManager::GetShader("ModelShader"), _camera.get());
         }
 
         {   Core::PROFILE_SCOPE("Render graphics");

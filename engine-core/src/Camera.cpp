@@ -2,22 +2,6 @@
 
 namespace Core
 {
-    // ----- Private -----
-
-    void Camera::UpdateCameraVectors()
-    {
-        //Calculate the new front vector
-        glm::vec3 front;
-        front.x = (float)(cos(glm::radians(_yaw)) * cos(glm::radians(_pitch)));
-        front.y = (float)(sin(glm::radians(_pitch)));
-        front.z = (float)(sin(glm::radians(_yaw)) * cos(glm::radians(_pitch)));
-        _front = glm::normalize(front);
-
-        //Also, re-calculate the right and up vector
-        _right = glm::normalize(glm::cross(_front, _worldUp)); //Normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement
-        _up = glm::normalize(glm::cross(_right, _front));
-    }
-
     // ----- Public -----
 
     Camera::Camera(glm::vec3 position, float yaw, float pitch, float movementSpeed)
@@ -31,7 +15,21 @@ namespace Core
             _movementSpeed(movementSpeed),
             _mouseSensitivity(0.1f)
     {
-        UpdateCameraVectors();
+        Update();
+    }
+
+    void Camera::Update()
+    {
+        //Calculate the new front vector
+        glm::vec3 front;
+        front.x = (float)(cos(glm::radians(_yaw)) * cos(glm::radians(_pitch)));
+        front.y = (float)(sin(glm::radians(_pitch)));
+        front.z = (float)(sin(glm::radians(_yaw)) * cos(glm::radians(_pitch)));
+        _front = glm::normalize(front);
+
+        //Also, re-calculate the right and up vector
+        _right = glm::normalize(glm::cross(_front, _worldUp)); //Normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement
+        _up = glm::normalize(glm::cross(_right, _front));
     }
 
     void Camera::ProcessKeyboard(Camera_Movement direction, float deltaTime)
@@ -79,7 +77,7 @@ namespace Core
             _yaw = 0.0f;
 
         //Update front, right and up vectors using the updated Euler angles
-        UpdateCameraVectors();
+        Update();
     }
 
     glm::vec3 Camera::GetPosition() const
@@ -105,5 +103,15 @@ namespace Core
     float Camera::GetPitch() const
     {
         return _pitch;
+    }
+
+    void Camera::SetPosition(const glm::vec3& position)
+    {
+        _position = position;
+    }
+
+    void Camera::InvertPitch()
+    {
+        _pitch = -_pitch;
     }
 }

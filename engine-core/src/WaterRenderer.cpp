@@ -55,17 +55,32 @@ namespace Core
         _refractFBO->Unbind();
     }
 
-    void WaterRenderer::RenderReflectionFrame(Shader* modelShader)
+    void WaterRenderer::RenderReflectionFrame(Shader* modelShader, Camera* camera)
     {
         //Render to reflection framebuffer
         StartReflectionFrame();
-
         Renderer::ClearBuffers();
+
+        //Move camera under the water
+        glm::vec3 camPos = camera->GetPosition();
+        float distance = 2.0f * (camPos.y + _waterHeight);
+        camera->SetPosition(glm::vec3(camPos.x, camPos.y - distance, camPos.z));
+        camera->InvertPitch();
+        camera->Update();
+
+        //Set shader variable(s)
         modelShader->Bind();
         modelShader->SetUniformVec4f("clipPlane", _reflectionClipPlane);
         modelShader->Unbind();
+
+        //Render scene
         Renderer::FlushAllModelBuffers(modelShader);
         Renderer::FlushCubemap();
+
+        //Reset camera
+        camera->SetPosition(camPos);
+        camera->InvertPitch();
+        camera->Update();
 
         EndReflectionFrame();
     }
@@ -74,14 +89,17 @@ namespace Core
     {
         //Render to refraction framebuffer
         StartRefractionFrame();
-
         Renderer::ClearBuffers();
+
+        //Set shader variable(s)
         terrainShader->Bind();
         terrainShader->SetUniformVec4f("clipPlane", _refractionClipPlane);
         terrainShader->Unbind();
         modelShader->Bind();
         modelShader->SetUniformVec4f("clipPlane", _refractionClipPlane);
         modelShader->Unbind();
+
+        //Render scene
         Renderer::FlushTerrainModel(terrainShader);
         Renderer::FlushAllModelBuffers(modelShader);
 
@@ -96,10 +114,10 @@ namespace Core
         InitRefractionFBO();
     }
 
-    void WaterRenderer::RenderToFramebuffer(Shader* terrainShader, Shader* modelShader)
+    void WaterRenderer::RenderToFramebuffer(Shader* terrainShader, Shader* modelShader, Camera* camera)
     {
         GLCall(glEnable(GL_CLIP_DISTANCE0));
-        RenderReflectionFrame(modelShader);
+        RenderReflectionFrame(modelShader, camera);
         RenderRefractionFrame(terrainShader, modelShader);
         GLCall(glDisable(GL_CLIP_DISTANCE0));
     }

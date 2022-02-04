@@ -89,6 +89,7 @@ namespace GW
         waterModel->SetTexture2(_waterRenderer->GetRefractTexture());
         waterModel->SetTexture3(Core::ResourceManager::GetTexture("DuDvMap"));
         waterModel->SetTexture4(Core::ResourceManager::GetTexture("NormalMap"));
+        waterModel->SetTexture5(_waterRenderer->GetRefractDepthTexture());
         Core::Renderer::SubmitWater(waterModel);
 
         //House
@@ -149,7 +150,7 @@ namespace GW
 
     void App::CreateSprites()
     {
-        //Shadowsprite
+        //ShadowSprite
         _shadowSprite = Core::MakeScope<Core::Sprite>
         (
             _shadowRenderer->GetDepthTexture(),
@@ -161,7 +162,7 @@ namespace GW
         _shadowSprite->ChangeSize(glm::vec2(280.0f, 280.0f));
         Core::Renderer::Submit(_shadowSprite.get());
 
-        //Reflectsprite
+        //ReflectSprite
         _reflectSprite = Core::MakeScope<Core::Sprite>
         (
             _waterRenderer->GetReflectTexture(),
@@ -173,7 +174,7 @@ namespace GW
         _reflectSprite->ChangeSize(glm::vec2(280.0f, 280.0f));
         Core::Renderer::Submit(_reflectSprite.get());
 
-        //Refractsprite
+        //RefractSprite
         _refractSprite = Core::MakeScope<Core::Sprite>
         (
             _waterRenderer->GetRefractTexture(),
@@ -184,6 +185,18 @@ namespace GW
         _refractSprite->ChangePosition(glm::vec2(590.0f, 10.0f));
         _refractSprite->ChangeSize(glm::vec2(280.0f, 280.0f));
         Core::Renderer::Submit(_refractSprite.get());
+
+        //RefractDepthSprite
+        _refractDepthSprite = Core::MakeScope<Core::Sprite>
+        (
+            _waterRenderer->GetRefractDepthTexture(),
+            Core::ResourceManager::GetShader("SpriteShaderBW"),
+            glm::vec3(1.0f, 1.0f, 1.0f)
+        );
+
+        _refractDepthSprite->ChangePosition(glm::vec2(880.0f, 10.0f));
+        _refractDepthSprite->ChangeSize(glm::vec2(280.0f, 280.0f));
+        Core::Renderer::Submit(_refractDepthSprite.get());
     }
 
     // ----- Public -----

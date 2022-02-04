@@ -9,13 +9,13 @@ namespace Core
     {
         private:
             Scope<FrameBuffer>  _reflectFBO, _refractFBO;
-            const uint32        _reflectionWidth  = 800;
-            const uint32        _reflectionHeight = 800;
-            const uint32        _refractionWidth  = 800;
-            const uint32        _refractionHeight = 800;
+            const uint32        _reflectionWidth  = 1024;
+            const uint32        _reflectionHeight = 1024;
+            const uint32        _refractionWidth  = 1024;
+            const uint32        _refractionHeight = 1024;
             const float         _waterHeight      = 0.1f;
-            const glm::vec4     _reflectionClipPlane = glm::vec4(0, 1, 0, -_waterHeight);
-            const glm::vec4     _refractionClipPlane = glm::vec4(0, -1, 0, _waterHeight);
+            const glm::vec4     _reflectionClipPlane = glm::vec4(0.0f, 1.0f, 0.0f, -_waterHeight);
+            const glm::vec4     _refractionClipPlane = glm::vec4(0.0f, -1.0f, 0.0f, _waterHeight);
 
             void InitReflectionFBO();
             void InitRefractionFBO();
@@ -24,7 +24,7 @@ namespace Core
             void StartRefractionFrame();
             void EndRefractionFrame();
             void RenderReflectionFrame(Shader* modelShader, Camera* camera);
-            void RenderRefractionFrame(Shader* terrainShader, Shader* modelShader);
+            void RenderRefractionFrame(Shader* terrainShader);
 
         public:
             explicit WaterRenderer();

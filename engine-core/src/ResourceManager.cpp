@@ -4,9 +4,9 @@ namespace Core
 {
     // ----- Public -----
 
-    Texture* ResourceManager::LoadTexture(const std::string& name, const uint32 width, const uint32 height, GLenum format)
+    Texture* ResourceManager::LoadTexture(const std::string& name, const uint32 width, const uint32 height, GLint internalFormat, GLenum format, GLenum type)
     {
-        Texture* texture = new Texture(width, height, format);
+        Texture* texture = new Texture(width, height, internalFormat, format, type);
         _textureStorage[name] = texture;
         return texture;
     }

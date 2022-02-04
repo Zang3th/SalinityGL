@@ -13,11 +13,11 @@ uniform mat4 view;
 uniform mat4 projection;
 uniform vec3 viewPos;
 
-const float tileSize = 0.1f;
+const float tileDivisor = 128.0f;
 
 void main()
 {
-    texCoords = texCoordsIn * tileSize;
+    texCoords = texCoordsIn / tileDivisor;
     vec4 worldPos = model * vec4(vertexIn, 1.0f);
     fragPos = worldPos.xyz;
     clipSpace = projection * view * worldPos;

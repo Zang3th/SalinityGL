@@ -19,7 +19,7 @@ namespace Core
             Ref<VertexArray>    _vao;
             glm::mat4           _model;
             glm::vec3           _position;
-            Texture            *_texture1, *_texture2, *_texture3, *_texture4;
+            Texture            *_texture1, *_texture2, *_texture3, *_texture4, *_texture5;
             uint32              _verticeCount;
             int32               _gotNormalMap;
             float               _rotationX, _rotationY, _rotationZ;
@@ -40,5 +40,6 @@ namespace Core
             void SetTexture2(Texture* texture);
             void SetTexture3(Texture* texture);
             void SetTexture4(Texture* texture);
+            void SetTexture5(Texture* texture);
     };
 }

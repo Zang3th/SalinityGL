@@ -32,7 +32,7 @@ namespace GW
             Core::Scope<Core::Audio>            _audio;
             Core::Scope<Core::ShadowRenderer>   _shadowRenderer;
             Core::Scope<Core::Cubemap>          _cubemap;
-            Core::Scope<Core::Sprite>           _shadowSprite, _reflectSprite, _refractSprite;
+            Core::Scope<Core::Sprite>           _shadowSprite, _reflectSprite, _refractSprite, _refractDepthSprite;
             Core::Scope<Core::WaterRenderer>    _waterRenderer;
 
             Core::Scope<Interface>              _interface;

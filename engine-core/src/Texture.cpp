@@ -51,12 +51,12 @@ namespace Core
         stbi_image_free(localBuffer);
     }
 
-    void Texture::Init(uint32 width, uint32 height, GLenum format)
+    void Texture::Init(uint32 width, uint32 height, GLint internalFormat, GLenum format, GLenum type)
     {
         //Create texture
         GLCall(glGenTextures(1, &_textureID));
         Bind();
-        GLCall(glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, nullptr));
+        GLCall(glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format, type, nullptr));
 
         LOG(INFO) << "Created:  Texture | (X: " << width << " | Y: " << height << " | Format: " << std::to_string(format) << ")";
     }
@@ -69,10 +69,10 @@ namespace Core
         InitFromFile(filepath);
     }
 
-    Texture::Texture(const uint32 width, const uint32 height, const GLenum format)
+    Texture::Texture(uint32 width, uint32 height, GLint internalFormat, GLenum format, GLenum type)
         :   _textureID(0)
     {
-        Init(width, height, format);
+        Init(width, height, internalFormat, format, type);
     }
 
     Texture::~Texture()

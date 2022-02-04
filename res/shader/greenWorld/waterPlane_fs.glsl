@@ -12,6 +12,7 @@ uniform sampler2D reflectionTexture;
 uniform sampler2D refractionTexture;
 uniform sampler2D dudvMap;
 uniform sampler2D normalMap;
+uniform sampler2D depthMap;
 uniform vec3      viewPos;
 
 const float waveStrength = 0.005;
@@ -21,6 +22,8 @@ const vec3  lightPos = vec3(150.0, 100.0, -30.0);
 const vec3  lightColor = vec3(1.0, 1.0, 1.0);
 const float shininess = 100.0;
 const float specularStrength = 0.3;
+const float nearPlane = 0.5;
+const float farPlane = 500.0;
 
 void main()
 {
@@ -28,6 +31,19 @@ void main()
     vec2 normalizedDeviceSpace = ((clipSpace.xy / clipSpace.w) / 2.0) + 0.5;
     vec2 reflectTexCoords = vec2(normalizedDeviceSpace.x, -normalizedDeviceSpace.y);
     vec2 refractTexCoords = vec2(normalizedDeviceSpace.x, normalizedDeviceSpace.y);
+
+    //Sample from refraction depth texture
+    float depth = texture(depthMap, refractTexCoords).r;
+
+    //Distance of the camera to the floor
+    float floorDistance = (2.0 * nearPlane * farPlane) / (farPlane + nearPlane - (2.0 * depth - 1.0) * (farPlane - nearPlane));
+
+    //Distance of the camera to the water surface
+    depth = gl_FragCoord.z;
+    float waterDistance = (2.0 * nearPlane * farPlane) / (farPlane + nearPlane - (2.0 * depth - 1.0) * (farPlane - nearPlane));
+
+    //Calculate water depth at given fragment
+    float waterDepth = floorDistance - waterDistance;
 
     //Sample distortion value from DuDvMap
     vec2 distortedTexCoords = (texture(dudvMap, vec2(texCoords.x + moveFactor, texCoords.y)).rg) * 0.1;
@@ -68,4 +84,5 @@ void main()
 
     vec4 outColor = mix(reflectColor, refractColor, refractiveFactor);
     fragColor = mix(outColor, waterColor, 0.2) + vec4(specular, 0.0);
+    //fragColor = vec4(waterDepth);
 }

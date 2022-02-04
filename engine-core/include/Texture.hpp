@@ -14,11 +14,11 @@ namespace Core
             uint32 _textureID;
 
             void InitFromFile(const std::string& filepath);
-            void Init(uint32 width, uint32 height, GLenum format);
+            void Init(uint32 width, uint32 height, GLint internalFormat, GLenum format, GLenum type);
 
         public:
             explicit Texture(const std::string& filepath);
-            Texture(uint32 width, uint32 height, GLenum format);
+            Texture(uint32 width, uint32 height, GLint internalFormat, GLenum format, GLenum type);
             ~Texture();
             void Bind() const;
             void BindToSlot(uint32 slot) const;

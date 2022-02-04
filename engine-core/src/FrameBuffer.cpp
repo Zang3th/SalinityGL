@@ -44,7 +44,7 @@ namespace Core
     Texture* FrameBuffer::CreateTextureAttachment(const std::string& name, uint32 width, uint32 height)
     {
         //Create and configure texture
-        _texture = ResourceManager::LoadTexture(name, width, height, GL_RGB);
+        _texture = ResourceManager::LoadTexture(name, width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
 
         //Attach texture
         GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, _texture->GetTextureID(), 0));
@@ -55,10 +55,10 @@ namespace Core
     Texture* FrameBuffer::CreateDepthTextureAttachment(const std::string& name, const uint32 width, const uint32 height)
     {
         //Create and configure depth texture
-        _depthTexture = ResourceManager::LoadTexture(name, width, height, GL_DEPTH_COMPONENT);
+        _depthTexture = ResourceManager::LoadTexture(name, width, height, GL_DEPTH_COMPONENT32, GL_DEPTH_COMPONENT, GL_FLOAT);
 
         //Attach depth texture
-        GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, _depthTexture->GetTextureID(), 0));
+        GLCall(glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, _depthTexture->GetTextureID(), 0));
 
         return _depthTexture;
     }

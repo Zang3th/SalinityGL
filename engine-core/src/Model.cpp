@@ -57,6 +57,7 @@ namespace Core
             _texture2(mesh->texture2),
             _texture3(mesh->texture3),
             _texture4(nullptr),
+            _texture5(nullptr),
             _verticeCount(mesh->indices.size()),
             _gotNormalMap(mesh->gotNormalMap),
             _rotationX(0.0f), _rotationY(0.0f), _rotationZ(0.0f),
@@ -155,6 +156,7 @@ namespace Core
         shader->SetUniform1i("refractionTexture", 1);
         shader->SetUniform1i("dudvMap", 2);
         shader->SetUniform1i("normalMap", 3);
+        shader->SetUniform1i("depthMap", 4);
         shader->SetUniform1f("moveFactor", moveFactor);
 
         //Reflection texture
@@ -172,6 +174,10 @@ namespace Core
         //NormalMap
         if(_texture4)
             _texture4->BindToSlot(3);
+
+        //DepthMap
+        if(_texture5)
+            _texture5->BindToSlot(4);
 
         _vao->Bind();
 
@@ -223,5 +229,10 @@ namespace Core
     void Model::SetTexture4(Texture* texture)
     {
         _texture4 = texture;
+    }
+
+    void Model::SetTexture5(Texture* texture)
+    {
+        _texture5 = texture;
     }
 }

@@ -85,7 +85,7 @@ namespace Core
         EndReflectionFrame();
     }
 
-    void WaterRenderer::RenderRefractionFrame(Shader* terrainShader, Shader* modelShader)
+    void WaterRenderer::RenderRefractionFrame(Shader* terrainShader)
     {
         //Render to refraction framebuffer
         StartRefractionFrame();
@@ -95,13 +95,9 @@ namespace Core
         terrainShader->Bind();
         terrainShader->SetUniformVec4f("clipPlane", _refractionClipPlane);
         terrainShader->Unbind();
-        modelShader->Bind();
-        modelShader->SetUniformVec4f("clipPlane", _refractionClipPlane);
-        modelShader->Unbind();
 
         //Render scene
         Renderer::FlushTerrainModel(terrainShader);
-        Renderer::FlushAllModelBuffers(modelShader);
 
         EndRefractionFrame();
     }
@@ -118,7 +114,7 @@ namespace Core
     {
         GLCall(glEnable(GL_CLIP_DISTANCE0));
         RenderReflectionFrame(modelShader, camera);
-        RenderRefractionFrame(terrainShader, modelShader);
+        RenderRefractionFrame(terrainShader);
         GLCall(glDisable(GL_CLIP_DISTANCE0));
     }
 

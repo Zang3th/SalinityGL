@@ -32,7 +32,7 @@
      - Shadows (X)
      - Normalmapping
      - HDR/Bloom 
-   - Water-Rendering
+   - Water-Rendering (X)
    - And a lot more ...
 
 ### Credits
@@ -58,7 +58,7 @@
    - This code is provided under the MIT License. See the file LICENSE for details.
 
 ### Current look of the GreenWorld App:
-![GreenWorld](res/screenshots/greenWorld/Screenshot_GW_014.png)
+![GreenWorld](res/screenshots/greenWorld/Screenshot_GW_015.png)
 
 ### Some projects that I created with an old version of the engine:
 

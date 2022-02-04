@@ -16,14 +16,14 @@ uniform sampler2D depthMap;
 uniform vec3      viewPos;
 
 const float waveStrength = 0.005;
-const vec4  waterColor = vec4(0.0, 0.3, 0.8, 1.0);
+const vec4  waterColor = vec4(0.0, 0.2, 0.8, 1.0);
 const float fresnelReflectivness = 0.2;
 const vec3  lightPos = vec3(150.0, 100.0, -30.0);
 const vec3  lightColor = vec3(1.0, 1.0, 1.0);
 const float shininess = 100.0;
-const float specularStrength = 0.3;
-const float nearPlane = 0.5;
-const float farPlane = 500.0;
+const float specularStrength = 0.5;
+const float nearPlane = 2.0;
+const float farPlane = 300.0;
 
 void main()
 {
@@ -48,7 +48,7 @@ void main()
     //Sample distortion value from DuDvMap
     vec2 distortedTexCoords = (texture(dudvMap, vec2(texCoords.x + moveFactor, texCoords.y)).rg) * 0.1;
     distortedTexCoords = texCoords + vec2(distortedTexCoords.x, distortedTexCoords.y + moveFactor);
-    vec2 totalDistortion = ((texture(dudvMap, distortedTexCoords).rg) * 2.0 - 1.0) * waveStrength;
+    vec2 totalDistortion = ((texture(dudvMap, distortedTexCoords).rg) * 2.0 - 1.0) * waveStrength * clamp(waterDepth / 3.0, 0.0, 1.0);
 
     //Add distortion to the reflection and refraction texture
     reflectTexCoords += totalDistortion;
@@ -65,7 +65,7 @@ void main()
 
     //Sample from normal map
     vec4 normalMapColor = texture(normalMap, distortedTexCoords);
-    vec3 normal = vec3(normalMapColor.r * 2.0 - 1.0, normalMapColor.b * 2.0, normalMapColor.g * 2.0 - 1.0);
+    vec3 normal = vec3(normalMapColor.r * 2.0 - 1.0, normalMapColor.b * 4.0, normalMapColor.g * 2.0 - 1.0);
     normal = normalize(normal);
 
     //Fresnel effect
@@ -80,9 +80,11 @@ void main()
     vec3 halfwayDir = normalize(lightDir + viewDir);
     vec3 reflectDir = reflect(-lightDir, normal);
     float spec = pow(max(dot(normal, halfwayDir), 0.0), shininess);
-    vec3 specular = lightColor * spec * specularStrength;
+    vec3 specular = lightColor * spec * specularStrength * clamp(waterDepth / 3.0, 0.0, 1.0);
 
     vec4 outColor = mix(reflectColor, refractColor, refractiveFactor);
     fragColor = mix(outColor, waterColor, 0.2) + vec4(specular, 0.0);
-    //fragColor = vec4(waterDepth);
+
+    //Add soft edges
+    fragColor.a = clamp(waterDepth / 1.0, 0.0, 1.0);
 }

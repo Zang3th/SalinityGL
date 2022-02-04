@@ -25,7 +25,7 @@ namespace Core
             inline static uint32    _spriteRenderPasses     = uint32();
             inline static uint32    _cubemapRenderPasses    = uint32();
             inline static glm::mat4 _orthoProjection = glm::ortho(0.0f, (float)WINDOW_WIDTH, 0.0f, (float)WINDOW_HEIGHT, -1.0f, 1.0f);
-            inline static glm::mat4 _perspProjection = glm::perspective(glm::radians(45.0f), (float)WINDOW_WIDTH/(float)WINDOW_HEIGHT, 0.5f, 500.0f);
+            inline static glm::mat4 _perspProjection = glm::perspective(glm::radians(45.0f), (float)WINDOW_WIDTH/(float)WINDOW_HEIGHT, 2.0f, 300.0f);
             //Nearplane of the _perspProjection has to be this big, otherwise the z-Buffer in the water rendering refraction depth pass is bugged
             inline static glm::mat4 _lightProjection = glm::mat4(1.0f);
             inline static std::vector<const Model*>  _modelBuffer = std::vector<const Model*>();

@@ -4,17 +4,18 @@ namespace Core
 {
     // ----- Public -----
 
-    Camera::Camera(glm::vec3 position, float yaw, float pitch, float movementSpeed)
-        :   _position(position),
-            _front(0.0f),
-            _up(0.0f),
-            _right(0.0f),
-            _worldUp(0.0f, 1.0f, 0.0f),
-            _yaw(yaw),
-            _pitch(pitch),
-            _movementSpeed(movementSpeed),
-            _mouseSensitivity(0.1f)
+    void Camera::Init(glm::vec3 position, float yaw, float pitch, float movementSpeed)
     {
+        _position         = position;
+        _front            = glm::vec3(0.0f);
+        _up               = glm::vec3(0.0f);
+        _right            = glm::vec3(0.0f);
+        _worldUp          = glm::vec3(0.0f, 1.0f, 0.0f);
+        _yaw              = yaw;
+        _pitch            = pitch;
+        _movementSpeed    = movementSpeed;
+        _mouseSensitivity = 0.1f;
+
         Update();
     }
 
@@ -80,27 +81,27 @@ namespace Core
         Update();
     }
 
-    glm::vec3 Camera::GetPosition() const
+    glm::vec3 Camera::GetPosition()
     {
         return _position;
     }
 
-    glm::vec3 Camera::GetUp() const
+    glm::vec3 Camera::GetUp()
     {
         return _up;
     }
 
-    glm::vec3 Camera::GetFront() const
+    glm::vec3 Camera::GetFront()
     {
         return _front;
     }
 
-    float Camera::GetYaw() const
+    float Camera::GetYaw()
     {
         return _yaw;
     }
 
-    float Camera::GetPitch() const
+    float Camera::GetPitch()
     {
         return _pitch;
     }

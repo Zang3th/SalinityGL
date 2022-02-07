@@ -2,18 +2,14 @@
 
 namespace Core
 {
-    // ----- Private -----
-
-    Cubemap*  Renderer::_cubemap;
-    Camera*   Renderer::_camera;
-    Model*    Renderer::_terrainModel;
-    Model*    Renderer::_waterModel;
-
     // ----- Public -----
 
-    void Renderer::Init(Camera* camera, glm::mat4 lightProjection)
+    void Renderer::Init(glm::mat4 lightProjection)
     {
-        _camera = camera;
+        _orthoProjection = glm::ortho(0.0f, (float)WINDOW_WIDTH, 0.0f, (float)WINDOW_HEIGHT, -1.0f, 1.0f);
+        _perspProjection = glm::perspective(glm::radians(45.0f), (float)WINDOW_WIDTH/(float)WINDOW_HEIGHT, 2.0f, 300.0f);
+        //Nearplane of the _perspProjection has to be this big, otherwise the z-Buffer in the water rendering refraction depth pass is bugged
+
         _lightProjection = lightProjection;
     }
 
@@ -66,7 +62,7 @@ namespace Core
         //Render models
         for(const auto& model : _modelBuffer)
         {
-            _drawnVertices += model->DrawModel(modelShader, _perspProjection, _camera->GetViewMatrix(), _camera->GetPosition(), _lightProjection);
+            _drawnVertices += model->DrawModel(modelShader, _perspProjection, Camera::GetViewMatrix(), Camera::GetPosition(), _lightProjection);
             _drawcalls++;
         }
 
@@ -85,7 +81,7 @@ namespace Core
         //Render models that cast shadows
         for(const auto& model : _shadowModelBuffer)
         {
-            _drawnVertices += model->DrawModel(modelShader, _perspProjection, _camera->GetViewMatrix(), _camera->GetPosition(), _lightProjection);
+            _drawnVertices += model->DrawModel(modelShader, _perspProjection, Camera::GetViewMatrix(), Camera::GetPosition(), _lightProjection);
             _drawcalls++;
         }
 
@@ -107,7 +103,7 @@ namespace Core
         else{
             GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));}
 
-        _drawnVertices += _terrainModel->DrawTerrainModel(modelShader, _perspProjection, _camera->GetViewMatrix(), _camera->GetPosition(), _lightProjection);
+        _drawnVertices += _terrainModel->DrawTerrainModel(modelShader, _perspProjection, Camera::GetViewMatrix(), Camera::GetPosition(), _lightProjection);
         _drawcalls++;
 
         //Increase render pass counter
@@ -122,7 +118,7 @@ namespace Core
         else{
             GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));}
 
-        _drawnVertices += _waterModel->DrawWaterModel(modelShader, _perspProjection, _camera->GetViewMatrix(), _camera->GetPosition(), moveFactor);
+        _drawnVertices += _waterModel->DrawWaterModel(modelShader, _perspProjection, Camera::GetViewMatrix(), Camera::GetPosition(), moveFactor);
         _drawcalls++;
 
         //Increase render pass counter
@@ -150,7 +146,7 @@ namespace Core
         if(_cubemap)
         {
             GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
-            _drawnVertices += _cubemap->Draw(_perspProjection, _camera->GetViewMatrix());
+            _drawnVertices += _cubemap->Draw(_perspProjection, Camera::GetViewMatrix());
             _drawcalls++;
 
             //Increase render pass counter

@@ -28,7 +28,6 @@ namespace GW
     {
         private:
             Core::Scope<Core::Window>           _window;
-            Core::Scope<Core::Camera>           _camera;
             Core::Scope<Core::Audio>            _audio;
             Core::Scope<Core::ShadowRenderer>   _shadowRenderer;
             Core::Scope<Core::Cubemap>          _cubemap;

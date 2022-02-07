@@ -55,18 +55,18 @@ namespace Core
         _refractFBO->Unbind();
     }
 
-    void WaterRenderer::RenderReflectionFrame(Shader* modelShader, Camera* camera)
+    void WaterRenderer::RenderReflectionFrame(Shader* modelShader)
     {
         //Render to reflection framebuffer
         StartReflectionFrame();
         Renderer::ClearBuffers();
 
         //Move camera under the water
-        glm::vec3 camPos = camera->GetPosition();
+        glm::vec3 camPos = Camera::GetPosition();
         float distance = 2.0f * (camPos.y + _waterHeight);
-        camera->SetPosition(glm::vec3(camPos.x, camPos.y - distance, camPos.z));
-        camera->InvertPitch();
-        camera->Update();
+        Camera::SetPosition(glm::vec3(camPos.x, camPos.y - distance, camPos.z));
+        Camera::InvertPitch();
+        Camera::Update();
 
         //Set shader variable(s)
         modelShader->Bind();
@@ -78,9 +78,9 @@ namespace Core
         Renderer::FlushCubemap();
 
         //Reset camera
-        camera->SetPosition(camPos);
-        camera->InvertPitch();
-        camera->Update();
+        Camera::SetPosition(camPos);
+        Camera::InvertPitch();
+        Camera::Update();
 
         EndReflectionFrame();
     }
@@ -110,10 +110,10 @@ namespace Core
         InitRefractionFBO();
     }
 
-    void WaterRenderer::RenderToFramebuffer(Shader* terrainShader, Shader* modelShader, Camera* camera)
+    void WaterRenderer::RenderToFramebuffer(Shader* terrainShader, Shader* modelShader)
     {
         GLCall(glEnable(GL_CLIP_DISTANCE0));
-        RenderReflectionFrame(modelShader, camera);
+        RenderReflectionFrame(modelShader);
         RenderRefractionFrame(terrainShader);
         GLCall(glDisable(GL_CLIP_DISTANCE0));
     }

@@ -4,9 +4,6 @@ namespace GW
 {
     // ----- Private -----
 
-    const Core::Window* InputManager::_window;
-          Core::Camera* InputManager::_camera;
-
     void InputManager::MousePosCallback(GLFWwindow* window, double xPos, double yPos)
     {
         if (_windowInFocus)
@@ -16,7 +13,7 @@ namespace GW
 
             _lastX = xPos;
             _lastY = yPos;
-            _camera->ProcessMouseMovement((float)xOffset, (float)yOffset);
+            Core::Camera::ProcessMouseMovement((float)xOffset, (float)yOffset);
         }
         else
         {
@@ -43,11 +40,10 @@ namespace GW
 
     // ----- Public -----
 
-    void InputManager::Init(const Core::Window* window, Core::Camera* camera)
+    void InputManager::Init(const Core::Window* window)
     {
         //Set static member variables
         _window = window;
-        _camera = camera;
         _windowInFocus = false;
 
         //Set callbacks
@@ -60,21 +56,21 @@ namespace GW
         auto dt = (float)_window->GetDeltaTime();
 
         if (glfwGetKey(_window->GetWindow(), GLFW_KEY_W) == GLFW_PRESS)
-            _camera->ProcessKeyboard(_camera->FORWARD, dt);
+            Core::Camera::ProcessKeyboard(Core::Camera::FORWARD, dt);
 
         if (glfwGetKey(_window->GetWindow(), GLFW_KEY_S) == GLFW_PRESS)
-            _camera->ProcessKeyboard(_camera->BACKWARD, dt);
+            Core::Camera::ProcessKeyboard(Core::Camera::BACKWARD, dt);
 
         if (glfwGetKey(_window->GetWindow(), GLFW_KEY_D) == GLFW_PRESS)
-            _camera->ProcessKeyboard(_camera->RIGHT, dt);
+            Core::Camera::ProcessKeyboard(Core::Camera::RIGHT, dt);
 
         if (glfwGetKey(_window->GetWindow(), GLFW_KEY_A) == GLFW_PRESS)
-            _camera->ProcessKeyboard(_camera->LEFT, dt);
+            Core::Camera::ProcessKeyboard(Core::Camera::LEFT, dt);
 
         if (glfwGetKey(_window->GetWindow(), GLFW_KEY_SPACE) == GLFW_PRESS)
-            _camera->ProcessKeyboard(_camera->UP, dt);
+            Core::Camera::ProcessKeyboard(Core::Camera::UP, dt);
 
         if (glfwGetKey(_window->GetWindow(), GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
-            _camera->ProcessKeyboard(_camera->DOWN, dt);
+            Core::Camera::ProcessKeyboard(Core::Camera::DOWN, dt);
     }
 }

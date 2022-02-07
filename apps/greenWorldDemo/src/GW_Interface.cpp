@@ -66,9 +66,8 @@ namespace GW
 
     // ----- Public -----
 
-    Interface::Interface(const Core::Window* window, const Core::Camera* camera)
+    Interface::Interface(const Core::Window* window)
         :   Core::BaseInterface(window),
-            _camera(camera),
             _windowFlags(ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav | ImGuiWindowFlags_NoMove),
             _windowAlphaValue(0.65f),
             _showOverlay(true)
@@ -138,9 +137,9 @@ namespace GW
                     //Camera stats
                     ImGui::NewLine();
                     ImGui::Separator();
-                    ImGui::Text("Camera-Position:  X: %.1f | Y: %.1f | Z: %.1f", _camera->GetPosition().x, _camera->GetPosition().y, _camera->GetPosition().z);
-                    ImGui::Text("Camera-Front:     X: %.1f | Y: %.1f | Z: %.1f", _camera->GetFront().x, _camera->GetFront().y, _camera->GetFront().z);
-                    ImGui::Text("Camera-Yaw/Pitch: %.2f / %.2f", _camera->GetYaw(), _camera->GetPitch());
+                    ImGui::Text("Camera-Position:  X: %.1f | Y: %.1f | Z: %.1f", Core::Camera::GetPosition().x, Core::Camera::GetPosition().y, Core::Camera::GetPosition().z);
+                    ImGui::Text("Camera-Front:     X: %.1f | Y: %.1f | Z: %.1f", Core::Camera::GetFront().x, Core::Camera::GetFront().y, Core::Camera::GetFront().z);
+                    ImGui::Text("Camera-Yaw|Pitch: %.2f | %.2f", Core::Camera::GetYaw(), Core::Camera::GetPitch());
                     ImGui::Separator();
 
                     //Profiling/Timing-Results

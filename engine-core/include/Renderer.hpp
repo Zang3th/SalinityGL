@@ -16,25 +16,24 @@ namespace Core
     class Renderer
     {
         private:
-                   static Cubemap  *_cubemap;
-                   static Camera   *_camera;
-                   static Model    *_terrainModel, *_waterModel;
-            inline static uint32    _drawcalls              = uint32();
-            inline static uint32    _drawnVertices          = uint32();
-            inline static uint32    _modelRenderPasses      = uint32();
-            inline static uint32    _spriteRenderPasses     = uint32();
-            inline static uint32    _cubemapRenderPasses    = uint32();
-            inline static glm::mat4 _orthoProjection = glm::ortho(0.0f, (float)WINDOW_WIDTH, 0.0f, (float)WINDOW_HEIGHT, -1.0f, 1.0f);
-            inline static glm::mat4 _perspProjection = glm::perspective(glm::radians(45.0f), (float)WINDOW_WIDTH/(float)WINDOW_HEIGHT, 2.0f, 300.0f);
-            //Nearplane of the _perspProjection has to be this big, otherwise the z-Buffer in the water rendering refraction depth pass is bugged
-            inline static glm::mat4 _lightProjection = glm::mat4(1.0f);
-            inline static std::vector<const Model*>  _modelBuffer = std::vector<const Model*>();
-            inline static std::vector<const Model*>  _shadowModelBuffer = std::vector<const Model*>();
-            inline static std::vector<const Sprite*> _spriteBuffer = std::vector<const Sprite*>();
+            inline static Cubemap                   *_cubemap               = nullptr;
+            inline static Model                     *_terrainModel          = nullptr;
+            inline static Model                     *_waterModel            = nullptr;
+            inline static uint32                     _drawcalls             = uint32();
+            inline static uint32                     _drawnVertices         = uint32();
+            inline static uint32                     _modelRenderPasses     = uint32();
+            inline static uint32                     _spriteRenderPasses    = uint32();
+            inline static uint32                     _cubemapRenderPasses   = uint32();
+            inline static glm::mat4                  _orthoProjection       = glm::mat4();
+            inline static glm::mat4                  _perspProjection       = glm::mat4();
+            inline static glm::mat4                  _lightProjection       = glm::mat4();
+            inline static std::vector<const Model*>  _modelBuffer           = std::vector<const Model*>();
+            inline static std::vector<const Model*>  _shadowModelBuffer     = std::vector<const Model*>();
+            inline static std::vector<const Sprite*> _spriteBuffer          = std::vector<const Sprite*>();
 
         public:
             Renderer() = delete;
-            static void Init(Camera* camera, glm::mat4 lightProjection);
+            static void Init(glm::mat4 lightProjection);
             static void PrepareFrame();
             static void Submit(Model* model, bool producesShadows);
             static void Submit(Sprite* sprite);

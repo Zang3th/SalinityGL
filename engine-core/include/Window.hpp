@@ -19,11 +19,11 @@ namespace Core
             bool            _isRunning;
 
             void CreateWindow();
+            void SetTitle(const std::string& title);
 
         public:
-            Window();
+            explicit Window(const std::string& title);
             ~Window();
-            void SetTitle(const std::string& title);
             [[nodiscard]] bool IsRunning() const;
             void CalcFrametime();
             static void PollEvents();

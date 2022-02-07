@@ -2,6 +2,7 @@
 
 #include "FrameBuffer.hpp"
 #include "Renderer.hpp"
+#include "Camera.hpp"
 
 namespace Core
 {
@@ -23,12 +24,12 @@ namespace Core
             void EndReflectionFrame();
             void StartRefractionFrame();
             void EndRefractionFrame();
-            void RenderReflectionFrame(Shader* modelShader, Camera* camera);
+            void RenderReflectionFrame(Shader* modelShader);
             void RenderRefractionFrame(Shader* terrainShader);
 
         public:
             explicit WaterRenderer();
-            void RenderToFramebuffer(Shader* terrainShader, Shader* modelShader, Camera* camera);
+            void RenderToFramebuffer(Shader* terrainShader, Shader* modelShader);
             [[nodiscard]] Texture* GetReflectTexture() const;
             [[nodiscard]] Texture* GetRefractTexture() const;
             [[nodiscard]] Texture* GetRefractDepthTexture() const;

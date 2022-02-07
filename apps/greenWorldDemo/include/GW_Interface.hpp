@@ -12,19 +12,18 @@ namespace GW
     class Interface : public Core::BaseInterface
     {
         private:
-            ImVec2                  _sidebarPos, _shaderFieldPos, _texFieldPos;
+            ImVec2                  _sidebarPos,  _shaderFieldPos,   _texFieldPos;
             ImVec2                  _overlaySize, _bottomFieldSizes, _overlayPivot;
-            const Core::Camera*     _camera;
             ImGuiWindowFlags        _windowFlags;
             float                   _windowAlphaValue;
             bool                    _showOverlay;
 
             static void SetDarkThemeColors();
-            static void TextCentered(const char*);
-            void SetOverlayParameters();
+            static void TextCentered(const char* text);
+            void        SetOverlayParameters();
 
         public:
-            Interface(const Core::Window* window, const Core::Camera* camera);
+            explicit Interface(const Core::Window* window);
             void AddElements() final;
     };
 }

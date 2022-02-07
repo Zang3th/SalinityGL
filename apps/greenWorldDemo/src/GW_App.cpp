@@ -27,18 +27,17 @@ namespace GW
         Core::Logger::Init();
 
         //Window
-        _window = Core::MakeScope<Core::Window>();
-        _window->SetTitle("GreenWorld Demo Application");
+        _window = Core::MakeScope<Core::Window>("GreenWorld Demo Application");
 
         //Camera
-        _camera = Core::MakeScope<Core::Camera>(glm::vec3(-118.0f, 124.0f, 71.0f), 1.0f, -36.0f, 25.0f);
+        Core::Camera::Init(glm::vec3(-118.0f, 124.0f, 71.0f), 1.0f, -36.0f, 25.0f);
 
         //UI
-        _interface = Core::MakeScope<Interface>(_window.get(), _camera.get());
+        _interface = Core::MakeScope<Interface>(_window.get());
 
         //Audio
         _audio = Core::MakeScope<Core::Audio>();
-        _audio->SetListenerPosition(_camera->GetPosition(), _camera->GetFront(), _camera->GetUp());
+        _audio->SetListenerPosition(Core::Camera::GetPosition(), Core::Camera::GetFront(), Core::Camera::GetUp());
         //_audio->PlaySound2D("../res/audio/greenWorld/music/TrueBlueSky.wav", true, 1.0f);
         //_audio->PlaySound3D("../res/audio/greenWorld/sounds/River.wav", glm::vec3(39.0f, 14.0f, 56.0f), true, 40.0f, 1.5);
 
@@ -51,14 +50,11 @@ namespace GW
         //Water-Rendering
         _waterRenderer = Core::MakeScope<Core::WaterRenderer>();
 
-        //Model-Management
-        Core::ModelManager::Init(_shadowRenderer.get());
-
         //Renderer (static)
-        Core::Renderer::Init(_camera.get(), _shadowRenderer->GetLightProjection());
+        Core::Renderer::Init(_shadowRenderer->GetLightProjection());
 
         //Input (static)
-        InputManager::Init(_window.get(), _camera.get());
+        InputManager::Init(_window.get());
     }
 
     void App::CreateModels()
@@ -75,10 +71,11 @@ namespace GW
         );
         terrainModel->ChangePosition(glm::vec3(0.0f, -2.7f, 0.0f));
         terrainModel->SetTexture2(Core::ResourceManager::GetTexture("ColorMap"));
+        terrainModel->SetTexture3(_shadowRenderer->GetDepthTexture());
         Core::Renderer::SubmitTerrain(terrainModel);
 
         //Water
-        auto waterModel = Core::ModelManager::AddPlaneWithoutTexture
+        auto waterModel = Core::ModelManager::AddPlane
         (
             PLANE_SIZE - 112,
             PLANE_SIZE,
@@ -96,6 +93,7 @@ namespace GW
         auto house = Core::ModelManager::AddObject("OldHouse", "../res/models/greenWorld/OldHouse");
         for(const auto& model : house)
         {
+            model->SetTexture3(_shadowRenderer->GetDepthTexture());
             model->ChangeSize(0.15f);
             model->ChangeRotation(0.0f, -90.0f, 0.0f);
             model->ChangePosition(glm::vec3(105.0f, 0.4f, 85.0f));
@@ -229,7 +227,7 @@ namespace GW
             _window->PollEvents();
             _window->ProcessEvents();
             InputManager::ProcessInput();
-            _audio->SetListenerPosition(_camera->GetPosition(), _camera->GetFront(), _camera->GetUp());
+            _audio->SetListenerPosition(Core::Camera::GetPosition(), Core::Camera::GetFront(), Core::Camera::GetUp());
         }
 
         {   Core::PROFILE_SCOPE("Prepare frame");
@@ -247,7 +245,7 @@ namespace GW
 
         {   Core::PROFILE_SCOPE("Create water");
 
-            _waterRenderer->RenderToFramebuffer(Core::ResourceManager::GetShader("TerrainShader"), Core::ResourceManager::GetShader("ModelShader"), _camera.get());
+            _waterRenderer->RenderToFramebuffer(Core::ResourceManager::GetShader("TerrainShader"), Core::ResourceManager::GetShader("ModelShader"));
         }
 
         {   Core::PROFILE_SCOPE("Render graphics");

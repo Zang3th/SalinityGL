@@ -2,22 +2,13 @@
 
 namespace Core
 {
-    // ----- Private -----
-
-    ShadowRenderer* ModelManager::_shadowRenderer;
-
     // ----- Public -----
-
-    void ModelManager::Init(ShadowRenderer* shadowRenderer)
-    {
-        _shadowRenderer = shadowRenderer;
-    }
 
     Model* ModelManager::AddTerrain
     (
-        const uint32 x,
-        const uint32 z,
-        const float  tileSize,
+        const uint32       x,
+        const uint32       z,
+        const float        tileSize,
         const std::string& name,
         const std::string& textureFilepath,
         const std::string& heightmapFilepath
@@ -32,7 +23,9 @@ namespace Core
         ResourceManager::LoadTextureFromFile(name, textureFilepath);
         terrainMesh.texture1 = ResourceManager::GetTexture(name);
         terrainMesh.texture2 = nullptr;
-        terrainMesh.texture3 = _shadowRenderer->GetDepthTexture();
+        terrainMesh.texture3 = nullptr;
+        terrainMesh.texture4 = nullptr;
+        terrainMesh.texture5 = nullptr;
         terrainMesh.gotNormalMap = false;
 
         //Create and store model
@@ -42,34 +35,7 @@ namespace Core
         return terrainModel;
     }
 
-    Model* ModelManager::AddPlaneWithTexture
-    (
-        const uint32 x,
-        const uint32 z,
-        const float  tileSize,
-        const std::string& name,
-        const std::string& textureFilepath
-    )
-    {
-        //Create plane mesh
-        Mesh planeMesh;
-        MeshCreator::CreatePlane(x, z, tileSize, &planeMesh);
-
-        //Allocate and assign textures
-        ResourceManager::LoadTextureFromFile(name, textureFilepath);
-        planeMesh.texture1 = ResourceManager::GetTexture(name);
-        planeMesh.texture2 = nullptr;
-        planeMesh.texture3 = _shadowRenderer->GetDepthTexture();
-        planeMesh.gotNormalMap = false;
-
-        //Create and store model
-        Model* planeModel = new Model(&planeMesh);
-        _modelStorage.push_back(planeModel);
-
-        return planeModel;
-    }
-
-    Model* ModelManager::AddPlaneWithoutTexture
+    Model* ModelManager::AddPlane
     (
         const uint32 x,
         const uint32 z,
@@ -84,6 +50,8 @@ namespace Core
         planeMesh.texture1 = nullptr;
         planeMesh.texture2 = nullptr;
         planeMesh.texture3 = nullptr;
+        planeMesh.texture4 = nullptr;
+        planeMesh.texture5 = nullptr;
         planeMesh.gotNormalMap = false;
 
         //Create and store model
@@ -105,7 +73,6 @@ namespace Core
         //Create models out of meshes and store these
         for(auto& mesh : meshes)
         {
-            mesh.texture3 = _shadowRenderer->GetDepthTexture();
             Model* objModel = new Model(&mesh);
             _modelStorage.push_back(objModel);
             models.push_back(objModel);

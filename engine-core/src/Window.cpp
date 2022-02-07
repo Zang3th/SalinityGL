@@ -50,11 +50,17 @@ namespace Core
         _isRunning = true; //Start application
     }
 
+    void Window::SetTitle(const std::string& title)
+    {
+        _windowName = title;
+        glfwSetWindowTitle(_window, _windowName.c_str());
+        LOG(INFO) << "Changed:  Window-Title | " << title;
+    }
+
     // ----- Public -----
 
-    Window::Window()
+    Window::Window(const std::string& title)
         :   _window(nullptr),
-            _windowName("GameEngine-Default"),
             _deltaTime(0.0f),
             _lastFrame(0.0f),
             _dtAccumulated(0.0f),
@@ -63,18 +69,12 @@ namespace Core
             _isRunning(false)
     {
         CreateWindow();
+        SetTitle(title);
     }
 
     Window::~Window()
     {
         glfwTerminate();
-    }
-
-    void Window::SetTitle(const std::string& title)
-    {
-        _windowName = title;
-        glfwSetWindowTitle(_window, _windowName.c_str());
-        LOG(INFO) << "Changed:  Window-Title | " << title;
     }
 
     bool Window::IsRunning() const

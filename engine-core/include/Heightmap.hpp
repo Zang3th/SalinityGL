@@ -9,10 +9,11 @@ namespace Core
     class Heightmap
     {
         private:
-            float _heightArray[PLANE_SIZE][PLANE_SIZE];
+            float* _heightArray = nullptr;
 
         public:
             explicit Heightmap(const std::string& filepath);
-            [[nodiscard]] float GetValueAt(uint16 x, uint16 z) const;
+            ~Heightmap();
+            [[nodiscard]] float GetValueAt(uint32 x, uint32 z) const;
     };
 }

@@ -1,5 +1,12 @@
 #include "GW_App.hpp"
 
+//Initialize extern settings
+const Core::uint32 Core::WINDOW_WIDTH        = 1920;
+const Core::uint32 Core::WINDOW_HEIGHT       = 1080;
+const Core::uint32 Core::PLANE_SIZE          = 128;
+      bool         Core::WIREFRAME_RENDERING = false;
+      bool         Core::DEBUG_SPRITES       = true;
+
 namespace GW
 {
     // ----- Private -----
@@ -62,8 +69,8 @@ namespace GW
         //Terrain
         auto terrainModel = Core::ModelManager::AddTerrain
         (
-            PLANE_SIZE,
-            PLANE_SIZE,
+            Core::PLANE_SIZE,
+            Core::PLANE_SIZE,
             1.0f,
             "GrassTexture",
             "../res/textures/greenWorld/Grass.jpg",
@@ -77,8 +84,8 @@ namespace GW
         //Water
         auto waterModel = Core::ModelManager::AddPlane
         (
-            PLANE_SIZE - 112,
-            PLANE_SIZE,
+            Core::PLANE_SIZE - 112,
+            Core::PLANE_SIZE,
             1.0f
         );
         waterModel->ChangePosition(glm::vec3(30.5f, 0.0f, 0.0f));
@@ -106,7 +113,7 @@ namespace GW
         {
             model->ChangeSize(2.0f);
             model->ChangeRotation(0.0f, -90.0f, 0.0f);
-            model->ChangePosition(glm::vec3(39.0f, -0.45f, 42.0f));
+            model->ChangePosition(glm::vec3(39.0f, -0.45f, 48.0f));
             Core::Renderer::Submit(model, true);
         }
 
@@ -258,7 +265,9 @@ namespace GW
             _moveFactor  = fmod(_moveFactor, 1.0f);
             Core::Renderer::FlushWaterModel(Core::ResourceManager::GetShader("WaterPlaneShader"), _moveFactor);
 
-            Core::Renderer::FlushSprites();
+            if(Core::DEBUG_SPRITES)
+                Core::Renderer::FlushSprites();
+
             Core::Renderer::FlushCubemap();
         }
 

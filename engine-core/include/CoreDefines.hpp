@@ -24,19 +24,18 @@ namespace Core
         return std::make_shared<T>(std::forward<Args>(args)...);
     }
 
-    //Global defines
-    #define WINDOW_WIDTH    1920
-    #define WINDOW_HEIGHT   1080
-    #define PLANE_SIZE      128
-
     //Datatypes
-    typedef int8_t int8;
-    typedef int16_t int16;
-    typedef int32_t int32;
-    typedef uint8_t uint8;
+    typedef int8_t   int8;
+    typedef int16_t  int16;
+    typedef int32_t  int32;
+    typedef uint8_t  uint8;
     typedef uint16_t uint16;
     typedef uint32_t uint32;
 
     //Extern settings
-    extern bool WireframeRendering;    
+    extern const uint32 WINDOW_WIDTH;
+    extern const uint32 WINDOW_HEIGHT;
+    extern const uint32 PLANE_SIZE;
+    extern       bool   WIREFRAME_RENDERING;
+    extern       bool   DEBUG_SPRITES;
 }

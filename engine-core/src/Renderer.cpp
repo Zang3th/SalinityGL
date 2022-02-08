@@ -54,7 +54,7 @@ namespace Core
     void Renderer::FlushModelBuffer(Shader* modelShader)
     {
         //Check for Wireframe-Mode
-        if(WireframeRendering){
+        if(WIREFRAME_RENDERING){
             GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));}
         else{
             GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));}
@@ -73,7 +73,7 @@ namespace Core
     void Renderer::FlushShadowModelBuffer(Shader* modelShader)
     {
         //Check for Wireframe-Mode
-        if(WireframeRendering){
+        if(WIREFRAME_RENDERING){
             GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));}
         else{
             GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));}
@@ -98,7 +98,7 @@ namespace Core
     void Renderer::FlushTerrainModel(Shader* modelShader)
     {
         //Check for Wireframe-Mode
-        if(WireframeRendering){
+        if(WIREFRAME_RENDERING){
             GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));}
         else{
             GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));}
@@ -113,7 +113,7 @@ namespace Core
     void Renderer::FlushWaterModel(Shader* modelShader, float moveFactor)
     {
         //Check for Wireframe-Mode
-        if(WireframeRendering){
+        if(WIREFRAME_RENDERING){
             GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));}
         else{
             GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));}

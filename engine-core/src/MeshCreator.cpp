@@ -73,7 +73,7 @@ namespace Core
                     yPos = (float)heightmap->GetValueAt(i, j);
 
                 mesh->vertices.emplace_back(glm::vec3(xPos * tileSize, yPos, zPos * tileSize));
-                mesh->texCoords.emplace_back(glm::vec2(xPos, zPos));
+                mesh->texCoords.emplace_back(glm::vec2(zPos, xPos)); //Flip texture coordinates
                 mesh->normals.emplace_back(glm::vec3(0.0f, 1.0f, 0.0f));
 
                 if ((j != z) && (i != x))

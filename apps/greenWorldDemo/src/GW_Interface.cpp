@@ -1,7 +1,5 @@
 #include "GW_Interface.hpp"
 
-bool Core::WireframeRendering = false;
-
 namespace GW
 {
     // ----- Private -----
@@ -57,10 +55,10 @@ namespace GW
         _sidebarPos = ImVec2(work_size.x, work_pos.y);
         _overlayPivot = ImVec2(1.0f, 0.0f);
 
-        _shaderFieldPos = ImVec2((float)WINDOW_WIDTH - 230.0f, (float)WINDOW_HEIGHT - 460.0f + work_pos.y);
+        _shaderFieldPos = ImVec2((float)Core::WINDOW_WIDTH - 230.0f, (float)Core::WINDOW_HEIGHT - 460.0f + work_pos.y);
         _texFieldPos = ImVec2(_shaderFieldPos.x + 230.0f, _shaderFieldPos.y);
 
-        _overlaySize = ImVec2(460.0f, (float)WINDOW_HEIGHT - 460.0f);
+        _overlaySize = ImVec2(460.0f, (float)Core::WINDOW_HEIGHT - 460.0f);
         _bottomFieldSizes = ImVec2(_overlaySize.x / 2, 460.0f);
     }
 
@@ -96,12 +94,13 @@ namespace GW
             if(ImGui::BeginMenu("Settings"))
             {
                 ImGui::MenuItem("Show overlay", "", &_showOverlay);
+                ImGui::MenuItem("Show debug sprites", "", &Core::DEBUG_SPRITES);
                 ImGui::EndMenu();
             }
 
             if(ImGui::BeginMenu("Rendering"))
             {
-                ImGui::MenuItem("Wireframe-Mode", "", &Core::WireframeRendering);
+                ImGui::MenuItem("Wireframe-Mode", "", &Core::WIREFRAME_RENDERING);
                 ImGui::EndMenu();
             }
         }

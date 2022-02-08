@@ -6,14 +6,19 @@ namespace Core
 
     Heightmap::Heightmap(const std::string& filepath)
     {
+        //Load image
         int32 width, height, nrChannels;
         stbi_set_flip_vertically_on_load(true);
-        unsigned char* localBuffer = stbi_load(filepath.c_str(), &width, &height, &nrChannels, 0);
+        unsigned char* localBuffer = stbi_load(filepath.c_str(), &width, &height, &nrChannels, 3);
         stbi_set_flip_vertically_on_load(false);
+
+        //Allocate buffer
+        _heightArray = (float*)malloc(width * height * sizeof(float));
+        LOG(INFO) << width * height * sizeof(float);
 
         if(localBuffer)
         {
-            if(width < PLANE_SIZE || height < PLANE_SIZE)
+            if(width < (int)PLANE_SIZE || height < (int)PLANE_SIZE)
             {
                 LOG(ERROR) << "Failed:   Heightmap is too small | " << filepath;
             }
@@ -24,16 +29,17 @@ namespace Core
             else
             {
                 //Save image into buffer
-                uint32 count = 0;
                 for(int32 i = 0; i < width; i++)
                 {
                     for(int32 j = 0; j < height; j++)
                     {
-                        float x = (float)localBuffer[count] / 255.0f;
-                        float y = (float)localBuffer[count + 1] / 255.0f;
-                        float z = (float)localBuffer[count + 2] / 255.0f;
-                        _heightArray[i][j] = x + y + z;
-                        count += 3;
+                        unsigned char* pixelOffset = localBuffer + (width * i + j) * nrChannels;
+
+                        float x = (float)pixelOffset[0] / 255.0f;
+                        float y = (float)pixelOffset[1] / 255.0f;
+                        float z = (float)pixelOffset[2] / 255.0f;
+
+                        _heightArray[width * i + j] = x + y + z;
                     }
                 }
 
@@ -48,16 +54,26 @@ namespace Core
         stbi_image_free(localBuffer);
     }
 
-    float Heightmap::GetValueAt(const uint16 x, const uint16 z) const
+    Heightmap::~Heightmap()
     {
+        free(_heightArray);
+    }
+
+    float Heightmap::GetValueAt(const uint32 x, const uint32 z) const
+    {
+        //Return value at given position with some special treatment for the edges
+
         if(x < PLANE_SIZE && z < PLANE_SIZE)
-            return _heightArray[x][z];
+            return _heightArray[PLANE_SIZE * x + z];
+
         else if(x-1 < PLANE_SIZE && z < PLANE_SIZE)
-            return _heightArray[x-1][z];
+            return _heightArray[PLANE_SIZE * (x-1) + z];
+
         else if(x < PLANE_SIZE && z-1 < PLANE_SIZE)
-            return _heightArray[x][z-1];
+            return _heightArray[PLANE_SIZE * x + (z-1)];
+
         else if(x-1 < PLANE_SIZE && z-1 < PLANE_SIZE)
-            return _heightArray[x-1][z-1];
+            return _heightArray[PLANE_SIZE * (x-1) + (z-1)];
 
         return 0;
     }

@@ -72,7 +72,7 @@ namespace GW
     {
         //Load custom font
         ImGuiIO& io = ImGui::GetIO();
-        io.Fonts->AddFontFromFileTTF("../res/fonts/JetBrainsMono-Medium.ttf", 19);
+        io.Fonts->AddFontFromFileTTF("../res/assets/fonts/JetBrainsMono-Medium.ttf", 19);
 
         //Set style
         ImGui::StyleColorsDark();

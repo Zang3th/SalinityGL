@@ -6,7 +6,7 @@ layout(location = 2) in vec3 normalsIn;
 
 out vec2 texCoords;
 out vec3 normals;
-out vec4 fragPos;
+out vec3 fragPos;
 out vec4 fragPosLightSpace;
 
 uniform mat4 model;
@@ -17,11 +17,12 @@ uniform vec4 clipPlane;
 
 void main()
 {
-    texCoords = texCoordsIn;
-    normals = transpose(inverse(mat3(model))) * normalsIn;
-    fragPos = model * vec4(vertexIn, 1.0f);
-    fragPosLightSpace = lightProjection * fragPos;
-    gl_ClipDistance[0] = dot(fragPos, clipPlane);
+    texCoords           = texCoordsIn;
+    normals             = transpose(inverse(mat3(model))) * normalsIn;
+    vec4 worldPos       = model * vec4(vertexIn, 1.0f);
+    fragPos             = worldPos.xyz;
+    fragPosLightSpace   = lightProjection * worldPos;
+    gl_ClipDistance[0]  = dot(worldPos, clipPlane);
 
-    gl_Position = projection * view * fragPos;
+    gl_Position         = projection * view * worldPos;
 }

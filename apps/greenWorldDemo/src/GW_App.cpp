@@ -23,9 +23,9 @@ namespace GW
         Core::ResourceManager::LoadShader("SpriteShaderBW", "../res/shader/greenWorld/sprite_vs.glsl", "../res/shader/greenWorld/spriteBlackAndWhite_fs.glsl");
 
         //Textures
-        Core::ResourceManager::LoadTextureFromFile("ColorMap", "../res/textures/greenWorld/ColorMap.png");
-        Core::ResourceManager::LoadTextureFromFile("DuDvMap", "../res/textures/greenWorld/DuDvMap.png");
-        Core::ResourceManager::LoadTextureFromFile("NormalMap", "../res/textures/greenWorld/WaterNormalMap.png");
+        Core::ResourceManager::LoadTextureFromFile("ColorMap", "../res/assets/textures/greenWorld/Colormap128.png");
+        Core::ResourceManager::LoadTextureFromFile("DuDvMap", "../res/assets/textures/greenWorld/DuDvMap.png");
+        Core::ResourceManager::LoadTextureFromFile("NormalMap", "../res/assets/textures/greenWorld/WaterNormalMap.png");
     }
 
     void App::InitModules()
@@ -45,20 +45,20 @@ namespace GW
         //Audio
         _audio = Core::MakeScope<Core::Audio>();
         _audio->SetListenerPosition(Core::Camera::GetPosition(), Core::Camera::GetFront(), Core::Camera::GetUp());
-        //_audio->PlaySound2D("../res/audio/greenWorld/music/TrueBlueSky.wav", true, 1.0f);
-        //_audio->PlaySound3D("../res/audio/greenWorld/sounds/River.wav", glm::vec3(39.0f, 14.0f, 56.0f), true, 40.0f, 1.5);
+        //_audio->PlaySound2D("../res/assets/audio/greenWorld/music/TrueBlueSky.wav", true, 1.0f);
+        //_audio->PlaySound3D("../res/assets/audio/greenWorld/sounds/River.wav", glm::vec3(39.0f, 14.0f, 56.0f), true, 40.0f, 1.5);
 
         //Resources
         LoadResources();
 
         //Shadow-Rendering
-        _shadowRenderer = Core::MakeScope<Core::ShadowRenderer>(8192, 8192, glm::vec3(150.0f, 100.0f, -30.0f));
+        _shadowRenderer = Core::MakeScope<Core::ShadowRenderer>(8192, 8192, _lightPosition);
 
         //Water-Rendering
         _waterRenderer = Core::MakeScope<Core::WaterRenderer>();
 
         //Renderer (static)
-        Core::Renderer::Init(_shadowRenderer->GetLightProjection());
+        Core::Renderer::Init(_nearPlane, _farPlane, _lightPosition, _lightColor, _shadowRenderer->GetLightProjection());
 
         //Input (static)
         InputManager::Init(_window.get());
@@ -73,8 +73,8 @@ namespace GW
             Core::PLANE_SIZE,
             1.0f,
             "GrassTexture",
-            "../res/textures/greenWorld/Grass.jpg",
-            "../res/textures/greenWorld/heightmap/Heightmap128_Noise.bmp"
+            "../res/assets/textures/greenWorld/Grass.jpg",
+            "../res/assets/textures/greenWorld/Heightmap128.bmp"
         );
         terrainModel->ChangePosition(glm::vec3(0.0f, -2.7f, 0.0f));
         terrainModel->SetTexture2(Core::ResourceManager::GetTexture("ColorMap"));
@@ -97,7 +97,7 @@ namespace GW
         Core::Renderer::SubmitWater(waterModel);
 
         //House
-        auto house = Core::ModelManager::AddObject("OldHouse", "../res/models/greenWorld/OldHouse");
+        auto house = Core::ModelManager::AddObject("OldHouse", "../res/assets/models/greenWorld/OldHouse");
         for(const auto& model : house)
         {
             model->SetTexture3(_shadowRenderer->GetDepthTexture());
@@ -108,17 +108,17 @@ namespace GW
         }
 
         //Bridge
-        auto bridge = Core::ModelManager::AddObject("Bridge", "../res/models/greenWorld/Bridge");
+        auto bridge = Core::ModelManager::AddObject("Bridge", "../res/assets/models/greenWorld/Bridge");
         for(const auto& model : bridge)
         {
             model->ChangeSize(2.0f);
             model->ChangeRotation(0.0f, -90.0f, 0.0f);
-            model->ChangePosition(glm::vec3(39.0f, -0.45f, 48.0f));
+            model->ChangePosition(glm::vec3(39.0f, -0.45f, 46.0f));
             Core::Renderer::Submit(model, true);
         }
 
         //Tree
-        auto tree = Core::ModelManager::AddObject("Tree", "../res/models/greenWorld/Tree");
+        auto tree = Core::ModelManager::AddObject("Tree", "../res/assets/models/greenWorld/Tree");
         for(const auto& model : tree)
         {
             model->ChangeSize(0.06f);
@@ -127,7 +127,7 @@ namespace GW
         }
 
         //Well
-        auto well = Core::ModelManager::AddObject("Well", "../res/models/greenWorld/Well");
+        auto well = Core::ModelManager::AddObject("Well", "../res/assets/models/greenWorld/Well");
         for(const auto& model : well)
         {
             model->ChangeSize(0.05f);
@@ -141,12 +141,12 @@ namespace GW
     {
         const std::array<const char*, 6> faces
         {
-            "../res/textures/greenWorld/cubemap/graycloud_xp.jpg", //Right
-            "../res/textures/greenWorld/cubemap/graycloud_xn.jpg", //Left
-            "../res/textures/greenWorld/cubemap/graycloud_yp.jpg", //Top
-            "../res/textures/greenWorld/cubemap/graycloud_yn.jpg", //Bottom
-            "../res/textures/greenWorld/cubemap/graycloud_zp.jpg", //Front
-            "../res/textures/greenWorld/cubemap/graycloud_zn.jpg"  //Back
+            "../res/assets/textures/greenWorld/cubemap/graycloud_xp.jpg", //Right
+            "../res/assets/textures/greenWorld/cubemap/graycloud_xn.jpg", //Left
+            "../res/assets/textures/greenWorld/cubemap/graycloud_yp.jpg", //Top
+            "../res/assets/textures/greenWorld/cubemap/graycloud_yn.jpg", //Bottom
+            "../res/assets/textures/greenWorld/cubemap/graycloud_zp.jpg", //Front
+            "../res/assets/textures/greenWorld/cubemap/graycloud_zn.jpg"  //Back
         };
 
         _cubemap = Core::MakeScope<Core::Cubemap>(faces, Core::ResourceManager::GetShader("CubemapShader"));
@@ -163,8 +163,8 @@ namespace GW
             glm::vec3(1.0f, 1.0f, 1.0f)
         );
 
-        _shadowSprite->ChangePosition(glm::vec2(10.0f, 10.0f));
-        _shadowSprite->ChangeSize(glm::vec2(280.0f, 280.0f));
+        _shadowSprite->ChangePosition(glm::vec2(5.0f, Core::WINDOW_HEIGHT - 230.0f));
+        _shadowSprite->ChangeSize(glm::vec2(200.0f, 200.0f));
         Core::Renderer::Submit(_shadowSprite.get());
 
         //ReflectSprite
@@ -175,8 +175,8 @@ namespace GW
             glm::vec3(1.0f, 1.0f, 1.0f)
         );
 
-        _reflectSprite->ChangePosition(glm::vec2(300.0f, 10.0f));
-        _reflectSprite->ChangeSize(glm::vec2(280.0f, 280.0f));
+        _reflectSprite->ChangePosition(glm::vec2(5.0f, Core::WINDOW_HEIGHT - 430.0f));
+        _reflectSprite->ChangeSize(glm::vec2(200.0f, 200.0f));
         Core::Renderer::Submit(_reflectSprite.get());
 
         //RefractSprite
@@ -187,8 +187,8 @@ namespace GW
             glm::vec3(1.0f, 1.0f, 1.0f)
         );
 
-        _refractSprite->ChangePosition(glm::vec2(590.0f, 10.0f));
-        _refractSprite->ChangeSize(glm::vec2(280.0f, 280.0f));
+        _refractSprite->ChangePosition(glm::vec2(5.0f, Core::WINDOW_HEIGHT - 630.0f));
+        _refractSprite->ChangeSize(glm::vec2(200.0f, 200.0f));
         Core::Renderer::Submit(_refractSprite.get());
 
         //RefractDepthSprite
@@ -199,8 +199,8 @@ namespace GW
             glm::vec3(1.0f, 1.0f, 1.0f)
         );
 
-        _refractDepthSprite->ChangePosition(glm::vec2(880.0f, 10.0f));
-        _refractDepthSprite->ChangeSize(glm::vec2(280.0f, 280.0f));
+        _refractDepthSprite->ChangePosition(glm::vec2(5.0f, Core::WINDOW_HEIGHT - 830.0f));
+        _refractDepthSprite->ChangeSize(glm::vec2(200.0f, 200.0f));
         Core::Renderer::Submit(_refractDepthSprite.get());
     }
 

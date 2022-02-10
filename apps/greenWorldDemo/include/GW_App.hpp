@@ -36,8 +36,12 @@ namespace GW
 
             Core::Scope<Interface>              _interface;
 
-            const float                         _waveSpeed  = 0.03f;
-                  float                         _moveFactor = 0.0f;
+                  glm::vec3                     _lightPosition = glm::vec3(150.0f, 100.0f, -30.0f);
+                  glm::vec3                     _lightColor    = glm::vec3(1.0f, 1.0f, 1.0f);
+                  float                         _nearPlane     = 2.0f;
+                  float                         _farPlane      = 300.0f;
+            const float                         _waveSpeed     = 0.03f;
+                  float                         _moveFactor    = 0.0f;
 
             void LoadResources();
             void InitModules();

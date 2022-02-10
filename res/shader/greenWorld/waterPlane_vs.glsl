@@ -17,11 +17,11 @@ const float tileDivisor = 32.0f;
 
 void main()
 {
-    texCoords = texCoordsIn / tileDivisor;
-    vec4 worldPos = model * vec4(vertexIn, 1.0f);
-    fragPos = worldPos.xyz;
-    clipSpace = projection * view * worldPos;
-    toCameraVector = viewPos - fragPos.xyz;
+    texCoords       = texCoordsIn / tileDivisor;
+    vec4 worldPos   = model * vec4(vertexIn, 1.0f);
+    fragPos         = worldPos.xyz;
+    clipSpace       = projection * view * worldPos;
+    toCameraVector  = viewPos - fragPos.xyz;
 
-    gl_Position = clipSpace;
+    gl_Position     = clipSpace;
 }

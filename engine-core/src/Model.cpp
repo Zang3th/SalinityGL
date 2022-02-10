@@ -66,7 +66,7 @@ namespace Core
 
     }
 
-    uint32 Model::DrawModel(Shader* shader, const glm::mat4& projMatrix, const glm::mat4& viewMatrix, const glm::vec3& camPos, const glm::mat4& lightProjection) const
+    uint32 Model::DrawModel(Shader* shader, const glm::mat4& projMatrix, const glm::mat4& viewMatrix, const glm::vec3& camPos, const glm::vec3& lightPos, const glm::vec3& lightColor, const glm::mat4& lightProjection) const
     {
         shader->Bind();
 
@@ -75,6 +75,8 @@ namespace Core
         shader->SetUniformMat4f("model", _model);
         shader->SetUniformMat4f("projection", projMatrix);
         shader->SetUniformVec3f("viewPos", camPos);
+        shader->SetUniformVec3f("lightPos", lightPos);
+        shader->SetUniformVec3f("lightColor", lightColor);
         shader->SetUniformMat4f("lightProjection", lightProjection);
         shader->SetUniform1i("diffuseTexture", 0);
         shader->SetUniform1i("normalMap", 1);
@@ -105,7 +107,7 @@ namespace Core
         return _verticeCount;
     }
 
-    uint32 Model::DrawTerrainModel(Shader* shader, const glm::mat4& projMatrix, const glm::mat4& viewMatrix, const glm::vec3& camPos, const glm::mat4& lightProjection) const
+    uint32 Model::DrawTerrainModel(Shader* shader, const glm::mat4& projMatrix, const glm::mat4& viewMatrix, const glm::vec3& camPos, const glm::vec3& lightPos, const glm::vec3& lightColor, const glm::mat4& lightProjection) const
     {
         shader->Bind();
 
@@ -114,6 +116,8 @@ namespace Core
         shader->SetUniformMat4f("model", _model);
         shader->SetUniformMat4f("projection", projMatrix);
         shader->SetUniformVec3f("viewPos", camPos);
+        shader->SetUniformVec3f("lightPos", lightPos);
+        shader->SetUniformVec3f("lightColor", lightColor);
         shader->SetUniformMat4f("lightProjection", lightProjection);
         shader->SetUniform1i("diffuseTexture", 0);
         shader->SetUniform1i("colorMap", 1);
@@ -143,7 +147,7 @@ namespace Core
         return _verticeCount;
     }
 
-    uint32 Model::DrawWaterModel(Shader* shader, const glm::mat4& projMatrix, const glm::mat4& viewMatrix, const glm::vec3& camPos, float moveFactor) const
+    uint32 Model::DrawWaterModel(Shader* shader, const glm::mat4& projMatrix, const glm::mat4& viewMatrix, const glm::vec3& camPos, const glm::vec3& lightPos, const glm::vec3& lightColor, float moveFactor, float nearPlane, float farPlane) const
     {
         shader->Bind();
 
@@ -152,12 +156,16 @@ namespace Core
         shader->SetUniformMat4f("model", _model);
         shader->SetUniformMat4f("projection", projMatrix);
         shader->SetUniformVec3f("viewPos", camPos);
+        shader->SetUniformVec3f("lightPos", lightPos);
+        shader->SetUniformVec3f("lightColor", lightColor);
         shader->SetUniform1i("reflectionTexture", 0);
         shader->SetUniform1i("refractionTexture", 1);
         shader->SetUniform1i("dudvMap", 2);
         shader->SetUniform1i("normalMap", 3);
         shader->SetUniform1i("depthMap", 4);
         shader->SetUniform1f("moveFactor", moveFactor);
+        shader->SetUniform1f("nearPlane", nearPlane);
+        shader->SetUniform1f("farPlane", farPlane);
 
         //Reflection texture
         if(_texture1)

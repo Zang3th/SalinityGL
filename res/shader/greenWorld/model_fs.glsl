@@ -2,23 +2,23 @@
 
 in vec2 texCoords;
 in vec3 normals;
-in vec4 fragPos;
+in vec3 fragPos;
 in vec4 fragPosLightSpace;
 
 out vec4 fragColor;
 
-uniform sampler2D diffuseTexture;
-uniform sampler2D normalMap;
-uniform sampler2D shadowMap;
-uniform int  gotNormalMap;
-uniform vec3 viewPos;
+uniform sampler2D   diffuseTexture;
+uniform sampler2D   normalMap;
+uniform sampler2D   shadowMap;
+uniform int         gotNormalMap;
+uniform vec3        viewPos;
+uniform vec3        lightPos;
+uniform vec3        lightColor;
 
 const float ambientStrength = 0.3;
 const float diffuseStrength = 0.6;
 const float specularStrength = 0.4;
 const float shininess = 2.0;
-const vec3  lightPos = vec3(150.0, 100.0, -30.0);
-const vec3  lightColor = vec3(1.0, 1.0, 1.0);
 
 float calculateShadow(vec4 fragPosInLightSpace, vec3 normal, vec3 lightDir)
 {
@@ -28,10 +28,10 @@ float calculateShadow(vec4 fragPosInLightSpace, vec3 normal, vec3 lightDir)
     //Transform to [0,1] range
     projCoords = projCoords * 0.5 + 0.5;
 
-    float closestDepth = texture(shadowMap, projCoords.xy).r;
-    float currentDepth = projCoords.z;
-    float bias = max(0.05 * (1.0 - dot(normal, lightDir)), 0.005);
-    float shadow = currentDepth - bias > closestDepth ? 1.0 : 0.0;
+    float closestDepth  = texture(shadowMap, projCoords.xy).r;
+    float currentDepth  = projCoords.z;
+    float bias          = max(0.05 * (1.0 - dot(normal, lightDir)), 0.005);
+    float shadow        = currentDepth - bias > closestDepth ? 1.0 : 0.0;
 
     if(projCoords.z > 1.0)
         shadow = 0.0;
@@ -39,11 +39,11 @@ float calculateShadow(vec4 fragPosInLightSpace, vec3 normal, vec3 lightDir)
     return shadow;
 }
 
-vec3 calculateLight(vec3 textureColor, vec3 fragmentPosition)
+vec3 calculateLight(vec3 textureColor)
 {
     vec3 normal_n   = normalize(normals);
-    vec3 lightDir   = normalize(lightPos - fragmentPosition);
-    vec3 viewDir    = normalize(viewPos  - fragmentPosition);
+    vec3 lightDir   = normalize(lightPos - fragPos);
+    vec3 viewDir    = normalize(viewPos  - fragPos);
     vec3 halfwayDir = normalize(lightDir + viewDir);
 
     //Ambient
@@ -71,5 +71,5 @@ void main()
     if(texColor.a < 0.5)
         discard;
 
-    fragColor = vec4(calculateLight(texColor.rgb, fragPos.rgb), texColor.a);
+    fragColor = vec4(calculateLight(texColor.rgb), texColor.a);
 }

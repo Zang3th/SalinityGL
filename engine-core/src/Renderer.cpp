@@ -4,14 +4,18 @@ namespace Core
 {
     // ----- Public -----
 
-    void Renderer::Init(glm::mat4 lightProjection)
+    void Renderer::Init(float nearPlane, float farPlane, glm::vec3 lightPos, glm::vec3 lightColor, glm::mat4 lightProjection)
     {
-        _orthoProjection = glm::ortho(0.0f, (float)WINDOW_WIDTH, 0.0f, (float)WINDOW_HEIGHT, -1.0f, 1.0f);
-        _perspProjection = glm::perspective(glm::radians(45.0f), (float)WINDOW_WIDTH/(float)WINDOW_HEIGHT, 2.0f, 300.0f);
-        //Nearplane of the _perspProjection has to be this big, otherwise the z-Buffer in the water rendering refraction depth pass is bugged
-
+        _nearPlane       = nearPlane;
+        _farPlane        = farPlane;
+        _lightPosition   = lightPos;
+        _lightColor      = lightColor;
         _lightProjection = lightProjection;
-    }
+        _orthoProjection = glm::ortho(0.0f, (float)WINDOW_WIDTH, 0.0f, (float)WINDOW_HEIGHT, -1.0f, 1.0f);
+
+        //Nearplane of the _perspProjection has to be this big, otherwise the z-Buffer in the water rendering refraction depth pass is bugged
+        _perspProjection = glm::perspective(glm::radians(45.0f), (float)WINDOW_WIDTH/(float)WINDOW_HEIGHT, _nearPlane, _farPlane);
+      }
 
     void Renderer::PrepareFrame()
     {
@@ -62,7 +66,16 @@ namespace Core
         //Render models
         for(const auto& model : _modelBuffer)
         {
-            _drawnVertices += model->DrawModel(modelShader, _perspProjection, Camera::GetViewMatrix(), Camera::GetPosition(), _lightProjection);
+            _drawnVertices += model->DrawModel
+            (
+                modelShader,
+                _perspProjection,
+                Camera::GetViewMatrix(),
+                Camera::GetPosition(),
+                _lightPosition,
+                _lightColor,
+                _lightProjection
+            );
             _drawcalls++;
         }
 
@@ -81,7 +94,16 @@ namespace Core
         //Render models that cast shadows
         for(const auto& model : _shadowModelBuffer)
         {
-            _drawnVertices += model->DrawModel(modelShader, _perspProjection, Camera::GetViewMatrix(), Camera::GetPosition(), _lightProjection);
+            _drawnVertices += model->DrawModel
+            (
+                modelShader,
+                _perspProjection,
+                Camera::GetViewMatrix(),
+                Camera::GetPosition(),
+                _lightPosition,
+                _lightColor,
+                _lightProjection
+            );
             _drawcalls++;
         }
 
@@ -103,7 +125,16 @@ namespace Core
         else{
             GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));}
 
-        _drawnVertices += _terrainModel->DrawTerrainModel(modelShader, _perspProjection, Camera::GetViewMatrix(), Camera::GetPosition(), _lightProjection);
+        _drawnVertices += _terrainModel->DrawTerrainModel
+        (
+            modelShader,
+            _perspProjection,
+            Camera::GetViewMatrix(),
+            Camera::GetPosition(),
+            _lightPosition,
+            _lightColor,
+            _lightProjection
+        );
         _drawcalls++;
 
         //Increase render pass counter
@@ -118,7 +149,18 @@ namespace Core
         else{
             GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));}
 
-        _drawnVertices += _waterModel->DrawWaterModel(modelShader, _perspProjection, Camera::GetViewMatrix(), Camera::GetPosition(), moveFactor);
+        _drawnVertices += _waterModel->DrawWaterModel
+        (
+            modelShader,
+            _perspProjection,
+            Camera::GetViewMatrix(),
+            Camera::GetPosition(),
+            _lightPosition,
+            _lightColor,
+            moveFactor,
+            _nearPlane,
+            _farPlane
+        );
         _drawcalls++;
 
         //Increase render pass counter

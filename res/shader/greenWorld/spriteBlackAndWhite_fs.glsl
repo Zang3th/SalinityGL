@@ -9,6 +9,6 @@ uniform vec3 color;
 
 void main()
 {
-    float depthValue = texture(image, texCoords).r;
-    fragColor = vec4(vec3(depthValue), 1.0);
+    float depthValue    = texture(image, texCoords).r;
+    fragColor           = vec4(vec3(depthValue), 1.0);
 }

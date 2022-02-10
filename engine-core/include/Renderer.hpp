@@ -19,11 +19,15 @@ namespace Core
             inline static Cubemap                   *_cubemap               = nullptr;
             inline static Model                     *_terrainModel          = nullptr;
             inline static Model                     *_waterModel            = nullptr;
+            inline static float                      _nearPlane             = float();
+            inline static float                      _farPlane              = float();
             inline static uint32                     _drawcalls             = uint32();
             inline static uint32                     _drawnVertices         = uint32();
             inline static uint32                     _modelRenderPasses     = uint32();
             inline static uint32                     _spriteRenderPasses    = uint32();
             inline static uint32                     _cubemapRenderPasses   = uint32();
+            inline static glm::vec3                  _lightPosition         = glm::vec3();
+            inline static glm::vec3                  _lightColor            = glm::vec3();
             inline static glm::mat4                  _orthoProjection       = glm::mat4();
             inline static glm::mat4                  _perspProjection       = glm::mat4();
             inline static glm::mat4                  _lightProjection       = glm::mat4();
@@ -33,7 +37,7 @@ namespace Core
 
         public:
             Renderer() = delete;
-            static void Init(glm::mat4 lightProjection);
+            static void Init(float nearPlane, float farPlane, glm::vec3 lightPos, glm::vec3 lightColor, glm::mat4 lightProjection);
             static void PrepareFrame();
             static void Submit(Model* model, bool producesShadows);
             static void Submit(Sprite* sprite);

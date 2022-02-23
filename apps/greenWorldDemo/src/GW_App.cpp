@@ -104,7 +104,7 @@ namespace GW
             model->ChangeSize(0.15f);
             model->ChangeRotation(0.0f, -90.0f, 0.0f);
             model->ChangePosition(glm::vec3(105.0f, 0.4f, 85.0f));
-            Core::Renderer::Submit(model, true);
+            Core::Renderer::Submit(model);
         }
 
         //Bridge
@@ -114,7 +114,7 @@ namespace GW
             model->ChangeSize(2.0f);
             model->ChangeRotation(0.0f, -90.0f, 0.0f);
             model->ChangePosition(glm::vec3(39.0f, -0.45f, 46.0f));
-            Core::Renderer::Submit(model, true);
+            Core::Renderer::Submit(model);
         }
 
         //Tree
@@ -123,7 +123,7 @@ namespace GW
         {
             model->ChangeSize(0.06f);
             model->ChangePosition(glm::vec3(85.0f, 0.3f, 35.0f));
-            Core::Renderer::Submit(model, true);
+            Core::Renderer::Submit(model);
         }
 
         //Well
@@ -133,7 +133,7 @@ namespace GW
             model->ChangeSize(0.05f);
             model->ChangeRotation(0.0f, -45.0f, 0.0f);
             model->ChangePosition(glm::vec3(75.0f, 15.3f, 75.0f));
-            Core::Renderer::Submit(model, true);
+            Core::Renderer::Submit(model);
         }
     }
 
@@ -258,7 +258,7 @@ namespace GW
         {   Core::PROFILE_SCOPE("Render graphics");
 
             Core::Renderer::FlushTerrainModel(Core::ResourceManager::GetShader("TerrainShader"));
-            Core::Renderer::FlushAllModelBuffers(Core::ResourceManager::GetShader("ModelShader"));
+            Core::Renderer::FlushModelBuffer(Core::ResourceManager::GetShader("ModelShader"));
 
             //Modify movefactor and render waterPlane
             _moveFactor += _waveSpeed * (float)_window->GetDeltaTime();

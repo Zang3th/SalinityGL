@@ -26,49 +26,29 @@ namespace Core
             float               _size;
 
             static Ref<VertexArray> CreateVaoFromMesh(Mesh* mesh);
-            void SetModelMatrix();
+            void                    SetModelMatrix();
 
         public:
-            explicit Model(Mesh* mesh);
-            [[nodiscard]] uint32 DrawModel
-            (
-                Shader* shader,
-                const glm::mat4& projMatrix,
-                const glm::mat4& viewMatrix,
-                const glm::vec3& camPos,
-                const glm::vec3& lightPos,
-                const glm::vec3& lightColor,
-                const glm::mat4& lightProjection
-            ) const;
-            [[nodiscard]] uint32 DrawTerrainModel
-            (
-                Shader* shader,
-                const glm::mat4& projMatrix,
-                const glm::mat4& viewMatrix,
-                const glm::vec3& camPos,
-                const glm::vec3& lightPos,
-                const glm::vec3& lightColor,
-                const glm::mat4& lightProjection
-            ) const;
-            [[nodiscard]] uint32 DrawWaterModel
-            (
-                    Shader* shader,
-                    const glm::mat4& projMatrix,
-                    const glm::mat4& viewMatrix,
-                    const glm::vec3& camPos,
-                    const glm::vec3& lightPos,
-                    const glm::vec3& lightColor,
-                    float moveFactor,
-                    float nearPlane,
-                    float farPlane
-            ) const;
+            explicit                    Model(Mesh* mesh);
+            [[nodiscard]] VertexArray*  GetVAO()          const;
+            [[nodiscard]] glm::mat4     GetModelMatrix()  const;
+            [[nodiscard]] uint32        GetVerticeCount() const;
+            [[nodiscard]] int32         GotNormalMap()    const;
+
             void ChangePosition(const glm::vec3& position);
             void ChangeRotation(float rotX, float rotY, float rotZ);
             void ChangeSize(float size);
+
             void SetTexture1(Texture* texture);
             void SetTexture2(Texture* texture);
             void SetTexture3(Texture* texture);
             void SetTexture4(Texture* texture);
             void SetTexture5(Texture* texture);
+
+            [[nodiscard]] Texture* GetTexture1() const;
+            [[nodiscard]] Texture* GetTexture2() const;
+            [[nodiscard]] Texture* GetTexture3() const;
+            [[nodiscard]] Texture* GetTexture4() const;
+            [[nodiscard]] Texture* GetTexture5() const;
     };
 }

@@ -44,7 +44,7 @@ namespace Core
         //Render scene to shadow framebuffer
         StartFrame();
         Renderer::ClearBuffers();
-        Renderer::FlushShadowModelBuffer(shadowShader);
+        Renderer::FlushModelBuffer(shadowShader);
         EndFrame();
     }
 

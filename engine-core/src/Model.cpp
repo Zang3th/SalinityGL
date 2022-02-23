@@ -66,137 +66,24 @@ namespace Core
 
     }
 
-    uint32 Model::DrawModel(Shader* shader, const glm::mat4& projMatrix, const glm::mat4& viewMatrix, const glm::vec3& camPos, const glm::vec3& lightPos, const glm::vec3& lightColor, const glm::mat4& lightProjection) const
+    VertexArray* Model::GetVAO() const
     {
-        shader->Bind();
+        return _vao.get();
+    }
 
-        //Set uniforms
-        shader->SetUniformMat4f("view", viewMatrix);
-        shader->SetUniformMat4f("model", _model);
-        shader->SetUniformMat4f("projection", projMatrix);
-        shader->SetUniformVec3f("viewPos", camPos);
-        shader->SetUniformVec3f("lightPos", lightPos);
-        shader->SetUniformVec3f("lightColor", lightColor);
-        shader->SetUniformMat4f("lightProjection", lightProjection);
-        shader->SetUniform1i("diffuseTexture", 0);
-        shader->SetUniform1i("normalMap", 1);
-        shader->SetUniform1i("shadowMap", 2);
-        shader->SetUniform1i("gotNormalMap", _gotNormalMap);
+    glm::mat4 Model::GetModelMatrix() const
+    {
+        return _model;
+    }
 
-        //Diffuse texture
-        if(_texture1)
-            _texture1->BindToSlot(0);
-
-        //Normal map
-        if(_gotNormalMap == 1)
-            _texture2->BindToSlot(1);
-
-        //Shadow map
-        if(_texture3)
-            _texture3->BindToSlot(2);
-
-        _vao->Bind();
-
-        //Render model
-        GLCall(glDrawElements(GL_TRIANGLES, _verticeCount, GL_UNSIGNED_INT, nullptr));
-
-        _vao->Unbind();
-        shader->Unbind();
-
-        //Return rendered vertices
+    uint32 Model::GetVerticeCount() const
+    {
         return _verticeCount;
     }
 
-    uint32 Model::DrawTerrainModel(Shader* shader, const glm::mat4& projMatrix, const glm::mat4& viewMatrix, const glm::vec3& camPos, const glm::vec3& lightPos, const glm::vec3& lightColor, const glm::mat4& lightProjection) const
+    int32 Model::GotNormalMap() const
     {
-        shader->Bind();
-
-        //Set uniforms
-        shader->SetUniformMat4f("view", viewMatrix);
-        shader->SetUniformMat4f("model", _model);
-        shader->SetUniformMat4f("projection", projMatrix);
-        shader->SetUniformVec3f("viewPos", camPos);
-        shader->SetUniformVec3f("lightPos", lightPos);
-        shader->SetUniformVec3f("lightColor", lightColor);
-        shader->SetUniformMat4f("lightProjection", lightProjection);
-        shader->SetUniform1i("diffuseTexture", 0);
-        shader->SetUniform1i("colorMap", 1);
-        shader->SetUniform1i("shadowMap", 2);
-
-        //Diffuse texture
-        if(_texture1)
-            _texture1->BindToSlot(0);
-
-        //Normal map
-        if(_texture2)
-            _texture2->BindToSlot(1);
-
-        //Shadow map
-        if(_texture3)
-            _texture3->BindToSlot(2);
-
-        _vao->Bind();
-
-        //Render model
-        GLCall(glDrawElements(GL_TRIANGLES, _verticeCount, GL_UNSIGNED_INT, nullptr));
-
-        _vao->Unbind();
-        shader->Unbind();
-
-        //Return rendered vertices
-        return _verticeCount;
-    }
-
-    uint32 Model::DrawWaterModel(Shader* shader, const glm::mat4& projMatrix, const glm::mat4& viewMatrix, const glm::vec3& camPos, const glm::vec3& lightPos, const glm::vec3& lightColor, float moveFactor, float nearPlane, float farPlane) const
-    {
-        shader->Bind();
-
-        //Set uniforms
-        shader->SetUniformMat4f("view", viewMatrix);
-        shader->SetUniformMat4f("model", _model);
-        shader->SetUniformMat4f("projection", projMatrix);
-        shader->SetUniformVec3f("viewPos", camPos);
-        shader->SetUniformVec3f("lightPos", lightPos);
-        shader->SetUniformVec3f("lightColor", lightColor);
-        shader->SetUniform1i("reflectionTexture", 0);
-        shader->SetUniform1i("refractionTexture", 1);
-        shader->SetUniform1i("dudvMap", 2);
-        shader->SetUniform1i("normalMap", 3);
-        shader->SetUniform1i("depthMap", 4);
-        shader->SetUniform1f("moveFactor", moveFactor);
-        shader->SetUniform1f("nearPlane", nearPlane);
-        shader->SetUniform1f("farPlane", farPlane);
-
-        //Reflection texture
-        if(_texture1)
-            _texture1->BindToSlot(0);
-
-        //Refraction texture
-        if(_texture2)
-            _texture2->BindToSlot(1);
-
-        //DuDvMap
-        if(_texture3)
-            _texture3->BindToSlot(2);
-
-        //NormalMap
-        if(_texture4)
-            _texture4->BindToSlot(3);
-
-        //DepthMap
-        if(_texture5)
-            _texture5->BindToSlot(4);
-
-        _vao->Bind();
-
-        //Render model
-        GLCall(glDrawElements(GL_TRIANGLES, _verticeCount, GL_UNSIGNED_INT, nullptr));
-
-        _vao->Unbind();
-        shader->Unbind();
-
-        //Return rendered vertices
-        return _verticeCount;
+        return _gotNormalMap;
     }
 
     void Model::ChangePosition(const glm::vec3& position)
@@ -242,5 +129,30 @@ namespace Core
     void Model::SetTexture5(Texture* texture)
     {
         _texture5 = texture;
+    }
+
+    Texture* Model::GetTexture1() const
+    {
+        return _texture1;
+    }
+
+    Texture* Model::GetTexture2() const
+    {
+        return _texture2;
+    }
+
+    Texture* Model::GetTexture3() const
+    {
+        return _texture3;
+    }
+
+    Texture* Model::GetTexture4() const
+    {
+        return _texture4;
+    }
+
+    Texture* Model::GetTexture5() const
+    {
+        return _texture5;
     }
 }

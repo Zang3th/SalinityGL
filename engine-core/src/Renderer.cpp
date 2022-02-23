@@ -2,6 +2,168 @@
 
 namespace Core
 {
+    // ----- Private -----
+
+    uint32 Renderer::DrawModel(Shader* modelShader, const Model* model)
+    {
+        modelShader->Bind();
+        bool gotNormalMap = model->GotNormalMap();
+
+        //Set uniforms
+        modelShader->SetUniformMat4f("view", Camera::GetViewMatrix());
+        modelShader->SetUniformMat4f("model", model->GetModelMatrix());
+        modelShader->SetUniformMat4f("projection", _perspProjection);
+        modelShader->SetUniformVec3f("viewPos", Camera::GetPosition());
+        modelShader->SetUniformVec3f("lightPos", _lightPosition);
+        modelShader->SetUniformVec3f("lightColor", _lightColor);
+        modelShader->SetUniformMat4f("lightProjection", _lightProjection);
+        modelShader->SetUniform1i("diffuseTexture", 0);
+        modelShader->SetUniform1i("normalMap", 1);
+        modelShader->SetUniform1i("shadowMap", 2);
+        modelShader->SetUniform1i("gotNormalMap", gotNormalMap);
+
+        //Get textures
+        Texture* texture1 = model->GetTexture1();
+        Texture* texture2 = model->GetTexture2();
+        Texture* texture3 = model->GetTexture3();
+
+        //Diffuse texture
+        if(texture1)
+            texture1->BindToSlot(0);
+
+        //Normal map
+        if(gotNormalMap == 1)
+            texture2->BindToSlot(1);
+
+        //Shadow map
+        if(texture3)
+            texture3->BindToSlot(2);
+
+        //Get rendering data
+        VertexArray* vao    = model->GetVAO();
+        uint32 verticeCount = model->GetVerticeCount();
+
+        //Render model
+        vao->Bind();
+        GLCall(glDrawElements(GL_TRIANGLES, verticeCount, GL_UNSIGNED_INT, nullptr));
+        vao->Unbind();
+
+        modelShader->Unbind();
+
+        //Return rendered vertices
+        return verticeCount;
+    }
+
+    uint32 Renderer::DrawTerrainModel(Shader* terrainShader)
+    {
+        terrainShader->Bind();
+
+        //Set uniforms
+        terrainShader->SetUniformMat4f("view", Camera::GetViewMatrix());
+        terrainShader->SetUniformMat4f("model", _terrainModel->GetModelMatrix());
+        terrainShader->SetUniformMat4f("projection", _perspProjection);
+        terrainShader->SetUniformVec3f("viewPos", Camera::GetPosition());
+        terrainShader->SetUniformVec3f("lightPos", _lightPosition);
+        terrainShader->SetUniformVec3f("lightColor", _lightColor);
+        terrainShader->SetUniformMat4f("lightProjection", _lightProjection);
+        terrainShader->SetUniform1i("diffuseTexture", 0);
+        terrainShader->SetUniform1i("colorMap", 1);
+        terrainShader->SetUniform1i("shadowMap", 2);
+
+        //Get textures
+        Texture* texture1 = _terrainModel->GetTexture1();
+        Texture* texture2 = _terrainModel->GetTexture2();
+        Texture* texture3 = _terrainModel->GetTexture3();
+
+        //Set diffuse texture
+        if(texture1)
+            texture1->BindToSlot(0);
+
+        //Set normal map
+        if(texture2)
+            texture2->BindToSlot(1);
+
+        //Set shadow map
+        if(texture3)
+            texture3->BindToSlot(2);
+
+        //Get rendering data
+        VertexArray* vao    = _terrainModel->GetVAO();
+        uint32 verticeCount = _terrainModel->GetVerticeCount();
+
+        //Render model
+        vao->Bind();
+        GLCall(glDrawElements(GL_TRIANGLES, verticeCount, GL_UNSIGNED_INT, nullptr));
+        vao->Unbind();
+
+        terrainShader->Unbind();
+
+        //Return rendered vertices
+        return verticeCount;
+    }
+
+    uint32 Renderer::DrawWaterModel(Shader* waterShader, float moveFactor)
+    {
+        waterShader->Bind();
+
+        //Set uniforms
+        waterShader->SetUniformMat4f("view", Camera::GetViewMatrix());
+        waterShader->SetUniformMat4f("model", _waterModel->GetModelMatrix());
+        waterShader->SetUniformMat4f("projection", _perspProjection);
+        waterShader->SetUniformVec3f("viewPos", Camera::GetPosition());
+        waterShader->SetUniformVec3f("lightPos", _lightPosition);
+        waterShader->SetUniformVec3f("lightColor", _lightColor);
+        waterShader->SetUniform1i("reflectionTexture", 0);
+        waterShader->SetUniform1i("refractionTexture", 1);
+        waterShader->SetUniform1i("dudvMap", 2);
+        waterShader->SetUniform1i("normalMap", 3);
+        waterShader->SetUniform1i("depthMap", 4);
+        waterShader->SetUniform1f("moveFactor", moveFactor);
+        waterShader->SetUniform1f("nearPlane", _nearPlane);
+        waterShader->SetUniform1f("farPlane", _farPlane);
+
+        //Get textures
+        Texture* texture1 = _waterModel->GetTexture1();
+        Texture* texture2 = _waterModel->GetTexture2();
+        Texture* texture3 = _waterModel->GetTexture3();
+        Texture* texture4 = _waterModel->GetTexture4();
+        Texture* texture5 = _waterModel->GetTexture5();
+
+        //Reflection texture
+        if(texture1)
+            texture1->BindToSlot(0);
+
+        //Refraction texture
+        if(texture2)
+            texture2->BindToSlot(1);
+
+        //DuDvMap
+        if(texture3)
+            texture3->BindToSlot(2);
+
+        //NormalMap
+        if(texture4)
+            texture4->BindToSlot(3);
+
+        //DepthMap
+        if(texture5)
+            texture5->BindToSlot(4);
+
+        //Get rendering data
+        VertexArray* vao    = _waterModel->GetVAO();
+        uint32 verticeCount = _waterModel->GetVerticeCount();
+
+        //Render model
+        vao->Bind();
+        GLCall(glDrawElements(GL_TRIANGLES, verticeCount, GL_UNSIGNED_INT, nullptr));
+        vao->Unbind();
+
+        waterShader->Unbind();
+
+        //Return rendered vertices
+        return verticeCount;
+    }
+
     // ----- Public -----
 
     void Renderer::Init(float nearPlane, float farPlane, glm::vec3 lightPos, glm::vec3 lightColor, glm::mat4 lightProjection)
@@ -20,19 +182,18 @@ namespace Core
     void Renderer::PrepareFrame()
     {
         //Reset render stats for current frame
-        _drawcalls              = 0;
-        _drawnVertices          = 0;
-        _modelRenderPasses      = 0;
-        _spriteRenderPasses     = 0;
-        _cubemapRenderPasses    = 0;
+        _drawcalls                = 0;
+        _drawnVertices            = 0;
+        _modelRenderPasses        = 0;
+        _terrainModelRenderPasses = 0;
+        _waterModelRenderPasses   = 0;
+        _spriteRenderPasses       = 0;
+        _cubemapRenderPasses      = 0;
     }
 
-    void Renderer::Submit(Model* model, bool producesShadows)
+    void Renderer::Submit(Model* model)
     {
-        if(producesShadows)
-            _shadowModelBuffer.push_back(model);
-        else
-            _modelBuffer.push_back(model);
+        _modelBuffer.push_back(model);
     }
 
     void Renderer::Submit(Sprite* sprite)
@@ -63,19 +224,10 @@ namespace Core
         else{
             GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));}
 
-        //Render models
-        for(const auto& model : _modelBuffer)
+        ///Draw models and update render stats
+        for(auto model : _modelBuffer)
         {
-            _drawnVertices += model->DrawModel
-            (
-                modelShader,
-                _perspProjection,
-                Camera::GetViewMatrix(),
-                Camera::GetPosition(),
-                _lightPosition,
-                _lightColor,
-                _lightProjection
-            );
+            _drawnVertices += DrawModel(modelShader, model);
             _drawcalls++;
         }
 
@@ -83,7 +235,7 @@ namespace Core
         _modelRenderPasses++;
     }
 
-    void Renderer::FlushShadowModelBuffer(Shader* modelShader)
+    void Renderer::FlushTerrainModel(Shader* terrainShader)
     {
         //Check for Wireframe-Mode
         if(WIREFRAME_RENDERING){
@@ -91,57 +243,13 @@ namespace Core
         else{
             GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));}
 
-        //Render models that cast shadows
-        for(const auto& model : _shadowModelBuffer)
-        {
-            _drawnVertices += model->DrawModel
-            (
-                modelShader,
-                _perspProjection,
-                Camera::GetViewMatrix(),
-                Camera::GetPosition(),
-                _lightPosition,
-                _lightColor,
-                _lightProjection
-            );
-            _drawcalls++;
-        }
-
-        //Increase render pass counter
-        _modelRenderPasses++;
-    }
-
-    void Renderer::FlushAllModelBuffers(Shader* modelShader)
-    {
-        FlushModelBuffer(modelShader);
-        FlushShadowModelBuffer(modelShader);
-    }
-
-    void Renderer::FlushTerrainModel(Shader* modelShader)
-    {
-        //Check for Wireframe-Mode
-        if(WIREFRAME_RENDERING){
-            GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));}
-        else{
-            GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));}
-
-        _drawnVertices += _terrainModel->DrawTerrainModel
-        (
-            modelShader,
-            _perspProjection,
-            Camera::GetViewMatrix(),
-            Camera::GetPosition(),
-            _lightPosition,
-            _lightColor,
-            _lightProjection
-        );
+        //Draw model and update render stats
+        _drawnVertices += DrawTerrainModel(terrainShader);
         _drawcalls++;
-
-        //Increase render pass counter
-        _modelRenderPasses++;
+        _terrainModelRenderPasses++;
     }
 
-    void Renderer::FlushWaterModel(Shader* modelShader, float moveFactor)
+    void Renderer::FlushWaterModel(Shader* waterShader, float moveFactor)
     {
         //Check for Wireframe-Mode
         if(WIREFRAME_RENDERING){
@@ -149,22 +257,10 @@ namespace Core
         else{
             GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));}
 
-        _drawnVertices += _waterModel->DrawWaterModel
-        (
-            modelShader,
-            _perspProjection,
-            Camera::GetViewMatrix(),
-            Camera::GetPosition(),
-            _lightPosition,
-            _lightColor,
-            moveFactor,
-            _nearPlane,
-            _farPlane
-        );
+        //Draw model and update render stats
+        _drawnVertices += DrawWaterModel(waterShader, moveFactor);
         _drawcalls++;
-
-        //Increase render pass counter
-        _modelRenderPasses++;
+        _waterModelRenderPasses++;
     }
 
     void Renderer::FlushSprites()
@@ -215,6 +311,16 @@ namespace Core
     uint32 Renderer::GetModelRenderPasses()
     {
         return _modelRenderPasses;
+    }
+
+    uint32 Renderer::GetTerrainModelRenderPasses()
+    {
+        return _terrainModelRenderPasses;
+    }
+
+    uint32 Renderer::GetWaterModelRenderPasses()
+    {
+        return _waterModelRenderPasses;
     }
 
     uint32 Renderer::GetSpriteRenderPasses()

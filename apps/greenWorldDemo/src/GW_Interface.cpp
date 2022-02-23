@@ -126,11 +126,13 @@ namespace GW
                     //Render stats
                     ImGui::NewLine();
                     ImGui::Separator();
-                    ImGui::Text("Drawcalls total:       %d", Core::Renderer::GetDrawcalls());
-                    ImGui::Text("Vertices total:        %d", Core::Renderer::GetDrawnVertices());
-                    ImGui::Text("Model render passes:   %d", Core::Renderer::GetModelRenderPasses());
-                    ImGui::Text("Sprite render passes:  %d", Core::Renderer::GetSpriteRenderPasses());
-                    ImGui::Text("Cubemap render passes: %d", Core::Renderer::GetCubemapRenderPasses());
+                    ImGui::Text("Drawcalls total:            %d", Core::Renderer::GetDrawcalls());
+                    ImGui::Text("Vertices  total:            %d", Core::Renderer::GetDrawnVertices());
+                    ImGui::Text("Model render passes:        %d", Core::Renderer::GetModelRenderPasses());
+                    ImGui::Text("TerrainModel render passes: %d", Core::Renderer::GetTerrainModelRenderPasses());
+                    ImGui::Text("WaterModel render passes:   %d", Core::Renderer::GetWaterModelRenderPasses());
+                    ImGui::Text("Sprite render passes:       %d", Core::Renderer::GetSpriteRenderPasses());
+                    ImGui::Text("Cubemap render passes:      %d", Core::Renderer::GetCubemapRenderPasses());
                     ImGui::Separator();
 
                     //Camera stats

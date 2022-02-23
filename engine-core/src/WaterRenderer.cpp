@@ -74,7 +74,7 @@ namespace Core
         modelShader->Unbind();
 
         //Render scene
-        Renderer::FlushAllModelBuffers(modelShader);
+        Renderer::FlushModelBuffer(modelShader);
         Renderer::FlushCubemap();
 
         //Reset camera

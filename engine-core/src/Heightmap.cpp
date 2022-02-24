@@ -14,7 +14,6 @@ namespace Core
 
         //Allocate buffer
         _heightArray = (float*)malloc(width * height * sizeof(float));
-        LOG(INFO) << width * height * sizeof(float);
 
         if(localBuffer)
         {

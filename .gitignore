@@ -1,3 +1,3 @@
-#Ignore all bash files
 *.sh
 /build
+/.idea

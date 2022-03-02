@@ -37,7 +37,7 @@ namespace GW
         _window = Core::MakeScope<Core::Window>("GreenWorld Demo Application");
 
         //Camera
-        Core::Camera::Init(glm::vec3(-118.0f, 124.0f, 71.0f), 1.0f, -36.0f, 25.0f);
+        Core::Camera::Init(glm::vec3(-75.0f, 74.0f, 70.0f), 0.4f, -23.0f, 25.0f);
 
         //UI
         _interface = Core::MakeScope<Interface>(_window.get());
@@ -97,13 +97,13 @@ namespace GW
         Core::Renderer::SubmitWater(waterModel);
 
         //House
-        auto house = Core::ModelManager::AddObject("OldHouse", "../res/assets/models/greenWorld/OldHouse");
+        auto house = Core::ModelManager::AddObject("House", "../res/assets/models/greenWorld/House");
         for(const auto& model : house)
         {
             model->SetTexture3(_shadowRenderer->GetDepthTexture());
-            model->ChangeSize(0.15f);
-            model->ChangeRotation(0.0f, -90.0f, 0.0f);
-            model->ChangePosition(glm::vec3(105.0f, 0.4f, 85.0f));
+            model->ChangeSize(1.2f);
+            model->ChangeRotation(0.0f, -70.0f, 0.0f);
+            model->ChangePosition(glm::vec3(85.0f, 0.4f, 95.0f));
             Core::Renderer::Submit(model);
         }
 
@@ -111,8 +111,7 @@ namespace GW
         auto bridge = Core::ModelManager::AddObject("Bridge", "../res/assets/models/greenWorld/Bridge");
         for(const auto& model : bridge)
         {
-            model->ChangeSize(2.0f);
-            model->ChangeRotation(0.0f, -90.0f, 0.0f);
+            model->SetTexture3(_shadowRenderer->GetDepthTexture());
             model->ChangePosition(glm::vec3(39.0f, -0.45f, 46.0f));
             Core::Renderer::Submit(model);
         }
@@ -121,18 +120,8 @@ namespace GW
         auto tree = Core::ModelManager::AddObject("Tree", "../res/assets/models/greenWorld/Tree");
         for(const auto& model : tree)
         {
-            model->ChangeSize(0.06f);
-            model->ChangePosition(glm::vec3(85.0f, 0.3f, 35.0f));
-            Core::Renderer::Submit(model);
-        }
-
-        //Well
-        auto well = Core::ModelManager::AddObject("Well", "../res/assets/models/greenWorld/Well");
-        for(const auto& model : well)
-        {
-            model->ChangeSize(0.05f);
-            model->ChangeRotation(0.0f, -45.0f, 0.0f);
-            model->ChangePosition(glm::vec3(75.0f, 15.3f, 75.0f));
+            model->SetTexture3(_shadowRenderer->GetDepthTexture());
+            model->ChangePosition(glm::vec3(85.0f, 0.3f, 25.0f));
             Core::Renderer::Submit(model);
         }
     }

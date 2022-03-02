@@ -48,9 +48,14 @@
 ### Using & Compiling
    - Currently, only for linux (with CMake as a buildsystem)
       - Clone the repository
-      - Install the external dependencies if needed (OpenGL)
+      - Install the external dependencies if needed
+                     
+            sudo apt-get update
+            sudo apt-get install cmake pkg-config
+            sudo apt-get install libglu1-mesa-dev mesa-common-dev  
+     
       - mkdir build
-      - cd build/
+      - cd build
       - cmake ..
       - make
             
@@ -58,7 +63,7 @@
    - This code is provided under the MIT License. See the file LICENSE for details.
 
 ### Current look of the GreenWorld App:
-![GreenWorld](res/screenshots/greenWorld/Screenshot_GW_017.png)
+![GreenWorld](res/screenshots/greenWorld/Screenshot_GW_018.png)
 
 ### Some projects that I created with an old version of the engine:
 

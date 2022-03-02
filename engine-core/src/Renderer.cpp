@@ -32,7 +32,7 @@ namespace Core
             texture1->BindToSlot(0);
 
         //Normal map
-        if(gotNormalMap == 1)
+        if(texture2)
             texture2->BindToSlot(1);
 
         //Shadow map

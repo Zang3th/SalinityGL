@@ -39,6 +39,7 @@ namespace Core
             mesh.texture1 = nullptr;
             mesh.texture2 = nullptr;
             mesh.texture3 = nullptr;
+            mesh.gotNormalMap = 0;
 
             //Iterate over all indices
             for(const auto& index : shapes.at(i).mesh.indices)

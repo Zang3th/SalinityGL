@@ -4,16 +4,17 @@
 #include "CoreDefines.hpp"
 #include "Logger.hpp"
 
+#include <vector>
+
 namespace Core
 {
     class Heightmap
     {
         private:
-            float* _heightArray = nullptr;
+            inline static std::vector<float> _heightmap = std::vector<float>();
 
         public:
             explicit Heightmap(const std::string& filepath);
-            ~Heightmap();
             [[nodiscard]] float GetValueAt(uint32 x, uint32 z) const;
     };
 }

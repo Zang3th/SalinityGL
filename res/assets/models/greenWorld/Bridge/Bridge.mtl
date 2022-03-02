@@ -10,5 +10,5 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 2
-map_Bump /bridge_UVdefaultMat1_normal.png
-map_Kd /bridge_UVdefaultMat1_baseColor.png
+map_Bump Bridge_normal.png
+map_Kd Bridge_baseColor.png

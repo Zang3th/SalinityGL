@@ -1,24 +1,25 @@
 # Blender MTL File: 'None'
 # Material Count: 2
 
-newmtl Branch
-Ns 323.999994
+newmtl trunk1.001
+Ns 18.000005
 Ka 1.000000 1.000000 1.000000
-Kd 0.800000 0.800000 0.800000
-Ks 0.500000 0.500000 0.500000
+Kd 0.500000 0.500000 0.500000
+Ks 0.026471 0.026471 0.026471
 Ke 0.000000 0.000000 0.000000
-Ni 1.000000
+Ni 1.520000
 d 1.000000
 illum 2
-map_Kd Branch_diffuse.png
+map_Bump Tree_normal.jpg
+map_Kd Tree_diffuse.jpg
 
-newmtl lambert5
-Ns 323.999994
+newmtl Material__26.001
+Ns 70.999985
 Ka 1.000000 1.000000 1.000000
-Kd 0.800000 0.800000 0.800000
-Ks 0.500000 0.500000 0.500000
+Kd 0.500000 0.500000 0.500000
+Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
-Ni 1.000000
+Ni 1.600000
 d 1.000000
-illum 2
-map_Kd Wood_diffuse.png
+illum 1
+map_Kd Leaf_diffuse.png

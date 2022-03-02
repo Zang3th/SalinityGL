@@ -12,8 +12,8 @@ namespace Core
         unsigned char* localBuffer = stbi_load(filepath.c_str(), &width, &height, &nrChannels, 3);
         stbi_set_flip_vertically_on_load(false);
 
-        //Allocate buffer
-        _heightArray = (float*)malloc(width * height * sizeof(float));
+        //Reserve space
+        _heightmap.reserve(PLANE_SIZE * PLANE_SIZE * sizeof(float));
 
         if(localBuffer)
         {
@@ -38,7 +38,7 @@ namespace Core
                         float y = (float)pixelOffset[1] / 255.0f;
                         float z = (float)pixelOffset[2] / 255.0f;
 
-                        _heightArray[width * i + j] = x + y + z;
+                        _heightmap.push_back(x + y + z);
                     }
                 }
 
@@ -53,26 +53,21 @@ namespace Core
         stbi_image_free(localBuffer);
     }
 
-    Heightmap::~Heightmap()
-    {
-        free(_heightArray);
-    }
-
     float Heightmap::GetValueAt(const uint32 x, const uint32 z) const
     {
         //Return value at given position with some special treatment for the edges
 
         if(x < PLANE_SIZE && z < PLANE_SIZE)
-            return _heightArray[PLANE_SIZE * x + z];
+            return _heightmap.at(PLANE_SIZE * x + z);
 
         else if(x-1 < PLANE_SIZE && z < PLANE_SIZE)
-            return _heightArray[PLANE_SIZE * (x-1) + z];
+            return _heightmap.at(PLANE_SIZE * (x-1) + z);
 
         else if(x < PLANE_SIZE && z-1 < PLANE_SIZE)
-            return _heightArray[PLANE_SIZE * x + (z-1)];
+            return _heightmap.at(PLANE_SIZE * x + (z-1));
 
         else if(x-1 < PLANE_SIZE && z-1 < PLANE_SIZE)
-            return _heightArray[PLANE_SIZE * (x-1) + (z-1)];
+            return _heightmap.at(PLANE_SIZE * (x-1) + (z-1));
 
         return 0;
     }

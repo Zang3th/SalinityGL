@@ -9,7 +9,7 @@ project(GameEngine)
 
 ############################### Settings ####################################
 
-set(GLFW_PATH "${CMAKE_SOURCE_DIR}/vendor/glfw/libglfw3.a")
+set(GLFW_PATH "${CMAKE_SOURCE_DIR}/vendor/glfw/libglfw.so")
 set(IRRKLANG_PATH "${CMAKE_SOURCE_DIR}/vendor/irrKlang/libIrrKlang.so")
 set(ENGINE_LINKER_FLAGS "-lX11")
 set(APPLICATION_LINKER_FLAGS "-ldl -pthread")
@@ -32,9 +32,6 @@ target_include_directories(GameEngine PUBLIC vendor/imgui/include)
 target_include_directories(GameEngine PUBLIC vendor/irrKlang/include)
 target_include_directories(GameEngine PUBLIC vendor/glm/glm)
 
-# Link against static libraries
-target_link_libraries(GameEngine PUBLIC ${GLFW_PATH})
-
 # Linking flags
 target_link_libraries(GameEngine PUBLIC ${ENGINE_LINKER_FLAGS})
 
@@ -56,6 +53,7 @@ target_include_directories(greenWorldDemo PUBLIC apps/greenWorldDemo/include)
 target_link_libraries(greenWorldDemo PUBLIC GameEngine)
 
 # Link against dynamic libraries
+target_link_libraries(greenWorldDemo PUBLIC ${GLFW_PATH})
 target_link_libraries(greenWorldDemo PUBLIC OpenGL::GL)
 target_link_libraries(greenWorldDemo PUBLIC ${IRRKLANG_PATH})
 

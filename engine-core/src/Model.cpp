@@ -20,6 +20,9 @@ namespace Core
         VertexBuffer vbo3(&mesh->normals[0], mesh->normals.size() * sizeof(glm::vec3));
         vao->DefineAttributes(2, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), nullptr);
 
+        VertexBuffer vbo4(&mesh->tangents[0], mesh->tangents.size() * sizeof(glm::vec3));
+        vao->DefineAttributes(3, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), nullptr);
+
         //Create ibo
         IndexBuffer ibo(&mesh->indices[0], mesh->indices.size() * sizeof(uint32));
 

@@ -64,6 +64,9 @@ namespace Core
                     attrib.texcoords[2 * index.texcoord_index + 1]
                 ));
 
+                //Reserve space for tangents
+                mesh.tangents.emplace_back(glm::vec3(0.0f, 0.0f, 0.0f));
+
                 //Auto increment indices
                 mesh.indices.push_back(mesh.indices.size());
             }
@@ -87,6 +90,13 @@ namespace Core
                 ResourceManager::LoadTextureFromFile(textureName, textureFilepath);
                 mesh.texture2 = ResourceManager::GetTexture(textureName);
                 mesh.gotNormalMap = 1;
+            }
+
+            //Calculate tangents
+            if(mesh.gotNormalMap == 1)
+            {
+                MeshCreator::CalculateTangents(&mesh);
+                LOG(INFO) << "Created:  Tangents for " << filename;
             }
 
             //Copy mesh into meshes vector

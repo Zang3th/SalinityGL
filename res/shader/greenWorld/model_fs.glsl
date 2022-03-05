@@ -4,6 +4,7 @@ in vec2 texCoords;
 in vec3 normals;
 in vec3 fragPos;
 in vec4 fragPosLightSpace;
+in vec3 tangents;
 
 out vec4 fragColor;
 
@@ -52,9 +53,8 @@ float calculateShadow(vec4 fragPosInLightSpace, vec3 normal, vec3 lightDir)
     }
 }
 
-vec3 calculateLight(vec3 textureColor)
+vec3 calculateLight(vec3 textureColor, vec3 normal)
 {
-    vec3 normal_n   = normalize(normals);
     vec3 lightDir   = normalize(lightPos - fragPos);
     vec3 viewDir    = normalize(viewPos  - fragPos);
     vec3 halfwayDir = normalize(lightDir + viewDir);
@@ -63,18 +63,36 @@ vec3 calculateLight(vec3 textureColor)
     vec3 ambient = ambientStrength * lightColor * textureColor;
 
     //Diffuse
-    float diff    = max(dot(lightDir, normal_n), 0.0);
+    float diff    = max(dot(lightDir, normal), 0.0);
     vec3  diffuse = diffuseStrength * diff * lightColor * textureColor;
 
     //Specular
-    vec3  reflectDir = reflect(-lightDir, normal_n);
-    float spec       = pow(max(dot(normal_n, halfwayDir), 0.0), shininess);
+    vec3  reflectDir = reflect(-lightDir, normal);
+    float spec       = pow(max(dot(normal, halfwayDir), 0.0), shininess);
     vec3  specular   = specularStrength * spec * lightColor * textureColor;
 
     //Shadow-Value
-    float shadow = calculateShadow(fragPosLightSpace, normal_n, lightDir);
+    float shadow = calculateShadow(fragPosLightSpace, normal, lightDir);
 
     return (ambient + (1.0 - shadow) * (diffuse + specular));
+}
+
+vec3 calculateBumpedNormal(vec3 normal)
+{
+    //Calculate bitangent
+    vec3 tangent_n = normalize(tangents);
+    vec3 bitangent = cross(tangent_n, normal);
+
+    //Fetch normal map
+    vec3 bumpMapNormal = texture(normalMap, texCoords).xyz;
+    bumpMapNormal = 2.0 * bumpMapNormal - vec3(1.0, 1.0, 1.0);
+
+    //Create TBN-Matrix and transform bumpMapNormal into world space
+    vec3 newNormal;
+    mat3 TBN = mat3(tangent_n, bitangent, normal);
+    newNormal = TBN * bumpMapNormal;
+
+    return normalize(newNormal);
 }
 
 void main()
@@ -84,5 +102,12 @@ void main()
     if(texColor.a < 0.5)
         discard;
 
-    fragColor = vec4(calculateLight(texColor.rgb), texColor.a);
+    vec3 normal_n = normalize(normals);
+
+    if(gotNormalMap == 1)
+    {
+        normal_n = calculateBumpedNormal(normal_n);
+    }
+
+    fragColor = vec4(calculateLight(texColor.rgb, normal_n), texColor.a);
 }

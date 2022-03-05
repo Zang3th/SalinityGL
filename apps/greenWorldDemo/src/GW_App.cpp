@@ -103,7 +103,7 @@ namespace GW
             model->SetTexture3(_shadowRenderer->GetDepthTexture());
             model->ChangeSize(1.2f);
             model->ChangeRotation(0.0f, -70.0f, 0.0f);
-            model->ChangePosition(glm::vec3(85.0f, 0.4f, 95.0f));
+            model->ChangePosition(glm::vec3(85.0f, 0.45f, 95.0f));
             Core::Renderer::Submit(model);
         }
 
@@ -112,7 +112,7 @@ namespace GW
         for(const auto& model : bridge)
         {
             model->SetTexture3(_shadowRenderer->GetDepthTexture());
-            model->ChangePosition(glm::vec3(39.0f, -0.45f, 46.0f));
+            model->ChangePosition(glm::vec3(39.0f, -0.45f, 47.0f));
             Core::Renderer::Submit(model);
         }
 
@@ -121,7 +121,7 @@ namespace GW
         for(const auto& model : tree)
         {
             model->SetTexture3(_shadowRenderer->GetDepthTexture());
-            model->ChangePosition(glm::vec3(85.0f, 0.3f, 25.0f));
+            model->ChangePosition(glm::vec3(85.0f, 0.3f, 20.0f));
             Core::Renderer::Submit(model);
         }
     }

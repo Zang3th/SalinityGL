@@ -6,6 +6,7 @@
 #include "glm.hpp"
 #include "CoreDefines.hpp"
 #include "tiny_obj_loader.hpp"
+#include "MeshCreator.hpp"
 
 #include <vector>
 

@@ -2,12 +2,12 @@
 
 namespace Core
 {
-    // ----- Private -----
+    // ----- Public -----
 
     void MeshCreator::CalculateNormals(Mesh* mesh)
     {
         //Iterate over all indices
-        for (uint32 i = 0; i < mesh->indices.size() - 2; i++)
+        for (uint32 i = 0; i < mesh->indices.size(); i += 3)
         {
             //Get all indices of one triangle
             uint32 index0 = mesh->indices.at(i + 0);
@@ -57,7 +57,52 @@ namespace Core
         }
     }
 
-    // ----- Public -----
+    void MeshCreator::CalculateTangents(Mesh* mesh)
+    {
+        //Iterate over all indices
+        for(uint32 i = 0; i < mesh->indices.size(); i += 3)
+        {
+            //Get all indices of one triangle
+            uint32 index0 = mesh->indices.at(i + 0);
+            uint32 index1 = mesh->indices.at(i + 1);
+            uint32 index2 = mesh->indices.at(i + 2);
+
+            //Get all points of one triangle
+            glm::vec3 point0 = mesh->vertices.at(index0);
+            glm::vec3 point1 = mesh->vertices.at(index1);
+            glm::vec3 point2 = mesh->vertices.at(index2);
+
+            //Get all uvs of one triangle
+            glm::vec2 uv0 = mesh->texCoords.at(index0);
+            glm::vec2 uv1 = mesh->texCoords.at(index1);
+            glm::vec2 uv2 = mesh->texCoords.at(index2);
+
+            //Calculate delta positions
+            glm::vec3 e1 = point1 - point0;
+            glm::vec3 e2 = point2 - point1;
+
+            //Calculate delta uvs
+            float x1 = uv1.x - uv0.x;
+            float x2 = uv2.x - uv0.x;
+            float y1 = uv1.y - uv0.y;
+            float y2 = uv2.y - uv0.y;
+
+            //Calculate tangent
+            float r           = 1.0f / (x1 * y2 - x2 + y1);
+            glm::vec3 tangent = r * (e1 * y2 - e2 * y1);
+
+            //Add tangent to all precalculated tangents of the points of this triangle
+            mesh->tangents.at(index0) += tangent;
+            mesh->tangents.at(index1) += tangent;
+            mesh->tangents.at(index2) += tangent;
+        }
+
+        //Normalize each tangent
+        for (uint32 i = 0; i < mesh->vertices.size(); i++)
+        {
+            mesh->tangents.at(i) = glm::normalize(mesh->tangents.at(i));
+        }
+    }
 
     void MeshCreator::CreatePlane(const uint32 x, const uint32 z, const float tileSize, Mesh* mesh, const Heightmap* heightmap)
     {

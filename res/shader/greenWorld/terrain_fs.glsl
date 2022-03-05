@@ -85,6 +85,11 @@ void main()
     if(texColor.a < 0.5)
         discard;
 
-    texColor    = mix(texColor, texColorMap, 0.7);
+    //Mix texture color with the colormap
+    texColor.r = texColor.r * 0.6 + texColorMap.r * 0.8;
+    texColor.g = texColor.g * 0.6 + texColorMap.g * 0.4;
+    texColor.b = texColor.b * 0.6 + texColorMap.b * 0.8;
+    texColor = normalize(texColor);
+
     fragColor   = vec4(calculateLight(texColor.rgb), texColor.a);
 }

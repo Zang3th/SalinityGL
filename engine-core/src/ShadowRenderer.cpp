@@ -19,7 +19,7 @@ namespace Core
     // ----- Public -----
 
     ShadowRenderer::ShadowRenderer(uint32 width, uint32 height, glm::vec3 lightPos)
-        :   _orthoProjection(glm::ortho(-90.0f, 90.0f, -90.0f, 90.0f, 115.0f, 200.0f)),
+        :   _orthoProjection(glm::ortho(-90.0f, 90.0f, -90.0f, 90.0f, 110.0f, 210.0f)),
             _lightView(glm::lookAt(lightPos, glm::vec3(64.0f, 0.0f, 64.0f), glm::vec3(0.0f, 1.0f, 0.0f))),
             _lightProjection(_orthoProjection * _lightView),
             _shadowWidth(width),

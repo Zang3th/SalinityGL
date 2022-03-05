@@ -79,17 +79,21 @@ vec3 calculateLight(vec3 textureColor, vec3 normal)
 
 vec3 calculateBumpedNormal(vec3 normal)
 {
-    //Calculate bitangent
     vec3 tangent_n = normalize(tangents);
+
+    //Re-orthogonalize tangent with respect to the normal
+    tangent_n = normalize(tangent_n - dot(tangent_n, normal) * normal);
+
+    //Calculate bitangent
     vec3 bitangent = cross(tangent_n, normal);
 
     //Fetch normal map
     vec3 bumpMapNormal = texture(normalMap, texCoords).xyz;
-    bumpMapNormal = 2.0 * bumpMapNormal - vec3(1.0, 1.0, 1.0);
+    bumpMapNormal      = bumpMapNormal * 2.0 - 1.0;
 
     //Create TBN-Matrix and transform bumpMapNormal into world space
     vec3 newNormal;
-    mat3 TBN = mat3(tangent_n, bitangent, normal);
+    mat3 TBN  = mat3(tangent_n, bitangent, normal);
     newNormal = TBN * bumpMapNormal;
 
     return normalize(newNormal);

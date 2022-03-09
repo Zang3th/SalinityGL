@@ -46,8 +46,8 @@ namespace GreenWorld
         //Audio
         _audio = Engine::MakeScope<Engine::Audio>();
         _audio->SetListenerPosition(Engine::Camera::GetPosition(), Engine::Camera::GetFront(), Engine::Camera::GetUp());
-        //_audio->PlaySound2D("../Res/Assets/Audio/GreenWorld/music/TrueBlueSky.wav", true, 1.0f);
-        //_audio->PlaySound3D("../Res/Assets/Audio/GreenWorld/sounds/River.wav", glm::vec3(39.0f, 14.0f, 56.0f), true, 40.0f, 1.5);
+        //_audio->PlaySound2D("../Res/Assets/Audio/GreenWorld/Music/TrueBlueSky.wav", true, 1.0f);
+        //_audio->PlaySound3D("../Res/Assets/Audio/GreenWorld/Sounds/River.wav", glm::vec3(39.0f, 14.0f, 56.0f), true, 40.0f, 1.5);
 
         //Resources
         LoadResources();

@@ -66,7 +66,7 @@
    - This code is provided under the MIT License. See the file LICENSE for details.
 
 ### Current look of the GreenWorld App:
-![GreenWorld](res/screenshots/greenWorld/Screenshot_GW_019.png)
+![GreenWorld](Res/Screenshots/GreenWorld/Screenshot_GW_019.png)
 
 ### Some projects that I created with an old version of the engine:
 

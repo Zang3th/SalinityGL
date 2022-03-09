@@ -9,53 +9,60 @@ project(GameEngine)
 
 ############################### Settings ####################################
 
-set(GLFW_PATH "${CMAKE_SOURCE_DIR}/vendor/glfw/libglfw.so")
-set(IRRKLANG_PATH "${CMAKE_SOURCE_DIR}/vendor/irrKlang/libIrrKlang.so")
+set(GLFW_PATH "${CMAKE_SOURCE_DIR}/Vendor/GLFW/libglfw.so")
+set(IRRKLANG_PATH "${CMAKE_SOURCE_DIR}/Vendor/IrrKlang/libIrrKlang.so")
 set(ENGINE_LINKER_FLAGS "-lX11")
 set(APPLICATION_LINKER_FLAGS "-ldl -pthread")
 
 ############################### Engine-Core #################################
 
-# Source files
-file(GLOB_RECURSE SRC_ENGINE engine-core/src/*.cpp)
-file(GLOB_RECURSE SRC_VENDOR vendor/other/src/*.cpp)
-file(GLOB_RECURSE SRC_IMGUI vendor/imgui/src/*.cpp)
+### Source files ###
+file(GLOB_RECURSE SRC_ENGINE_CORE Engine/*.cpp)
+file(GLOB_RECURSE SRC_VENDOR Vendor/*.cpp)
 
-# Compile to a static library
-add_library(GameEngine STATIC ${SRC_ENGINE} ${SRC_VENDOR} ${SRC_IMGUI})
+### Compile to a static library ###
+add_library(GameEngine STATIC ${SRC_ENGINE_CORE} ${SRC_VENDOR})
 
-# Include directories
-target_include_directories(GameEngine PUBLIC engine-core/include)
-target_include_directories(GameEngine PUBLIC vendor/other/include)
-target_include_directories(GameEngine PUBLIC vendor/glfw/include)
-target_include_directories(GameEngine PUBLIC vendor/imgui/include)
-target_include_directories(GameEngine PUBLIC vendor/irrKlang/include)
-target_include_directories(GameEngine PUBLIC vendor/glm/glm)
+### Include directories ###
+target_include_directories(GameEngine PUBLIC Engine/Core)
+target_include_directories(GameEngine PUBLIC Engine/Debug)
+target_include_directories(GameEngine PUBLIC Engine/Rendering/Buffers)
+target_include_directories(GameEngine PUBLIC Engine/Rendering/Camera)
+target_include_directories(GameEngine PUBLIC Engine/Rendering/Renderables)
+target_include_directories(GameEngine PUBLIC Engine/Rendering/Renderer)
+target_include_directories(GameEngine PUBLIC Engine/Rendering/Resources)
 
-# Linking flags
+target_include_directories(GameEngine PUBLIC Vendor/Other/include)
+target_include_directories(GameEngine PUBLIC Vendor/GLFW/include)
+target_include_directories(GameEngine PUBLIC Vendor/IrrKlang/include)
+target_include_directories(GameEngine PUBLIC Vendor/Imgui/include)
+target_include_directories(GameEngine PUBLIC Vendor/GLM/include)
+
+### Enginge linker flags ###
 target_link_libraries(GameEngine PUBLIC ${ENGINE_LINKER_FLAGS})
 
 ############################# Demo-Applications #############################
 
-# Packages
+### Packages ###
 find_package(OpenGL REQUIRED)
 
-# Source files
-file(GLOB_RECURSE SRC_GREENWORLD apps/greenWorldDemo/src/*.cpp)
+### Source files ###
+file(GLOB_RECURSE SRC_GREENWORLD Apps/GreenWorld/src/*.cpp)
 
-# Compile to an executable
-add_executable(greenWorldDemo apps/greenWorldDemo/greenWorldDemo.cpp ${SRC_GREENWORLD})
+### Compile to an executable ###
+add_executable(GreenWorldDemo Apps/GreenWorld/GreenWorldRun.cpp ${SRC_GREENWORLD})
 
-# Include directories
-target_include_directories(greenWorldDemo PUBLIC apps/greenWorldDemo/include)
+### Include directories ###
+target_include_directories(GreenWorldDemo PUBLIC Apps/GreenWorld/src)
+target_include_directories(GreenWorldDemo PUBLIC Engine)
 
-# Link against static libraries
-target_link_libraries(greenWorldDemo PUBLIC GameEngine)
+### Link against static libraries ###
+target_link_libraries(GreenWorldDemo PUBLIC GameEngine)
 
-# Link against dynamic libraries
-target_link_libraries(greenWorldDemo PUBLIC ${GLFW_PATH})
-target_link_libraries(greenWorldDemo PUBLIC OpenGL::GL)
-target_link_libraries(greenWorldDemo PUBLIC ${IRRKLANG_PATH})
+### Link against dynamic libraries ###
+target_link_libraries(GreenWorldDemo PUBLIC ${GLFW_PATH})
+target_link_libraries(GreenWorldDemo PUBLIC OpenGL::GL)
+target_link_libraries(GreenWorldDemo PUBLIC ${IRRKLANG_PATH})
 
-# General linker flags
-target_link_libraries(greenWorldDemo PUBLIC ${APPLICATION_LINKER_FLAGS})
+### Application linker flags ###
+target_link_libraries(GreenWorldDemo PUBLIC ${APPLICATION_LINKER_FLAGS})

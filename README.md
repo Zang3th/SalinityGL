@@ -1,25 +1,25 @@
 # GameEngine in C++ with OpenGL
 
 ### Objectives:
-   - Thin abstraction layer for 2D/3D-Rendering
+   - Abstraction layer for 2D/3D-Rendering
    - OpenGL-Wrapper-Functions
-      - Located in the engine-core
    - Written in C++17 with OpenGL 4.5
-   - Example applications that use the wrapper functions
+   - Example applications that are using the engine
      - GreenWorld: Demo Nature-Scene (3D)   
 
 ### General functionalities
    - Basic OpenGL-Wrapping (VAO, VBO, IBO, FBO, Shaders, Textures, Errorhandling)
      - Windowcreation
-     - 2D Sprite-Renderer
-     - 3D Model-Renderer
-     - Camerasystem
+     - 2D-Sprite-Renderer
+     - 3D-Model-Renderer
+     - Camerasystem + Control
    - File-Management
    - Profiler
    - UI
    - Cubemaps/Skyboxes
    - Audio
    - Loading of OBJ-Models
+   - Meshcreator
    
 ### Example applications  
    - GreenWorld
@@ -57,8 +57,8 @@
             sudo apt-get install cmake pkg-config
             sudo apt-get install libglu1-mesa-dev mesa-common-dev  
      
-      - mkdir build
-      - cd build
+      - mkdir Build
+      - cd Build
       - cmake ..
       - make
             

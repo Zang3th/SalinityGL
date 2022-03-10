@@ -40,37 +40,36 @@ namespace Engine
 
     // ----- Public -----
 
-    void CameraController3D::Init(const Window* window)
+    void CameraController3D::Init()
     {
         //Set static member variables
-        _window = window;
         _windowInFocus = false;
 
         //Set callbacks
-        glfwSetCursorPosCallback(_window->GetWindow(), MousePosCallback);
-        glfwSetMouseButtonCallback(_window->GetWindow(), MouseButtonCallback);
+        glfwSetCursorPosCallback(Window::GetWindow(), MousePosCallback);
+        glfwSetMouseButtonCallback(Window::GetWindow(), MouseButtonCallback);
     }
 
     void CameraController3D::ProcessInput()
     {
-        auto dt = (float)_window->GetDeltaTime();
+        auto dt = (float)Window::GetDeltaTime();
 
-        if (glfwGetKey(_window->GetWindow(), GLFW_KEY_W) == GLFW_PRESS)
+        if (glfwGetKey(Window::GetWindow(), GLFW_KEY_W) == GLFW_PRESS)
             Camera::ProcessKeyboard(Camera::FORWARD, dt);
 
-        if (glfwGetKey(_window->GetWindow(), GLFW_KEY_S) == GLFW_PRESS)
+        if (glfwGetKey(Window::GetWindow(), GLFW_KEY_S) == GLFW_PRESS)
             Camera::ProcessKeyboard(Camera::BACKWARD, dt);
 
-        if (glfwGetKey(_window->GetWindow(), GLFW_KEY_D) == GLFW_PRESS)
+        if (glfwGetKey(Window::GetWindow(), GLFW_KEY_D) == GLFW_PRESS)
             Camera::ProcessKeyboard(Camera::RIGHT, dt);
 
-        if (glfwGetKey(_window->GetWindow(), GLFW_KEY_A) == GLFW_PRESS)
+        if (glfwGetKey(Window::GetWindow(), GLFW_KEY_A) == GLFW_PRESS)
             Camera::ProcessKeyboard(Camera::LEFT, dt);
 
-        if (glfwGetKey(_window->GetWindow(), GLFW_KEY_SPACE) == GLFW_PRESS)
+        if (glfwGetKey(Window::GetWindow(), GLFW_KEY_SPACE) == GLFW_PRESS)
             Camera::ProcessKeyboard(Camera::UP, dt);
 
-        if (glfwGetKey(_window->GetWindow(), GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
+        if (glfwGetKey(Window::GetWindow(), GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
             Camera::ProcessKeyboard(Camera::DOWN, dt);
     }
 }

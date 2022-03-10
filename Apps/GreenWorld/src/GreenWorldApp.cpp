@@ -6,6 +6,7 @@ const Engine::uint32 Engine::WINDOW_HEIGHT       = 1080;
 const Engine::uint32 Engine::PLANE_SIZE          = 128;
       bool           Engine::WIREFRAME_RENDERING = false;
       bool           Engine::DEBUG_SPRITES       = true;
+const float          Engine::GRAVITY             = -40.0f;
 
 namespace GreenWorld
 {
@@ -34,14 +35,14 @@ namespace GreenWorld
         Engine::Logger::Init();
 
         //Window
-        _window = Engine::MakeScope<Engine::Window>("GreenWorld Demo Application");
+        Engine::Window::Init("GreenWorld Demo Application");
 
         //Camera + Control
         Engine::Camera::Init(glm::vec3(-75.0f, 74.0f, 70.0f), 0.4f, -23.0f, 25.0f);
-        Engine::CameraController3D::Init(_window.get());
+        Engine::CameraController3D::Init();
 
         //UI
-        _interface = Engine::MakeScope<Interface>(_window.get());
+        _interface = Engine::MakeScope<Interface>();
 
         //Audio
         _audio = Engine::MakeScope<Engine::Audio>();
@@ -58,7 +59,7 @@ namespace GreenWorld
         //Water-Rendering
         _waterRenderer = Engine::MakeScope<Engine::WaterRenderer>();
 
-        //Renderer (static)
+        //Renderer
         Engine::Renderer::Init(_nearPlane, _farPlane, _lightPosition, _lightColor, _shadowRenderer->GetLightProjection());
     }
 
@@ -211,22 +212,22 @@ namespace GreenWorld
 
     bool App::IsRunning()
     {
-        return _window->IsRunning();
+        return Engine::Window::IsRunning();
     }
 
     void App::Update()
     {
         {   Engine::PROFILE_SCOPE("Process events");
 
-            _window->PollEvents();
-            _window->ProcessEvents();
+            Engine::Window::PollEvents();
+            Engine::Window::ProcessEvents();
             Engine::CameraController3D::ProcessInput();
             _audio->SetListenerPosition(Engine::Camera::GetPosition(), Engine::Camera::GetFront(), Engine::Camera::GetUp());
         }
 
         {   Engine::PROFILE_SCOPE("Prepare frame");
 
-            _window->CalcFrametime();
+            Engine::Window::CalcFrametime();
             _interface->PrepareFrame();
             Engine::Renderer::PrepareFrame();
             Engine::Renderer::ClearBuffers();
@@ -248,7 +249,7 @@ namespace GreenWorld
             Engine::Renderer::FlushModelBuffer(Engine::ResourceManager::GetShader("ModelShader"));
 
             //Modify movefactor and render waterPlane
-            _moveFactor += _waveSpeed * (float)_window->GetDeltaTime();
+            _moveFactor += _waveSpeed * (float)Engine::Window::GetDeltaTime();
             _moveFactor  = fmod(_moveFactor, 1.0f);
             Engine::Renderer::FlushWaterModel(Engine::ResourceManager::GetShader("WaterPlaneShader"), _moveFactor);
 
@@ -266,7 +267,7 @@ namespace GreenWorld
 
         {   Engine::PROFILE_SCOPE("End frame");
 
-            _window->SwapBuffers();
+            Engine::Window::SwapBuffers();
         }
     }
 }

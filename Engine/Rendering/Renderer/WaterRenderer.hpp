@@ -28,10 +28,11 @@ namespace Engine
             void RenderRefractionFrame(Shader* terrainShader);
 
         public:
-            explicit WaterRenderer();
+            WaterRenderer();
             void RenderToFramebuffer(Shader* terrainShader, Shader* modelShader);
-            [[nodiscard]] Texture* GetReflectTexture() const;
-            [[nodiscard]] Texture* GetRefractTexture() const;
+
+            [[nodiscard]] Texture* GetReflectTexture()      const;
+            [[nodiscard]] Texture* GetRefractTexture()      const;
             [[nodiscard]] Texture* GetRefractDepthTexture() const;
     };
 }

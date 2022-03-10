@@ -9,15 +9,12 @@
 namespace Engine
 {
     class BaseInterface
-    {   
-        protected:
-            const Window* _window;
-
+    {
         public:
-            explicit BaseInterface(const Window* window);
+            BaseInterface();
             virtual ~BaseInterface();
-            static void PrepareFrame();
+            static  void PrepareFrame();
             virtual void AddElements() = 0;
-            static void Render();
+            static  void Render();
     };
 }

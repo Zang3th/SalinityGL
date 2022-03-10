@@ -4,13 +4,12 @@ namespace Engine
 {
     // ----- Public -----
 
-    BaseInterface::BaseInterface(const Window* window)
-        :   _window(window)
+    BaseInterface::BaseInterface()
     {
         //Setup ImGui
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
-        ImGui_ImplGlfw_InitForOpenGL(_window->GetWindow(), true);
+        ImGui_ImplGlfw_InitForOpenGL(Window::GetWindow(), true);
         ImGui_ImplOpenGL3_Init("#version 450");
     }
 

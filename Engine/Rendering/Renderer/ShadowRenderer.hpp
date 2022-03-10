@@ -24,7 +24,8 @@ namespace Engine
         public:
             ShadowRenderer(uint32 width, uint32 height, glm::vec3 lightPos);
             void RenderToFramebuffer(Shader* shadowShader);
-            [[nodiscard]] Texture* GetDepthTexture() const;
+
+            [[nodiscard]] Texture*  GetDepthTexture()    const;
             [[nodiscard]] glm::mat4 GetLightProjection() const;
     };
 }

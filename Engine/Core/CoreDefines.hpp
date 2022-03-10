@@ -38,4 +38,5 @@ namespace Engine
     extern const uint32 PLANE_SIZE;
     extern       bool   WIREFRAME_RENDERING;
     extern       bool   DEBUG_SPRITES;
+    extern const float  GRAVITY;
 }

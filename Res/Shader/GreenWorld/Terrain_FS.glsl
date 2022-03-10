@@ -31,7 +31,7 @@ float calculateShadow(vec4 fragPosInLightSpace, vec3 normal, vec3 lightDir)
     float shadow        = 0.0;
     float currentDepth  = projCoords.z;
     float bias          = max(0.05 * (1.0 - dot(normal, lightDir)), 0.005);
-    vec2 texelSize      = 1.0 / textureSize(shadowMap, 0) * 5.0;
+    vec2 texelSize      = 1.0 / textureSize(shadowMap, 0) * 2.0;
 
     if(projCoords.z > 1.0)
     {
@@ -48,7 +48,7 @@ float calculateShadow(vec4 fragPosInLightSpace, vec3 normal, vec3 lightDir)
             }
         }
 
-        return shadow / 100.0;
+        return shadow / 100;
     }
 }
 

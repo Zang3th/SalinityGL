@@ -64,9 +64,10 @@ namespace GreenWorld
 
     // ----- Public -----
 
-    Interface::Interface(const Engine::Window* window)
-        :   Engine::BaseInterface(window),
-            _windowFlags(ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav | ImGuiWindowFlags_NoMove),
+    Interface::Interface()
+        :   _windowFlags(ImGuiWindowFlags_NoDecoration       | ImGuiWindowFlags_NoSavedSettings |
+                         ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav           |
+                         ImGuiWindowFlags_NoMove),
             _windowAlphaValue(0.65f),
             _showOverlay(true)
     {
@@ -85,7 +86,7 @@ namespace GreenWorld
     void Interface::AddElements()
     {
         //Discard old plotting data every 120 frames
-        if(_window->GetFrameCounter() > 120)
+        if(Engine::Window::GetFrameCounter() > 120)
             ImGui::PlotVarFlushOldEntries();
 
         //Menu bar
@@ -120,8 +121,8 @@ namespace GreenWorld
                 if(ImGui::Begin("Sidebar", &_showOverlay, _windowFlags))
                 {
                     //Application stats
-                    ImGui::Text("Application average %.2f ms/frame (%.1f FPS)", _window->GetDeltaTime() * 1000.0f, _window->GetFps());
-                    ImGui::PlotVar("", (float)_window->GetDeltaTime() * 1000.0f, 0.0f, 30.0f);
+                    ImGui::Text("Application average %.2f ms/frame (%.1f FPS)", Engine::Window::GetDeltaTime() * 1000.0f, Engine::Window::GetFps());
+                    ImGui::PlotVar("", (float)Engine::Window::GetDeltaTime() * 1000.0f, 0.0f, 30.0f);
 
                     //Render stats
                     ImGui::NewLine();

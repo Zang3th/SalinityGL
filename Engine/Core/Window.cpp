@@ -2,15 +2,15 @@
 
 namespace Engine
 {
-    // ----- Private -----
+    // ----- Public -----
 
-    void Window::CreateWindow()
+    void Window::Init(const std::string& title)
     {
         if(!glfwInit())
             LOG(ERROR) << "Failed:   GLFW-Initialization | " << glfwGetError(nullptr);
         else
             LOG(INFO) << "Loaded:   GLFW";
-            
+
         glfwWindowHint(GLFW_SAMPLES, 8);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
@@ -19,6 +19,7 @@ namespace Engine
         glfwWindowHint(GLFW_MAXIMIZED, GLFW_FALSE);
         glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_TRUE);
 
+        _windowName = title;
         _window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, _windowName.c_str(), nullptr, nullptr);
 
         if(!_window)
@@ -26,15 +27,15 @@ namespace Engine
         else
             LOG(INFO) << "Created:  GLFW-Window (" << WINDOW_WIDTH << "x" << WINDOW_HEIGHT << ")";
 
-        glfwMakeContextCurrent(_window);  
+        glfwMakeContextCurrent(_window);
         glfwSwapInterval(1);
 
-        if(!gladLoadGL()) 
+        if(!gladLoadGL())
             LOG(ERROR) << "Failed:   OpenGL-Loading with glad";
         else
             LOG(INFO) << "Loaded:   OpenGL with glad | " << glGetString(GL_VENDOR) << " | " << glGetString(GL_RENDERER) << " | " << glGetString(GL_VERSION);
-    
-        GLCall(glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT));  
+
+        GLCall(glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT));
         GLCall(glEnable(GL_MULTISAMPLE));
         GLCall(glEnable(GL_DEPTH_TEST));
         GLCall(glDepthFunc(GL_LEQUAL));
@@ -46,40 +47,8 @@ namespace Engine
         GLCall(glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS));
         GLCall(glDebugMessageCallback(ErrorManager::OpenGLMessageCallback, nullptr));
         GLCall(glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, nullptr, GL_FALSE));
-    
+
         _isRunning = true; //Start application
-    }
-
-    void Window::SetTitle(const std::string& title)
-    {
-        _windowName = title;
-        glfwSetWindowTitle(_window, _windowName.c_str());
-        LOG(INFO) << "Changed:  Window-Title | " << title;
-    }
-
-    // ----- Public -----
-
-    Window::Window(const std::string& title)
-        :   _window(nullptr),
-            _deltaTime(0.0f),
-            _lastFrame(0.0f),
-            _dtAccumulated(0.0f),
-            _fpsAvg(0.0f),
-            _frameCounter(0),
-            _isRunning(false)
-    {
-        CreateWindow();
-        SetTitle(title);
-    }
-
-    Window::~Window()
-    {
-        glfwTerminate();
-    }
-
-    bool Window::IsRunning() const
-    {
-        return _isRunning;
     }
 
     void Window::CalcFrametime()
@@ -129,23 +98,27 @@ namespace Engine
         glfwSwapBuffers(_window);
     }
 
+    bool Window::IsRunning()
+    {
+        return _isRunning;
+    }
 
-    double Window::GetDeltaTime() const
+    double Window::GetDeltaTime()
     {
         return _deltaTime;
     }
 
-    double Window::GetFps() const
+    double Window::GetFps()
     {
         return _fpsAvg;
     }
 
-    uint32 Window::GetFrameCounter() const
+    uint32 Window::GetFrameCounter()
     {
         return _frameCounter;
     }
 
-    GLFWwindow* Window::GetWindow() const
+    GLFWwindow* Window::GetWindow()
     {
         return _window;
     }

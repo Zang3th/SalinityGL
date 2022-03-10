@@ -166,7 +166,7 @@ namespace Engine
 
     // ----- Public -----
 
-    void Renderer::Init(float nearPlane, float farPlane, glm::vec3 lightPos, glm::vec3 lightColor, glm::mat4 lightProjection)
+    void Renderer::Init(const float nearPlane, const float farPlane, const glm::vec3 lightPos, const glm::vec3 lightColor, const glm::mat4 lightProjection)
     {
         _nearPlane       = nearPlane;
         _farPlane        = farPlane;

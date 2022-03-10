@@ -9,7 +9,6 @@ namespace Engine
     class CameraController3D
     {
         private:
-            inline static const Window* _window        = nullptr;
             inline static       double  _lastX         = double();
             inline static       double  _lastY         = double();
             inline static       bool    _windowInFocus = bool();
@@ -19,7 +18,7 @@ namespace Engine
 
         public:
             CameraController3D() = delete;
-            static void Init(const Window* window);
+            static void Init();
             static void ProcessInput();
     };
 }

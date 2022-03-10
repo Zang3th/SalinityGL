@@ -9,29 +9,27 @@ namespace Engine
     class Window
     {
         private:
-            GLFWwindow*     _window;
-            std::string     _windowName;
-            double          _deltaTime;
-            double          _lastFrame;
-            double          _dtAccumulated;
-            double          _fpsAvg;
-            uint32          _frameCounter;
-            bool            _isRunning;
-
-            void CreateWindow();
-            void SetTitle(const std::string& title);
+            inline static GLFWwindow* _window        = nullptr;
+            inline static std::string _windowName    = std::string();
+            inline static double      _deltaTime     = double();
+            inline static double      _lastFrame     = double();
+            inline static double      _dtAccumulated = double();
+            inline static double      _fpsAvg        = double();
+            inline static uint32      _frameCounter  = uint32();
+            inline static bool        _isRunning     = bool();
 
         public:
-            explicit Window(const std::string& title);
-            ~Window();
-            [[nodiscard]] bool IsRunning() const;
-            void CalcFrametime();
+            Window() = delete;
+            static void Init(const std::string& title);
+            static void CalcFrametime();
             static void PollEvents();
-            void ProcessEvents();
-            void SwapBuffers();
-            [[nodiscard]] double GetDeltaTime() const;
-            [[nodiscard]] double GetFps() const;
-            [[nodiscard]] uint32 GetFrameCounter() const;
-            [[nodiscard]] GLFWwindow* GetWindow() const;
+            static void ProcessEvents();
+            static void SwapBuffers();
+
+            [[nodiscard]] static bool        IsRunning();
+            [[nodiscard]] static double      GetDeltaTime();
+            [[nodiscard]] static double      GetFps();
+            [[nodiscard]] static uint32      GetFrameCounter();
+            [[nodiscard]] static GLFWwindow* GetWindow();
     };
 }

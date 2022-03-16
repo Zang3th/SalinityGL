@@ -48,18 +48,20 @@ namespace GreenWorld
 
     void Interface::SetOverlayParameters()
     {
-        const ImGuiViewport* viewport = ImGui::GetMainViewport();
-        ImVec2 work_pos = viewport->WorkPos;
-        ImVec2 work_size = viewport->WorkSize;
+        const ImGuiViewport* viewport  = ImGui::GetMainViewport();
+        const ImVec2 workPos           = viewport->WorkPos;
+        const float  windowWidth       = (float)Engine::WINDOW_WIDTH;
+        const float  windowHeight      = (float)Engine::WINDOW_HEIGHT;
+        const float  menuBarHeight     = 25.0f;
+        const float  sidebarWidth      = 415.0f;
+        const float  shaderTexBarWidth = 210.0f;
 
-        _sidebarPos = ImVec2(work_size.x, work_pos.y);
-        _overlayPivot = ImVec2(1.0f, 0.0f);
-
-        _shaderFieldPos = ImVec2((float)Engine::WINDOW_WIDTH - 230.0f, (float)Engine::WINDOW_HEIGHT - 460.0f + work_pos.y);
-        _texFieldPos = ImVec2(_shaderFieldPos.x + 230.0f, _shaderFieldPos.y);
-
-        _overlaySize = ImVec2(460.0f, (float)Engine::WINDOW_HEIGHT - 460.0f);
-        _bottomFieldSizes = ImVec2(_overlaySize.x / 2, 460.0f);
+        _sidebarPos      = ImVec2(workPos.x + windowWidth, menuBarHeight);
+        _sidebarSize     = ImVec2(sidebarWidth,windowHeight - menuBarHeight);
+        _shaderFieldPos  = ImVec2(0.0f, menuBarHeight);
+        _shaderFieldSize = ImVec2(shaderTexBarWidth, (windowHeight / 2.0f) - menuBarHeight);
+        _texFieldPos     = ImVec2(_shaderFieldPos.x, _shaderFieldPos.y + _shaderFieldSize.y);
+        _texFieldSize    = ImVec2(_shaderFieldSize.x, windowHeight / 2.0f);
     }
 
     // ----- Public -----
@@ -116,7 +118,7 @@ namespace GreenWorld
             {
                 ImGui::SetNextWindowBgAlpha(_windowAlphaValue);
                 ImGui::SetNextWindowPos(_sidebarPos, ImGuiCond_Always, _overlayPivot);
-                ImGui::SetNextWindowSize(_overlaySize);
+                ImGui::SetNextWindowSize(_sidebarSize);
 
                 if(ImGui::Begin("Sidebar", &_showOverlay, _windowFlags))
                 {
@@ -127,21 +129,25 @@ namespace GreenWorld
                     //Render stats
                     ImGui::NewLine();
                     ImGui::Separator();
-                    ImGui::Text("Drawcalls total:            %d", Engine::Renderer::GetDrawcalls());
-                    ImGui::Text("Vertices  total:            %d", Engine::Renderer::GetDrawnVertices());
-                    ImGui::Text("Model render passes:        %d", Engine::Renderer::GetModelRenderPasses());
-                    ImGui::Text("TerrainModel render passes: %d", Engine::Renderer::GetTerrainModelRenderPasses());
-                    ImGui::Text("WaterModel render passes:   %d", Engine::Renderer::GetWaterModelRenderPasses());
-                    ImGui::Text("Sprite render passes:       %d", Engine::Renderer::GetSpriteRenderPasses());
-                    ImGui::Text("Cubemap render passes:      %d", Engine::Renderer::GetCubemapRenderPasses());
+                    ImGui::Text("Drawcalls total: %d", Engine::Renderer::GetDrawcalls());
+                    ImGui::Text("Vertices  total: %d", Engine::Renderer::GetDrawnVertices());
+                    ImGui::Separator();
+                    ImGui::NewLine();
+                    ImGui::Separator();
+                    ImGui::Text("Model    render passes: %d", Engine::Renderer::GetModelRenderPasses());
+                    ImGui::Text("Terrain  render passes: %d", Engine::Renderer::GetTerrainRenderPasses());
+                    ImGui::Text("Water    render passes: %d", Engine::Renderer::GetWaterRenderPasses());
+                    ImGui::Text("Particle render passes: %d", Engine::Renderer::GetParticleRenderPasses());
+                    ImGui::Text("Sprite   render passes: %d", Engine::Renderer::GetSpriteRenderPasses());
+                    ImGui::Text("Cubemap  render passes: %d", Engine::Renderer::GetCubemapRenderPasses());
                     ImGui::Separator();
 
                     //Camera stats
                     ImGui::NewLine();
                     ImGui::Separator();
-                    ImGui::Text("Camera-Position:  X: %.1f | Y: %.1f | Z: %.1f", Engine::Camera::GetPosition().x, Engine::Camera::GetPosition().y, Engine::Camera::GetPosition().z);
-                    ImGui::Text("Camera-Front:     X: %.1f | Y: %.1f | Z: %.1f", Engine::Camera::GetFront().x, Engine::Camera::GetFront().y, Engine::Camera::GetFront().z);
-                    ImGui::Text("Camera-Yaw|Pitch: %.2f | %.2f", Engine::Camera::GetYaw(), Engine::Camera::GetPitch());
+                    ImGui::Text("Camera-Position:  (%.1f, %.1f, %.1f)", Engine::Camera::GetPosition().x, Engine::Camera::GetPosition().y, Engine::Camera::GetPosition().z);
+                    ImGui::Text("Camera-Front:     (%.1f, %.1f, %.1f)", Engine::Camera::GetFront().x, Engine::Camera::GetFront().y, Engine::Camera::GetFront().z);
+                    ImGui::Text("Camera-Yaw/Pitch: (%.2f / %.2f)", Engine::Camera::GetYaw(), Engine::Camera::GetPitch());
                     ImGui::Separator();
 
                     //Profiling/Timing-Results
@@ -156,8 +162,8 @@ namespace GreenWorld
 
             //ShaderWindow
             {
-                ImGui::SetNextWindowPos(_shaderFieldPos, ImGuiCond_Always, _overlayPivot);
-                ImGui::SetNextWindowSize(_bottomFieldSizes);
+                ImGui::SetNextWindowPos(_shaderFieldPos, ImGuiCond_Always, _shaderPivot);
+                ImGui::SetNextWindowSize(_shaderFieldSize);
                 ImGui::SetNextWindowBgAlpha(_windowAlphaValue);
 
                 if(ImGui::Begin("ShaderWindow", &_showOverlay, _windowFlags))
@@ -171,8 +177,8 @@ namespace GreenWorld
 
             //TextureWindow
             {
-                ImGui::SetNextWindowPos(_texFieldPos, ImGuiCond_Always, _overlayPivot);
-                ImGui::SetNextWindowSize(_bottomFieldSizes);
+                ImGui::SetNextWindowPos(_texFieldPos, ImGuiCond_Always, _texturePivot);
+                ImGui::SetNextWindowSize(_texFieldSize);
                 ImGui::SetNextWindowBgAlpha(_windowAlphaValue);
 
                 if(ImGui::Begin("TextureWindow", &_showOverlay, _windowFlags))

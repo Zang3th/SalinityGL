@@ -13,7 +13,7 @@ uniform mat4 view;
 uniform mat4 projection;
 uniform vec3 viewPos;
 
-const float tileDivisor = 32.0f;
+const float tileDivisor = 8.0f;
 
 void main()
 {

@@ -5,7 +5,7 @@ const Engine::uint32 Engine::WINDOW_WIDTH        = 1920;
 const Engine::uint32 Engine::WINDOW_HEIGHT       = 1080;
 const Engine::uint32 Engine::PLANE_SIZE          = 128;
       bool           Engine::WIREFRAME_RENDERING = false;
-      bool           Engine::DEBUG_SPRITES       = true;
+      bool           Engine::DEBUG_SPRITES       = false;
 const float          Engine::GRAVITY             = -40.0f;
 
 namespace GreenWorld
@@ -19,6 +19,7 @@ namespace GreenWorld
         Engine::ResourceManager::LoadShader("WaterPlaneShader", "../Res/Shader/GreenWorld/WaterPlane_VS.glsl", "../Res/Shader/GreenWorld/WaterPlane_FS.glsl");
         Engine::ResourceManager::LoadShader("ModelShader", "../Res/Shader/GreenWorld/Model_VS.glsl", "../Res/Shader/GreenWorld/Model_FS.glsl");
         Engine::ResourceManager::LoadShader("TerrainShader", "../Res/Shader/GreenWorld/Terrain_VS.glsl", "../Res/Shader/GreenWorld/Terrain_FS.glsl");
+        Engine::ResourceManager::LoadShader("ParticleShader", "../Res/Shader/GreenWorld/Particle_VS.glsl", "../Res/Shader/GreenWorld/Particle_FS.glsl");
         Engine::ResourceManager::LoadShader("CubemapShader", "../Res/Shader/GreenWorld/Cubemap_VS.glsl", "../Res/Shader/GreenWorld/Cubemap_FS.glsl");
         Engine::ResourceManager::LoadShader("SpriteShader", "../Res/Shader/GreenWorld/Sprite_VS.glsl", "../Res/Shader/GreenWorld/Sprite_FS.glsl");
         Engine::ResourceManager::LoadShader("SpriteShaderBW", "../Res/Shader/GreenWorld/Sprite_VS.glsl", "../Res/Shader/GreenWorld/SpriteBlackAndWhite_FS.glsl");
@@ -151,7 +152,7 @@ namespace GreenWorld
             glm::vec3(1.0f, 1.0f, 1.0f)
         );
 
-        _shadowSprite->ChangePosition(glm::vec2(5.0f, Engine::WINDOW_HEIGHT - 230.0f));
+        _shadowSprite->ChangePosition(glm::vec2(210.0f, 0));
         _shadowSprite->ChangeSize(glm::vec2(200.0f, 200.0f));
         Engine::Renderer::Submit(_shadowSprite.get());
 
@@ -163,7 +164,7 @@ namespace GreenWorld
             glm::vec3(1.0f, 1.0f, 1.0f)
         );
 
-        _reflectSprite->ChangePosition(glm::vec2(5.0f, Engine::WINDOW_HEIGHT - 430.0f));
+        _reflectSprite->ChangePosition(glm::vec2(410.0f, 0));
         _reflectSprite->ChangeSize(glm::vec2(200.0f, 200.0f));
         Engine::Renderer::Submit(_reflectSprite.get());
 
@@ -175,7 +176,7 @@ namespace GreenWorld
             glm::vec3(1.0f, 1.0f, 1.0f)
         );
 
-        _refractSprite->ChangePosition(glm::vec2(5.0f, Engine::WINDOW_HEIGHT - 630.0f));
+        _refractSprite->ChangePosition(glm::vec2(610.0f, 0));
         _refractSprite->ChangeSize(glm::vec2(200.0f, 200.0f));
         Engine::Renderer::Submit(_refractSprite.get());
 
@@ -187,9 +188,15 @@ namespace GreenWorld
             glm::vec3(1.0f, 1.0f, 1.0f)
         );
 
-        _refractDepthSprite->ChangePosition(glm::vec2(5.0f, Engine::WINDOW_HEIGHT - 830.0f));
+        _refractDepthSprite->ChangePosition(glm::vec2(810.0f, 0));
         _refractDepthSprite->ChangeSize(glm::vec2(200.0f, 200.0f));
         Engine::Renderer::Submit(_refractDepthSprite.get());
+    }
+
+    void App::CreateParticles()
+    {
+        _particleRenderer = Engine::MakeScope<Engine::ParticleRenderer>();
+        Engine::Renderer::Submit(_particleRenderer.get());
     }
 
     // ----- Public -----
@@ -200,6 +207,7 @@ namespace GreenWorld
 
         //Call after init because these methods depend on OpenGL-Initialization
         CreateModels();
+        CreateParticles();
         CreateCubemap();
         CreateSprites();
     }
@@ -245,13 +253,15 @@ namespace GreenWorld
 
         {   Engine::PROFILE_SCOPE("Render graphics");
 
-            Engine::Renderer::FlushTerrainModel(Engine::ResourceManager::GetShader("TerrainShader"));
+            Engine::Renderer::FlushTerrain(Engine::ResourceManager::GetShader("TerrainShader"));
             Engine::Renderer::FlushModelBuffer(Engine::ResourceManager::GetShader("ModelShader"));
 
             //Modify movefactor and render waterPlane
             _moveFactor += _waveSpeed * (float)Engine::Window::GetDeltaTime();
             _moveFactor  = fmod(_moveFactor, 1.0f);
-            Engine::Renderer::FlushWaterModel(Engine::ResourceManager::GetShader("WaterPlaneShader"), _moveFactor);
+            Engine::Renderer::FlushWater(Engine::ResourceManager::GetShader("WaterPlaneShader"), _moveFactor);
+
+            Engine::Renderer::FlushParticleRenderer(Engine::ResourceManager::GetShader("ParticleShader"));
 
             if(Engine::DEBUG_SPRITES)
                 Engine::Renderer::FlushSprites();

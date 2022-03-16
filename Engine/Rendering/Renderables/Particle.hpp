@@ -2,11 +2,10 @@
 
 #include "glm.hpp"
 #include "CoreDefines.hpp"
-#include "Window.hpp"
 
 namespace Engine
 {
-    struct Particle
+    class Particle
     {
         private:
             glm::vec3 _position,      _velocity;

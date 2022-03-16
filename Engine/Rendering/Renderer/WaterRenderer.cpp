@@ -97,7 +97,7 @@ namespace Engine
         terrainShader->Unbind();
 
         //Render scene
-        Renderer::FlushTerrainModel(terrainShader);
+        Renderer::FlushTerrain(terrainShader);
 
         EndRefractionFrame();
     }

@@ -54,7 +54,7 @@ namespace Engine
         return verticeCount;
     }
 
-    uint32 Renderer::DrawTerrainModel(Shader* terrainShader)
+    uint32 Renderer::DrawTerrain(Shader* terrainShader)
     {
         terrainShader->Bind();
 
@@ -102,7 +102,7 @@ namespace Engine
         return verticeCount;
     }
 
-    uint32 Renderer::DrawWaterModel(Shader* waterShader, float moveFactor)
+    uint32 Renderer::DrawWater(Shader* waterShader, float moveFactor)
     {
         waterShader->Bind();
 
@@ -164,6 +164,11 @@ namespace Engine
         return verticeCount;
     }
 
+    uint32 Renderer::DrawParticles(Shader* particleShader)
+    {
+        return _particleRenderer->Render();
+    }
+
     // ----- Public -----
 
     void Renderer::Init(const float nearPlane, const float farPlane, const glm::vec3 lightPos, const glm::vec3 lightColor, const glm::mat4 lightProjection)
@@ -185,8 +190,9 @@ namespace Engine
         _drawcalls                = 0;
         _drawnVertices            = 0;
         _modelRenderPasses        = 0;
-        _terrainModelRenderPasses = 0;
-        _waterModelRenderPasses   = 0;
+        _terrainRenderPasses      = 0;
+        _waterRenderPasses        = 0;
+        _particleRenderPasses     = 0;
         _spriteRenderPasses       = 0;
         _cubemapRenderPasses      = 0;
     }
@@ -204,6 +210,11 @@ namespace Engine
     void Renderer::Submit(Cubemap* cubemap)
     {
         _cubemap = cubemap;
+    }
+
+    void Renderer::Submit(ParticleRenderer* particleRenderer)
+    {
+        _particleRenderer = particleRenderer;
     }
 
     void Renderer::SubmitTerrain(Model* terrain)
@@ -235,7 +246,7 @@ namespace Engine
         _modelRenderPasses++;
     }
 
-    void Renderer::FlushTerrainModel(Shader* terrainShader)
+    void Renderer::FlushTerrain(Shader* terrainShader)
     {
         //Check for Wireframe-Mode
         if(WIREFRAME_RENDERING){
@@ -244,12 +255,12 @@ namespace Engine
             GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));}
 
         //Draw model and update render stats
-        _drawnVertices += DrawTerrainModel(terrainShader);
+        _drawnVertices += DrawTerrain(terrainShader);
         _drawcalls++;
-        _terrainModelRenderPasses++;
+        _terrainRenderPasses++;
     }
 
-    void Renderer::FlushWaterModel(Shader* waterShader, float moveFactor)
+    void Renderer::FlushWater(Shader* waterShader, float moveFactor)
     {
         //Check for Wireframe-Mode
         if(WIREFRAME_RENDERING){
@@ -258,9 +269,23 @@ namespace Engine
             GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));}
 
         //Draw model and update render stats
-        _drawnVertices += DrawWaterModel(waterShader, moveFactor);
+        _drawnVertices += DrawWater(waterShader, moveFactor);
         _drawcalls++;
-        _waterModelRenderPasses++;
+        _waterRenderPasses++;
+    }
+
+    void Renderer::FlushParticleRenderer(Shader* particleShader)
+    {
+        //Check for Wireframe-Mode
+        if(WIREFRAME_RENDERING){
+            GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));}
+        else{
+            GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));}
+
+        //Draw particles and update render stats
+        _drawnVertices += DrawParticles(particleShader);
+        _drawcalls++;
+        _particleRenderPasses++;
     }
 
     void Renderer::FlushSprites()
@@ -313,14 +338,19 @@ namespace Engine
         return _modelRenderPasses;
     }
 
-    uint32 Renderer::GetTerrainModelRenderPasses()
+    uint32 Renderer::GetTerrainRenderPasses()
     {
-        return _terrainModelRenderPasses;
+        return _terrainRenderPasses;
     }
 
-    uint32 Renderer::GetWaterModelRenderPasses()
+    uint32 Renderer::GetWaterRenderPasses()
     {
-        return _waterModelRenderPasses;
+        return _waterRenderPasses;
+    }
+
+    uint32 Renderer::GetParticleRenderPasses()
+    {
+        return _particleRenderPasses;
     }
 
     uint32 Renderer::GetSpriteRenderPasses()

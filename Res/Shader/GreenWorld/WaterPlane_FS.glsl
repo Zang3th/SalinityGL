@@ -23,7 +23,7 @@ const float waveStrength = 0.005;
 const vec4  waterColor = vec4(0.0, 0.2, 0.8, 1.0);
 const float fresnelReflectivness = 0.2;
 const float shininess = 100.0;
-const float specularStrength = 0.5;
+const float specularStrength = 0.4;
 
 void main()
 {

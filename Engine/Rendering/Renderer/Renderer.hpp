@@ -8,6 +8,7 @@
 #include "ErrorManager.hpp"
 #include "Cubemap.hpp"
 #include "Shader.hpp"
+#include "ParticleRenderer.hpp"
 
 #include <vector>
 
@@ -19,13 +20,15 @@ namespace Engine
             inline static Cubemap                   *_cubemap                   = nullptr;
             inline static Model                     *_terrainModel              = nullptr;
             inline static Model                     *_waterModel                = nullptr;
+            inline static ParticleRenderer          *_particleRenderer          = nullptr;
             inline static float                      _nearPlane                 = float();
             inline static float                      _farPlane                  = float();
             inline static uint32                     _drawcalls                 = uint32();
             inline static uint32                     _drawnVertices             = uint32();
             inline static uint32                     _modelRenderPasses         = uint32();
-            inline static uint32                     _terrainModelRenderPasses  = uint32();
-            inline static uint32                     _waterModelRenderPasses    = uint32();
+            inline static uint32                     _terrainRenderPasses       = uint32();
+            inline static uint32                     _waterRenderPasses         = uint32();
+            inline static uint32                     _particleRenderPasses      = uint32();
             inline static uint32                     _spriteRenderPasses        = uint32();
             inline static uint32                     _cubemapRenderPasses       = uint32();
             inline static glm::vec3                  _lightPosition             = glm::vec3();
@@ -37,8 +40,9 @@ namespace Engine
             inline static std::vector<const Sprite*> _spriteBuffer              = std::vector<const Sprite*>();
 
             static uint32 DrawModel(Shader* modelShader, const Model* model);
-            static uint32 DrawTerrainModel(Shader* terrainShader);
-            static uint32 DrawWaterModel(Shader* waterShader, float moveFactor);
+            static uint32 DrawTerrain(Shader* terrainShader);
+            static uint32 DrawWater(Shader* waterShader, float moveFactor);
+            static uint32 DrawParticles(Shader* particleShader);
 
         public:
             Renderer() = delete;
@@ -47,12 +51,14 @@ namespace Engine
             static void Submit(Model* model);
             static void Submit(Sprite* sprite);
             static void Submit(Cubemap* cubemap);
-            static void SubmitTerrain(Model* model);
-            static void SubmitWater(Model* model);
+            static void Submit(ParticleRenderer* particleRenderer);
+            static void SubmitTerrain(Model* terrain);
+            static void SubmitWater(Model* water);
 
             static void FlushModelBuffer(Shader* modelShader);
-            static void FlushTerrainModel(Shader* terrainShader);
-            static void FlushWaterModel(Shader* waterShader, float moveFactor);
+            static void FlushTerrain(Shader* terrainShader);
+            static void FlushWater(Shader* waterShader, float moveFactor);
+            static void FlushParticleRenderer(Shader* particleShader);
             static void FlushSprites();
             static void FlushCubemap();
 
@@ -61,8 +67,9 @@ namespace Engine
             static uint32 GetDrawcalls();
             static uint32 GetDrawnVertices();
             static uint32 GetModelRenderPasses();
-            static uint32 GetTerrainModelRenderPasses();
-            static uint32 GetWaterModelRenderPasses();
+            static uint32 GetTerrainRenderPasses();
+            static uint32 GetWaterRenderPasses();
+            static uint32 GetParticleRenderPasses();
             static uint32 GetSpriteRenderPasses();
             static uint32 GetCubemapRenderPasses();
     };

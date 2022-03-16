@@ -48,7 +48,7 @@ float calculateShadow(vec4 fragPosInLightSpace, vec3 normal, vec3 lightDir)
             }
         }
 
-        return shadow / 100;
+        return shadow / 100.0;
     }
 }
 

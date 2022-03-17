@@ -18,3 +18,4 @@
 #include "WaterRenderer.hpp"
 #include "BaseInterface.hpp"
 #include "imgui_plot_var.h"
+#include "ParticleRenderer.hpp"

@@ -27,7 +27,7 @@ namespace Engine
     {
         std::string output;
 
-        for (auto const& tex : _textureStorage)
+        for(auto const& tex : _textureStorage)
             output += (tex.first + "\n");
 
         return output;
@@ -49,7 +49,7 @@ namespace Engine
     {
         std::string output;
 
-        for (auto const& shader : _shaderStorage)
+        for(auto const& shader : _shaderStorage)
             output += (shader.first + "\n");
 
         return output;
@@ -57,10 +57,10 @@ namespace Engine
 
     void ResourceManager::CleanUp()
     {
-        for (auto const& tex : _textureStorage)
+        for(auto const& tex : _textureStorage)
             delete tex.second;
 
-        for (auto const& shader : _shaderStorage)
+        for(auto const& shader : _shaderStorage)
             delete shader.second;
     }
 }

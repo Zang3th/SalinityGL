@@ -4,10 +4,18 @@ namespace Engine
 {
     // ----- Public -----
 
-    Particle::Particle(glm::vec3 position, glm::vec3 velocity, float lifeLength, float rotation, float size)
+    Particle::Particle
+    (
+        glm::vec3 position,
+        glm::vec3 velocity,
+        float     gravity,
+        float     lifeLength,
+        float     rotation,
+        float     size
+    )
         :   _position(position),
             _velocity(velocity),
-            _gravityFactor(1.0f),
+            _gravityFactor(gravity),
             _lifeLength(lifeLength),
             _rotation(rotation),
             _size(size),
@@ -18,9 +26,9 @@ namespace Engine
 
     bool Particle::Update(float dt)
     {
-        _velocity.y += GRAVITY * _gravityFactor * dt;
-        _position   += _velocity * dt;
-        _elapsedTime = dt;
+        _velocity.y  += GRAVITY * _gravityFactor * dt;
+        _position    += _velocity * dt;
+        _elapsedTime += dt;
 
         return _elapsedTime < _lifeLength;
     }

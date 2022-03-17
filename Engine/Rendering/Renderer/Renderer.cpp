@@ -164,11 +164,6 @@ namespace Engine
         return verticeCount;
     }
 
-    uint32 Renderer::DrawParticles(Shader* particleShader)
-    {
-        return _particleRenderer->Render();
-    }
-
     // ----- Public -----
 
     void Renderer::Init(const float nearPlane, const float farPlane, const glm::vec3 lightPos, const glm::vec3 lightColor, const glm::mat4 lightProjection)
@@ -274,7 +269,7 @@ namespace Engine
         _waterRenderPasses++;
     }
 
-    void Renderer::FlushParticleRenderer(Shader* particleShader)
+    void Renderer::FlushParticleRenderer()
     {
         //Check for Wireframe-Mode
         if(WIREFRAME_RENDERING){
@@ -283,8 +278,9 @@ namespace Engine
             GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));}
 
         //Draw particles and update render stats
-        _drawnVertices += DrawParticles(particleShader);
-        _drawcalls++;
+        uint32 particleCount  = _particleRenderer->Render(_perspProjection);
+        _drawnVertices       += particleCount * 4;
+        _drawcalls           += particleCount;
         _particleRenderPasses++;
     }
 

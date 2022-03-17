@@ -11,7 +11,7 @@ namespace Engine
         vao->Bind();
 
         //Create data
-        float vertices[] =
+        static const float vertices[] =
         {
             //Position  //Texture
             0.0f, 1.0f, 0.0f, 1.0f,
@@ -68,14 +68,14 @@ namespace Engine
 
     }
 
-    uint32 Sprite::Draw(const glm::mat4& projection) const
+    uint32 Sprite::Draw(const glm::mat4& projMatrix) const
     {
         _shader->Bind();
         
         //Set uniforms
         _shader->SetUniformVec3f("color", _color);
         _shader->SetUniformMat4f("model", _model);
-        _shader->SetUniformMat4f("projection", projection);
+        _shader->SetUniformMat4f("projection", projMatrix);
 
         _texture->Bind();
         _vao->Bind();

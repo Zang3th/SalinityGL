@@ -13,7 +13,7 @@ namespace Engine
     class ModelManager
     {
         private:
-            inline static std::vector<Model*> _modelStorage   = std::vector<Model*>();
+            inline static std::vector<Model*> _modelStorage = std::vector<Model*>();
 
         public:
             ModelManager() = delete;

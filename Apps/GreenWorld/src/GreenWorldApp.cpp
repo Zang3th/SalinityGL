@@ -195,7 +195,15 @@ namespace GreenWorld
 
     void App::CreateParticles()
     {
-        _particleRenderer = Engine::MakeScope<Engine::ParticleRenderer>();
+        _particleRenderer = Engine::MakeScope<Engine::ParticleRenderer>
+        (
+            Engine::ResourceManager::GetShader("ParticleShader"),
+            glm::vec3(0.0f, 0.0f, 0.0f),
+            1,
+            1.0f,
+            1.0f,
+            4.0f
+        );
         Engine::Renderer::Submit(_particleRenderer.get());
     }
 
@@ -261,7 +269,7 @@ namespace GreenWorld
             _moveFactor  = fmod(_moveFactor, 1.0f);
             Engine::Renderer::FlushWater(Engine::ResourceManager::GetShader("WaterPlaneShader"), _moveFactor);
 
-            Engine::Renderer::FlushParticleRenderer(Engine::ResourceManager::GetShader("ParticleShader"));
+            Engine::Renderer::FlushParticleRenderer();
 
             if(Engine::DEBUG_SPRITES)
                 Engine::Renderer::FlushSprites();

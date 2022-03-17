@@ -42,7 +42,6 @@ namespace Engine
             static uint32 DrawModel(Shader* modelShader, const Model* model);
             static uint32 DrawTerrain(Shader* terrainShader);
             static uint32 DrawWater(Shader* waterShader, float moveFactor);
-            static uint32 DrawParticles(Shader* particleShader);
 
         public:
             Renderer() = delete;
@@ -58,7 +57,7 @@ namespace Engine
             static void FlushModelBuffer(Shader* modelShader);
             static void FlushTerrain(Shader* terrainShader);
             static void FlushWater(Shader* waterShader, float moveFactor);
-            static void FlushParticleRenderer(Shader* particleShader);
+            static void FlushParticleRenderer();
             static void FlushSprites();
             static void FlushCubemap();
 

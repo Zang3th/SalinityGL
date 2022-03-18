@@ -13,12 +13,12 @@ namespace Engine
         float     rotation,
         float     size
     )
-        :   _position(position),
-            _velocity(velocity),
+        :   _initPosition(position), _position(position),
+            _initVelocity(velocity), _velocity(velocity),
             _gravityFactor(gravity),
-            _lifeLength(lifeLength),
-            _rotation(rotation),
-            _size(size),
+            _initLifeLength(lifeLength), _lifeLength(lifeLength),
+            _initRotation(rotation), _rotation(rotation),
+            _initSize(size), _size(size),
             _elapsedTime(0.0f)
     {
 
@@ -31,6 +31,14 @@ namespace Engine
         _elapsedTime += dt;
 
         return _elapsedTime < _lifeLength;
+    }
+
+    void Particle::Respawn()
+    {
+        _position    = _initPosition;
+        _velocity    = _initVelocity;
+        _lifeLength  = _initLifeLength;
+        _elapsedTime = 0.0f;
     }
 
     glm::vec3 Particle::GetPosition()

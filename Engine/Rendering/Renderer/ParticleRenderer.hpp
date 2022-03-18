@@ -8,6 +8,7 @@
 #include "VertexArray.hpp"
 #include "VertexBuffer.hpp"
 #include "ErrorManager.hpp"
+#include "Random.hpp"
 
 namespace Engine
 {

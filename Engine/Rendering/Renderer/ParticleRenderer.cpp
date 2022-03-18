@@ -34,15 +34,16 @@ namespace Engine
         //Iterate over particle count
         for(uint32 i = 0; i < _count; i++)
         {
-            //TODO: Slightly randomize parameters to deviate the particles a bit
-
-            //Create parameters
+            //Create and randomize the parameters a bit to deviate the particles
             glm::vec3 pos  = _position;
-            glm::vec3 vel  = glm::vec3(0.75f, 0.75f, 0.75f) * _speed;
+            glm::vec3 vel  = glm::vec3
+                            (2.0f  * ((Random::GetFloat() - 0.5f) * 2.0f),
+                             20.0f,
+                             2.0f  * ((Random::GetFloat() - 0.5f) * 2.0f)) * _speed * Random::GetFloat();
             float     grav = _gravityComplient;
             float     life = _lifeLength;
             float     rot  = 0.0f;
-            float     size = 1.0f;
+            float     size = 1.0f * Random::GetFloat();
 
             //Create particle
             Particle* particle = new Particle(pos, vel, grav, life, rot, size);
@@ -63,8 +64,17 @@ namespace Engine
         //Get view matrix
         glm::mat4 view = Camera::GetViewMatrix();
 
-        //Apply transformations
+        //Set upper 3x3 part of the model matrix to the transpose of the view matrix to negate any rotation. Then apply transformations
         model = glm::translate(model, particle->GetPosition());
+        model[0][0] = view[0][0];
+        model[0][1] = view[1][0];
+        model[0][2] = view[2][0];
+        model[1][0] = view[0][1];
+        model[1][1] = view[1][1];
+        model[1][2] = view[2][1];
+        model[2][0] = view[0][2];
+        model[2][1] = view[1][2];
+        model[2][2] = view[2][2];
         model = glm::rotate(model, glm::radians(particle->GetRotation()), glm::vec3(0.0f, 0.0f, 1.0f));
         model = glm::scale(model, glm::vec3(particle->GetSize()));
 
@@ -100,39 +110,51 @@ namespace Engine
             delete p.particle;
     }
 
-    //TODO: Optimize Rendering via better Resourcebinding and/or Instanced Rendering
+    //TODO: Optimize Rendering via Instanced Rendering
     uint32 ParticleRenderer::Render(const glm::mat4& projMatrix)
     {
+        //Bind shader
+        _shader->Bind();
+
+        //Bind vao
+        _vao->Bind();
+
         //Iterate over all particles
         for(uint32 i = 0; i < _count; i++)
         {
             //Get current particle
             ParticleBinding particleBinding = _particleStorage[i];
 
-            //Update particle
-            //particleBinding.particle->Update((float)Window::GetDeltaTime());
-            particleBinding.modelView = GetModelViewMatrix(particleBinding.particle);
+            if(particleBinding.particle->Update((float)Window::GetDeltaTime()))
+            {
+                if(particleBinding.particle->GetPosition().y > 0.0f)
+                {
+                    particleBinding.modelView = GetModelViewMatrix(particleBinding.particle);
 
-            //Bind shader
-            _shader->Bind();
+                    //Set uniforms
+                    _shader->SetUniformVec4f("color", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+                    _shader->SetUniformMat4f("modelView", particleBinding.modelView);
+                    _shader->SetUniformMat4f("projection", projMatrix);
 
-            //Set uniforms
-            _shader->SetUniformVec4f("color", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-            _shader->SetUniformMat4f("modelView", particleBinding.modelView);
-            _shader->SetUniformMat4f("projection", projMatrix);
-
-            //Bind vao
-            _vao->Bind();
-
-            //Render particle
-            GLCall(glDrawArrays(GL_TRIANGLE_STRIP, 0, 4));
-
-            //Unbind vao
-            _vao->Unbind();
-
-            //Unbind shader
-            _shader->Unbind();
+                    //Render particle
+                    GLCall(glDrawArrays(GL_TRIANGLE_STRIP, 0, 4));
+                }
+                else
+                {
+                    particleBinding.particle->Respawn();
+                }
+            }
+            else
+            {
+                particleBinding.particle->Respawn();
+            }
         }
+
+        //Unbind vao
+        _vao->Unbind();
+
+        //Unbind shader
+        _shader->Unbind();
 
         //Return rendered particle count
         return _count;

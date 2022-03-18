@@ -6,7 +6,7 @@ const Engine::uint32 Engine::WINDOW_HEIGHT       = 1080;
 const Engine::uint32 Engine::PLANE_SIZE          = 128;
       bool           Engine::WIREFRAME_RENDERING = false;
       bool           Engine::DEBUG_SPRITES       = false;
-const float          Engine::GRAVITY             = -40.0f;
+const float          Engine::GRAVITY             = -20.0f;
 
 namespace GreenWorld
 {
@@ -199,7 +199,7 @@ namespace GreenWorld
         (
             Engine::ResourceManager::GetShader("ParticleShader"),
             glm::vec3(0.0f, 0.0f, 0.0f),
-            1,
+            300,
             1.0f,
             1.0f,
             4.0f

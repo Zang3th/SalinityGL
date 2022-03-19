@@ -99,7 +99,7 @@ namespace Engine
             _speed(speed),
             _gravityComplient(gravityComplient),
             _lifeLength(lifeLength),
-            _verticeCount(6)
+            _verticeCount(4)
     {
         GenerateParticles();
     }
@@ -137,7 +137,7 @@ namespace Engine
                     _shader->SetUniformMat4f("projection", projMatrix);
 
                     //Render particle
-                    GLCall(glDrawArrays(GL_TRIANGLE_STRIP, 0, 4));
+                    GLCall(glDrawArrays(GL_TRIANGLE_STRIP, 0, _verticeCount));
                 }
                 else
                 {

@@ -8,34 +8,35 @@
      - GreenWorld: Demo Nature-Scene (3D)   
 
 ### General functionalities
-   - Basic OpenGL-Wrapping (VAO, VBO, IBO, FBO, Shaders, Textures, Errorhandling)
+   - Basic OpenGL-Wrapping (VAO, VBO, IBO, FBO, Errorhandling)
      - Windowcreation
-     - 2D-Sprite-Renderer
-     - 3D-Model-Renderer
+     - Resourcemanagement (Shader, Textures)
+     - 2D-Sprite-Rendering
+     - 3D-Model-Rendering
      - Camerasystem + Control
+     - Cubemaps/Skyboxes
    - File-Management
-   - Profiler
+   - Profiling
    - UI
-   - Cubemaps/Skyboxes
    - Audio
    - Loading of OBJ-Models
-   - Meshcreator
-   
-### Example applications  
-   - GreenWorld
-     - Demo Nature-Scene
+   - Creation of basic meshes
+
+### Added functionalities
+   - Lighting
+     - Blinn-Phong
+     - Shadow-Rendering
+     - Normalmapping
+   - Water-Rendering
+
 
 ### ToDo's
    - Instanced-Rendering
      - Particles
-       - Smoke, Fire
+       - Smoke (in process)
      - Grass
-   - Lighting
-     - Blinn-Phong (X)
-     - Shadows (X)
-     - Normalmapping (X)
-     - HDR/Bloom 
-   - Water-Rendering (X)
+   - Bloom
+   - Lensflare
    - And a lot more ...
 
 ### Credits
@@ -49,7 +50,7 @@
    - [tinyobjloader](https://github.com/tinyobjloader/tinyobjloader)
 
 ### Using & Compiling
-   - Currently, only for linux (with CMake as a buildsystem)
+   - Currently, only for linux with CMake
       - Clone the repository
       - Install the external dependencies if needed
                      
@@ -67,16 +68,3 @@
 
 ### Current look of the GreenWorld App:
 ![GreenWorld](Res/Screenshots/GreenWorld/Screenshot_GW_019.png)
-
-### Some projects that I created with an old version of the engine:
-
-#### 3D-World with lighting, models and single raycasting to raise/sink tiles
-<img src="https://user-images.githubusercontent.com/59279641/77147299-375d0f00-6a8d-11ea-9db8-0d94d04d178b.PNG"/>
-<img src="https://user-images.githubusercontent.com/59279641/77147427-7ee39b00-6a8d-11ea-86cd-6ba2ad74efff.PNG"/>
-<img src="https://user-images.githubusercontent.com/59279641/77147461-94f15b80-6a8d-11ea-82b8-0a67f637a7c7.PNG"/>  
- 
-#### 3D-Simulation-Project with bullet3 as a physics engine  
-[![Simulation project video](https://user-images.githubusercontent.com/59279641/106173433-34927680-6194-11eb-9cfc-caabc3781d1f.gif)](https://user-images.githubusercontent.com/59279641/106173014-c0f06980-6193-11eb-9ea6-1efb2e17c5a9.mp4)
-
-#### My implementation of the game "Breakout" from "learnopengl.com":
-<img src="https://user-images.githubusercontent.com/59279641/91633530-3d1a3180-e9e9-11ea-889c-74dba8e7e700.PNG"/>

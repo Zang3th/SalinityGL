@@ -98,6 +98,11 @@ namespace Engine
         GLCall(glBindTexture(GL_TEXTURE_2D, _textureID));
     }
 
+    void Texture::Unbind() const
+    {
+        GLCall(glBindTexture(GL_TEXTURE_2D, 0));
+    }
+
     void Texture::ActivateTextureFlipOnLoad() const
     {
         stbi_set_flip_vertically_on_load(true);
@@ -141,8 +146,8 @@ namespace Engine
         return _textureID;
     }
 
-    void Texture::Unbind() const
+    uint32 Texture::GetNumberOfRows() const
     {
-        GLCall(glBindTexture(GL_TEXTURE_2D, 0));
+        return _numberOfRows;
     }
 }

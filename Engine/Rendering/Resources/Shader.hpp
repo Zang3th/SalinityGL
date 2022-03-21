@@ -21,14 +21,18 @@ namespace Engine
         public:
             Shader(const std::string& vsFilepath, const std::string& fsFilepath);
             ~Shader();
+
             void Bind() const;
             void Unbind() const;
+
             void SetUniform1i(const std::string& name, int32 value);
             void SetUniform1f(const std::string& name, float value);
             void SetUniform4f(const std::string& name, float v0, float v1, float v2, float v3);
             void SetUniformMat4f(const std::string& name, const glm::mat4& matrix);
+            void SetUniformVec2f(const std::string& name, const glm::vec2& vec);
             void SetUniformVec3f(const std::string& name, const glm::vec3& vec);
             void SetUniformVec4f(const std::string& name, const glm::vec4& vec);
+
             [[nodiscard]] uint32 GetShaderID() const;
     };
 }

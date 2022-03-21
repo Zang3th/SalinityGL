@@ -278,7 +278,6 @@ namespace Engine
 
     void Renderer::FlushParticleRenderer()
     {
-        GLRenderSettings::SetBlendFunc(GL_ONE);
         GLRenderSettings::DisableDepthtest();
 
         //Check for Wireframe-Mode
@@ -294,7 +293,6 @@ namespace Engine
         _particleRenderPasses++;
 
         GLRenderSettings::EnableDepthtest();
-        GLRenderSettings::SetBlendFunc(GL_ONE_MINUS_SRC_ALPHA);
     }
 
     void Renderer::FlushSprites()

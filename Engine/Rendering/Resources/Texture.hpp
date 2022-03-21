@@ -5,7 +5,7 @@
 
 namespace Engine
 {
-    //Anisotropic filtering is implemented as an extension and isn't included in OpenGL Engine
+    //Anisotropic filtering is implemented as an extension and isn't included in the OpenGL-Core
     #define GL_TEXTURE_MAX_ANISOTROPY_EXT 0x84FE
 
     class Texture
@@ -21,15 +21,18 @@ namespace Engine
             Texture(const std::string& filepath, uint32 numberOfRows);
             Texture(uint32 width, uint32 height, GLint internalFormat, GLenum format, GLenum type);
             ~Texture();
-            void Bind() const;
-            void BindToSlot(uint32 slot) const;
-            void ActivateTextureFlipOnLoad() const;
-            void DeactivateTextureFlipOnLoad() const;
-            void AddFilterNearest() const;
-            void AddFilterLinear() const;
-            void AddWrapRepeat() const;
-            void AddBorderColor() const;
-            [[nodiscard]] uint32 GetTextureID() const;
-            void Unbind() const;
+
+            void Bind()                            const;
+            void BindToSlot(uint32 slot)           const;
+            void Unbind()                          const;
+            void ActivateTextureFlipOnLoad()       const;
+            void DeactivateTextureFlipOnLoad()     const;
+            void AddFilterNearest()                const;
+            void AddFilterLinear()                 const;
+            void AddWrapRepeat()                   const;
+            void AddBorderColor()                  const;
+
+            [[nodiscard]] uint32 GetTextureID()    const;
+            [[nodiscard]] uint32 GetNumberOfRows() const;
     };
 }

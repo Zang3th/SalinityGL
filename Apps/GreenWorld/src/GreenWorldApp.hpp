@@ -16,7 +16,7 @@ namespace GreenWorld
             Engine::Scope<Engine::Cubemap>          _cubemap;
             Engine::Scope<Engine::Sprite>           _shadowSprite, _reflectSprite, _refractSprite, _refractDepthSprite;
             Engine::Scope<Engine::WaterRenderer>    _waterRenderer;
-            Engine::Scope<Engine::ParticleRenderer> _particleRenderer;
+            Engine::Scope<Engine::ParticleRenderer> _smokeRenderer;
             Engine::Scope<Interface>                _interface;
 
             const glm::vec3                         _lightPosition = glm::vec3(150.0f, 100.0f, -30.0f);

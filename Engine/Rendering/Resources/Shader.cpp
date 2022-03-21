@@ -150,6 +150,11 @@ namespace Engine
         GLCall(glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, &matrix[0][0]));
     }
 
+    void Shader::SetUniformVec2f(const std::string& name, const glm::vec2& vec)
+    {
+        GLCall(glUniform2fv(GetUniformLocation(name), 1, &vec[0]));
+    }
+
     void Shader::SetUniformVec3f(const std::string& name, const glm::vec3& vec)
     {
         GLCall(glUniform3fv(GetUniformLocation(name), 1, &vec[0]));

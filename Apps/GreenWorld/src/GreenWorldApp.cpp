@@ -28,7 +28,7 @@ namespace GreenWorld
         Engine::ResourceManager::LoadTextureFromFile("ColorMap", "../Res/Assets/Textures/GreenWorld/Colormap128.png");
         Engine::ResourceManager::LoadTextureFromFile("DuDvMap", "../Res/Assets/Textures/GreenWorld/DuDvMap.png");
         Engine::ResourceManager::LoadTextureFromFile("NormalMap", "../Res/Assets/Textures/GreenWorld/WaterNormalMap.png");
-        Engine::ResourceManager::LoadTextureAtlasFromFile("ParticleTextureAtlas", "../Res/Assets/Textures/GreenWorld/Star.png", 1);
+        Engine::ResourceManager::LoadTextureAtlasFromFile("ParticleTextureAtlas", "../Res/Assets/Textures/GreenWorld/SmokeAtlas.png", 8);
     }
 
     void App::InitModules()
@@ -196,17 +196,19 @@ namespace GreenWorld
 
     void App::CreateParticles()
     {
-        _particleRenderer = Engine::MakeScope<Engine::ParticleRenderer>
+        _smokeRenderer = Engine::MakeScope<Engine::ParticleRenderer>
         (
-            Engine::ResourceManager::GetTexture("ParticleTextureAtlas"),
-            Engine::ResourceManager::GetShader("ParticleShader"),
-            glm::vec3(0.0f, 0.0f, 0.0f),
-            300,
-            1.0f,
-            1.0f,
-            4.0f
+            Engine::ResourceManager::GetTexture("ParticleTextureAtlas"), //TextureAtlas
+            Engine::ResourceManager::GetShader("ParticleShader"),        //Shader
+            glm::vec3(87.0f, 32.0f, 92.5f),                          //Spawnpoint
+            50,                                                                //Number of particles
+            20.0f,                                                             //Size
+            0.05f,                                                             //Speed
+            0.0f,                                                              //Gravitycompliance
+            5.0f,                                                              //Lifetime
+            40.0f                                                              //Respawnthreshold (Y-Position)
         );
-        Engine::Renderer::Submit(_particleRenderer.get());
+        Engine::Renderer::Submit(_smokeRenderer.get());
     }
 
     // ----- Public -----
@@ -217,9 +219,9 @@ namespace GreenWorld
 
         //Call after init because these methods depend on OpenGL-Initialization
         CreateModels();
-        CreateParticles();
         CreateCubemap();
         CreateSprites();
+        CreateParticles();
     }
 
     App::~App()

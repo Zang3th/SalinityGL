@@ -38,15 +38,15 @@ namespace Engine
             glm::vec3 pos  = _position;
             glm::vec3 vel  = glm::vec3
                             (2.0f  * ((Random::GetFloat() - 0.5f) * 2.0f),
-                             20.0f,
-                             2.0f  * ((Random::GetFloat() - 0.5f) * 2.0f)) * _speed * Random::GetFloat();
+                             25.0f,
+                             2.0f  * ((Random::GetFloat() - 0.5f) * 2.0f)) * _speed;
             float     grav = _gravityComplient;
-            float     life = _lifeLength;
+            float     life = _lifeLength + ((Random::GetFloat() - 0.5f) * 2.0f);
             float     rot  = 0.0f;
-            float     size = 1.0f * Random::GetFloat();
+            float     size = _size * Random::GetFloat();
 
             //Create particle
-            Particle* particle = new Particle(pos, vel, grav, life, rot, size);
+            Particle* particle = new Particle(pos, vel, grav, life, rot, size, _textureAtlas->GetNumberOfRows());
 
             //Get initial modelViewMatrix
             glm::mat4 modelView = GetModelViewMatrix(particle);
@@ -89,18 +89,22 @@ namespace Engine
         Shader*   shader,
         glm::vec3 position,
         uint32    count,
+        float     size,
         float     speed,
         float     gravityComplient,
-        float     lifeLength
+        float     lifeLength,
+        float     respawnThreshold
     )
         :   _vao(CreateParticleVao()),
             _textureAtlas(textureAtlas),
             _shader(shader),
             _position(position),
             _count(count),
+            _size(size),
             _speed(speed),
             _gravityComplient(gravityComplient),
             _lifeLength(lifeLength),
+            _respawnTreshold(respawnThreshold),
             _verticeCount(4)
     {
         GenerateParticles();
@@ -129,31 +133,42 @@ namespace Engine
         {
             //Get current particle
             ParticleBinding particleBinding = _particleStorage[i];
+            Particle* particle = particleBinding.particle;
 
-            if(particleBinding.particle->Update((float)Window::GetDeltaTime()))
+            if(particle->Update((float)Window::GetDeltaTime()))
             {
-                if(particleBinding.particle->GetPosition().y > 0.0f)
+                if(particle->GetPosition().y < _respawnTreshold)
                 {
-                    particleBinding.modelView = GetModelViewMatrix(particleBinding.particle);
+                    particleBinding.modelView = GetModelViewMatrix(particle);
+
+                    //Create vec2 with texture coordinate information
+                    glm::vec2 texCoordInfo(particle->GetNumberOfRows(), particle->GetBlendFactor());
 
                     //Set uniforms
-                    _shader->SetUniformVec4f("color", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
                     _shader->SetUniformMat4f("modelView", particleBinding.modelView);
                     _shader->SetUniformMat4f("projection", projMatrix);
+                    _shader->SetUniformVec2f("texOffset0", particle->GetTextureOffset0());
+                    _shader->SetUniformVec2f("texOffset1", particle->GetTextureOffset1());
+                    _shader->SetUniformVec2f("texCoordInfo", texCoordInfo);
 
                     //Render particle
                     GLCall(glDrawArrays(GL_TRIANGLE_STRIP, 0, _verticeCount));
                 }
                 else
                 {
-                    particleBinding.particle->Respawn();
+                    particle->Respawn();
                 }
             }
             else
             {
-                particleBinding.particle->Respawn();
+                particle->Respawn();
             }
         }
+
+        //Sort particles depending on the distance to the camera
+        std::sort(_particleStorage.begin(), _particleStorage.end(),
+                  [] (ParticleBinding const& a, ParticleBinding const& b)
+                  { return a.particle->GetDistanceToCam() < b.particle->GetDistanceToCam(); });
 
         //Unbind vao
         _vao->Unbind();

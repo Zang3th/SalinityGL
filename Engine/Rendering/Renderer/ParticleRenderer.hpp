@@ -10,6 +10,7 @@
 #include "VertexBuffer.hpp"
 #include "ErrorManager.hpp"
 #include "Random.hpp"
+#include <algorithm>
 
 namespace Engine
 {
@@ -31,9 +32,11 @@ namespace Engine
             Shader                      *_shader;
             glm::vec3                    _position;
             uint32                       _count;
+            float                        _size;
             float                        _speed;
             float                        _gravityComplient;
             float                        _lifeLength;
+            float                        _respawnTreshold;
             uint32                       _verticeCount;
             std::vector<ParticleBinding> _particleStorage;
 
@@ -48,9 +51,11 @@ namespace Engine
                 Shader*   shader,
                 glm::vec3 position,
                 uint32    count,
+                float     size,
                 float     speed,
                 float     gravityComplient,
-                float     lifeLength
+                float     lifeLength,
+                float     respawnThreshold
             );
             ~ParticleRenderer();
             [[nodiscard]] uint32 Render(const glm::mat4& projMatrix);

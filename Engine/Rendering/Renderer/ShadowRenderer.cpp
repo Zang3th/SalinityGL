@@ -6,14 +6,14 @@ namespace Engine
 
     void ShadowRenderer::StartFrame()
     {
-        GLCall(glCullFace(GL_FRONT));
+        GLRenderSettings::SetCullFace(GL_FRONT);
         _fbo->Bind(_shadowWidth, _shadowHeight);
     }
 
     void ShadowRenderer::EndFrame()
     {
         _fbo->Unbind();
-        GLCall(glCullFace(GL_BACK));
+        GLRenderSettings::SetCullFace(GL_BACK);
     }
 
     // ----- Public -----

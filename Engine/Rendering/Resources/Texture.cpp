@@ -64,13 +64,19 @@ namespace Engine
     // ----- Public -----
 
     Texture::Texture(const std::string &filepath)
-        :   _textureID(0)
+        :   _textureID(0), _numberOfRows(0)
+    {
+        InitFromFile(filepath);
+    }
+
+    Texture::Texture(const std::string &filepath, uint32 numberOfRows)
+            :   _textureID(0), _numberOfRows(numberOfRows)
     {
         InitFromFile(filepath);
     }
 
     Texture::Texture(uint32 width, uint32 height, GLint internalFormat, GLenum format, GLenum type)
-        :   _textureID(0)
+        :   _textureID(0), _numberOfRows(0)
     {
         Init(width, height, internalFormat, format, type);
     }

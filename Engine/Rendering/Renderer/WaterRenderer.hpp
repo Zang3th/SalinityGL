@@ -3,6 +3,7 @@
 #include "FrameBuffer.hpp"
 #include "Renderer.hpp"
 #include "Camera.hpp"
+#include "GLRenderSettings.hpp"
 
 namespace Engine
 {

@@ -18,6 +18,13 @@ namespace Engine
         return texture;
     }
 
+    Texture* ResourceManager::LoadTextureAtlasFromFile(const std::string& name, const std::string& filepath, uint32 numberOfRows)
+    {
+        Texture* texture = new Texture(filepath, numberOfRows);
+        _textureStorage[name] = texture;
+        return texture;
+    }
+
     Texture* ResourceManager::GetTexture(const std::string& name)
     {
         return _textureStorage[name];

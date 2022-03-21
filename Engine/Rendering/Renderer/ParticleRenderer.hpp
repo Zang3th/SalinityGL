@@ -2,6 +2,7 @@
 
 #include "CoreDefines.hpp"
 #include "Particle.hpp"
+#include "Texture.hpp"
 #include "Shader.hpp"
 #include "Camera.hpp"
 #include "Window.hpp"
@@ -26,6 +27,7 @@ namespace Engine
             };
 
             Ref<VertexArray>             _vao;
+            Texture                     *_textureAtlas;
             Shader                      *_shader;
             glm::vec3                    _position;
             uint32                       _count;
@@ -42,6 +44,7 @@ namespace Engine
         public:
             ParticleRenderer
             (
+                Texture*  textureAtlas,
                 Shader*   shader,
                 glm::vec3 position,
                 uint32    count,

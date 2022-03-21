@@ -177,7 +177,14 @@ namespace Engine
 
         //Nearplane of the _perspProjection has to be this big, otherwise the z-Buffer in the water rendering refraction depth pass is bugged
         _perspProjection = glm::perspective(glm::radians(45.0f), (float)WINDOW_WIDTH/(float)WINDOW_HEIGHT, _nearPlane, _farPlane);
-      }
+
+        //OpenGL-Rendersettings
+        GLRenderSettings::EnableMultisample();
+        GLRenderSettings::EnableDepthtest();
+        GLRenderSettings::SetDepthFunc(GL_LEQUAL);
+        GLRenderSettings::EnableBlending();
+        GLRenderSettings::SetBlendFunc(GL_ONE_MINUS_SRC_ALPHA);
+    }
 
     void Renderer::PrepareFrame()
     {
@@ -225,10 +232,10 @@ namespace Engine
     void Renderer::FlushModelBuffer(Shader* modelShader)
     {
         //Check for Wireframe-Mode
-        if(WIREFRAME_RENDERING){
-            GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));}
-        else{
-            GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));}
+        if(WIREFRAME_RENDERING)
+            GLRenderSettings::EnableWireframe();
+        else
+            GLRenderSettings::DisableWireframe();
 
         ///Draw models and update render stats
         for(auto model : _modelBuffer)
@@ -244,10 +251,10 @@ namespace Engine
     void Renderer::FlushTerrain(Shader* terrainShader)
     {
         //Check for Wireframe-Mode
-        if(WIREFRAME_RENDERING){
-            GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));}
-        else{
-            GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));}
+        if(WIREFRAME_RENDERING)
+            GLRenderSettings::EnableWireframe();
+        else
+            GLRenderSettings::DisableWireframe();
 
         //Draw model and update render stats
         _drawnVertices += DrawTerrain(terrainShader);
@@ -258,10 +265,10 @@ namespace Engine
     void Renderer::FlushWater(Shader* waterShader, float moveFactor)
     {
         //Check for Wireframe-Mode
-        if(WIREFRAME_RENDERING){
-            GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));}
-        else{
-            GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));}
+        if(WIREFRAME_RENDERING)
+            GLRenderSettings::EnableWireframe();
+        else
+            GLRenderSettings::DisableWireframe();
 
         //Draw model and update render stats
         _drawnVertices += DrawWater(waterShader, moveFactor);
@@ -271,22 +278,28 @@ namespace Engine
 
     void Renderer::FlushParticleRenderer()
     {
+        GLRenderSettings::SetBlendFunc(GL_ONE);
+        GLRenderSettings::DisableDepthtest();
+
         //Check for Wireframe-Mode
-        if(WIREFRAME_RENDERING){
-            GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));}
-        else{
-            GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));}
+        if(WIREFRAME_RENDERING)
+            GLRenderSettings::EnableWireframe();
+        else
+            GLRenderSettings::DisableWireframe();
 
         //Draw particles and update render stats
         uint32 particleCount  = _particleRenderer->Render(_perspProjection);
         _drawnVertices       += particleCount * 4;
         _drawcalls           += particleCount;
         _particleRenderPasses++;
+
+        GLRenderSettings::EnableDepthtest();
+        GLRenderSettings::SetBlendFunc(GL_ONE_MINUS_SRC_ALPHA);
     }
 
     void Renderer::FlushSprites()
     {
-        GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
+        GLRenderSettings::DisableWireframe();
 
         //Render sprites
         for(const auto& sprite : _spriteBuffer)
@@ -301,10 +314,10 @@ namespace Engine
 
     void Renderer::FlushCubemap()
     {
-        //Render cubemap last (if it exists)
+        //Render cubemap if it exists
         if(_cubemap)
         {
-            GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
+            GLRenderSettings::DisableWireframe();
             _drawnVertices += _cubemap->Draw(_perspProjection, Camera::GetViewMatrix());
             _drawcalls++;
 

@@ -27,13 +27,13 @@ namespace Engine
     {
         GLCall(glBindTexture(GL_TEXTURE_2D, 0));
         GLCall(glBindFramebuffer(GL_FRAMEBUFFER, _fboID));
-        GLCall(glViewport(0, 0, width, height));
+        GLRenderSettings::SetViewport(width, height);
     }
 
     void FrameBuffer::Unbind() const
     {
         GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
-        GLCall(glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT));
+        GLRenderSettings::SetViewport(WINDOW_WIDTH, WINDOW_HEIGHT);
     }
 
     void FrameBuffer::SetColorAttachment0()

@@ -112,10 +112,10 @@ namespace Engine
 
     void WaterRenderer::RenderToFramebuffer(Shader* terrainShader, Shader* modelShader)
     {
-        GLCall(glEnable(GL_CLIP_DISTANCE0));
+        GLRenderSettings::EnableClipDistance(GL_CLIP_DISTANCE0);
         RenderReflectionFrame(modelShader);
         RenderRefractionFrame(terrainShader);
-        GLCall(glDisable(GL_CLIP_DISTANCE0));
+        GLRenderSettings::DisableClipDistance(GL_CLIP_DISTANCE0);
     }
 
     Texture* WaterRenderer::GetReflectTexture() const

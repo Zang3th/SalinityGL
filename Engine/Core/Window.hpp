@@ -3,6 +3,7 @@
 #include "ErrorManager.hpp"
 #include "glfw3.h"
 #include "CoreDefines.hpp"
+#include "GLRenderSettings.hpp"
 
 namespace Engine
 {

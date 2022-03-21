@@ -28,6 +28,7 @@ namespace GreenWorld
         Engine::ResourceManager::LoadTextureFromFile("ColorMap", "../Res/Assets/Textures/GreenWorld/Colormap128.png");
         Engine::ResourceManager::LoadTextureFromFile("DuDvMap", "../Res/Assets/Textures/GreenWorld/DuDvMap.png");
         Engine::ResourceManager::LoadTextureFromFile("NormalMap", "../Res/Assets/Textures/GreenWorld/WaterNormalMap.png");
+        Engine::ResourceManager::LoadTextureAtlasFromFile("ParticleTextureAtlas", "../Res/Assets/Textures/GreenWorld/Star.png", 1);
     }
 
     void App::InitModules()
@@ -197,6 +198,7 @@ namespace GreenWorld
     {
         _particleRenderer = Engine::MakeScope<Engine::ParticleRenderer>
         (
+            Engine::ResourceManager::GetTexture("ParticleTextureAtlas"),
             Engine::ResourceManager::GetShader("ParticleShader"),
             glm::vec3(0.0f, 0.0f, 0.0f),
             300,
@@ -269,12 +271,12 @@ namespace GreenWorld
             _moveFactor  = fmod(_moveFactor, 1.0f);
             Engine::Renderer::FlushWater(Engine::ResourceManager::GetShader("WaterPlaneShader"), _moveFactor);
 
-            Engine::Renderer::FlushParticleRenderer();
-
             if(Engine::DEBUG_SPRITES)
                 Engine::Renderer::FlushSprites();
 
             Engine::Renderer::FlushCubemap();
+
+            Engine::Renderer::FlushParticleRenderer();
         }
 
         {   Engine::PROFILE_SCOPE("Render UI");

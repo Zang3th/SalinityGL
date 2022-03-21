@@ -85,6 +85,7 @@ namespace Engine
 
     ParticleRenderer::ParticleRenderer
     (
+        Texture*  textureAtlas,
         Shader*   shader,
         glm::vec3 position,
         uint32    count,
@@ -93,6 +94,7 @@ namespace Engine
         float     lifeLength
     )
         :   _vao(CreateParticleVao()),
+            _textureAtlas(textureAtlas),
             _shader(shader),
             _position(position),
             _count(count),
@@ -115,6 +117,9 @@ namespace Engine
     {
         //Bind shader
         _shader->Bind();
+
+        //Bind texture
+        _textureAtlas->Bind();
 
         //Bind vao
         _vao->Bind();

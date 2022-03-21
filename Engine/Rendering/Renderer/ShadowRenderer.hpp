@@ -7,6 +7,7 @@
 #include "Texture.hpp"
 #include "ResourceManager.hpp"
 #include "Renderer.hpp"
+#include "GLRenderSettings.hpp"
 
 namespace Engine
 {

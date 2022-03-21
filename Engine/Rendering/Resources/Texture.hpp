@@ -11,13 +11,14 @@ namespace Engine
     class Texture
     {
         private:
-            uint32 _textureID;
+            uint32 _textureID, _numberOfRows;
 
             void InitFromFile(const std::string& filepath);
             void Init(uint32 width, uint32 height, GLint internalFormat, GLenum format, GLenum type);
 
         public:
             explicit Texture(const std::string& filepath);
+            Texture(const std::string& filepath, uint32 numberOfRows);
             Texture(uint32 width, uint32 height, GLint internalFormat, GLenum format, GLenum type);
             ~Texture();
             void Bind() const;

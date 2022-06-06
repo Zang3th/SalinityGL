@@ -5,7 +5,8 @@
    - OpenGL-Wrapper-Functions
    - Written in C++17 with OpenGL 4.5
    - Example applications that are using the engine
-     - GreenWorld: Demo Nature-Scene (3D)   
+     - GreenWorld: Nature-Scene (3D)   
+     - ParticleSim: Particle/Sandfalling-Simulation (2D)
 
 ### Basic functionalities
    - Basic OpenGL-Wrapping (VAO, VBO, IBO, FBO, Errorhandling)
@@ -32,11 +33,12 @@
       - Particles
            - Smoke
 
-
 ### ToDo's   
    - Grass
    - Bloom
    - Lensflare
+   - Simple Raytracing
+     - Shadows and Lighting in 2D
    - And a lot more ...
 
 ### Credits
@@ -49,7 +51,7 @@
    - [irrKlang](https://www.ambiera.com/irrklang/)
    - [tinyobjloader](https://github.com/tinyobjloader/tinyobjloader)
 
-### Using & Compiling (currently for linux with CMake)
+### Using & Compiling (currently for Linux with CMake)
    - Clone the repository
    - Install the external dependencies if needed
        

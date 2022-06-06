@@ -9,10 +9,10 @@ namespace Engine
         float  lifeFactor    = _elapsedTime / _lifeLength;
         uint32 stageCount    = _numberOfRows * _numberOfRows;
         float  atlasProgress = lifeFactor * (float)stageCount;
-        uint32 index0        = floor(atlasProgress);
+        uint32 index0        = (uint32)(floorf(atlasProgress));
         uint32 index1        = index0 < stageCount - 1 ? index0 + 1 : index0;
 
-        _blendFactor    = (float)fmod(atlasProgress, 1.0f);
+        _blendFactor    = (float)fmodf(atlasProgress, 1.0f);
         _textureOffset0 = CalculateTextureOffset(index0);
         _textureOffset1 = CalculateTextureOffset(index1);
     }
@@ -81,6 +81,7 @@ namespace Engine
     {
         return _textureOffset0;
     }
+
     glm::vec2 Particle::GetTextureOffset1() const
     {
         return _textureOffset1;
@@ -104,10 +105,5 @@ namespace Engine
     float Particle::GetDistanceToCam() const
     {
         return _distanceToCamera;
-    }
-
-    uint32 Particle::GetNumberOfRows() const
-    {
-        return _numberOfRows;
     }
 }

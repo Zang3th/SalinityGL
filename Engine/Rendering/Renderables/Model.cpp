@@ -11,16 +11,16 @@ namespace Engine
         vao->Bind();
 
         //Create vbo's, send it data and configure vao
-        VertexBuffer vbo1(&mesh->vertices[0], mesh->vertices.size() * sizeof(glm::vec3));
+        VertexBuffer vbo1(&mesh->vertices[0], mesh->vertices.size() * sizeof(glm::vec3), GL_STATIC_DRAW);
         vao->DefineAttributes(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), nullptr);
 
-        VertexBuffer vbo2(&mesh->texCoords[0], mesh->texCoords.size() * sizeof(glm::vec2));
+        VertexBuffer vbo2(&mesh->texCoords[0], mesh->texCoords.size() * sizeof(glm::vec2), GL_STATIC_DRAW);
         vao->DefineAttributes(1, 2, GL_FLOAT, GL_FALSE, sizeof(glm::vec2), nullptr);
 
-        VertexBuffer vbo3(&mesh->normals[0], mesh->normals.size() * sizeof(glm::vec3));
+        VertexBuffer vbo3(&mesh->normals[0], mesh->normals.size() * sizeof(glm::vec3), GL_STATIC_DRAW);
         vao->DefineAttributes(2, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), nullptr);
 
-        VertexBuffer vbo4(&mesh->tangents[0], mesh->tangents.size() * sizeof(glm::vec3));
+        VertexBuffer vbo4(&mesh->tangents[0], mesh->tangents.size() * sizeof(glm::vec3), GL_STATIC_DRAW);
         vao->DefineAttributes(3, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), nullptr);
 
         //Create ibo

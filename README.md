@@ -7,7 +7,7 @@
    - Example applications that are using the engine
      - GreenWorld: Demo Nature-Scene (3D)   
 
-### General functionalities
+### Basic functionalities
    - Basic OpenGL-Wrapping (VAO, VBO, IBO, FBO, Errorhandling)
      - Windowcreation
      - Resourcemanagement (Shader, Textures)
@@ -22,19 +22,19 @@
    - Loading of OBJ-Models
    - Creation of basic meshes
 
-### Added functionalities
+### Additional functionalities
    - Lighting
      - Blinn-Phong
      - Shadow-Rendering
      - Normalmapping
    - Water-Rendering
-
-
-### ToDo's
    - Instanced-Rendering
-     - Particles
-       - Smoke (in process)
-     - Grass
+      - Particles
+           - Smoke
+
+
+### ToDo's   
+   - Grass
    - Bloom
    - Lensflare
    - And a lot more ...
@@ -49,22 +49,20 @@
    - [irrKlang](https://www.ambiera.com/irrklang/)
    - [tinyobjloader](https://github.com/tinyobjloader/tinyobjloader)
 
-### Using & Compiling
-   - Currently, only for linux with CMake
-      - Clone the repository
-      - Install the external dependencies if needed
-                     
-            sudo apt-get update
-            sudo apt-get install cmake pkg-config
-            sudo apt-get install libglu1-mesa-dev mesa-common-dev  
-     
-      - mkdir Build
-      - cd Build
-      - cmake ..
-      - make
+### Using & Compiling (currently for linux with CMake)
+   - Clone the repository
+   - Install the external dependencies if needed
+       
+         sudo apt-get update
+         sudo apt-get install cmake pkg-config
+         sudo apt-get install libglu1-mesa-dev mesa-common-dev
+   - mkdir Build
+   - cd Build
+   - cmake ..
+   - make
             
 ### License:
    - This code is provided under the MIT License. See the file LICENSE for details.
 
 ### Current look of the GreenWorld App:
-![GreenWorld](Res/Screenshots/GreenWorld/Screenshot_GW_020.png)
+![GreenWorld](Res/Screenshots/GreenWorld/Screenshot_GW_021.png)

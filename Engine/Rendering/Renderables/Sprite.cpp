@@ -24,7 +24,7 @@ namespace Engine
         };
 
         //Create vbo, send it data and configure vao
-        VertexBuffer vbo(vertices, sizeof(vertices));
+        VertexBuffer vbo(vertices, sizeof(vertices), GL_STATIC_DRAW);
         vao->DefineAttributes(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), nullptr);
 
         //Unbind vao

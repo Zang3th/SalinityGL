@@ -289,7 +289,7 @@ namespace Engine
         //Draw particles and update render stats
         uint32 particleCount  = _particleRenderer->Render(_perspProjection);
         _drawnVertices       += particleCount * 4;
-        _drawcalls           += particleCount;
+        _drawcalls           += 1;
         _particleRenderPasses++;
 
         GLRenderSettings::EnableDepthtest();

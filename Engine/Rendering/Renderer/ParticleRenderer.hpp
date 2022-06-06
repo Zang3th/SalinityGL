@@ -17,32 +17,28 @@ namespace Engine
     class ParticleRenderer
     {
         private:
-            struct ParticleBinding
-            {
-                Particle* particle;
-                glm::mat4 modelView;
-
-                ParticleBinding(Particle* particle, glm::mat4 modelView)
-                    : particle(particle), modelView(modelView)
-                {};
-            };
-
             Ref<VertexArray>             _vao;
+            Ref<VertexBuffer>            _vboModel, _vboTex, _vboBlend;
             Texture                     *_textureAtlas;
             Shader                      *_shader;
             glm::vec3                    _position;
             uint32                       _count;
+            uint32                       _numberOfRows;
             float                        _size;
             float                        _speed;
             float                        _gravityComplient;
             float                        _lifeLength;
             float                        _respawnTreshold;
             uint32                       _verticeCount;
-            std::vector<ParticleBinding> _particleStorage;
+            std::vector<Particle*>       _pointerStorage;
+            std::vector<glm::mat4>       _modelViewStorage;
+            std::vector<glm::vec4>       _texOffsetStorage;
+            std::vector<float>           _blendFactorStorage;
 
-            Ref<VertexArray> CreateParticleVao();
-            void             GenerateParticles();
-            glm::mat4        GetModelViewMatrix(Particle* particle);
+            void              InitGpuStorage();
+            void              UpdateGpuStorage();
+            void              GenerateParticles();
+            glm::mat4         GetModelViewMatrix(Particle* particle);
 
         public:
             ParticleRenderer

@@ -56,7 +56,7 @@ namespace Engine
         vao->Bind();
 
         //Create vbo, send it data and configure vao
-        VertexBuffer vbo(&skyboxVertices, sizeof(skyboxVertices));
+        VertexBuffer vbo(&skyboxVertices, sizeof(skyboxVertices), GL_STATIC_DRAW);
         vao->DefineAttributes(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
 
         //Unbind vao

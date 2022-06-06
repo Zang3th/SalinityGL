@@ -16,7 +16,7 @@ namespace Engine
                       _initRotation,   _rotation,       _initSize,      _size,          _distanceToCamera;
             uint32    _numberOfRows;
 
-            void UpdateTextureCoordInfo();
+                          void      UpdateTextureCoordInfo();
             [[nodiscard]] glm::vec2 CalculateTextureOffset(uint32 index) const;
 
     public:
@@ -40,6 +40,5 @@ namespace Engine
             [[nodiscard]] float     GetSize()           const;
             [[nodiscard]] float     GetBlendFactor()    const;
             [[nodiscard]] float     GetDistanceToCam()  const;
-            [[nodiscard]] uint32    GetNumberOfRows()   const;
     };
 }

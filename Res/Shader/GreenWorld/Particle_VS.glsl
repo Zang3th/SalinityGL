@@ -1,16 +1,16 @@
 #version 450 core
 
-layout(location = 0) in vec2 vertexIn;
+layout(location = 0) in vec2  vertexIn;
+layout(location = 1) in mat4  modelViewIn;
+layout(location = 2) in vec4  texOffsetsIn;
+layout(location = 3) in float blendFactorIn;
 
 out vec2  texCoords0;
 out vec2  texCoords1;
 out float blendFactor;
 
-uniform mat4  modelView;
 uniform mat4  projection;
-uniform vec2  texOffset0;
-uniform vec2  texOffset1;
-uniform vec2  texCoordInfo; //(numberOfRows, blendFactor)
+uniform float numberOfRows;
 
 void main()
 {
@@ -19,13 +19,13 @@ void main()
     texCoords.y    = 1.0 - texCoords.y;
 
     //Set them in relation to the texture atlas
-    texCoords /= texCoordInfo.x;
+    texCoords /= numberOfRows;
 
     //Set current and next texture coordinates
-    texCoords0 = texCoords + texOffset0;
-    texCoords1 = texCoords + texOffset1;
+    texCoords0 = texCoords + texOffsetsIn.xy;
+    texCoords1 = texCoords + texOffsetsIn.zw;
 
-    blendFactor = texCoordInfo.y;
+    blendFactor = blendFactorIn;
 
-    gl_Position = projection * modelView * vec4(vertexIn, 0.0, 1.0f);
+    gl_Position = projection * modelViewIn * vec4(vertexIn, 0.0, 1.0f);
 }

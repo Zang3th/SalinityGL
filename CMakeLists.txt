@@ -12,7 +12,7 @@ project(GameEngine)
 set(GLFW_PATH "${CMAKE_SOURCE_DIR}/Vendor/GLFW/libglfw.so")
 set(IRRKLANG_PATH "${CMAKE_SOURCE_DIR}/Vendor/IrrKlang/libIrrKlang.so")
 set(ENGINE_LINKER_FLAGS "-lX11")
-set(APPLICATION_LINKER_FLAGS "-ldl -pthread")
+set(APPLICATION_LINKER_FLAGS "-ldl -lpthread")
 
 ############################### Engine-Core #################################
 

@@ -2,8 +2,8 @@
 
 layout(location = 0) in vec2  vertexIn;
 layout(location = 1) in mat4  modelViewIn;
-layout(location = 2) in vec4  texOffsetsIn;
-layout(location = 3) in float blendFactorIn;
+layout(location = 5) in vec4  texOffsetsIn;
+layout(location = 6) in float blendFactorIn;
 
 out vec2  texCoords0;
 out vec2  texCoords1;

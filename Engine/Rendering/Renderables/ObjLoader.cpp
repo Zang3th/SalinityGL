@@ -18,7 +18,7 @@ namespace Engine
         {
             std::string objInfo0 = "(Shapes: "    + std::to_string(shapes.size())          + ", Materials: " + std::to_string(materials.size())  + ")";
             std::string objInfo1 = "(Vertices: "  + std::to_string(attrib.vertices.size()) + ", TexCoords: " + std::to_string(attrib.texcoords.size()) +
-                                  ", Indices: "  + std::to_string(shapes[0].mesh.indices.size()) + ")";
+                                   ", Indices: "  + std::to_string(shapes[0].mesh.indices.size()) + ")";
             Logger::Info("Loaded", "OBJ-Model", objFullFilepath);
             Logger::Info("", "", objInfo0);
             Logger::Info("", "", objInfo1);

@@ -42,7 +42,7 @@
      - Shadows and Lighting in 2D
    - And a lot more ...
 
-### Credits
+### Libraries (Credits to the creators and contributors)
    - [glad](https://github.com/Dav1dde/glad)
    - [glfw](https://github.com/glfw/glfw)
    - [easylogging++](https://github.com/amrayn/easyloggingpp)
@@ -52,17 +52,19 @@
    - [irrKlang](https://www.ambiera.com/irrklang/)
    - [tinyobjloader](https://github.com/tinyobjloader/tinyobjloader)
 
-### Using & Compiling (currently for Linux with CMake)   
+### Using & Compiling (currently for Linux with CMake)
+   - Tested with Ubuntu 16.04 - 22.04
    - Install the external dependencies if needed
-    
+
          sudo apt install cmake pkg-config
          sudo apt install libglu1-mesa-dev mesa-common-dev
-    
-   - Clone or download the repository 
-   - mkdir Build
-   - cd Build
-   - cmake ..
-   - make
+   - Clone or download the repository and build it
+         
+         git clone https://github.com/Zanget3u/GameEngine
+         mkdir Build
+         cd Build
+         cmake ..
+         make
             
 ### License:
    - This code is provided under the MIT License. See the file LICENSE for details.

@@ -1,7 +1,8 @@
 #pragma once
 
 #include "ErrorManager.hpp"
-#include "CoreDefines.hpp"
+#include "Types.hpp"
+#include "AppSettings.hpp"
 #include "ResourceManager.hpp"
 #include "GLRenderSettings.hpp"
 
@@ -10,8 +11,8 @@ namespace Engine
     class FrameBuffer
     {
         private:
-            uint32          _fboID, _depthBufferID;
-            Texture         *_texture, *_depthTexture;
+            uint32          _fboID,    _depthBufferID;
+            Texture        *_texture, *_depthTexture;
 
         public:
             FrameBuffer();

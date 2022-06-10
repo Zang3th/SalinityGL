@@ -1,7 +1,8 @@
 #pragma once
 
 #include "stb_image.hpp"
-#include "CoreDefines.hpp"
+#include "Types.hpp"
+#include "AppSettings.hpp"
 #include "Logger.hpp"
 
 #include <vector>

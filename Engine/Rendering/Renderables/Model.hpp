@@ -7,7 +7,7 @@
 #include "Shader.hpp"
 #include "glm.hpp"
 #include "gtc/matrix_transform.hpp"
-#include "CoreDefines.hpp"
+#include "Types.hpp"
 #include "ErrorManager.hpp"
 #include "Mesh.hpp"
 

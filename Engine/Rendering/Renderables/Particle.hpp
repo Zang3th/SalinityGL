@@ -1,7 +1,8 @@
 #pragma once
 
 #include "glm.hpp"
-#include "CoreDefines.hpp"
+#include "Types.hpp"
+#include "AppSettings.hpp"
 #include <cmath>
 #include "Camera.hpp"
 

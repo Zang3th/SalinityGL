@@ -2,8 +2,11 @@
 
 #include "ErrorManager.hpp"
 #include "glfw3.h"
-#include "CoreDefines.hpp"
+#include "Types.hpp"
+#include "AppSettings.hpp"
 #include "GLRenderSettings.hpp"
+
+#include <string>
 
 namespace Engine
 {

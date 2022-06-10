@@ -19,11 +19,13 @@ namespace Engine
         {
             if(width < (int)PLANE_SIZE || height < (int)PLANE_SIZE)
             {
-                LOG(ERROR) << "Failed:   Heightmap is too small | " << filepath;
+                std::string texInfo = "Texture too small: " + filepath;
+                Logger::Error("Failed", "Heightmap", texInfo);
             }
             else if(nrChannels != 3)
             {
-                LOG(ERROR) << "Failed:   Heightmap doesn't have 3 channels | " << filepath;
+                std::string texInfo = "Texture doesn't have 3 channels: " + filepath;
+                Logger::Error("Failed", "Heightmap", texInfo);
             }
             else
             {
@@ -42,13 +44,13 @@ namespace Engine
                     }
                 }
 
-                LOG(INFO) << "Loaded:   Heightmap-Texture | " << filepath << " (X: " << width << " | Y: " << height << " | Channels: " << nrChannels << ")";
+                std::string heightmapInfo = "(X: " + std::to_string(width) + ", Y: " + std::to_string(height) + ", Channels: " + std::to_string(nrChannels) + ")";
+                Logger::Info("Loaded", "Heightmap", filepath);
+                Logger::Info("", "", heightmapInfo);
             }
         }
         else
-        {
-            LOG(ERROR) << "Failed:   Heightmap-Texture-Loading | " << filepath;
-        }
+            Logger::Error("Failed", "Heightmap-Load.", filepath);
 
         stbi_image_free(localBuffer);
     }

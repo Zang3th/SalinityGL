@@ -10,10 +10,10 @@ namespace Engine
         //Init library
         _engine = irrklang::createIrrKlangDevice();
 
-        if (!_engine)
-            LOG(ERROR) << "Failed:   Irrklang-Initialization";
+        if(!_engine)
+            Logger::Error("Failed", "Irrklang-Lib.");
         else
-            LOG(INFO) << "Loaded:   Irrklang";
+            Logger::Info("Init.", "Irrklang-Lib.");
     }
 
     Audio::~Audio()
@@ -34,11 +34,10 @@ namespace Engine
         {
             sound->setVolume(volume);
             _sounds.push_back(sound);
-
-            LOG(INFO) << "Loaded:   2D-Sound | " << filepath;
+            Logger::Info("Loaded", "2D-Sound", filepath);
         }
         else
-            LOG(ERROR) << "Failed:   2D-Sound | " << filepath;
+            Logger::Error("Failed", "2D-Sound-Load", filepath);
     }
 
     void Audio::PlaySound3D(const std::string& filepath, const glm::vec3& position, const bool loop, const float distance, const float volume)
@@ -50,11 +49,10 @@ namespace Engine
             sound->setMinDistance(distance);
             sound->setVolume(volume);
             _sounds.push_back(sound);
-
-            LOG(INFO) << "Loaded:   3D-Sound | " << filepath;
+            Logger::Info("Loaded", "3D-Sound", filepath);
         }
         else
-            LOG(ERROR) << "Failed:   3D-Sound | " << filepath;
+            Logger::Error("Failed", "3D-Sound-Load", filepath);
     }
 
     void Audio::SetListenerPosition(const glm::vec3& pos, const glm::vec3& front, const glm::vec3& up)

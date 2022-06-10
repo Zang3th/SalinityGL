@@ -4,7 +4,7 @@
 #include "Mesh.hpp"
 #include "ResourceManager.hpp"
 #include "glm.hpp"
-#include "CoreDefines.hpp"
+#include "Types.hpp"
 #include "tiny_obj_loader.hpp"
 #include "MeshCreator.hpp"
 

@@ -4,7 +4,7 @@
 #include "Shader.hpp"
 #include "VertexArray.hpp"
 #include "VertexBuffer.hpp"
-#include "CoreDefines.hpp"
+#include "Types.hpp"
 #include "ErrorManager.hpp"
 
 namespace Engine

@@ -2,7 +2,7 @@
 
 #include "Texture.hpp"
 #include "Shader.hpp"
-#include "CoreDefines.hpp"
+#include "Types.hpp"
 
 #include <map>
 

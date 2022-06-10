@@ -25,18 +25,19 @@ namespace Engine
                 else if(nrChannels == 4)
                     format = GL_RGBA;
                 else
-                    LOG(ERROR) << "Failed:   Imageformat is not supported | " << faces[i];
+                    Logger::Error("Failed", "Cubemap-Format", faces[i]);
 
                 if(format != 0)
                 {
                     GLCall(glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, localBuffer));
-                    LOG(INFO) << "Loaded:   Cubemap-Texture | " << faces[i] << " (X: " << width << " | Y: " << height << " | Channels: " << nrChannels << ")";
+
+                    std::string cubemapInfo = "(X: " + std::to_string(width) + ", Y: " + std::to_string(height) + ", Channels: " + std::to_string(nrChannels) + ")";
+                    Logger::Info("Loaded", "Heightmap", faces[i]);
+                    Logger::Info("", "", cubemapInfo);
                 }
             }
             else
-            {
-                LOG(ERROR) << "Failed:   Cubemap-Texture-Loading | " << faces[i];
-            }
+                Logger::Error("Failed", "Cubemap-Load.", faces[i]);
 
             stbi_image_free(localBuffer);
         }

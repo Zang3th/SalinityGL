@@ -47,10 +47,10 @@ namespace GreenWorld
         _interface = Engine::MakeScope<Interface>();
 
         //Audio
-        //_audio = Engine::MakeScope<Engine::Audio>();
-        //_audio->SetListenerPosition(Engine::Camera::GetPosition(), Engine::Camera::GetFront(), Engine::Camera::GetUp());
-        //_audio->PlaySound2D("../Res/Assets/Audio/GreenWorld/Music/TrueBlueSky.wav", true, 1.0f);
-        //_audio->PlaySound3D("../Res/Assets/Audio/GreenWorld/Sounds/River.wav", glm::vec3(39.0f, 14.0f, 56.0f), true, 40.0f, 1.5);
+        _audio = Engine::MakeScope<Engine::Audio>();
+        _audio->SetListenerPosition(Engine::Camera::GetPosition(), Engine::Camera::GetFront(), Engine::Camera::GetUp());
+        _audio->PlaySound2D("../Res/Assets/Audio/GreenWorld/Music/TrueBlueSky.wav", true, 1.0f);
+        _audio->PlaySound3D("../Res/Assets/Audio/GreenWorld/Sounds/River.wav", glm::vec3(39.0f, 14.0f, 56.0f), true, 40.0f, 1.5);
 
         //Resources
         LoadResources();
@@ -200,12 +200,12 @@ namespace GreenWorld
         (
             Engine::ResourceManager::GetTexture("ParticleTextureAtlas"), //TextureAtlas
             Engine::ResourceManager::GetShader("ParticleShader"),        //Shader
-            glm::vec3(87.0f, 36.0f, 92.5f),                          //Spawnpoint
+            glm::vec3(87.0f, 34.0f, 92.5f),                          //Spawnpoint
             200,                                                               //Number of particles
-            8.0f,                                                              //Size
-            0.15f,                                                             //Speed
+            5.0f,                                                              //Size
+            0.05f,                                                             //Speed
             0.0f,                                                              //Gravitycompliance
-            4.0f,                                                              //Lifetime
+            6.0f,                                                              //Lifetime
             44.0f                                                              //Respawnthreshold (Y-Position)
         );
         Engine::Renderer::Submit(_smokeRenderer.get());
@@ -242,7 +242,7 @@ namespace GreenWorld
             Engine::Window::PollEvents();
             Engine::Window::ProcessEvents();
             Engine::CameraController3D::ProcessInput();
-            //_audio->SetListenerPosition(Engine::Camera::GetPosition(), Engine::Camera::GetFront(), Engine::Camera::GetUp());
+            _audio->SetListenerPosition(Engine::Camera::GetPosition(), Engine::Camera::GetFront(), Engine::Camera::GetUp());
         }
 
         {   Engine::PROFILE_SCOPE("Prepare frame");

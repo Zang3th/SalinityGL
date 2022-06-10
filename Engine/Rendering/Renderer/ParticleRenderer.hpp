@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CoreDefines.hpp"
+#include "Types.hpp"
 #include "Particle.hpp"
 #include "Texture.hpp"
 #include "Shader.hpp"
@@ -10,6 +10,7 @@
 #include "VertexBuffer.hpp"
 #include "ErrorManager.hpp"
 #include "Random.hpp"
+
 #include <algorithm>
 
 namespace Engine
@@ -35,10 +36,10 @@ namespace Engine
             std::vector<glm::vec4>       _texOffsetStorage;
             std::vector<float>           _blendFactorStorage;
 
-            void              InitGpuStorage();
-            void              UpdateGpuStorage();
-            void              GenerateParticles();
-            glm::mat4         GetModelViewMatrix(Particle* particle);
+            void      InitGpuStorage();
+            void      UpdateGpuStorage();
+            void      GenerateParticles();
+            glm::mat4 GetModelViewMatrix(Particle* particle);
 
         public:
             ParticleRenderer

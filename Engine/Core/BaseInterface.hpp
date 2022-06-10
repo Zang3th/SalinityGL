@@ -3,7 +3,7 @@
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
-#include "CoreDefines.hpp"
+#include "Types.hpp"
 #include "Window.hpp"
 
 namespace Engine

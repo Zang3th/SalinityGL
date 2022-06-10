@@ -12,6 +12,7 @@ namespace Engine
     {
         public:
             FileManager() = delete;
+            static std::string PadString(const std::string& string, size_t num, char paddingChar = ' ');
             static std::string FileToString(const std::string& filepath);
     };
 }

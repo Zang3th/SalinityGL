@@ -27,15 +27,18 @@ namespace Engine
             GLCall(glGetShaderInfoLog(id, length, &length, msg.get()));
 
             //Log error message
-            LOG(ERROR) << "Failed:  Shader-Compilation | " << shaderType << " | "<< std::string(msg.get());
+            std::string errorMsg = "Type: " + std::to_string(shaderType) + ", Error: " + std::string(msg.get());
+            Logger::Error("Failed", "Shader-Comp.", errorMsg);
 
             //Free resources and return
             GLCall(glDeleteShader(id));
         }
         else
         {
-            LOG(INFO) << "Compiled: Shader | " << shaderType;
+            std::string shaderInfo = "Type: " + std::to_string(shaderType);
+            Logger::Info("Compiled", "Shader", shaderInfo);
         }
+
 
         return id;
     }
@@ -61,14 +64,16 @@ namespace Engine
             GLCall(glGetProgramInfoLog(programID, length, &length, msg.get()));
 
             //Log error message
-            LOG(ERROR) << "Failed:  Shader-Linking | " << programID << " | "<< std::string(msg.get());
+            std::string errorMsg = "Program: " + std::to_string(programID) + ", Error: " + std::string(msg.get());
+            Logger::Error("Failed", "Shader-Link.", errorMsg);
 
             //Free resources and return
             GLCall(glDeleteProgram(programID));
         }
         else
         {
-            LOG(INFO) << "Linked:   Program | " << programID;
+            std::string shaderInfo = "Program: " + std::to_string(programID);
+            Logger::Info("Linked", "Shader", shaderInfo);
         }
 
         GLCall(glValidateProgram(programID));

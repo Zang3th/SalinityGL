@@ -2,7 +2,7 @@
 
 #include "glad.hpp"
 #include "Logger.hpp"
-#include "CoreDefines.hpp"
+#include "Types.hpp"
 
 #include <csignal>
 
@@ -21,11 +21,11 @@ namespace Engine
             static bool GLLogCall(const char* function, const char* file, uint32 line);
             static void OpenGLMessageCallback
             (
-                unsigned source,
-                unsigned type,
-                unsigned id,
-                unsigned severity,
-                int length,
+                uint32      source,
+                uint32      type,
+                uint32      id,
+                uint32      severity,
+                int32       length,
                 const char* message,
                 const void* userParam
             );

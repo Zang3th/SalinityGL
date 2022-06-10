@@ -3,7 +3,9 @@
 #include "glm.hpp"
 #include "ErrorManager.hpp"
 #include "FileManager.hpp"
-#include "CoreDefines.hpp"
+#include "Types.hpp"
+
+#include <unordered_map>
 
 namespace Engine
 {

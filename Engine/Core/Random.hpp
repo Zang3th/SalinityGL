@@ -1,7 +1,7 @@
 #pragma once
 
 #include <random>
-#include "CoreDefines.hpp"
+#include "Types.hpp"
 
 namespace Engine
 {

@@ -76,7 +76,7 @@ namespace Engine
                                      25.0f * ((Random::GetFloat())        * 1.5f),
                                       2.0f * ((Random::GetFloat() - 0.5f) * 2.0f)) * _speed;
             float grav = _gravityComplient;
-            float life = _lifeLength + ((Random::GetFloat() - 0.5f) * 2.0f);
+            float life = _lifeLength + ((Random::GetFloat() - 0.5f) * 4.0f);
             float rot  = 0.0f;
             float size = _size * Random::GetFloat();
 

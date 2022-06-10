@@ -2,7 +2,7 @@
 
 #include "Window.hpp"
 #include "Camera.hpp"
-#include "CoreDefines.hpp"
+#include "Types.hpp"
 
 namespace Engine
 {

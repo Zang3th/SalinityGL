@@ -7,9 +7,9 @@ namespace Engine
     void Window::Init(const std::string& title)
     {
         if(!glfwInit())
-            LOG(ERROR) << "Failed:   GLFW-Initialization | " << glfwGetError(nullptr);
+            Logger::Error("Failed", "GLFW-Lib.", std::to_string(glfwGetError(nullptr)));
         else
-            LOG(INFO) << "Loaded:   GLFW";
+            Logger::Info("Init.", "GLFW-Lib.");
 
         glfwWindowHint(GLFW_SAMPLES, 8);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -23,17 +23,23 @@ namespace Engine
         _window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, _windowName.c_str(), nullptr, nullptr);
 
         if(!_window)
-            LOG(ERROR) << "Failed:   GLFW-Window-Creation | " << glfwGetError(nullptr);
+            Logger::Error("Failed", "GLFW-Window", std::to_string(glfwGetError(nullptr)));
         else
-            LOG(INFO) << "Created:  GLFW-Window (" << WINDOW_WIDTH << "x" << WINDOW_HEIGHT << ")";
+            Logger::Info("Created", "GLFW-Window", _windowName);
 
         glfwMakeContextCurrent(_window);
         glfwSwapInterval(1);
 
         if(!gladLoadGL())
-            LOG(ERROR) << "Failed:   OpenGL-Loading with glad";
+            Logger::Error("Failed", "OpenGL-Load.");
         else
-            LOG(INFO) << "Loaded:   OpenGL with glad | " << glGetString(GL_VENDOR) << " | " << glGetString(GL_RENDERER) << " | " << glGetString(GL_VERSION);
+        {
+            std::string rendererString(reinterpret_cast<const char *>(glGetString(GL_RENDERER)));
+            std::string versionString(reinterpret_cast<const char *>(glGetString(GL_VERSION)));
+            std::string glInfo = rendererString + ", " + versionString;
+
+            Logger::Info("Loaded", "OpenGL", glInfo);
+        }
 
         GLRenderSettings::SetViewport(WINDOW_WIDTH, WINDOW_HEIGHT);
         GLRenderSettings::EnableDebugging();
@@ -73,14 +79,12 @@ namespace Engine
         if(glfwWindowShouldClose(_window))
         {
             _isRunning = false;
-            LOG(INFO) << "Closed:   " << _windowName;
+            Logger::Info("Closed", "GLFW-Window", _windowName);
         }
 
         if(glfwGetKey(_window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         {
             glfwSetWindowShouldClose(_window, true);
-            _isRunning = false;
-            LOG(INFO) << "Closed:   " << _windowName;
         }
     }
 

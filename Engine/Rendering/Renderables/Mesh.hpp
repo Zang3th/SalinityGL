@@ -1,7 +1,7 @@
 #pragma once
 
 #include "glm.hpp"
-#include "CoreDefines.hpp"
+#include "Types.hpp"
 #include "Texture.hpp"
 
 #include <vector>

@@ -3,6 +3,20 @@
 namespace Engine
 {
     // ----- Public -----
+
+    std::string FileManager::PadString(const std::string& string, const size_t num, const char paddingChar)
+    {
+        if(num > string.size())
+        {
+            std::string newString = string;
+            //newString.insert(0, num - string.size(), paddingChar);
+            newString.append(num - string.size(), paddingChar);
+
+            return newString;
+        }
+
+        return string;
+    }
     
     std::string FileManager::FileToString(const std::string& filepath)
     {
@@ -17,12 +31,15 @@ namespace Engine
             file.read(&content[0], content.size());
             file.close();
 
-            LOG(INFO) << "Loaded:   File | " << filepath << " (Size: " << content.size() << ")";
-            return(content);
+            std::string fileInfo = filepath + ", Size: " + std::to_string(content.size());
+            Logger::Info("Loaded", "File", fileInfo);
+
+            return content;
         }
         else
         {
-            LOG(ERROR) << "Failed:   File-Loading | " <<  filepath;
+            Logger::Error("Failed", "File-Load.", filepath);
+
             return "FILE_ERROR";
         }
     }    

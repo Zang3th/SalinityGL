@@ -23,7 +23,7 @@ namespace Engine
             else if(nrChannels == 4)
                 format = GL_RGBA;
             else
-                LOG(ERROR) << "Failed:   Imageformat is not supported | " << filepath;
+                Logger::Error("Failed", "Image-Texture-Format", filepath);
 
             if(format != 0)
             {
@@ -40,13 +40,13 @@ namespace Engine
                 GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_LOD_BIAS, 0));
                 GLCall(glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 4.0f));
 
-                LOG(INFO) << "Loaded:   Texture | " << filepath << " (X: " << width << " | Y: " << height << " | Channels: " << nrChannels << ")";
+                std::string texInfo = "(X: " + std::to_string(width) + ", Y: " + std::to_string(height) + ", Channels: " + std::to_string(nrChannels) + ")";
+                Logger::Info("Loaded", "Texture", filepath);
+                Logger::Info("", "", texInfo);
             }
         }
         else
-        {
-            LOG(ERROR) << "Failed:   Texture-Loading | " << filepath;
-        }
+            Logger::Error("Failed", "Texture-Load.", filepath);
 
         stbi_image_free(localBuffer);
     }
@@ -58,7 +58,8 @@ namespace Engine
         Bind();
         GLCall(glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format, type, nullptr));
 
-        LOG(INFO) << "Created:  Texture | (X: " << width << " | Y: " << height << " | Format: " << std::to_string(format) << ")";
+        std::string texInfo = "(X: " + std::to_string(width) + ", Y: " + std::to_string(height) + ", Format: " + std::to_string(format) + ")";
+        Logger::Info("Created", "Texture", texInfo);
     }
 
     // ----- Public -----

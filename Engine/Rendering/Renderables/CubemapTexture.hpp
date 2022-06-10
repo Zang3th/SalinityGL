@@ -2,7 +2,7 @@
 
 #include "stb_image.hpp"
 #include "ErrorManager.hpp"
-#include "CoreDefines.hpp"
+#include "Types.hpp"
 
 #include <array>
 

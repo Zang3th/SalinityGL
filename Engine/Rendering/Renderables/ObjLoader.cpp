@@ -13,21 +13,22 @@ namespace Engine
         std::string objFullFilepath = baseFilepath + "/" + filename + ".obj";
 
         if(!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, objFullFilepath.c_str(), baseFilepath.c_str()))
-            LOG(ERROR) << "Failed:   Obj-File-Loading | " << objFullFilepath;
+            Logger::Error("Failed", "OBJ-Loading", objFullFilepath);
         else
-            LOG(INFO) << "Loaded:   Obj-File | " << objFullFilepath
-                      << " (Shapes: " << shapes.size()
-                      << " | Materials: " << materials.size()
-                      << " | Vertices: " << attrib.vertices.size()
-                      << " | TexCoords: " << attrib.texcoords.size()
-                      << " | Indices: " << shapes[0].mesh.indices.size()
-                      << ")";
+        {
+            std::string objInfo0 = "(Shapes: "    + std::to_string(shapes.size())          + ", Materials: " + std::to_string(materials.size())  + ")";
+            std::string objInfo1 = "(Vertices: "  + std::to_string(attrib.vertices.size()) + ", TexCoords: " + std::to_string(attrib.texcoords.size()) +
+                                  ", Indices: "  + std::to_string(shapes[0].mesh.indices.size()) + ")";
+            Logger::Info("Loaded", "OBJ-Model", objFullFilepath);
+            Logger::Info("", "", objInfo0);
+            Logger::Info("", "", objInfo1);
+        }
 
         //Additional error checking to catch edge cases
         if(!warn.empty())
-            LOG(WARNING) << "Failed:   " << warn;
+            Logger::Warn("Warning", "tinyobj", warn);
         if(!err.empty())
-            LOG(ERROR) << "Failed:   " << err;
+            Logger::Error("Error", "tinyobj", err);
 
         //Iterate over all shapes
         for(uint32 i = 0; i < shapes.size(); i++)
@@ -96,7 +97,7 @@ namespace Engine
             if(mesh.gotNormalMap == 1)
             {
                 MeshCreator::CalculateTangents(&mesh);
-                LOG(INFO) << "Created:  Tangents for " << filename;
+                Logger::Info("Created", "Tangents", filename);
             }
 
             //Copy mesh into meshes vector

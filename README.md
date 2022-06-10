@@ -1,6 +1,7 @@
 # GameEngine in C++ with OpenGL
 
 ### Objectives:
+   - For my personal educational purposes  
    - Abstraction layer for 2D/3D-Rendering
    - OpenGL-Wrapper-Functions
    - Written in C++17 with OpenGL 4.5
@@ -51,13 +52,13 @@
    - [irrKlang](https://www.ambiera.com/irrklang/)
    - [tinyobjloader](https://github.com/tinyobjloader/tinyobjloader)
 
-### Using & Compiling (currently for Linux with CMake)
-   - Clone the repository
+### Using & Compiling (currently for Linux with CMake)   
    - Install the external dependencies if needed
-       
-         sudo apt-get update
-         sudo apt-get install cmake pkg-config
-         sudo apt-get install libglu1-mesa-dev mesa-common-dev
+    
+         sudo apt install cmake pkg-config
+         sudo apt install libglu1-mesa-dev mesa-common-dev
+    
+   - Clone or download the repository 
    - mkdir Build
    - cd Build
    - cmake ..
@@ -67,4 +68,4 @@
    - This code is provided under the MIT License. See the file LICENSE for details.
 
 ### Current look of the GreenWorld App:
-![GreenWorld](Res/Screenshots/GreenWorld/Screenshot_GW_021.png)
+![GreenWorld](Res/Screenshots/GreenWorld/Screenshot_GW_022.png)

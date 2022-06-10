@@ -1,6 +1,6 @@
 #pragma once
 
-#include "easylogging++.hpp"
+#include <string>
 
 namespace Engine
 {
@@ -9,5 +9,9 @@ namespace Engine
         public:
             Logger() = delete;
             static void Init();
+            static void Info(const std::string& action, const std::string& obj, const std::string& params = "");
+            static void Warn(const std::string& action, const std::string& obj, const std::string& params = "");
+            static void Error(const std::string& action, const std::string& obj, const std::string& params = "");
+            static void Trace(const std::string& action, const std::string& obj, const std::string& params = "");
     };
 }

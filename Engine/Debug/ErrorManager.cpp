@@ -13,9 +13,8 @@ namespace Engine
 	{
 		while (GLenum error = glGetError())
 		{
-			LOG(ERROR) << "OpenGL Error [" << error << "]";
-			LOG(ERROR) << "File: " << file;
-			LOG(ERROR) << "Function: " << function << " at line [" << line << "]";
+            Logger::Error("GL_LOG", "Error: " + std::to_string(error), function);
+            Logger::Error("GL_LOG", "Line: " + std::to_string(line), file);
 
 			return false;
 		}
@@ -24,21 +23,21 @@ namespace Engine
 
 	void ErrorManager::OpenGLMessageCallback
 	(
-	    unsigned source,
-	    unsigned type,
-	    unsigned id,
-	    unsigned severity,
-	    int length,
-	    const char* message,
-	    const void* userParam
+        uint32      source,
+        uint32      type,
+        uint32      id,
+        uint32      severity,
+        int32       length,
+        const char* message,
+        const void* userParam
 	)
 	{
         switch (severity)
         {
-            case GL_DEBUG_SEVERITY_HIGH:         LOG(ERROR)     << message; return;
-            case GL_DEBUG_SEVERITY_MEDIUM:       LOG(WARNING)   << message; return;
-            case GL_DEBUG_SEVERITY_LOW:          LOG(INFO)      << message; return;
-            case GL_DEBUG_SEVERITY_NOTIFICATION: LOG(TRACE)     << message; return;
+            case GL_DEBUG_SEVERITY_HIGH:         Logger::Error("GL_DEBUG", "SEVERITY_HIGH",  message); return;
+            case GL_DEBUG_SEVERITY_MEDIUM:       Logger::Warn("GL_DEBUG", "SEVERITY_MED.", message);  return;
+            case GL_DEBUG_SEVERITY_LOW:          Logger::Info("GL_DEBUG", "SEVERITY_LOW", message);  return;
+            case GL_DEBUG_SEVERITY_NOTIFICATION: Logger::Trace("GGL_DEBUG.", "NOTIFICATION", message); return;
             default: return;
         }
 	}

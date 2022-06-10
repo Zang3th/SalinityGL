@@ -1,5 +1,7 @@
 # GameEngine in C++ with OpenGL
 
+[![codefactor.io](https://www.codefactor.io/repository/github/zanget3u/gameengine/badge)](https://www.codefactor.io/repository/github/zanget3u/gameengine)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/206a757e7dc642ea9d00d42aad85da56)](https://www.codacy.com/gh/Zanget3u/GameEngine/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Zanget3u/GameEngine&amp;utm_campaign=Badge_Grade)
 ### Objectives:
    - For my personal educational purposes  
    - Abstraction layer for 2D/3D-Rendering
@@ -42,7 +44,7 @@
      - Shadows and Lighting in 2D
    - And a lot more ...
 
-### Libraries (Credits to the creators and contributors)
+### Libraries (Credits to the Creators and Contributors)
    - [glad](https://github.com/Dav1dde/glad)
    - [glfw](https://github.com/glfw/glfw)
    - [easylogging++](https://github.com/amrayn/easyloggingpp)
@@ -69,5 +71,5 @@
 ### License:
    - This code is provided under the MIT License. See the file LICENSE for details.
 
-### Current look of the GreenWorld App:
+### GreenWorld-Application:
 ![GreenWorld](Res/Screenshots/GreenWorld/Screenshot_GW_022.png)

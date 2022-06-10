@@ -22,11 +22,6 @@ namespace Engine
         //Allocate and assign textures
         ResourceManager::LoadTextureFromFile(name, textureFilepath);
         terrainMesh.texture1 = ResourceManager::GetTexture(name);
-        terrainMesh.texture2 = nullptr;
-        terrainMesh.texture3 = nullptr;
-        terrainMesh.texture4 = nullptr;
-        terrainMesh.texture5 = nullptr;
-        terrainMesh.gotNormalMap = false;
 
         //Create and store model
         Model* terrainModel = new Model(&terrainMesh);
@@ -45,14 +40,6 @@ namespace Engine
         //Create plane mesh
         Mesh planeMesh;
         MeshCreator::CreatePlane(x, z, tileSize, &planeMesh);
-
-        //Set default textures
-        planeMesh.texture1 = nullptr;
-        planeMesh.texture2 = nullptr;
-        planeMesh.texture3 = nullptr;
-        planeMesh.texture4 = nullptr;
-        planeMesh.texture5 = nullptr;
-        planeMesh.gotNormalMap = false;
 
         //Create and store model
         Model* planeModel = new Model(&planeMesh);

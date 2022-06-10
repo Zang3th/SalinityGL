@@ -237,7 +237,8 @@ namespace GreenWorld
 
     void App::Update()
     {
-        {   Engine::PROFILE_SCOPE("Process events");
+        {
+            Engine::PROFILE_SCOPE("Process events");
 
             Engine::Window::PollEvents();
             Engine::Window::ProcessEvents();
@@ -245,7 +246,8 @@ namespace GreenWorld
             //_audio->SetListenerPosition(Engine::Camera::GetPosition(), Engine::Camera::GetFront(), Engine::Camera::GetUp());
         }
 
-        {   Engine::PROFILE_SCOPE("Prepare frame");
+        {
+            Engine::PROFILE_SCOPE("Prepare frame");
 
             Engine::Window::CalcFrametime();
             _interface->PrepareFrame();
@@ -253,17 +255,20 @@ namespace GreenWorld
             Engine::Renderer::ClearBuffers();
         }
 
-        {   Engine::PROFILE_SCOPE("Create shadows");
+        {
+            Engine::PROFILE_SCOPE("Create shadows");
 
             _shadowRenderer->RenderToFramebuffer(Engine::ResourceManager::GetShader("ShadowCreateShader"));
         }
 
-        {   Engine::PROFILE_SCOPE("Create water");
+        {
+            Engine::PROFILE_SCOPE("Create water");
 
             _waterRenderer->RenderToFramebuffer(Engine::ResourceManager::GetShader("TerrainShader"), Engine::ResourceManager::GetShader("ModelShader"));
         }
 
-        {   Engine::PROFILE_SCOPE("Render graphics");
+        {
+            Engine::PROFILE_SCOPE("Render graphics");
 
             Engine::Renderer::FlushTerrain(Engine::ResourceManager::GetShader("TerrainShader"));
             Engine::Renderer::FlushModelBuffer(Engine::ResourceManager::GetShader("ModelShader"));
@@ -281,13 +286,15 @@ namespace GreenWorld
             Engine::Renderer::FlushParticleRenderer();
         }
 
-        {   Engine::PROFILE_SCOPE("Render UI");
+        {
+            Engine::PROFILE_SCOPE("Render UI");
 
             _interface->AddElements();
             _interface->Render();
         }
 
-        {   Engine::PROFILE_SCOPE("End frame");
+        {
+            Engine::PROFILE_SCOPE("End frame");
 
             Engine::Window::SwapBuffers();
         }

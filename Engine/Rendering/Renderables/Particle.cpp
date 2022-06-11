@@ -46,9 +46,7 @@ namespace Engine
             _initSize(size),         _size(size),
             _distanceToCamera(0.0f),
             _numberOfRows(numberOfRows)
-    {
-
-    }
+    {}
 
     bool Particle::Update(float dt)
     {

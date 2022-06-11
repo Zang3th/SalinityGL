@@ -65,9 +65,7 @@ namespace Engine
             _gotNormalMap(mesh->gotNormalMap),
             _rotationX(0.0f), _rotationY(0.0f), _rotationZ(0.0f),
             _size(1.0f)
-    {
-
-    }
+    {}
 
     VertexArray* Model::GetVAO() const
     {

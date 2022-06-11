@@ -11,10 +11,7 @@ namespace Engine
 {
     class MeshCreator
     {
-        private:
-
-
-        public:
+       public:
             MeshCreator() = delete;
             static void CalculateNormals(Mesh* mesh);
             static void CalculateTangents(Mesh* mesh);

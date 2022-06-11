@@ -116,9 +116,7 @@ namespace Engine
 
     Shader::Shader(const std::string& vsFilepath, const std::string& fsFilepath)
         :   _shaderID(Create(vsFilepath, fsFilepath))
-    {
-
-    }
+    {}
 
     Shader::~Shader()
     {

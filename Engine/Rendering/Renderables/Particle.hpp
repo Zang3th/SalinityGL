@@ -14,7 +14,7 @@ namespace Engine
             glm::vec3 _initPosition,   _position,       _initVelocity,  _velocity;
             glm::vec2 _textureOffset0, _textureOffset1;
             float     _gravityFactor,  _lifeLength,     _elapsedTime,    _blendFactor,
-                      _initRotation,   _rotation,       _initSize,      _size,          _distanceToCamera;
+                      _initRotation,   _rotation,       _initSize,       _size,          _distanceToCamera;
             uint32    _numberOfRows;
 
                           void      UpdateTextureCoordInfo();

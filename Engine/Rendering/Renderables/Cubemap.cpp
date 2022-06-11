@@ -72,9 +72,7 @@ namespace Engine
             _cubemapTexture(MakeScope<CubemapTexture>(faces)),
             _shader(shader),
             _verticeCount(36)
-    {
-
-    }
+    {}
 
     uint32 Cubemap::Draw(const glm::mat4& projMatrix, const glm::mat4& viewMatrix) const
     {

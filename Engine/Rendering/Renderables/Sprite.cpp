@@ -64,9 +64,7 @@ namespace Engine
             _size(glm::vec2(1.0f)),
             _rotation(0.0f),
             _verticeCount(6)
-    {
-
-    }
+    {}
 
     uint32 Sprite::Draw(const glm::mat4& projMatrix) const
     {

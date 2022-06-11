@@ -14,7 +14,8 @@ namespace Engine
     class Sprite
     {
         private:
-            Ref<VertexArray>    _vao;
+            Scope<VertexArray>  _vao;
+            Scope<VertexBuffer> _vboVert;
             glm::mat4           _model;
             glm::vec3           _color;
             Texture*            _texture;
@@ -24,8 +25,8 @@ namespace Engine
             float               _rotation;
             uint32              _verticeCount;
 
-            static Ref<VertexArray> CreateSpriteVao();
-            void                    SetModelMatrix();
+            void                InitGpuStorage();
+            void                SetModelMatrix();
 
         public:
             Sprite(Texture* texture, Shader* shader, glm::vec3 color);

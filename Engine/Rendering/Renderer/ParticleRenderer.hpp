@@ -18,8 +18,8 @@ namespace Engine
     class ParticleRenderer
     {
         private:
-            Ref<VertexArray>             _vao;
-            Ref<VertexBuffer>            _vboModel, _vboTex, _vboBlend;
+            Scope<VertexArray>           _vao;
+            Scope<VertexBuffer>          _vboVert, _vboModel, _vboTex, _vboBlend;
             Texture                     *_textureAtlas;
             Shader                      *_shader;
             glm::vec3                    _position;

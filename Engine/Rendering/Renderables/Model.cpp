@@ -4,32 +4,30 @@ namespace Engine
 {
     // ----- Private -----
 
-    Ref<VertexArray> Model::CreateVaoFromMesh(Mesh* mesh)
+    void Model::InitGpuStorage(Mesh* mesh)
     {
         //Create and bind vao
-        Ref<VertexArray> vao = MakeRef<VertexArray>();
-        vao->Bind();
+        _vao = MakeScope<VertexArray>();
+        _vao->Bind();
 
         //Create vbo's, send it data and configure vao
-        VertexBuffer vbo1(&mesh->vertices[0], mesh->vertices.size() * sizeof(glm::vec3), GL_STATIC_DRAW);
-        vao->DefineAttributes(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), nullptr);
+        _vboVert = MakeScope<VertexBuffer>(&mesh->vertices[0], mesh->vertices.size() * sizeof(glm::vec3), GL_STATIC_DRAW);
+        _vao->DefineAttributes(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), nullptr);
 
-        VertexBuffer vbo2(&mesh->texCoords[0], mesh->texCoords.size() * sizeof(glm::vec2), GL_STATIC_DRAW);
-        vao->DefineAttributes(1, 2, GL_FLOAT, GL_FALSE, sizeof(glm::vec2), nullptr);
+        _vboTex = MakeScope<VertexBuffer>(&mesh->texCoords[0], mesh->texCoords.size() * sizeof(glm::vec2), GL_STATIC_DRAW);
+        _vao->DefineAttributes(1, 2, GL_FLOAT, GL_FALSE, sizeof(glm::vec2), nullptr);
 
-        VertexBuffer vbo3(&mesh->normals[0], mesh->normals.size() * sizeof(glm::vec3), GL_STATIC_DRAW);
-        vao->DefineAttributes(2, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), nullptr);
+        _vboNorm = MakeScope<VertexBuffer>(&mesh->normals[0], mesh->normals.size() * sizeof(glm::vec3), GL_STATIC_DRAW);
+        _vao->DefineAttributes(2, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), nullptr);
 
-        VertexBuffer vbo4(&mesh->tangents[0], mesh->tangents.size() * sizeof(glm::vec3), GL_STATIC_DRAW);
-        vao->DefineAttributes(3, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), nullptr);
+        _vboTang = MakeScope<VertexBuffer>(&mesh->tangents[0], mesh->tangents.size() * sizeof(glm::vec3), GL_STATIC_DRAW);
+        _vao->DefineAttributes(3, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), nullptr);
 
         //Create ibo
-        IndexBuffer ibo(&mesh->indices[0], mesh->indices.size() * sizeof(uint32));
+        _ibo = MakeScope<IndexBuffer>(&mesh->indices[0], mesh->indices.size() * sizeof(uint32));
 
         //Unbind vao
-        vao->Unbind();
-
-        return vao;
+        _vao->Unbind();
     }
 
     void Model::SetModelMatrix()
@@ -53,8 +51,7 @@ namespace Engine
     // ----- Public -----
 
     Model::Model(Mesh* mesh)
-        :   _vao(CreateVaoFromMesh(mesh)),
-            _model(glm::mat4(1.0f)),
+        :   _model(glm::mat4(1.0f)),
             _position(0.0f),
             _texture1(mesh->texture1),
             _texture2(mesh->texture2),
@@ -65,11 +62,8 @@ namespace Engine
             _gotNormalMap(mesh->gotNormalMap),
             _rotationX(0.0f), _rotationY(0.0f), _rotationZ(0.0f),
             _size(1.0f)
-    {}
-
-    VertexArray* Model::GetVAO() const
     {
-        return _vao.get();
+        InitGpuStorage(mesh);
     }
 
     glm::mat4 Model::GetModelMatrix() const
@@ -85,6 +79,24 @@ namespace Engine
     int32 Model::GotNormalMap() const
     {
         return _gotNormalMap;
+    }
+
+    void Model::BindBuffers() const
+    {
+        _vao->Bind();
+        _vboVert->Bind();
+        _vboTex->Bind();
+        _vboNorm->Bind();
+        _vboTang->Bind();
+    }
+
+    void Model::UnbindBuffers() const
+    {
+        _vboTang->Unbind();
+        _vboNorm->Unbind();
+        _vboTex->Unbind();
+        _vboVert->Unbind();
+        _vao->Unbind();
     }
 
     void Model::ChangePosition(const glm::vec3& position)

@@ -4,12 +4,8 @@ namespace Engine
 {
     // ----- Private -----   
 
-    Ref<VertexArray> Sprite::CreateSpriteVao()
+    void Sprite::InitGpuStorage()
     {
-        //Create and bind vao
-        Ref<VertexArray> vao = MakeRef<VertexArray>();
-        vao->Bind();
-
         //Create data
         static const float vertices[] =
         {
@@ -23,14 +19,17 @@ namespace Engine
             1.0f, 0.0f, 1.0f, 0.0f
         };
 
+        //Create and bind vao
+        _vao = MakeScope<VertexArray>();
+        _vao->Bind();
+
         //Create vbo, send it data and configure vao
-        VertexBuffer vbo(vertices, sizeof(vertices), GL_STATIC_DRAW);
-        vao->DefineAttributes(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), nullptr);
+        _vboVert = MakeScope<VertexBuffer>(vertices, sizeof(vertices), GL_STATIC_DRAW);
+        _vao->DefineAttributes(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), nullptr);
 
         //Unbind vao
-        vao->Unbind();
-
-        return vao;
+        _vao->Unbind();
+        _vboVert->Unbind();
     }
     
     void Sprite::SetModelMatrix()
@@ -55,8 +54,7 @@ namespace Engine
     // ----- Public -----
 
     Sprite::Sprite(Texture* texture, Shader* shader, glm::vec3 color)
-        :   _vao(CreateSpriteVao()),
-            _model(glm::mat4(1.0f)),
+        :   _model(glm::mat4(1.0f)),
             _color(color),
             _texture(texture),
             _shader(shader),
@@ -64,25 +62,38 @@ namespace Engine
             _size(glm::vec2(1.0f)),
             _rotation(0.0f),
             _verticeCount(6)
-    {}
+    {
+        InitGpuStorage();
+    }
 
     uint32 Sprite::Draw(const glm::mat4& projMatrix) const
     {
+        //Bind shader
         _shader->Bind();
-        
+
+        //Bind texture
+        _texture->Bind();
+
+        //Bind vao and vbo
+        _vao->Bind();
+        _vboVert->Bind();
+
         //Set uniforms
         _shader->SetUniformVec3f("color", _color);
         _shader->SetUniformMat4f("model", _model);
         _shader->SetUniformMat4f("projection", projMatrix);
 
-        _texture->Bind();
-        _vao->Bind();
-
         //Render quad
         GLCall(glDrawArrays(GL_TRIANGLES, 0, _verticeCount));
 
+        //Unbind vao and vbo
+        _vboVert->Unbind();
         _vao->Unbind();
+
+        //Unbind texture
         _texture->Unbind();
+
+        //Unbind shader
         _shader->Unbind();
 
         //Return rendered vertices

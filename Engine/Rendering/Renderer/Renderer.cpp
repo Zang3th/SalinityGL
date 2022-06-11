@@ -6,23 +6,10 @@ namespace Engine
 
     uint32 Renderer::DrawModel(Shader* modelShader, const Model* model)
     {
+        //Bind shader
         modelShader->Bind();
-        bool gotNormalMap = model->GotNormalMap();
 
-        //Set uniforms
-        modelShader->SetUniformMat4f("view", Camera::GetViewMatrix());
-        modelShader->SetUniformMat4f("model", model->GetModelMatrix());
-        modelShader->SetUniformMat4f("projection", _perspProjection);
-        modelShader->SetUniformVec3f("viewPos", Camera::GetPosition());
-        modelShader->SetUniformVec3f("lightPos", _lightPosition);
-        modelShader->SetUniformVec3f("lightColor", _lightColor);
-        modelShader->SetUniformMat4f("lightProjection", _lightProjection);
-        modelShader->SetUniform1i("diffuseTexture", 0);
-        modelShader->SetUniform1i("normalMap", 1);
-        modelShader->SetUniform1i("shadowMap", 2);
-        modelShader->SetUniform1i("gotNormalMap", gotNormalMap);
-
-        //Get textures
+        //Get textures and bind depending on existence
         Texture* texture1 = model->GetTexture1();
         Texture* texture2 = model->GetTexture2();
         Texture* texture3 = model->GetTexture3();
@@ -39,15 +26,40 @@ namespace Engine
         if(texture3)
             texture3->BindToSlot(2);
 
-        //Get rendering data
-        VertexArray* vao    = model->GetVAO();
+        //Bind buffers and get vertice count
+        model->BindBuffers();
         uint32 verticeCount = model->GetVerticeCount();
 
-        //Render model
-        vao->Bind();
-        GLCall(glDrawElements(GL_TRIANGLES, verticeCount, GL_UNSIGNED_INT, nullptr));
-        vao->Unbind();
+        //Set uniforms
+        modelShader->SetUniformMat4f("view", Camera::GetViewMatrix());
+        modelShader->SetUniformMat4f("model", model->GetModelMatrix());
+        modelShader->SetUniformMat4f("projection", _perspProjection);
+        modelShader->SetUniformVec3f("viewPos", Camera::GetPosition());
+        modelShader->SetUniformVec3f("lightPos", _lightPosition);
+        modelShader->SetUniformVec3f("lightColor", _lightColor);
+        modelShader->SetUniformMat4f("lightProjection", _lightProjection);
+        modelShader->SetUniform1i("diffuseTexture", 0);
+        modelShader->SetUniform1i("normalMap", 1);
+        modelShader->SetUniform1i("shadowMap", 2);
+        modelShader->SetUniform1i("gotNormalMap", model->GotNormalMap());
 
+        //Render model
+        GLCall(glDrawElements(GL_TRIANGLES, verticeCount, GL_UNSIGNED_INT, nullptr));
+
+        //Unbind buffers
+        modelShader->Unbind();
+
+        //Unbind textures
+        if(texture1)
+            texture1->Unbind();
+
+        if(texture2)
+            texture2->Unbind();
+
+        if(texture3)
+            texture3->Unbind();
+
+        //Unbind shader
         modelShader->Unbind();
 
         //Return rendered vertices
@@ -56,21 +68,10 @@ namespace Engine
 
     uint32 Renderer::DrawTerrain(Shader* terrainShader)
     {
+        //Bind shader
         terrainShader->Bind();
 
-        //Set uniforms
-        terrainShader->SetUniformMat4f("view", Camera::GetViewMatrix());
-        terrainShader->SetUniformMat4f("model", _terrainModel->GetModelMatrix());
-        terrainShader->SetUniformMat4f("projection", _perspProjection);
-        terrainShader->SetUniformVec3f("viewPos", Camera::GetPosition());
-        terrainShader->SetUniformVec3f("lightPos", _lightPosition);
-        terrainShader->SetUniformVec3f("lightColor", _lightColor);
-        terrainShader->SetUniformMat4f("lightProjection", _lightProjection);
-        terrainShader->SetUniform1i("diffuseTexture", 0);
-        terrainShader->SetUniform1i("colorMap", 1);
-        terrainShader->SetUniform1i("shadowMap", 2);
-
-        //Get textures
+        //Get textures and bind depending on existence
         Texture* texture1 = _terrainModel->GetTexture1();
         Texture* texture2 = _terrainModel->GetTexture2();
         Texture* texture3 = _terrainModel->GetTexture3();
@@ -87,15 +88,39 @@ namespace Engine
         if(texture3)
             texture3->BindToSlot(2);
 
-        //Get rendering data
-        VertexArray* vao    = _terrainModel->GetVAO();
+        //Bind buffers and get vertice count
+        _terrainModel->BindBuffers();
         uint32 verticeCount = _terrainModel->GetVerticeCount();
 
-        //Render model
-        vao->Bind();
-        GLCall(glDrawElements(GL_TRIANGLES, verticeCount, GL_UNSIGNED_INT, nullptr));
-        vao->Unbind();
+        //Set uniforms
+        terrainShader->SetUniformMat4f("view", Camera::GetViewMatrix());
+        terrainShader->SetUniformMat4f("model", _terrainModel->GetModelMatrix());
+        terrainShader->SetUniformMat4f("projection", _perspProjection);
+        terrainShader->SetUniformVec3f("viewPos", Camera::GetPosition());
+        terrainShader->SetUniformVec3f("lightPos", _lightPosition);
+        terrainShader->SetUniformVec3f("lightColor", _lightColor);
+        terrainShader->SetUniformMat4f("lightProjection", _lightProjection);
+        terrainShader->SetUniform1i("diffuseTexture", 0);
+        terrainShader->SetUniform1i("colorMap", 1);
+        terrainShader->SetUniform1i("shadowMap", 2);
 
+        //Render model
+        GLCall(glDrawElements(GL_TRIANGLES, verticeCount, GL_UNSIGNED_INT, nullptr));
+
+        //Unbind buffers
+        _terrainModel->UnbindBuffers();
+
+        //Unbind textures
+        if(texture1)
+            texture1->Unbind();
+
+        if(texture2)
+            texture2->Unbind();
+
+        if(texture3)
+            texture3->Unbind();
+
+        //Unbind shader
         terrainShader->Unbind();
 
         //Return rendered vertices
@@ -104,25 +129,10 @@ namespace Engine
 
     uint32 Renderer::DrawWater(Shader* waterShader, float moveFactor)
     {
+        //Bind shader
         waterShader->Bind();
 
-        //Set uniforms
-        waterShader->SetUniformMat4f("view", Camera::GetViewMatrix());
-        waterShader->SetUniformMat4f("model", _waterModel->GetModelMatrix());
-        waterShader->SetUniformMat4f("projection", _perspProjection);
-        waterShader->SetUniformVec3f("viewPos", Camera::GetPosition());
-        waterShader->SetUniformVec3f("lightPos", _lightPosition);
-        waterShader->SetUniformVec3f("lightColor", _lightColor);
-        waterShader->SetUniform1i("reflectionTexture", 0);
-        waterShader->SetUniform1i("refractionTexture", 1);
-        waterShader->SetUniform1i("dudvMap", 2);
-        waterShader->SetUniform1i("normalMap", 3);
-        waterShader->SetUniform1i("depthMap", 4);
-        waterShader->SetUniform1f("moveFactor", moveFactor);
-        waterShader->SetUniform1f("nearPlane", _nearPlane);
-        waterShader->SetUniform1f("farPlane", _farPlane);
-
-        //Get textures
+        //Get textures and bind depending on existence
         Texture* texture1 = _waterModel->GetTexture1();
         Texture* texture2 = _waterModel->GetTexture2();
         Texture* texture3 = _waterModel->GetTexture3();
@@ -149,15 +159,49 @@ namespace Engine
         if(texture5)
             texture5->BindToSlot(4);
 
-        //Get rendering data
-        VertexArray* vao    = _waterModel->GetVAO();
+        //Bind buffers and get vertice count
+        _waterModel->BindBuffers();
         uint32 verticeCount = _waterModel->GetVerticeCount();
 
-        //Render model
-        vao->Bind();
-        GLCall(glDrawElements(GL_TRIANGLES, verticeCount, GL_UNSIGNED_INT, nullptr));
-        vao->Unbind();
+        //Set uniforms
+        waterShader->SetUniformMat4f("view", Camera::GetViewMatrix());
+        waterShader->SetUniformMat4f("model", _waterModel->GetModelMatrix());
+        waterShader->SetUniformMat4f("projection", _perspProjection);
+        waterShader->SetUniformVec3f("viewPos", Camera::GetPosition());
+        waterShader->SetUniformVec3f("lightPos", _lightPosition);
+        waterShader->SetUniformVec3f("lightColor", _lightColor);
+        waterShader->SetUniform1i("reflectionTexture", 0);
+        waterShader->SetUniform1i("refractionTexture", 1);
+        waterShader->SetUniform1i("dudvMap", 2);
+        waterShader->SetUniform1i("normalMap", 3);
+        waterShader->SetUniform1i("depthMap", 4);
+        waterShader->SetUniform1f("moveFactor", moveFactor);
+        waterShader->SetUniform1f("nearPlane", _nearPlane);
+        waterShader->SetUniform1f("farPlane", _farPlane);
 
+        //Render model
+        GLCall(glDrawElements(GL_TRIANGLES, verticeCount, GL_UNSIGNED_INT, nullptr));
+
+        //Unbind buffers
+        _waterModel->UnbindBuffers();
+
+        //Unbind textures
+        if(texture1)
+            texture1->Unbind();
+
+        if(texture2)
+            texture2->Unbind();
+
+        if(texture3)
+            texture3->Unbind();
+
+        if(texture4)
+            texture4->Unbind();
+
+        if(texture5)
+            texture5->Unbind();
+
+        //Unbind shader
         waterShader->Unbind();
 
         //Return rendered vertices

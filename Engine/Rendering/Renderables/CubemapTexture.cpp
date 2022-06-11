@@ -32,7 +32,7 @@ namespace Engine
                     GLCall(glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, localBuffer));
 
                     std::string cubemapInfo = "(X: " + std::to_string(width) + ", Y: " + std::to_string(height) + ", Channels: " + std::to_string(nrChannels) + ")";
-                    Logger::Info("Loaded", "Heightmap", faces[i]);
+                    Logger::Info("Loaded", "Cubemap", faces[i]);
                     Logger::Info("", "", cubemapInfo);
                 }
             }

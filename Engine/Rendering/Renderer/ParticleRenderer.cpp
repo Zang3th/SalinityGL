@@ -6,10 +6,6 @@ namespace Engine
 
     void ParticleRenderer::InitGpuStorage()
     {
-        //Create and bind vao
-        _vao = MakeRef<VertexArray>();
-        _vao->Bind();
-
         //Create data
         static const float vertices[] =
         {
@@ -19,23 +15,27 @@ namespace Engine
              0.5f, -0.5f
         };
 
+        //Create and bind vao
+        _vao = MakeScope<VertexArray>();
+        _vao->Bind();
+
         //Create vbo's, send it data and configure vao
-        VertexBuffer vboVertices(vertices, sizeof(vertices), GL_STATIC_DRAW);
+        _vboVert = MakeScope<VertexBuffer>(vertices, sizeof(vertices), GL_STATIC_DRAW);
         _vao->DefineAttributes(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), nullptr);
 
-        _vboModel = MakeRef<VertexBuffer>(&_modelViewStorage[0], _modelViewStorage.size() * 16 * sizeof(float), GL_DYNAMIC_DRAW);
+        _vboModel = MakeScope<VertexBuffer>(&_modelViewStorage[0], _modelViewStorage.size() * 16 * sizeof(float), GL_DYNAMIC_DRAW);
         _vao->DefineAttributes(1, 4, GL_FLOAT, GL_FALSE, 16 * sizeof(float), nullptr);
         _vao->DefineAttributes(2, 4, GL_FLOAT, GL_FALSE, 16 * sizeof(float), (void*)(4 * sizeof(float)));
         _vao->DefineAttributes(3, 4, GL_FLOAT, GL_FALSE, 16 * sizeof(float), (void*)(8 * sizeof(float)));
         _vao->DefineAttributes(4, 4, GL_FLOAT, GL_FALSE, 16 * sizeof(float), (void*)(12 * sizeof(float)));
 
-        _vboTex = MakeRef<VertexBuffer>(&_texOffsetStorage[0], _texOffsetStorage.size() * 4 * sizeof(float), GL_DYNAMIC_DRAW);
+        _vboTex = MakeScope<VertexBuffer>(&_texOffsetStorage[0], _texOffsetStorage.size() * 4 * sizeof(float), GL_DYNAMIC_DRAW);
         _vao->DefineAttributes(5, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), nullptr);
 
-        _vboBlend = MakeRef<VertexBuffer>(&_blendFactorStorage[0], _blendFactorStorage.size() * sizeof(float), GL_DYNAMIC_DRAW);
+        _vboBlend = MakeScope<VertexBuffer>(&_blendFactorStorage[0], _blendFactorStorage.size() * sizeof(float), GL_DYNAMIC_DRAW);
         _vao->DefineAttributes(6, 1, GL_FLOAT, GL_FALSE, sizeof(float), nullptr);
 
-        //Set attribute divisors
+        //Set attribute divisors for per instance data
         _vao->AttributeDivisor(1, 1);
         _vao->AttributeDivisor(2, 1);
         _vao->AttributeDivisor(3, 1);
@@ -45,6 +45,7 @@ namespace Engine
 
         //Unbind everything
         _vao->Unbind();
+        _vboVert->Unbind();
         _vboModel->Unbind();
         _vboTex->Unbind();
         _vboBlend->Unbind();
@@ -162,6 +163,7 @@ namespace Engine
 
         //Bind vao and vbo's
         _vao->Bind();
+        _vboVert->Bind();
         _vboModel->Bind();
         _vboTex->Bind();
         _vboBlend->Bind();
@@ -202,7 +204,11 @@ namespace Engine
         _vboBlend->Unbind();
         _vboTex->Unbind();
         _vboModel->Unbind();
+        _vboVert->Unbind();
         _vao->Unbind();
+
+        //Unbind texture
+        _textureAtlas->Unbind();
 
         //Unbind shader
         _shader->Unbind();

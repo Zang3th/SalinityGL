@@ -12,12 +12,13 @@ namespace Engine
     class Cubemap
     {
         private:
-            Ref<VertexArray>        _vao;
+            Scope<VertexArray>      _vao;
+            Scope<VertexBuffer>     _vboVert;
             Scope<CubemapTexture>   _cubemapTexture;
             Shader*                 _shader;
             uint32                  _verticeCount;
 
-            static Ref<VertexArray> CreateVao();
+            void                    InitGpuStorage();
 
         public:
             Cubemap(const std::array<const char*, 6>& faces, Shader* shader);

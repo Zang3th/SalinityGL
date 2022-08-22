@@ -48,21 +48,30 @@ find_package(OpenGL REQUIRED)
 
 ### Source files ###
 file(GLOB_RECURSE SRC_GREENWORLD Apps/GreenWorld/src/*.cpp)
+file(GLOB_RECURSE SRC_PARTICLESIM Apps/ParticleSim/src/*.cpp)
 
 ### Compile to an executable ###
 add_executable(GreenWorldDemo Apps/GreenWorld/GreenWorldRun.cpp ${SRC_GREENWORLD})
+add_executable(ParticleSimDemo Apps/ParticleSim/ParticleSimRun.cpp ${SRC_PARTICLESIM})
 
 ### Include directories ###
 target_include_directories(GreenWorldDemo PUBLIC Apps/GreenWorld/src)
 target_include_directories(GreenWorldDemo PUBLIC Engine)
+target_include_directories(ParticleSimDemo PUBLIC Apps/ParticleSim/src)
+target_include_directories(ParticleSimDemo PUBLIC Engine)
 
 ### Link against static libraries ###
 target_link_libraries(GreenWorldDemo PUBLIC GameEngine)
+target_link_libraries(ParticleSimDemo PUBLIC GameEngine)
 
 ### Link against dynamic libraries ###
 target_link_libraries(GreenWorldDemo PUBLIC ${GLFW_PATH})
 target_link_libraries(GreenWorldDemo PUBLIC OpenGL::GL)
 target_link_libraries(GreenWorldDemo PUBLIC ${IRRKLANG_PATH})
+target_link_libraries(ParticleSimDemo PUBLIC ${GLFW_PATH})
+target_link_libraries(ParticleSimDemo PUBLIC OpenGL::GL)
+target_link_libraries(ParticleSimDemo PUBLIC ${IRRKLANG_PATH})
 
 ### Application linker flags ###
 target_link_libraries(GreenWorldDemo PUBLIC ${APPLICATION_LINKER_FLAGS})
+target_link_libraries(ParticleSimDemo PUBLIC ${APPLICATION_LINKER_FLAGS})

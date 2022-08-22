@@ -10,6 +10,10 @@ namespace Engine
 {
     class BaseInterface
     {
+        protected:
+            static  void SetDarkThemeColors();
+            static  void TextCentered(const char* text);
+
         public:
             BaseInterface();
             virtual ~BaseInterface();

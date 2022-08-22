@@ -28,7 +28,7 @@ namespace Engine
             Logger::Info("Created", "GLFW-Window", _windowName);
 
         glfwMakeContextCurrent(_window);
-        glfwSwapInterval(1);
+        glfwSwapInterval(0);
 
         if(!gladLoadGL())
             Logger::Error("Failed", "OpenGL-Load.");

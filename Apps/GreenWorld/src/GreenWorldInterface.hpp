@@ -13,14 +13,11 @@ namespace GreenWorld
             ImVec2           _overlayPivot    = ImVec2(1.0f, 0.0f);
             ImVec2           _shaderPivot     = ImVec2(0.0f, 0.0f);
             ImVec2           _texturePivot    = ImVec2(0.0f, 0.0f);
-
             ImGuiWindowFlags _windowFlags;
             float            _windowAlphaValue;
             bool             _showOverlay;
 
-            static void SetDarkThemeColors();
-            static void TextCentered(const char* text);
-            void        SetOverlayParameters();
+            void             SetOverlayParameters();
 
         public:
             Interface();

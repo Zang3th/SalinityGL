@@ -11,7 +11,7 @@
 - Written in C++17 with OpenGL 4.5
 - Example applications that are using the engine
   - GreenWorld: Nature-Scene (3D)
-  - ParticleSim: Particle/Sandfalling-Simulation (2D)
+  - ParticleSim: Particle-Simulation (2D)
 
 ## Basic functionalities
 
@@ -82,3 +82,9 @@
 ## GreenWorld-Application
 
 ![GreenWorld](Res/Screenshots/GreenWorld/Screenshot_GW_022.png)
+
+## ParticleSim-Application
+
+![GreenWorld](Res/Screenshots/ParticleSim/Screenshot_PS_001.png)
+
+- Credits to the blog post of Taylor Petrick: [2d-ray-tracing](https://taylorpetrick.com/blog/post/2d-ray-tracing)

@@ -14,7 +14,8 @@ namespace ParticleSim
 
     void App::LoadResources()
     {
-
+        //Shader
+        Engine::ResourceManager::LoadShader("ParticleBGShader", "../Res/Shader/ParticleSim/ParticleBG_VS.glsl", "../Res/Shader/ParticleSim/ParticleBG_FS.glsl");
     }
 
     void App::InitModules()
@@ -27,6 +28,25 @@ namespace ParticleSim
 
         //UI
         _interface = Engine::MakeScope<Interface>();
+
+        //Resources
+        LoadResources();
+
+        //Renderer
+        Engine::Renderer::Init2DBasic();
+    }
+
+    void App::CreateSprites()
+    {
+        //BackgroundSprite
+        _bgSprite = Engine::MakeScope<Engine::Sprite>
+        (
+            nullptr,
+            Engine::ResourceManager::GetShader("ParticleBGShader"),
+            glm::vec3(0.48f, 0.55f, 0.57f)
+        );
+
+        Engine::Renderer::Submit(_bgSprite.get());
     }
 
     // ----- Public -----
@@ -34,11 +54,14 @@ namespace ParticleSim
     App::App()
     {
         InitModules();
+
+        //Call after init because these methods depend on OpenGL-Initialization
+        CreateSprites();
     }
 
     App::~App()
     {
-
+        Engine::ResourceManager::CleanUp();
     }
 
     bool App::IsRunning()
@@ -60,7 +83,14 @@ namespace ParticleSim
 
             Engine::Window::CalcFrametime();
             _interface->PrepareFrame();
+            Engine::Renderer::PrepareFrame();
             Engine::Renderer::ClearBuffers();
+        }
+
+        {
+            Engine::PROFILE_SCOPE("Render graphics");
+
+            Engine::Renderer::FlushSprites();
         }
 
         {

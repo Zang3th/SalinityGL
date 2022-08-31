@@ -11,7 +11,7 @@ namespace ParticleSim
         const float  windowWidth       = (float)Engine::WINDOW_WIDTH;
         const float  windowHeight      = (float)Engine::WINDOW_HEIGHT;
         const float  menuBarHeight     = 25.0f;
-        const float  sidebarWidth      = 415.0f;
+        const float  sidebarWidth      = 431.0f;
 
         _sidebarPos      = ImVec2(workPos.x + windowWidth, menuBarHeight);
         _sidebarSize     = ImVec2(sidebarWidth,windowHeight - menuBarHeight);
@@ -52,12 +52,6 @@ namespace ParticleSim
                 ImGui::MenuItem("Show overlay", "", &_showOverlay);
                 ImGui::EndMenu();
             }
-
-            if(ImGui::BeginMenu("Rendering"))
-            {
-                ImGui::MenuItem("Wireframe-Mode", "", &Engine::WIREFRAME_RENDERING);
-                ImGui::EndMenu();
-            }
         }
         ImGui::EndMainMenuBar();
 
@@ -79,18 +73,12 @@ namespace ParticleSim
                     ImGui::PlotVar("", (float)Engine::Window::GetDeltaTime() * 1000.0f, 0.0f, 30.0f);
 
                     //Render stats
-                    ImGui::NewLine();
-                    ImGui::Separator();
-                    ImGui::Text("Drawcalls total: %d", Engine::Renderer::GetDrawcalls());
-                    ImGui::Text("Vertices  total: %d", Engine::Renderer::GetDrawnVertices());
-                    ImGui::Separator();
+                    ImGui::Text("Drawcalls total: %d, Vertices total: %d", Engine::Renderer::GetDrawcalls(), Engine::Renderer::GetDrawnVertices());
 
                     //Profiling/Timing-Results
                     ImGui::NewLine();
-                    ImGui::Separator();
                     for(auto const& entry : Engine::Profiler::_results)
                         ImGui::Text("%.3fms - %s", entry.second, entry.first);
-                    ImGui::Separator();
                 }
                 ImGui::End();
             }

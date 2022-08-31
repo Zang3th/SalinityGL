@@ -62,7 +62,7 @@ namespace GreenWorld
         _waterRenderer = Engine::MakeScope<Engine::WaterRenderer>();
 
         //Renderer
-        Engine::Renderer::Init(_nearPlane, _farPlane, _lightPosition, _lightColor, _shadowRenderer->GetLightProjection());
+        Engine::Renderer::Init3DScene(_nearPlane, _farPlane, _lightPosition, _lightColor, _shadowRenderer->GetLightProjection());
     }
 
     void App::CreateModels()

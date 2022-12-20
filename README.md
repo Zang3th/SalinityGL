@@ -11,7 +11,6 @@
 - Written in C++17 with OpenGL 4.5
 - Example applications that are using the engine
   - GreenWorld: Nature-Scene (3D)
-  - ParticleSim: Particle/Sandfalling-Simulation (2D)
 
 ## Basic functionalities
 

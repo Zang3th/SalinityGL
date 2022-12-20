@@ -6,21 +6,21 @@ namespace Engine
 
     Texture* ResourceManager::LoadTexture(const std::string& name, const uint32 width, const uint32 height, GLint internalFormat, GLenum format, GLenum type)
     {
-        Texture* texture = new Texture(width, height, internalFormat, format, type);
+        auto texture = new Texture(width, height, internalFormat, format, type);
         _textureStorage[name] = texture;
         return texture;
     }
 
     Texture* ResourceManager::LoadTextureFromFile(const std::string& name, const std::string& filepath)
     {
-        Texture* texture = new Texture(filepath);
+        auto texture = new Texture(filepath);
         _textureStorage[name] = texture;
         return texture;
     }
 
     Texture* ResourceManager::LoadTextureAtlasFromFile(const std::string& name, const std::string& filepath, uint32 numberOfRows)
     {
-        Texture* texture = new Texture(filepath, numberOfRows);
+        auto texture = new Texture(filepath, numberOfRows);
         _textureStorage[name] = texture;
         return texture;
     }
@@ -42,7 +42,7 @@ namespace Engine
 
     Shader* ResourceManager::LoadShader(const std::string& name, const std::string& vsFilepath, const std::string& fsFilepath)
     {
-         Shader* shader = new Shader(vsFilepath, fsFilepath);
+        auto shader = new Shader(vsFilepath, fsFilepath);
         _shaderStorage[name] = shader;
         return shader;
     }

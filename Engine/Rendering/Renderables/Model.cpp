@@ -53,11 +53,7 @@ namespace Engine
     Model::Model(Mesh* mesh)
         :   _model(glm::mat4(1.0f)),
             _position(0.0f),
-            _texture1(mesh->texture1),
-            _texture2(mesh->texture2),
-            _texture3(mesh->texture3),
-            _texture4(mesh->texture4),
-            _texture5(mesh->texture5),
+            _textures(mesh->textures),
             _verticeCount(mesh->indices.size()),
             _gotNormalMap(mesh->gotNormalMap),
             _rotationX(0.0f), _rotationY(0.0f), _rotationZ(0.0f),
@@ -119,53 +115,13 @@ namespace Engine
         SetModelMatrix();
     }
 
-    void Model::SetTexture1(Texture* texture)
+    void Model::AddTexture(Texture* texture)
     {
-        _texture1 = texture;
+        _textures.push_back(texture);
     }
 
-    void Model::SetTexture2(Texture* texture)
+    [[nodiscard]] const std::vector<Texture*>* Model::GetTextures() const
     {
-        _texture2 = texture;
-    }
-
-    void Model::SetTexture3(Texture* texture)
-    {
-        _texture3 = texture;
-    }
-
-    void Model::SetTexture4(Texture* texture)
-    {
-        _texture4 = texture;
-    }
-
-    void Model::SetTexture5(Texture* texture)
-    {
-        _texture5 = texture;
-    }
-
-    Texture* Model::GetTexture1() const
-    {
-        return _texture1;
-    }
-
-    Texture* Model::GetTexture2() const
-    {
-        return _texture2;
-    }
-
-    Texture* Model::GetTexture3() const
-    {
-        return _texture3;
-    }
-
-    Texture* Model::GetTexture4() const
-    {
-        return _texture4;
-    }
-
-    Texture* Model::GetTexture5() const
-    {
-        return _texture5;
+        return &_textures;
     }
 }

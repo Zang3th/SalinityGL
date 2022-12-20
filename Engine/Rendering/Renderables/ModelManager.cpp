@@ -21,10 +21,10 @@ namespace Engine
 
         //Allocate and assign textures
         ResourceManager::LoadTextureFromFile(name, textureFilepath);
-        terrainMesh.texture1 = ResourceManager::GetTexture(name);
+        terrainMesh.textures.push_back(ResourceManager::GetTexture(name));
 
         //Create and store model
-        Model* terrainModel = new Model(&terrainMesh);
+        auto terrainModel = new Model(&terrainMesh);
         _modelStorage.push_back(terrainModel);
 
         return terrainModel;
@@ -42,7 +42,7 @@ namespace Engine
         MeshCreator::CreatePlane(x, z, tileSize, &planeMesh);
 
         //Create and store model
-        Model* planeModel = new Model(&planeMesh);
+        auto planeModel = new Model(&planeMesh);
         _modelStorage.push_back(planeModel);
 
         return planeModel;
@@ -60,7 +60,7 @@ namespace Engine
         //Create models out of meshes and store these
         for(auto& mesh : meshes)
         {
-            Model* objModel = new Model(&mesh);
+            auto objModel = new Model(&mesh);
             _modelStorage.push_back(objModel);
             models.push_back(objModel);
         }

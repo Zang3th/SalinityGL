@@ -8,13 +8,17 @@
 
 namespace Engine
 {
-    class BaseInterface
+    class Interface
     {
+        protected:
+            static void SetDarkThemeColors();
+            static void TextCentered(const char* text);
+
         public:
-            BaseInterface();
-            virtual ~BaseInterface();
-            static  void PrepareFrame();
+            Interface();
+            virtual ~Interface();
             virtual void AddElements() = 0;
+            static  void PrepareFrame();
             static  void Render();
     };
 }

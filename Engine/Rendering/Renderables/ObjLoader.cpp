@@ -40,27 +40,27 @@ namespace Engine
             for(const auto& index : shapes.at(i).mesh.indices)
             {
                 //Get vertices
-                mesh.vertices.emplace_back(glm::vec3(
+                mesh.vertices.emplace_back(
                     attrib.vertices[3 * index.vertex_index + 0],
                     attrib.vertices[3 * index.vertex_index + 1],
                     attrib.vertices[3 * index.vertex_index + 2]
-                ));
+                );
 
                 //Get normals
-                mesh.normals.emplace_back(glm::vec3(
+                mesh.normals.emplace_back(
                     attrib.normals[3 * index.normal_index + 0],
                     attrib.normals[3 * index.normal_index + 1],
                     attrib.normals[3 * index.normal_index + 2]
-                ));
+                );
 
                 //Get texCoords
-                mesh.texCoords.emplace_back(glm::vec2(
+                mesh.texCoords.emplace_back(
                     attrib.texcoords[2 * index.texcoord_index + 0],
                     attrib.texcoords[2 * index.texcoord_index + 1]
-                ));
+                );
 
                 //Reserve space for tangents
-                mesh.tangents.emplace_back(glm::vec3(0.0f, 0.0f, 0.0f));
+                mesh.tangents.emplace_back(0.0f, 0.0f, 0.0f);
 
                 //Auto increment indices
                 mesh.indices.push_back(mesh.indices.size());
@@ -73,7 +73,7 @@ namespace Engine
                 std::string textureFilepath = baseFilepath + "/" + materials[i].diffuse_texname;
                 std::string textureName = filename + "DiffuseTexture";
                 ResourceManager::LoadTextureFromFile(textureName, textureFilepath);
-                mesh.texture1 = ResourceManager::GetTexture(textureName);
+                mesh.textures.push_back(ResourceManager::GetTexture(textureName));
             }
 
             //Check for normal map
@@ -83,7 +83,7 @@ namespace Engine
                 std::string textureFilepath = baseFilepath + "/" + materials[i].bump_texname;
                 std::string textureName = filename + "NormalTexture";
                 ResourceManager::LoadTextureFromFile(textureName, textureFilepath);
-                mesh.texture2 = ResourceManager::GetTexture(textureName);
+                mesh.textures.push_back(ResourceManager::GetTexture(textureName));
                 mesh.gotNormalMap = 1;
             }
 

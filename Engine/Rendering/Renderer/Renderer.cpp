@@ -9,22 +9,12 @@ namespace Engine
         //Bind shader
         modelShader->Bind();
 
-        //Get textures and bind depending on existence
-        Texture* texture1 = model->GetTexture1();
-        Texture* texture2 = model->GetTexture2();
-        Texture* texture3 = model->GetTexture3();
-
-        //Diffuse texture
-        if(texture1)
-            texture1->BindToSlot(0);
-
-        //Normal map
-        if(texture2)
-            texture2->BindToSlot(1);
-
-        //Shadow map
-        if(texture3)
-            texture3->BindToSlot(2);
+        //Get textures and bind them
+        uint8_t slot = 0;
+        for(const auto& tex : *model->GetTextures())
+        {
+            tex->BindToSlot(slot++);
+        }
 
         //Bind buffers and get vertice count
         model->BindBuffers();
@@ -50,14 +40,10 @@ namespace Engine
         modelShader->Unbind();
 
         //Unbind textures
-        if(texture1)
-            texture1->Unbind();
-
-        if(texture2)
-            texture2->Unbind();
-
-        if(texture3)
-            texture3->Unbind();
+        for(const auto& tex : *model->GetTextures())
+        {
+            tex->Unbind();
+        }
 
         //Unbind shader
         modelShader->Unbind();
@@ -71,22 +57,12 @@ namespace Engine
         //Bind shader
         terrainShader->Bind();
 
-        //Get textures and bind depending on existence
-        Texture* texture1 = _terrainModel->GetTexture1();
-        Texture* texture2 = _terrainModel->GetTexture2();
-        Texture* texture3 = _terrainModel->GetTexture3();
-
-        //Set diffuse texture
-        if(texture1)
-            texture1->BindToSlot(0);
-
-        //Set normal map
-        if(texture2)
-            texture2->BindToSlot(1);
-
-        //Set shadow map
-        if(texture3)
-            texture3->BindToSlot(2);
+        //Get textures and bind them
+        uint8_t slot = 0;
+        for(const auto& tex : *_terrainModel->GetTextures())
+        {
+            tex->BindToSlot(slot++);
+        }
 
         //Bind buffers and get vertice count
         _terrainModel->BindBuffers();
@@ -111,14 +87,10 @@ namespace Engine
         _terrainModel->UnbindBuffers();
 
         //Unbind textures
-        if(texture1)
-            texture1->Unbind();
-
-        if(texture2)
-            texture2->Unbind();
-
-        if(texture3)
-            texture3->Unbind();
+        for(const auto& tex : *_terrainModel->GetTextures())
+        {
+            tex->Unbind();
+        }
 
         //Unbind shader
         terrainShader->Unbind();
@@ -132,32 +104,12 @@ namespace Engine
         //Bind shader
         waterShader->Bind();
 
-        //Get textures and bind depending on existence
-        Texture* texture1 = _waterModel->GetTexture1();
-        Texture* texture2 = _waterModel->GetTexture2();
-        Texture* texture3 = _waterModel->GetTexture3();
-        Texture* texture4 = _waterModel->GetTexture4();
-        Texture* texture5 = _waterModel->GetTexture5();
-
-        //Reflection texture
-        if(texture1)
-            texture1->BindToSlot(0);
-
-        //Refraction texture
-        if(texture2)
-            texture2->BindToSlot(1);
-
-        //DuDvMap
-        if(texture3)
-            texture3->BindToSlot(2);
-
-        //NormalMap
-        if(texture4)
-            texture4->BindToSlot(3);
-
-        //DepthMap
-        if(texture5)
-            texture5->BindToSlot(4);
+        //Get textures and bind them
+        uint8_t slot = 0;
+        for(const auto& tex : *_terrainModel->GetTextures())
+        {
+            tex->BindToSlot(slot++);
+        }
 
         //Bind buffers and get vertice count
         _waterModel->BindBuffers();
@@ -186,20 +138,10 @@ namespace Engine
         _waterModel->UnbindBuffers();
 
         //Unbind textures
-        if(texture1)
-            texture1->Unbind();
-
-        if(texture2)
-            texture2->Unbind();
-
-        if(texture3)
-            texture3->Unbind();
-
-        if(texture4)
-            texture4->Unbind();
-
-        if(texture5)
-            texture5->Unbind();
+        for(const auto& tex : *_waterModel->GetTextures())
+        {
+            tex->Unbind();
+        }
 
         //Unbind shader
         waterShader->Unbind();

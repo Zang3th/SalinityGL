@@ -24,6 +24,7 @@ file(GLOB_RECURSE SRC_VENDOR Vendor/*.cpp)
 add_library(GameEngine STATIC ${SRC_ENGINE_CORE} ${SRC_VENDOR})
 
 ### Include directories ###
+target_include_directories(GameEngine PUBLIC Engine/Application)
 target_include_directories(GameEngine PUBLIC Engine/Core)
 target_include_directories(GameEngine PUBLIC Engine/Debug)
 target_include_directories(GameEngine PUBLIC Engine/Rendering/Buffers)
@@ -38,7 +39,7 @@ target_include_directories(GameEngine PUBLIC Vendor/IrrKlang/include)
 target_include_directories(GameEngine PUBLIC Vendor/Imgui/include)
 target_include_directories(GameEngine PUBLIC Vendor/GLM/include)
 
-### Enginge linker flags ###
+### Engine linker flags ###
 target_link_libraries(GameEngine PUBLIC ${ENGINE_LINKER_FLAGS})
 
 ############################# Demo-Applications #############################
@@ -50,19 +51,19 @@ find_package(OpenGL REQUIRED)
 file(GLOB_RECURSE SRC_GREENWORLD Apps/GreenWorld/src/*.cpp)
 
 ### Compile to an executable ###
-add_executable(GreenWorldDemo Apps/GreenWorld/GreenWorldRun.cpp ${SRC_GREENWORLD})
+add_executable(GreenWorld Apps/GreenWorld/GreenWorld.cpp ${SRC_GREENWORLD})
 
 ### Include directories ###
-target_include_directories(GreenWorldDemo PUBLIC Apps/GreenWorld/src)
-target_include_directories(GreenWorldDemo PUBLIC Engine)
+target_include_directories(GreenWorld PUBLIC Apps/GreenWorld/src)
+target_include_directories(GreenWorld PUBLIC Engine)
 
 ### Link against static libraries ###
-target_link_libraries(GreenWorldDemo PUBLIC GameEngine)
+target_link_libraries(GreenWorld PUBLIC GameEngine)
 
 ### Link against dynamic libraries ###
-target_link_libraries(GreenWorldDemo PUBLIC ${GLFW_PATH})
-target_link_libraries(GreenWorldDemo PUBLIC OpenGL::GL)
-target_link_libraries(GreenWorldDemo PUBLIC ${IRRKLANG_PATH})
+target_link_libraries(GreenWorld PUBLIC ${GLFW_PATH})
+target_link_libraries(GreenWorld PUBLIC OpenGL::GL)
+target_link_libraries(GreenWorld PUBLIC ${IRRKLANG_PATH})
 
 ### Application linker flags ###
-target_link_libraries(GreenWorldDemo PUBLIC ${APPLICATION_LINKER_FLAGS})
+target_link_libraries(GreenWorld PUBLIC ${APPLICATION_LINKER_FLAGS})

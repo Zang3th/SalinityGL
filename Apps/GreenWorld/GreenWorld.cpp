@@ -3,7 +3,7 @@
 int main()
 {
     //Create app
-    GreenWorld::App greenWorldApp;
+    GreenWorld::GreenWorldApp greenWorldApp;
 
     //Start app
     while(greenWorldApp.IsRunning())

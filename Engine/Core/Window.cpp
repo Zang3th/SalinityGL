@@ -7,9 +7,9 @@ namespace Engine
     void Window::Init(const std::string& title)
     {
         if(!glfwInit())
-            Logger::Error("Failed", "GLFW-Lib.", std::to_string(glfwGetError(nullptr)));
+            Logger::Error("Failed", "GLFW-Library", std::to_string(glfwGetError(nullptr)));
         else
-            Logger::Info("Init.", "GLFW-Lib.");
+            Logger::Info("Loaded", "GLFW-Library");
 
         glfwWindowHint(GLFW_SAMPLES, 8);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -28,7 +28,7 @@ namespace Engine
             Logger::Info("Created", "GLFW-Window", _windowName);
 
         glfwMakeContextCurrent(_window);
-        glfwSwapInterval(1);
+        glfwSwapInterval(0);
 
         if(!gladLoadGL())
             Logger::Error("Failed", "OpenGL-Load.");

@@ -4,7 +4,7 @@
 
 namespace GreenWorld
 {
-    class Interface : public Engine::BaseInterface
+    class GreenWorldInterface : public Engine::Interface
     {
         private:
             ImVec2           _sidebarPos,     _sidebarSize;
@@ -18,12 +18,10 @@ namespace GreenWorld
             float            _windowAlphaValue;
             bool             _showOverlay;
 
-            static void SetDarkThemeColors();
-            static void TextCentered(const char* text);
-            void        SetOverlayParameters();
+            void             SetOverlayParameters();
 
         public:
-            Interface();
+            GreenWorldInterface();
             void AddElements() final;
     };
 }

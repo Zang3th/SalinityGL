@@ -17,6 +17,7 @@
 #include "ShadowRenderer.hpp"
 #include "ModelManager.hpp"
 #include "WaterRenderer.hpp"
-#include "BaseInterface.hpp"
+#include "Interface.hpp"
 #include "imgui_plot_var.h"
 #include "ParticleRenderer.hpp"
+#include "App.hpp"

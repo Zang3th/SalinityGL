@@ -12,7 +12,7 @@ namespace GreenWorld
 {
     // ----- Private -----
 
-    void App::LoadResources()
+    void GreenWorldApp::LoadResources()
     {
         //Shader
         Engine::ResourceManager::LoadShader("ShadowCreateShader", "../Res/Shader/GreenWorld/ShadowCreate_VS.glsl", "../Res/Shader/GreenWorld/ShadowCreate_FS.glsl");
@@ -31,20 +31,20 @@ namespace GreenWorld
         Engine::ResourceManager::LoadTextureAtlasFromFile("ParticleTextureAtlas", "../Res/Assets/Textures/GreenWorld/SmokeAtlas.png", 8);
     }
 
-    void App::InitModules()
+    void GreenWorldApp::InitModules()
     {
         //Logging
         Engine::Logger::Init();
 
         //Window
-        Engine::Window::Init("GreenWorld Demo Application");
+        Engine::Window::Init("GreenWorld");
 
         //Camera + Control
         Engine::Camera::Init(glm::vec3(-75.0f, 74.0f, 70.0f), 0.4f, -23.0f, 25.0f);
         Engine::CameraController3D::Init();
 
         //UI
-        _interface = Engine::MakeScope<Interface>();
+        _interface = Engine::MakeScope<GreenWorldInterface>();
 
         //Audio
         //_audio = Engine::MakeScope<Engine::Audio>();
@@ -65,7 +65,7 @@ namespace GreenWorld
         Engine::Renderer::Init(_nearPlane, _farPlane, _lightPosition, _lightColor, _shadowRenderer->GetLightProjection());
     }
 
-    void App::CreateModels()
+    void GreenWorldApp::CreateModels()
     {
         //Terrain
         auto terrainModel = Engine::ModelManager::AddTerrain
@@ -78,8 +78,8 @@ namespace GreenWorld
             "../Res/Assets/Textures/GreenWorld/Heightmap128.bmp"
         );
         terrainModel->ChangePosition(glm::vec3(0.0f, -2.7f, 0.0f));
-        terrainModel->SetTexture2(Engine::ResourceManager::GetTexture("ColorMap"));
-        terrainModel->SetTexture3(_shadowRenderer->GetDepthTexture());
+        terrainModel->AddTexture(Engine::ResourceManager::GetTexture("ColorMap"));
+        terrainModel->AddTexture(_shadowRenderer->GetDepthTexture());
         Engine::Renderer::SubmitTerrain(terrainModel);
 
         //Water
@@ -90,18 +90,18 @@ namespace GreenWorld
             1.0f
         );
         waterModel->ChangePosition(glm::vec3(30.5f, 0.0f, 0.0f));
-        waterModel->SetTexture1(_waterRenderer->GetReflectTexture());
-        waterModel->SetTexture2(_waterRenderer->GetRefractTexture());
-        waterModel->SetTexture3(Engine::ResourceManager::GetTexture("DuDvMap"));
-        waterModel->SetTexture4(Engine::ResourceManager::GetTexture("NormalMap"));
-        waterModel->SetTexture5(_waterRenderer->GetRefractDepthTexture());
+        waterModel->AddTexture(_waterRenderer->GetReflectTexture());
+        waterModel->AddTexture(_waterRenderer->GetRefractTexture());
+        waterModel->AddTexture(Engine::ResourceManager::GetTexture("DuDvMap"));
+        waterModel->AddTexture(Engine::ResourceManager::GetTexture("NormalMap"));
+        waterModel->AddTexture(_waterRenderer->GetRefractDepthTexture());
         Engine::Renderer::SubmitWater(waterModel);
 
         //House
         auto house = Engine::ModelManager::AddObject("House", "../Res/Assets/Models/GreenWorld/House");
         for(const auto& model : house)
         {
-            model->SetTexture3(_shadowRenderer->GetDepthTexture());
+            model->AddTexture(_shadowRenderer->GetDepthTexture());
             model->ChangeSize(1.2f);
             model->ChangeRotation(0.0f, -70.0f, 0.0f);
             model->ChangePosition(glm::vec3(85.0f, 0.45f, 95.0f));
@@ -112,7 +112,7 @@ namespace GreenWorld
         auto bridge = Engine::ModelManager::AddObject("Bridge", "../Res/Assets/Models/GreenWorld/Bridge");
         for(const auto& model : bridge)
         {
-            model->SetTexture3(_shadowRenderer->GetDepthTexture());
+            model->AddTexture(_shadowRenderer->GetDepthTexture());
             model->ChangePosition(glm::vec3(39.0f, -0.45f, 47.0f));
             Engine::Renderer::Submit(model);
         }
@@ -121,13 +121,13 @@ namespace GreenWorld
         auto tree = Engine::ModelManager::AddObject("Tree", "../Res/Assets/Models/GreenWorld/Tree");
         for(const auto& model : tree)
         {
-            model->SetTexture3(_shadowRenderer->GetDepthTexture());
+            model->AddTexture(_shadowRenderer->GetDepthTexture());
             model->ChangePosition(glm::vec3(85.0f, 0.3f, 20.0f));
             Engine::Renderer::Submit(model);
         }
     }
 
-    void App::CreateCubemap()
+    void GreenWorldApp::CreateCubemap()
     {
         const std::array<const char*, 6> faces
         {
@@ -143,7 +143,7 @@ namespace GreenWorld
         Engine::Renderer::Submit(_cubemap.get());
     }
 
-    void App::CreateSprites()
+    void GreenWorldApp::CreateSprites()
     {
         //ShadowSprite
         _shadowSprite = Engine::MakeScope<Engine::Sprite>
@@ -194,26 +194,26 @@ namespace GreenWorld
         Engine::Renderer::Submit(_refractDepthSprite.get());
     }
 
-    void App::CreateParticles()
+    void GreenWorldApp::CreateParticles()
     {
         _smokeRenderer = Engine::MakeScope<Engine::ParticleRenderer>
         (
             Engine::ResourceManager::GetTexture("ParticleTextureAtlas"), //TextureAtlas
             Engine::ResourceManager::GetShader("ParticleShader"),        //Shader
-            glm::vec3(87.0f, 34.0f, 92.5f),                          //Spawnpoint
-            200,                                                               //Number of particles
-            5.0f,                                                              //Size
-            0.05f,                                                             //Speed
-            0.0f,                                                              //Gravitycompliance
-            6.0f,                                                              //Lifetime
-            44.0f                                                              //Respawnthreshold (Y-Position)
+            glm::vec3(87.0f, 34.0f, 92.5f),                              //Spawn point
+            200,                                                         //Number of particles
+            5.0f,                                                        //Size
+            0.05f,                                                       //Speed
+            0.0f,                                                        //Gravity compliance
+            6.0f,                                                        //Lifetime
+            44.0f                                                        //Respawn threshold (Y-Position)
         );
         Engine::Renderer::Submit(_smokeRenderer.get());
     }
 
     // ----- Public -----
 
-    App::App()
+    GreenWorldApp::GreenWorldApp()
     {
         InitModules();
 
@@ -224,18 +224,13 @@ namespace GreenWorld
         CreateParticles();
     }
 
-    App::~App()
+    GreenWorldApp::~GreenWorldApp()
     {
         Engine::ResourceManager::CleanUp();
         Engine::ModelManager::CleanUp();
     }
 
-    bool App::IsRunning()
-    {
-        return Engine::Window::IsRunning();
-    }
-
-    void App::Update()
+    void GreenWorldApp::Update()
     {
         {
             Engine::PROFILE_SCOPE("Process events");
@@ -273,7 +268,7 @@ namespace GreenWorld
             Engine::Renderer::FlushTerrain(Engine::ResourceManager::GetShader("TerrainShader"));
             Engine::Renderer::FlushModelBuffer(Engine::ResourceManager::GetShader("ModelShader"));
 
-            //Modify movefactor and render waterPlane
+            //Modify movefactor and render water plane
             _moveFactor += _waveSpeed * (float)Engine::Window::GetDeltaTime();
             _moveFactor  = fmod(_moveFactor, 1.0f);
             Engine::Renderer::FlushWater(Engine::ResourceManager::GetShader("WaterPlaneShader"), _moveFactor);

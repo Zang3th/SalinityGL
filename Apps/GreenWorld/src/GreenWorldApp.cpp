@@ -1,12 +1,12 @@
 #include "GreenWorldApp.hpp"
 
 //Initialize extern settings
-const Engine::uint32 Engine::WINDOW_WIDTH        = 1920;
-const Engine::uint32 Engine::WINDOW_HEIGHT       = 1080;
-const Engine::uint32 Engine::PLANE_SIZE          = 128;
-      bool           Engine::WIREFRAME_RENDERING = false;
-      bool           Engine::DEBUG_SPRITES       = false;
-const float          Engine::GRAVITY             = -20.0f;
+const   Engine::uint32 Engine::WINDOW_WIDTH        = 1920;
+const   Engine::uint32 Engine::WINDOW_HEIGHT       = 1080;
+const   Engine::uint32 Engine::PLANE_SIZE          = 128;
+        bool           Engine::WIREFRAME_RENDERING = false;
+        bool           Engine::DEBUG_SPRITES       = false;
+const   float          Engine::GRAVITY             = -20.0f;
 
 namespace GreenWorld
 {
@@ -62,7 +62,7 @@ namespace GreenWorld
         _waterRenderer = Engine::MakeScope<Engine::WaterRenderer>();
 
         //Renderer
-        Engine::Renderer::Init(_nearPlane, _farPlane, _lightPosition, _lightColor, _shadowRenderer->GetLightProjection());
+        Engine::Renderer::Init3DScene(_nearPlane, _farPlane, _lightPosition, _lightColor, _shadowRenderer->GetLightProjection());
     }
 
     void GreenWorldApp::CreateModels()

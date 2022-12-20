@@ -46,7 +46,11 @@ namespace Engine
 
         public:
             Renderer() = delete;
-            static void Init(float nearPlane, float farPlane, glm::vec3 lightPos, glm::vec3 lightColor, glm::mat4 lightProjection);
+
+            static void Init2DBasic();
+            static void Init3DBasic(float nearPlane, float farPlane);
+            static void Init3DScene(float nearPlane, float farPlane, glm::vec3 lightPos, glm::vec3 lightColor, glm::mat4 lightProjection);
+
             static void PrepareFrame();
             static void Submit(Model* model);
             static void Submit(Sprite* sprite);

@@ -37,7 +37,6 @@ namespace Engine
             std::string rendererString(reinterpret_cast<const char *>(glGetString(GL_RENDERER)));
             std::string versionString(reinterpret_cast<const char *>(glGetString(GL_VERSION)));
             std::string glInfo = rendererString + ", " + versionString;
-
             Logger::Info("Loaded", "OpenGL", glInfo);
         }
 

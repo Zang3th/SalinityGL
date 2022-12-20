@@ -106,7 +106,7 @@ namespace Engine
 
         //Get textures and bind them
         uint8_t slot = 0;
-        for(const auto& tex : *_terrainModel->GetTextures())
+        for(const auto& tex : *_waterModel->GetTextures())
         {
             tex->BindToSlot(slot++);
         }
@@ -152,29 +152,7 @@ namespace Engine
 
     // ----- Public -----
 
-    void Renderer::Init2DBasic()
-    {
-        _orthoProjection = glm::ortho(0.0f, (float)WINDOW_WIDTH, 0.0f, (float)WINDOW_HEIGHT, -1.0f, 1.0f);
-    }
-
-    void Renderer::Init3DBasic(const float nearPlane, const float farPlane)
-    {
-        _nearPlane       = nearPlane;
-        _farPlane        = farPlane;
-        _orthoProjection = glm::ortho(0.0f, (float)WINDOW_WIDTH, 0.0f, (float)WINDOW_HEIGHT, -1.0f, 1.0f);
-
-        //Nearplane of the _perspProjection has to be this big, otherwise the z-Buffer in the water rendering refraction depth pass is bugged
-        _perspProjection = glm::perspective(glm::radians(45.0f), (float)WINDOW_WIDTH/(float)WINDOW_HEIGHT, _nearPlane, _farPlane);
-
-        //OpenGL-Rendersettings
-        GLRenderSettings::EnableMultisample();
-        GLRenderSettings::EnableDepthtest();
-        GLRenderSettings::SetDepthFunc(GL_LEQUAL);
-        GLRenderSettings::EnableBlending();
-        GLRenderSettings::SetBlendFunc(GL_ONE_MINUS_SRC_ALPHA);
-    }
-
-    void Renderer::Init3DScene(const float nearPlane, const float farPlane, const glm::vec3 lightPos, const glm::vec3 lightColor, const glm::mat4 lightProjection)
+    void Renderer::Init3D(const float nearPlane, const float farPlane, const glm::vec3 lightPos, const glm::vec3 lightColor, const glm::mat4 lightProjection)
     {
         _nearPlane       = nearPlane;
         _farPlane        = farPlane;

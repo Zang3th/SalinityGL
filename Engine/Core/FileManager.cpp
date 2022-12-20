@@ -9,7 +9,6 @@ namespace Engine
         if(num > string.size())
         {
             std::string newString = string;
-            //newString.insert(0, num - string.size(), paddingChar);
             newString.append(num - string.size(), paddingChar);
 
             return newString;

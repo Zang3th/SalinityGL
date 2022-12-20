@@ -82,7 +82,7 @@ namespace Engine
             float size = _size * Random::GetFloat();
 
             //Create particle
-            Particle* particle = new Particle(pos, vel, grav, life, rot, size, _numberOfRows);
+            auto particle = new Particle(pos, vel, grav, life, rot, size, _numberOfRows);
 
             //Save the different components
             _pointerStorage.push_back(particle);

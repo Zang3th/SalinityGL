@@ -9,7 +9,7 @@ namespace Engine
         float  lifeFactor    = _elapsedTime / _lifeLength;
         uint32 stageCount    = _numberOfRows * _numberOfRows;
         float  atlasProgress = lifeFactor * (float)stageCount;
-        uint32 index0        = (uint32)(floorf(atlasProgress));
+        auto   index0        = (uint32)(floorf(atlasProgress));
         uint32 index1        = index0 < stageCount - 1 ? index0 + 1 : index0;
 
         _blendFactor    = (float)fmodf(atlasProgress, 1.0f);
@@ -22,7 +22,7 @@ namespace Engine
         uint32 col = index % _numberOfRows;
         uint32 row = index / _numberOfRows;
 
-        return glm::vec2((float)col / (float)_numberOfRows, (float)row /(float)_numberOfRows);
+        return {(float)col / (float)_numberOfRows, (float)row /(float)_numberOfRows};
     }
 
     // ----- Public -----

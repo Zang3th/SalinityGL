@@ -14,6 +14,6 @@ namespace Engine
             ~VertexBuffer();
             void Bind()   const;
             void Unbind() const;
-            void Update(const void* data, const uint32 size);
+            void Update(const void* data, uint32 size);
     };
 }

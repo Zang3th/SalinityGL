@@ -42,9 +42,9 @@ namespace GW
 
         //Create application specific renderers
         _sceneRenderer  = Engine::RenderManager::AddScene(_nearPlane, _farPlane, _lightPos, _lightCol);
-        _shadowRenderer = Engine::RenderManager::AddShadows(8192, _lightPos, "ShadowCreateShader");
-        _waterRenderer  = Engine::RenderManager::AddWater();
         _spriteRenderer = Engine::RenderManager::AddSprites();
+        _shadowRenderer = Engine::RenderManager::AddShadows(8192, _lightPos, "ShadowCreateShader");
+        _waterRenderer  = Engine::RenderManager::AddWater(0.025f);
         _smokeRenderer  = Engine::RenderManager::AddParticles
         (
             glm::vec3(87.0f, 34.0f, 92.5f),                                 //Spawn point
@@ -212,23 +212,23 @@ namespace GW
         {
             Engine::PROFILE_SCOPE("Render shadows");
 
-            _shadowRenderer->Draw();
+            Engine::RenderManager::RenderShadows();
         }
 
         {
             Engine::PROFILE_SCOPE("Render water");
 
-            _waterRenderer->Draw();
+            Engine::RenderManager::RenderWater();
         }
 
         {
             Engine::PROFILE_SCOPE("Render scene");
 
-            _sceneRenderer->Draw();
-            _particleRenderer->Draw();
+            Engine::RenderManager::RenderScene();
+            Engine::RenderManager::RenderParticles();
 
             if(Engine::DEBUG_SPRITES)
-                Engine::Renderer::FlushSprites();
+                Engine::RenderManager::RenderSprites();
         }
 
         {

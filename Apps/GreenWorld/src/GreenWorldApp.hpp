@@ -6,7 +6,7 @@
 #include <vector>
 #include <array>
 
-namespace GreenWorld
+namespace GW
 {
     class GreenWorldApp : public Engine::App
     {

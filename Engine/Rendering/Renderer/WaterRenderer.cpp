@@ -27,7 +27,7 @@ namespace Engine
         _refractFBO->SetColorAttachment0();
 
         //Create and configure texture attachments
-        Texture* refractTexture =_refractFBO->CreateTextureAttachment("RefractionTexture", _refractionWidth, _refractionHeight);
+        Texture* refractTexture = _refractFBO->CreateTextureAttachment("RefractionTexture", _refractionWidth, _refractionHeight);
         refractTexture->AddFilterLinear();
         Texture* refractDepthTexture = _refractFBO->CreateDepthTextureAttachment("RefractionDepthTexture", _refractionWidth, _refractionHeight);
         refractDepthTexture->AddFilterLinear();

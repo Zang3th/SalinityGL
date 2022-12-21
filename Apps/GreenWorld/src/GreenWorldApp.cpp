@@ -8,7 +8,7 @@ const Engine::uint32 Engine::PLANE_SIZE          = 128;
       bool           Engine::DEBUG_SPRITES       = false;
 const float          Engine::GRAVITY             = -20.0f;
 
-namespace GreenWorld
+namespace GW
 {
     // ----- Private -----
 

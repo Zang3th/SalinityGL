@@ -2,7 +2,7 @@
 
 #include "Engine.hpp"
 
-namespace GreenWorld
+namespace GW
 {
     class GreenWorldInterface : public Engine::Interface
     {

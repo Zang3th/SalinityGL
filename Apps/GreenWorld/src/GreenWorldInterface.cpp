@@ -1,6 +1,6 @@
 #include "GreenWorldInterface.hpp"
 
-namespace GreenWorld
+namespace GW
 {
     // ----- Private -----
 

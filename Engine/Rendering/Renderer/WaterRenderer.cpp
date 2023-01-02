@@ -62,11 +62,11 @@ namespace Engine
         Renderer::ClearBuffers();
 
         //Move camera under the water
-        glm::vec3 camPos = Camera::GetPosition();
+        glm::vec3 camPos = Camera3D::GetPosition();
         float distance = 2.0f * (camPos.y + _waterHeight);
-        Camera::SetPosition(glm::vec3(camPos.x, camPos.y - distance, camPos.z));
-        Camera::InvertPitch();
-        Camera::Update();
+        Camera3D::SetPosition(glm::vec3(camPos.x, camPos.y - distance, camPos.z));
+        Camera3D::InvertPitch();
+        Camera3D::Update();
 
         //Set shader variable(s)
         modelShader->Bind();
@@ -78,9 +78,9 @@ namespace Engine
         Renderer::FlushCubemap();
 
         //Reset camera
-        Camera::SetPosition(camPos);
-        Camera::InvertPitch();
-        Camera::Update();
+        Camera3D::SetPosition(camPos);
+        Camera3D::InvertPitch();
+        Camera3D::Update();
 
         EndReflectionFrame();
     }

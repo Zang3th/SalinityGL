@@ -5,7 +5,7 @@
 
 namespace Engine
 {
-    class Camera
+    class Camera3D
     {
         private:
             inline static glm::vec3   _position         = glm::vec3();
@@ -29,7 +29,7 @@ namespace Engine
                 DOWN
             };
 
-            Camera() = delete;
+            Camera3D() = delete;
             static void Init(glm::vec3 position, float yaw, float pitch, float movementSpeed);
             static void Update();
             static inline glm::mat4 GetViewMatrix(){return glm::lookAt(_position, _position + _front, _up);}

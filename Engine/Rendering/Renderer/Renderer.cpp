@@ -21,10 +21,10 @@ namespace Engine
         uint32 verticeCount = model->GetVerticeCount();
 
         //Set uniforms
-        modelShader->SetUniformMat4f("view", Camera::GetViewMatrix());
+        modelShader->SetUniformMat4f("view", Camera3D::GetViewMatrix());
         modelShader->SetUniformMat4f("model", model->GetModelMatrix());
         modelShader->SetUniformMat4f("projection", _perspProjection);
-        modelShader->SetUniformVec3f("viewPos", Camera::GetPosition());
+        modelShader->SetUniformVec3f("viewPos", Camera3D::GetPosition());
         modelShader->SetUniformVec3f("lightPos", _lightPosition);
         modelShader->SetUniformVec3f("lightColor", _lightColor);
         modelShader->SetUniformMat4f("lightProjection", _lightProjection);
@@ -69,10 +69,10 @@ namespace Engine
         uint32 verticeCount = _terrainModel->GetVerticeCount();
 
         //Set uniforms
-        terrainShader->SetUniformMat4f("view", Camera::GetViewMatrix());
+        terrainShader->SetUniformMat4f("view", Camera3D::GetViewMatrix());
         terrainShader->SetUniformMat4f("model", _terrainModel->GetModelMatrix());
         terrainShader->SetUniformMat4f("projection", _perspProjection);
-        terrainShader->SetUniformVec3f("viewPos", Camera::GetPosition());
+        terrainShader->SetUniformVec3f("viewPos", Camera3D::GetPosition());
         terrainShader->SetUniformVec3f("lightPos", _lightPosition);
         terrainShader->SetUniformVec3f("lightColor", _lightColor);
         terrainShader->SetUniformMat4f("lightProjection", _lightProjection);
@@ -116,10 +116,10 @@ namespace Engine
         uint32 verticeCount = _waterModel->GetVerticeCount();
 
         //Set uniforms
-        waterShader->SetUniformMat4f("view", Camera::GetViewMatrix());
+        waterShader->SetUniformMat4f("view", Camera3D::GetViewMatrix());
         waterShader->SetUniformMat4f("model", _waterModel->GetModelMatrix());
         waterShader->SetUniformMat4f("projection", _perspProjection);
-        waterShader->SetUniformVec3f("viewPos", Camera::GetPosition());
+        waterShader->SetUniformVec3f("viewPos", Camera3D::GetPosition());
         waterShader->SetUniformVec3f("lightPos", _lightPosition);
         waterShader->SetUniformVec3f("lightColor", _lightColor);
         waterShader->SetUniform1i("reflectionTexture", 0);
@@ -302,7 +302,7 @@ namespace Engine
         if(_cubemap)
         {
             GLRenderSettings::DisableWireframe();
-            _drawnVertices += _cubemap->Draw(_perspProjection, Camera::GetViewMatrix());
+            _drawnVertices += _cubemap->Draw(_perspProjection, Camera3D::GetViewMatrix());
             _drawcalls++;
 
             //Increase render pass counter

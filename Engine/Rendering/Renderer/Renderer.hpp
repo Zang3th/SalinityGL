@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Camera.hpp"
+#include "Camera3D.hpp"
 #include "glm.hpp"
 #include "Sprite.hpp"
 #include "Model.hpp"

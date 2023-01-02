@@ -56,7 +56,7 @@ namespace Engine
 
         UpdateTextureCoordInfo();
 
-        _distanceToCamera = glm::length(Camera::GetPosition() - _position) * 2.0f;
+        _distanceToCamera = glm::length(Camera3D::GetPosition() - _position) * 2.0f;
 
         return _elapsedTime < _lifeLength;
     }

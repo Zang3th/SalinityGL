@@ -1,10 +1,10 @@
-#include "Camera.hpp"
+#include "Camera3D.hpp"
 
 namespace Engine
 {
     // ----- Public -----
 
-    void Camera::Init(glm::vec3 position, float yaw, float pitch, float movementSpeed)
+    void Camera3D::Init(glm::vec3 position, float yaw, float pitch, float movementSpeed)
     {
         _position         = position;
         _front            = glm::vec3(0.0f);
@@ -19,7 +19,7 @@ namespace Engine
         Update();
     }
 
-    void Camera::Update()
+    void Camera3D::Update()
     {
         //Calculate the new front vector
         glm::vec3 front;
@@ -33,7 +33,7 @@ namespace Engine
         _up = glm::normalize(glm::cross(_right, _front));
     }
 
-    void Camera::ProcessKeyboard(Camera_Movement direction, float deltaTime)
+    void Camera3D::ProcessKeyboard(Camera_Movement direction, float deltaTime)
     {
         float velocity = _movementSpeed * deltaTime;
 
@@ -56,7 +56,7 @@ namespace Engine
             _position -= _up * velocity;
     }
 
-    void Camera::ProcessMouseMovement(float xOffset, float yOffset)
+    void Camera3D::ProcessMouseMovement(float xOffset, float yOffset)
     {
         xOffset *= _mouseSensitivity;
         yOffset *= _mouseSensitivity;
@@ -81,37 +81,37 @@ namespace Engine
         Update();
     }
 
-    glm::vec3 Camera::GetPosition()
+    glm::vec3 Camera3D::GetPosition()
     {
         return _position;
     }
 
-    glm::vec3 Camera::GetUp()
+    glm::vec3 Camera3D::GetUp()
     {
         return _up;
     }
 
-    glm::vec3 Camera::GetFront()
+    glm::vec3 Camera3D::GetFront()
     {
         return _front;
     }
 
-    float Camera::GetYaw()
+    float Camera3D::GetYaw()
     {
         return _yaw;
     }
 
-    float Camera::GetPitch()
+    float Camera3D::GetPitch()
     {
         return _pitch;
     }
 
-    void Camera::SetPosition(const glm::vec3& position)
+    void Camera3D::SetPosition(const glm::vec3& position)
     {
         _position = position;
     }
 
-    void Camera::InvertPitch()
+    void Camera3D::InvertPitch()
     {
         _pitch = -_pitch;
     }

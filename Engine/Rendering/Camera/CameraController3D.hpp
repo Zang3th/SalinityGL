@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Window.hpp"
-#include "Camera.hpp"
+#include "Camera3D.hpp"
 #include "Types.hpp"
 
 namespace Engine

@@ -98,7 +98,7 @@ namespace Engine
         glm::mat4 model(1.0f);
 
         //Get view matrix
-        glm::mat4 view = Camera::GetViewMatrix();
+        glm::mat4 view = Camera3D::GetViewMatrix();
 
         //Set upper 3x3 part of the model matrix to the transpose of the view matrix to negate any rotation. Then apply transformations
         model = glm::translate(model, particle->GetPosition());

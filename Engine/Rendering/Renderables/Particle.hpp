@@ -3,8 +3,9 @@
 #include "glm.hpp"
 #include "Types.hpp"
 #include "AppSettings.hpp"
+#include "Camera3D.hpp"
+
 #include <cmath>
-#include "Camera.hpp"
 
 namespace Engine
 {

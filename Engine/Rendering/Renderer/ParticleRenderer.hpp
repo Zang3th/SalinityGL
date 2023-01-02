@@ -4,7 +4,7 @@
 #include "Particle.hpp"
 #include "Texture.hpp"
 #include "Shader.hpp"
-#include "Camera.hpp"
+#include "Camera3D.hpp"
 #include "Window.hpp"
 #include "VertexArray.hpp"
 #include "VertexBuffer.hpp"

@@ -84,28 +84,30 @@ namespace GW
                     ImGui::Text("Application average %.2f ms/frame (%.1f FPS)", Engine::Window::GetDeltaTime() * 1000.0f, Engine::Window::GetFps());
                     ImGui::PlotVar("", (float)Engine::Window::GetDeltaTime() * 1000.0f, 0.0f, 30.0f);
 
+                    auto renderStats = Engine::RenderManager::GetStats();
+
                     //Render stats
                     ImGui::NewLine();
                     ImGui::Separator();
-                    ImGui::Text("Drawcalls total: %d", Engine::Renderer::GetDrawcalls());
-                    ImGui::Text("Vertices  total: %d", Engine::Renderer::GetDrawnVertices());
+                    ImGui::Text("DrawCalls:      %d", renderStats->drawCalls);
+                    ImGui::Text("DrawnVertices:  %d", renderStats->drawnVertices);
                     ImGui::Separator();
                     ImGui::NewLine();
                     ImGui::Separator();
-                    ImGui::Text("Model    render passes: %d", Engine::Renderer::GetModelRenderPasses());
+                    /*ImGui::Text("Model    render passes: %d", Engine::Renderer::GetModelRenderPasses());
                     ImGui::Text("Terrain  render passes: %d", Engine::Renderer::GetTerrainRenderPasses());
                     ImGui::Text("Water    render passes: %d", Engine::Renderer::GetWaterRenderPasses());
                     ImGui::Text("Particle render passes: %d", Engine::Renderer::GetParticleRenderPasses());
                     ImGui::Text("Sprite   render passes: %d", Engine::Renderer::GetSpriteRenderPasses());
-                    ImGui::Text("Cubemap  render passes: %d", Engine::Renderer::GetCubemapRenderPasses());
+                    ImGui::Text("Cubemap  render passes: %d", Engine::Renderer::GetCubemapRenderPasses());*/
                     ImGui::Separator();
 
                     //Camera stats
                     ImGui::NewLine();
                     ImGui::Separator();
-                    ImGui::Text("Camera-Position:  (%.1f, %.1f, %.1f)", Engine::Camera::GetPosition().x, Engine::Camera::GetPosition().y, Engine::Camera::GetPosition().z);
-                    ImGui::Text("Camera-Front:     (%.1f, %.1f, %.1f)", Engine::Camera::GetFront().x, Engine::Camera::GetFront().y, Engine::Camera::GetFront().z);
-                    ImGui::Text("Camera-Yaw/Pitch: (%.2f / %.2f)", Engine::Camera::GetYaw(), Engine::Camera::GetPitch());
+                    ImGui::Text("Camera-Position:   ( %.1f, %.1f, %.1f )", Engine::Camera3D::GetPosition().x, Engine::Camera3D::GetPosition().y, Engine::Camera3D::GetPosition().z);
+                    ImGui::Text("Camera-Front:      ( %.1f, %.1f, %.1f )", Engine::Camera3D::GetFront().x, Engine::Camera3D::GetFront().y, Engine::Camera3D::GetFront().z);
+                    ImGui::Text("Camera-Yaw, Pitch: ( %.2f, %.2f )", Engine::Camera3D::GetYaw(), Engine::Camera3D::GetPitch());
                     ImGui::Separator();
 
                     //Profiling/Timing-Results

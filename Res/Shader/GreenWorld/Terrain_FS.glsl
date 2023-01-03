@@ -91,5 +91,5 @@ void main()
     texColor.b = texColor.b * 0.6 + texColorMap.b * 0.8;
     texColor   = normalize(texColor);
 
-    fragColor   = vec4(calculateLight(texColor.rgb), texColor.a);
+    fragColor  = vec4(calculateLight(texColor.rgb), texColor.a);
 }

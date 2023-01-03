@@ -1,12 +1,15 @@
 #include "GreenWorldApp.hpp"
 
 //Initialize extern settings
-const Engine::int32  Engine::WINDOW_WIDTH        = 1920;
-const Engine::int32  Engine::WINDOW_HEIGHT       = 1080;
-const Engine::uint32 Engine::PLANE_SIZE          = 128;
-      bool           Engine::WIREFRAME_RENDERING = false;
-      bool           Engine::DEBUG_SPRITES       = false;
-const float          Engine::GRAVITY             = -20.0f;
+const Engine::int32  Engine::WINDOW_WIDTH       = 1920;
+const Engine::int32  Engine::WINDOW_HEIGHT      = 1080;
+const Engine::uint32 Engine::PLANE_SIZE         = 128;
+const float          Engine::GRAVITY            = -20.0f;
+
+bool                Engine::WIREFRAME_RENDERING = false;
+bool                Engine::DEBUG_SPRITES       = false;
+Engine::RenderStats Engine::RENDER_STATS;
+
 
 namespace GW
 {
@@ -27,8 +30,7 @@ namespace GW
         //Textures
         Engine::ResourceManager::LoadTextureAtlasFromFile("ParticleTextureAtlas", "../Res/Assets/Textures/GreenWorld/SmokeAtlas.png", 8);
         Engine::ResourceManager::LoadTextureFromFile("GrassTexture", "../Res/Assets/Textures/GreenWorld/Grass.jpg");
-        Engine::ResourceManager::LoadTextureFromFile("HeightMap", "../Res/Assets/Textures/GreenWorld/Heightmap128.bmp");
-        Engine::ResourceManager::LoadTextureFromFile("ColorMap", "../Res/Assets/Textures/GreenWorld/Colormap128.png");
+        Engine::ResourceManager::LoadTextureFromFile("Colormap", "../Res/Assets/Textures/GreenWorld/Colormap128.png");
         Engine::ResourceManager::LoadTextureFromFile("DuDvMap", "../Res/Assets/Textures/GreenWorld/DuDvMap.png");
         Engine::ResourceManager::LoadTextureFromFile("NormalMap", "../Res/Assets/Textures/GreenWorld/WaterNormalMap.png");
     }
@@ -44,9 +46,9 @@ namespace GW
 
         //Create application specific renderers
         _sceneRenderer  = Engine::RenderManager::AddScene(_nearPlane, _farPlane, _lightPos, _lightCol);
-        /*_spriteRenderer = Engine::RenderManager::AddSprites();
+        //_spriteRenderer = Engine::RenderManager::AddSprites();
         _shadowRenderer = Engine::RenderManager::AddShadows(8192, _lightPos, "ShadowCreateShader");
-        _waterRenderer  = Engine::RenderManager::AddWater(0.025f);
+        /*_waterRenderer  = Engine::RenderManager::AddWater(0.025f);
         _smokeRenderer  = Engine::RenderManager::AddParticles
         (
             glm::vec3(87.0f, 34.0f, 92.5f),                                 //Spawn point
@@ -81,20 +83,21 @@ namespace GW
         };
         _sceneRenderer->AddCubemap(faces, "CubemapShader");
 
-        /*//Terrain
-        _sceneRenderer.AddTerrain
+        //Terrain
+        _sceneRenderer->AddTerrain
         (
             Engine::PLANE_SIZE,                                             //Length in x direction
             Engine::PLANE_SIZE,                                             //Length in z direction
             1.0f,                                                           //Tile size
             glm::vec3(0.0f, -2.7f, 0.0f),                                   //Position
+            _shadowRenderer,                                                //Shadow renderer
+            "../Res/Assets/Textures/GreenWorld/Heightmap128.bmp",           //Heightmap filepath
             "GrassTexture",                                                 //Main texture
-            "HeightMap",                                                    //Height map
-            "ColorMap",                                                     //Texture for coloring
+            "Colormap",                                                     //Texture for coloring
             "TerrainShader"                                                 //Shader
         );
 
-        //Water
+        /*//Water
         _sceneRenderer.AddWater
         (
             Engine::PLANE_SIZE - 112,                                       //Length in x direction
@@ -211,13 +214,13 @@ namespace GW
             _interface->PrepareFrame();
         }
 
-        /*{
+        {
             Engine::PROFILE_SCOPE("Render shadows");
 
             Engine::RenderManager::RenderShadows();
         }
 
-        {
+        /*{
             Engine::PROFILE_SCOPE("Render water");
 
             Engine::RenderManager::RenderWater();

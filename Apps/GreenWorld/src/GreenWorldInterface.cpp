@@ -85,20 +85,19 @@ namespace GW
                     ImGui::PlotVar("", (float)Engine::Window::GetDeltaTime() * 1000.0f, 0.0f, 30.0f);
 
                     //Render stats
-                    auto renderStats = Engine::RenderManager::GetStats();
                     ImGui::NewLine();
                     ImGui::Separator();
-                    ImGui::Text("DrawCalls:      %d", renderStats->drawCalls);
-                    ImGui::Text("DrawnVertices:  %d", renderStats->drawnVertices);
+                    ImGui::Text("DrawCalls:      %d", Engine::RENDER_STATS.drawCalls);
+                    ImGui::Text("DrawnVertices:  %d", Engine::RENDER_STATS.drawnVertices);
                     ImGui::Separator();
                     ImGui::NewLine();
                     ImGui::Separator();
-                    /*ImGui::Text("Model    render passes: %d", Engine::Renderer::GetModelRenderPasses());
-                    ImGui::Text("Terrain  render passes: %d", Engine::Renderer::GetTerrainRenderPasses());
-                    ImGui::Text("Water    render passes: %d", Engine::Renderer::GetWaterRenderPasses());
-                    ImGui::Text("Particle render passes: %d", Engine::Renderer::GetParticleRenderPasses());
-                    ImGui::Text("Sprite   render passes: %d", Engine::Renderer::GetSpriteRenderPasses());*/
-                    ImGui::Text("Cubemap passes: %d", renderStats->cubemapPasses);
+                    //ImGui::Text("Model    render passes: %d", Engine::Renderer::GetModelRenderPasses());
+                    ImGui::Text("Terrain  render passes: %d", Engine::RENDER_STATS.terrainPasses);
+                    //ImGui::Text("Water    render passes: %d", Engine::Renderer::GetWaterRenderPasses());
+                    //ImGui::Text("Particle render passes: %d", Engine::Renderer::GetParticleRenderPasses());
+                    //ImGui::Text("Sprite   render passes: %d", Engine::Renderer::GetSpriteRenderPasses());
+                    ImGui::Text("Cubemap passes: %d", Engine::RENDER_STATS.cubemapPasses);
                     ImGui::Separator();
 
                     //Camera stats

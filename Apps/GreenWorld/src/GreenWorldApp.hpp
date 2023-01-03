@@ -25,7 +25,8 @@ namespace GW
             /*const float                             _waveSpeed     = 0.025f;
                   float                             _moveFactor    = 0.0f;*/
 
-            Engine::SceneRenderer*                  _sceneRenderer = nullptr;
+            Engine::SceneRenderer*                  _sceneRenderer  = nullptr;
+            Engine::ShadowRenderer*                 _shadowRenderer = nullptr;
             Engine::Scope<GreenWorldInterface>      _interface;
     
             void LoadResources() final;

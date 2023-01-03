@@ -4,7 +4,7 @@
 
 namespace GW
 {
-    class GreenWorldInterface : public Engine::Interface
+    class GreenWorldInterface final : public Engine::Interface
     {
         private:
             ImVec2           _sidebarPos,     _sidebarSize;

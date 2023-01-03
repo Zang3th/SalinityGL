@@ -43,8 +43,8 @@ namespace Engine
     {
         //Render scene to shadow framebuffer
         StartFrame();
-        Renderer::ClearBuffers();
-        Renderer::FlushModelBuffer(shadowShader);
+        //Renderer::ClearBuffers();
+        //Renderer::FlushModelBuffer(shadowShader);
         EndFrame();
     }
 

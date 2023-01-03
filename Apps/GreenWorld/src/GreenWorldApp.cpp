@@ -40,11 +40,11 @@ namespace GW
         Engine::Window::Init("GreenWorld");
         Engine::Camera3D::Init(glm::vec3(-75.0f, 74.0f, 70.0f), 0.4f, -23.0f, 25.0f);
         Engine::CameraController3D::Init();
-        /*Engine::RenderManager::Init();*/
+        Engine::RenderManager::Init();
 
         //Create application specific renderers
-        /*_sceneRenderer  = Engine::RenderManager::AddScene(_nearPlane, _farPlane, _lightPos, _lightCol);
-        _spriteRenderer = Engine::RenderManager::AddSprites();
+        _sceneRenderer  = Engine::RenderManager::AddScene(_nearPlane, _farPlane, _lightPos, _lightCol);
+        /*_spriteRenderer = Engine::RenderManager::AddSprites();
         _shadowRenderer = Engine::RenderManager::AddShadows(8192, _lightPos, "ShadowCreateShader");
         _waterRenderer  = Engine::RenderManager::AddWater(0.025f);
         _smokeRenderer  = Engine::RenderManager::AddParticles
@@ -67,7 +67,7 @@ namespace GW
         LoadResources();
     }
 
-    /*void GreenWorldApp::AddObjects()
+    void GreenWorldApp::AddObjects()
     {
         //Cubemap
         const std::array<const char*, 6> faces
@@ -79,9 +79,9 @@ namespace GW
             "../Res/Assets/Textures/GreenWorld/Cubemap/Graycloud_zp.jpg",   //Front
             "../Res/Assets/Textures/GreenWorld/Cubemap/Graycloud_zn.jpg"    //Back
         };
-        _sceneRenderer.AddCubemap(_faces, "CubemapShader");
+        _sceneRenderer->AddCubemap(faces, "CubemapShader");
 
-        //Terrain
+        /*//Terrain
         _sceneRenderer.AddTerrain
         (
             Engine::PLANE_SIZE,                                             //Length in x direction
@@ -135,8 +135,8 @@ namespace GW
             glm::vec3(0.0f),                                                //Rotation
             "../Res/Assets/Models/GreenWorld/Tree",                         //Path to obj file
             "ModelShader"                                                   //Shader
-        );
-    }*/
+        );*/
+    }
 
     /*void GreenWorldApp::AddSprites()
     {
@@ -182,14 +182,14 @@ namespace GW
     GreenWorldApp::GreenWorldApp()
     {
         InitModules();
-        /*AddObjects();
-        AddSprites();*/
+        AddObjects();
+        /*AddSprites();*/
     }
 
     GreenWorldApp::~GreenWorldApp()
     {
         Engine::ResourceManager::CleanUp();
-        //Engine::RenderManager::CleanUp();
+        Engine::RenderManager::CleanUp();
     }
 
     void GreenWorldApp::Update()
@@ -221,17 +221,17 @@ namespace GW
             Engine::PROFILE_SCOPE("Render water");
 
             Engine::RenderManager::RenderWater();
-        }
+        }*/
 
         {
             Engine::PROFILE_SCOPE("Render scene");
 
             Engine::RenderManager::RenderScene();
-            Engine::RenderManager::RenderParticles();
+            /*Engine::RenderManager::RenderParticles();
 
             if(Engine::DEBUG_SPRITES)
-                Engine::RenderManager::RenderSprites();
-        }*/
+                Engine::RenderManager::RenderSprites();*/
+        }
 
         {
             Engine::PROFILE_SCOPE("Render UI");

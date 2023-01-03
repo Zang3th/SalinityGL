@@ -59,7 +59,7 @@ namespace Engine
     {
         //Render to reflection framebuffer
         StartReflectionFrame();
-        Renderer::ClearBuffers();
+        //Renderer::ClearBuffers();
 
         //Move camera under the water
         glm::vec3 camPos = Camera3D::GetPosition();
@@ -74,8 +74,8 @@ namespace Engine
         modelShader->Unbind();
 
         //Render scene
-        Renderer::FlushModelBuffer(modelShader);
-        Renderer::FlushCubemap();
+        //Renderer::FlushModelBuffer(modelShader);
+        //Renderer::FlushCubemap();
 
         //Reset camera
         Camera3D::SetPosition(camPos);
@@ -89,7 +89,7 @@ namespace Engine
     {
         //Render to refraction framebuffer
         StartRefractionFrame();
-        Renderer::ClearBuffers();
+        //Renderer::ClearBuffers();
 
         //Set shader variable(s)
         terrainShader->Bind();
@@ -97,7 +97,7 @@ namespace Engine
         terrainShader->Unbind();
 
         //Render scene
-        Renderer::FlushTerrain(terrainShader);
+        //Renderer::FlushTerrain(terrainShader);
 
         EndRefractionFrame();
     }

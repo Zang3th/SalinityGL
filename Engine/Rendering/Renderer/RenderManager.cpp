@@ -2,10 +2,19 @@
 
 namespace Engine
 {
-    // ----- Private -----
-
-
     // ----- Public -----
+
+    void RenderManager::Init()
+    {
+        _rendererStorage.clear();
+        _rendererStorage.reserve(5);
+    }
+
+    void RenderManager::CleanUp()
+    {
+        for(auto const& renderer : _rendererStorage)
+            delete renderer;
+    }
 
     void RenderManager::PrepareFrame()
     {
@@ -21,5 +30,18 @@ namespace Engine
     RenderStats* RenderManager::GetStats()
     {
         return &_renderStats;
+    }
+
+    SceneRenderer* RenderManager::AddScene(const float nearPlane, const float farPlane, const glm::vec3 lightPos, const glm::vec3 lightCol)
+    {
+        _sceneRenderer = new SceneRenderer(nearPlane, farPlane, lightPos, lightCol);
+        _rendererStorage.push_back(_sceneRenderer);
+
+        return _sceneRenderer;
+    }
+
+    void RenderManager::RenderScene()
+    {
+        _sceneRenderer->Flush();
     }
 }

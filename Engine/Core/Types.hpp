@@ -39,11 +39,13 @@ namespace Engine
     {
         uint32 drawCalls     = 0;
         uint32 drawnVertices = 0;
+        uint32 cubemapPasses = 0;
 
         void Reset()
         {
             drawCalls     = 0;
             drawnVertices = 0;
+            cubemapPasses = 0;
         }
     };
 }

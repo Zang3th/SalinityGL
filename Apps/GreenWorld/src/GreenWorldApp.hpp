@@ -8,7 +8,7 @@
 
 namespace GW
 {
-    class GreenWorldApp : public Engine::App
+    class GreenWorldApp final : public Engine::App
     {
         private:
             /*Engine::Scope<Engine::Audio>            _audio;
@@ -17,25 +17,27 @@ namespace GW
             Engine::Scope<Engine::Sprite>           _shadowSprite, _reflectSprite, _refractSprite, _refractDepthSprite;
             Engine::Scope<Engine::WaterRenderer>    _waterRenderer;
             Engine::Scope<Engine::ParticleRenderer> _smokeRenderer;*/
-            Engine::Scope<GreenWorldInterface>      _interface;
 
-            /*const glm::vec3                         _lightPosition = glm::vec3(150.0f, 100.0f, -30.0f);
-            const glm::vec3                         _lightColor    = glm::vec3(1.0f, 1.0f, 1.0f);
-            const float                             _nearPlane     = 2.0f;
-            const float                             _farPlane      = 300.0f;
-            const float                             _waveSpeed     = 0.025f;
+            const float                             _nearPlane = 2.0f;
+            const float                             _farPlane  = 300.0f;
+            const glm::vec3                         _lightPos  = glm::vec3(150.0f, 100.0f, -30.0f);
+            const glm::vec3                         _lightCol  = glm::vec3(1.0f, 1.0f, 1.0f);
+            /*const float                             _waveSpeed     = 0.025f;
                   float                             _moveFactor    = 0.0f;*/
+
+            Engine::SceneRenderer*                  _sceneRenderer = nullptr;
+            Engine::Scope<GreenWorldInterface>      _interface;
     
             void LoadResources() final;
             void InitModules()   final;
-            /*void CreateModels();
-            void CreateParticles();
+            void AddObjects();
+            /*void CreateParticles();
             void CreateCubemap();
             void CreateSprites();*/
 
         public:
             GreenWorldApp();
-            ~GreenWorldApp();
+            ~GreenWorldApp() final;
             void Update() final;
     };
 }

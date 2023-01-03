@@ -84,9 +84,8 @@ namespace GW
                     ImGui::Text("Application average %.2f ms/frame (%.1f FPS)", Engine::Window::GetDeltaTime() * 1000.0f, Engine::Window::GetFps());
                     ImGui::PlotVar("", (float)Engine::Window::GetDeltaTime() * 1000.0f, 0.0f, 30.0f);
 
-                    auto renderStats = Engine::RenderManager::GetStats();
-
                     //Render stats
+                    auto renderStats = Engine::RenderManager::GetStats();
                     ImGui::NewLine();
                     ImGui::Separator();
                     ImGui::Text("DrawCalls:      %d", renderStats->drawCalls);
@@ -98,8 +97,8 @@ namespace GW
                     ImGui::Text("Terrain  render passes: %d", Engine::Renderer::GetTerrainRenderPasses());
                     ImGui::Text("Water    render passes: %d", Engine::Renderer::GetWaterRenderPasses());
                     ImGui::Text("Particle render passes: %d", Engine::Renderer::GetParticleRenderPasses());
-                    ImGui::Text("Sprite   render passes: %d", Engine::Renderer::GetSpriteRenderPasses());
-                    ImGui::Text("Cubemap  render passes: %d", Engine::Renderer::GetCubemapRenderPasses());*/
+                    ImGui::Text("Sprite   render passes: %d", Engine::Renderer::GetSpriteRenderPasses());*/
+                    ImGui::Text("Cubemap passes: %d", renderStats->cubemapPasses);
                     ImGui::Separator();
 
                     //Camera stats

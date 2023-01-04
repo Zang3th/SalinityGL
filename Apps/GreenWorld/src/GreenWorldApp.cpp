@@ -90,7 +90,7 @@ namespace GW
             Engine::PLANE_SIZE,                                             //Length in z direction
             1.0f,                                                           //Tile size
             glm::vec3(0.0f, -2.7f, 0.0f),                                   //Position
-            _shadowRenderer,                                                //Shadow renderer
+            _shadowRenderer->GetDepthTexture(),                             //Depth texture
             "../Res/Assets/Textures/GreenWorld/Heightmap128.bmp",           //Heightmap filepath
             "GrassTexture",                                                 //Main texture
             "Colormap",                                                     //Texture for coloring
@@ -210,7 +210,6 @@ namespace GW
 
             Engine::Window::CalcFrametime();
             Engine::RenderManager::PrepareFrame();
-            Engine::RenderManager::ClearBuffers();
             _interface->PrepareFrame();
         }
 

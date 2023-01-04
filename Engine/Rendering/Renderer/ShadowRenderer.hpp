@@ -8,24 +8,27 @@
 #include "ResourceManager.hpp"
 #include "Renderer.hpp"
 #include "GLRenderSettings.hpp"
+#include "SceneRenderer.hpp"
 
 namespace Engine
 {
-    class ShadowRenderer
+    class ShadowRenderer final : public Renderer
     {
+        friend class RenderManager;
+
         private:
             glm::mat4           _orthoProjection, _lightView, _lightProjection;
             Scope<FrameBuffer>  _fbo;
             uint32              _shadowWidth;
             uint32              _shadowHeight;
+            Shader*             _shadowShader;
 
+            ShadowRenderer(uint32 width, uint32 height, glm::vec3 lightPos, Shader* shadowShader);
             void StartFrame();
             void EndFrame();
 
         public:
-            ShadowRenderer(uint32 width, uint32 height, glm::vec3 lightPos);
-            void RenderToFramebuffer(Shader* shadowShader);
-
+            void Flush(Renderer* sceneRenderer) final;
             [[nodiscard]] Texture*  GetDepthTexture()    const;
             [[nodiscard]] glm::mat4 GetLightProjection() const;
     };

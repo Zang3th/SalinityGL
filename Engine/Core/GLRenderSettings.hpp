@@ -26,5 +26,7 @@ namespace Engine
             static void SetDepthFunc(GLushort func);
             static void SetBlendFunc(GLushort func);
             static void SetCullFace(GLushort face);
+
+            static void ClearBuffers();
     };
 }

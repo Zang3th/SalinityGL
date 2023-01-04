@@ -9,7 +9,9 @@
 #include "AppSettings.hpp"
 #include "Camera3D.hpp"
 #include "Model.hpp"
-#include "ModelManager.hpp"
+#include "Heightmap.hpp"
+#include "MeshCreator.hpp"
+#include "ShadowRenderer.hpp"
 
 #include <array>
 #include <string>
@@ -34,10 +36,11 @@ namespace Engine
             SceneRenderer(float nearPlane, float farPlane, glm::vec3 lightPos, glm::vec3 lightCol);
             ~SceneRenderer() final;
             void FlushCubemap();
-            void FlushTerrain();
+            void FlushTerrain(Renderer* shadowRenderer);
 
         public:
-            void Flush() final;
+            void Flush(Renderer* shadowRenderer) final;
+            void FlushModels(Shader* shader);
             void AddCubemap(const std::array<const char*, 6>& faces, const std::string& shader);
             void AddTerrain
             (
@@ -45,7 +48,7 @@ namespace Engine
                 uint32             z,
                 float              tileSize,
                 glm::vec3          position,
-                ShadowRenderer*    shadowRenderer,
+                Texture*           depthTexture,
                 const std::string& heightmapFilepath,
                 const std::string& texture,
                 const std::string& colormap,

@@ -6,6 +6,6 @@ namespace Engine
     {
         public:
             virtual ~Renderer() = 0;
-            virtual void Flush() = 0;
+            virtual void Flush(Renderer* renderer) = 0;
     };
 }

@@ -29,7 +29,7 @@ namespace Engine
         }
     }
 
-    void SceneRenderer::FlushTerrain()
+    void SceneRenderer::FlushTerrain(Renderer* shadowRenderer)
     {
         //Bind shader
         _terrainShader->Bind();
@@ -52,7 +52,7 @@ namespace Engine
         _terrainShader->SetUniformVec3f("viewPos", Camera3D::GetPosition());
         _terrainShader->SetUniformVec3f("lightPos", _lightPos);
         _terrainShader->SetUniformVec3f("lightColor", _lightCol);
-        //_terrainShader->SetUniformMat4f("lightProjection", _lightProj);
+        _terrainShader->SetUniformMat4f("lightProjection", ((ShadowRenderer*)shadowRenderer)->GetLightProjection());
         _terrainShader->SetUniform1i("diffuseTexture", 0);
         _terrainShader->SetUniform1i("colorMap", 1);
         _terrainShader->SetUniform1i("shadowMap", 2);
@@ -80,7 +80,7 @@ namespace Engine
 
     // ----- Public -----
 
-    void SceneRenderer::Flush()
+    void SceneRenderer::Flush(Renderer* shadowRenderer)
     {
         //Check for Wireframe-Mode
         if(WIREFRAME_RENDERING)
@@ -88,8 +88,13 @@ namespace Engine
         else
             GLRenderSettings::DisableWireframe();
 
-        FlushTerrain();
         FlushCubemap();
+        FlushTerrain(shadowRenderer);
+    }
+
+    void SceneRenderer::FlushModels(Shader* shader)
+    {
+
     }
 
     void SceneRenderer::AddCubemap(const std::array<const char*, 6>& faces, const std::string& shader)
@@ -103,7 +108,7 @@ namespace Engine
             uint32             z,
             float              tileSize,
             glm::vec3          position,
-            ShadowRenderer*    shadowRenderer,
+            Texture*           depthTexture,
             const std::string& heightmapFilepath,
             const std::string& texture,
             const std::string& colormap,
@@ -125,7 +130,7 @@ namespace Engine
         //Add textures
         _terrainModel->AddTexture(ResourceManager::GetTexture(texture));
         _terrainModel->AddTexture(ResourceManager::GetTexture(colormap));
-        _terrainModel->AddTexture(shadowRenderer->GetDepthTexture());
+        _terrainModel->AddTexture(depthTexture);
 
         //Save shader
         _terrainShader = ResourceManager::GetShader(shader);

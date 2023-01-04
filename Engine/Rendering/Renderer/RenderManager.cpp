@@ -14,19 +14,12 @@ namespace Engine
     {
         for(auto const& renderer : _rendererStorage)
             delete renderer;
-
-        delete _shadowRenderer;
     }
 
     void RenderManager::PrepareFrame()
     {
         RENDER_STATS.Reset();
-    }
-
-    void RenderManager::ClearBuffers()
-    {
-        GLCall(glClearColor(0.0, 0.0, 0.0, 1.0));
-        GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
+        GLRenderSettings::ClearBuffers();
     }
 
     SceneRenderer* RenderManager::AddScene(const float nearPlane, const float farPlane, const glm::vec3 lightPos, const glm::vec3 lightCol)
@@ -40,17 +33,18 @@ namespace Engine
     ShadowRenderer* RenderManager::AddShadows(uint32 resolution, glm::vec3 lightPos, const std::string& shader)
     {
         _shadowRenderer = new ShadowRenderer(resolution, resolution, lightPos, ResourceManager::GetShader(shader));
+        _rendererStorage.push_back(_shadowRenderer);
 
         return _shadowRenderer;
     }
 
     void RenderManager::RenderScene()
     {
-        _sceneRenderer->Flush();
+        _sceneRenderer->Flush((Renderer*)_shadowRenderer);
     }
 
     void RenderManager::RenderShadows()
     {
-        _shadowRenderer->RenderToFramebuffer();
+        _shadowRenderer->Flush((Renderer*)_sceneRenderer);
     }
 }

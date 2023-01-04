@@ -9,7 +9,7 @@ namespace Engine
           _perspProj(glm::perspective(glm::radians(45.0f), (float)WINDOW_WIDTH/(float)WINDOW_HEIGHT, _nearPlane, _farPlane)),
           _terrainModel(nullptr), _terrainShader(nullptr)
     {
-
+        Logger::Info("Created", __func__);
     }
 
     SceneRenderer::~SceneRenderer()

@@ -23,6 +23,8 @@ namespace Engine
         depthTexture->AddBorderColor();
 
         _fbo->Unbind();
+
+        Logger::Info("Created", __func__);
     }
 
     void ShadowRenderer::StartFrame()

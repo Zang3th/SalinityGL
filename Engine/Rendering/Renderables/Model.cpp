@@ -101,11 +101,11 @@ namespace Engine
         SetModelMatrix();
     }
 
-    void Model::ChangeRotation(const float rotX, const float rotY, const float rotZ)
+    void Model::ChangeRotation(const glm::vec3& rotation)
     {
-        _rotationX += rotX;
-        _rotationY += rotY;
-        _rotationZ += rotZ;
+        _rotationX += rotation.x;
+        _rotationY += rotation.y;
+        _rotationZ += rotation.z;
         SetModelMatrix();
     }
 

@@ -29,7 +29,7 @@ namespace Engine
             void                SetModelMatrix();
 
         public:
-            Sprite(Texture* texture, Shader* shader, glm::vec3 color);
+            Sprite(Texture* texture, Shader* shader, const glm::vec3& color);
 
             [[nodiscard]] uint32 Draw(const glm::mat4& projMatrix) const;
 

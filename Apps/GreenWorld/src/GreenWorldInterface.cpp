@@ -92,7 +92,7 @@ namespace GW
                     ImGui::Separator();
                     ImGui::NewLine();
                     ImGui::Separator();
-                    //ImGui::Text("Model    render passes: %d", Engine::Renderer::GetModelRenderPasses());
+                    ImGui::Text("Model   passes: %d", Engine::RENDER_STATS.modelPasses);
                     ImGui::Text("Terrain passes: %d", Engine::RENDER_STATS.terrainPasses);
                     //ImGui::Text("Water    render passes: %d", Engine::Renderer::GetWaterRenderPasses());
                     //ImGui::Text("Particle render passes: %d", Engine::Renderer::GetParticleRenderPasses());

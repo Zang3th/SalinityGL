@@ -4,10 +4,10 @@ namespace Engine
 {
     // ----- Private -----
 
-    SceneRenderer::SceneRenderer(const float nearPlane, const float farPlane, const glm::vec3 lightPos, const glm::vec3 lightCol)
+    SceneRenderer::SceneRenderer(const float nearPlane, const float farPlane, const glm::vec3& lightPos, const glm::vec3& lightCol)
         : _nearPlane(nearPlane), _farPlane(farPlane), _lightPos(lightPos), _lightCol(lightCol),
           _perspProj(glm::perspective(glm::radians(45.0f), (float)WINDOW_WIDTH/(float)WINDOW_HEIGHT, _nearPlane, _farPlane)),
-          _terrainModel(nullptr), _terrainShader(nullptr)
+          _terrainModel(nullptr), _terrainShader(nullptr), _modelShader(nullptr), _waterShader(nullptr)
     {
         Logger::Info("Created", __func__);
     }
@@ -16,6 +16,8 @@ namespace Engine
     {
         for(auto const& model : _modelStorage)
             delete model;
+
+        delete _terrainModel;
     }
 
     void SceneRenderer::FlushCubemap()
@@ -29,7 +31,7 @@ namespace Engine
         }
     }
 
-    void SceneRenderer::FlushTerrain(Renderer* shadowRenderer)
+    void SceneRenderer::FlushTerrain()
     {
         //Bind shader
         _terrainShader->Bind();
@@ -52,7 +54,7 @@ namespace Engine
         _terrainShader->SetUniformVec3f("viewPos", Camera3D::GetPosition());
         _terrainShader->SetUniformVec3f("lightPos", _lightPos);
         _terrainShader->SetUniformVec3f("lightColor", _lightCol);
-        _terrainShader->SetUniformMat4f("lightProjection", ((ShadowRenderer*)shadowRenderer)->GetLightProjection());
+        _terrainShader->SetUniformMat4f("lightProjection", _lightProj);
         _terrainShader->SetUniform1i("diffuseTexture", 0);
         _terrainShader->SetUniform1i("colorMap", 1);
         _terrainShader->SetUniform1i("shadowMap", 2);
@@ -78,9 +80,70 @@ namespace Engine
         RENDER_STATS.terrainPasses++;
     }
 
+    void SceneRenderer::FlushModel(Model* model, Shader* shader)
+    {
+        //Bind shader
+        shader->Bind();
+
+        //Get textures and bind them
+        uint8_t slot = 0;
+        for(const auto& tex : *model->GetTextures())
+        {
+            tex->BindToSlot(slot++);
+        }
+
+        //Bind buffers and get vertice count
+        model->BindBuffers();
+        uint32 verticeCount = model->GetVerticeCount();
+
+        //Set uniforms
+        shader->SetUniformMat4f("view", Camera3D::GetViewMatrix());
+        shader->SetUniformMat4f("model", model->GetModelMatrix());
+        shader->SetUniformMat4f("projection", _perspProj);
+        shader->SetUniformVec3f("viewPos", Camera3D::GetPosition());
+        shader->SetUniformVec3f("lightPos", _lightPos);
+        shader->SetUniformVec3f("lightColor", _lightCol);
+        shader->SetUniformMat4f("lightProjection", _lightProj);
+        shader->SetUniform1i("diffuseTexture", 0);
+        shader->SetUniform1i("normalMap", 1);
+        shader->SetUniform1i("shadowMap", 2);
+        shader->SetUniform1i("gotNormalMap", model->GotNormalMap());
+
+        //Render model
+        GLCall(glDrawElements(GL_TRIANGLES, verticeCount, GL_UNSIGNED_INT, nullptr));
+
+        //Unbind buffers
+        model->UnbindBuffers();
+
+        //Unbind textures
+        for(const auto& tex : *model->GetTextures())
+        {
+            tex->Unbind();
+        }
+
+        //Unbind shader
+        shader->Unbind();
+
+        //Save stats
+        RENDER_STATS.drawnVertices += verticeCount;
+        RENDER_STATS.drawCalls++;
+    }
+
     // ----- Public -----
 
-    void SceneRenderer::Flush(Renderer* shadowRenderer)
+    void SceneRenderer::SetDefaultShaders(const std::string& terrainShader, const std::string& modelShader, const std::string& waterShader)
+    {
+        _terrainShader = ResourceManager::GetShader(terrainShader);
+        _modelShader   = ResourceManager::GetShader(modelShader);
+        _waterShader   = ResourceManager::GetShader(waterShader);
+    }
+
+    void SceneRenderer::AddLightProjection(const glm::mat4 &lightProj)
+    {
+        _lightProj = lightProj;
+    }
+
+    void SceneRenderer::Flush(Renderer* renderer)
     {
         //Check for Wireframe-Mode
         if(WIREFRAME_RENDERING)
@@ -88,13 +151,19 @@ namespace Engine
         else
             GLRenderSettings::DisableWireframe();
 
+        FlushTerrain();
+        FlushModels(_modelShader);
         FlushCubemap();
-        FlushTerrain(shadowRenderer);
     }
 
     void SceneRenderer::FlushModels(Shader* shader)
     {
+        for(auto& model : _modelStorage)
+        {
+            FlushModel(model, shader);
+        }
 
+        RENDER_STATS.modelPasses++;
     }
 
     void SceneRenderer::AddCubemap(const std::array<const char*, 6>& faces, const std::string& shader)
@@ -104,15 +173,8 @@ namespace Engine
 
     void SceneRenderer::AddTerrain
     (
-            uint32             x,
-            uint32             z,
-            float              tileSize,
-            glm::vec3          position,
-            Texture*           depthTexture,
-            const std::string& heightmapFilepath,
-            const std::string& texture,
-            const std::string& colormap,
-            const std::string& shader
+        const uint32 x, const uint32 z, const float tileSize, const glm::vec3& position, Texture* depthTexture,
+        const std::string& heightmapFilepath, const std::string& texture, const std::string& colormap
     )
     {
         //Create terrain mesh
@@ -122,7 +184,6 @@ namespace Engine
 
         //Create and store model
         _terrainModel = new Model(&terrainMesh);
-        _modelStorage.push_back(_terrainModel);
 
         //Reposition model
         _terrainModel->ChangePosition(position);
@@ -131,8 +192,27 @@ namespace Engine
         _terrainModel->AddTexture(ResourceManager::GetTexture(texture));
         _terrainModel->AddTexture(ResourceManager::GetTexture(colormap));
         _terrainModel->AddTexture(depthTexture);
+    }
 
-        //Save shader
-        _terrainShader = ResourceManager::GetShader(shader);
+    void SceneRenderer::AddObject
+    (
+        const float size, const glm::vec3& rotation, const glm::vec3& position,
+        Texture* depthTexture, const std::string& objName, const std::string& objFilepath
+    )
+    {
+        //Get meshes out of obj-File
+        std::vector<Mesh> meshes;
+        MeshCreator::CreateFromObj(objName, objFilepath, &meshes);
+
+        //Create models out of meshes and store these
+        for(auto& mesh : meshes)
+        {
+            auto objModel = new Model(&mesh);
+            objModel->AddTexture(depthTexture);
+            objModel->ChangeSize(size);
+            objModel->ChangeRotation(rotation);
+            objModel->ChangePosition(position);
+            _modelStorage.push_back(objModel);
+        }
     }
 }

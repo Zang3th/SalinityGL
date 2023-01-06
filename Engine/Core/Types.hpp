@@ -41,6 +41,7 @@ namespace Engine
         uint32 drawnVertices = 0;
         uint32 cubemapPasses = 0;
         uint32 terrainPasses = 0;
+        uint32 modelPasses   = 0;
 
         void Reset()
         {
@@ -48,6 +49,7 @@ namespace Engine
             drawnVertices = 0;
             cubemapPasses = 0;
             terrainPasses = 0;
+            modelPasses   = 0;
         }
     };
 }

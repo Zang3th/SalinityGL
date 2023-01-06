@@ -24,8 +24,8 @@ namespace Engine
             static void CleanUp();
             static void PrepareFrame();
 
-            static SceneRenderer*  AddScene(float nearPlane, float farPlane, glm::vec3 lightPos, glm::vec3 lightCol);
-            static ShadowRenderer* AddShadows(uint32 resolution, glm::vec3 lightPos, const std::string& shader);
+            static SceneRenderer*  AddScene(float nearPlane, float farPlane, const glm::vec3& lightPos, const glm::vec3& lightCol);
+            static ShadowRenderer* AddShadows(uint32 resolution, const glm::vec3& lightPos);
 
             static void RenderScene();
             static void RenderShadows();

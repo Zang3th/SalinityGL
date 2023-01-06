@@ -8,6 +8,13 @@ namespace Engine
     {
         _rendererStorage.clear();
         _rendererStorage.reserve(5);
+
+        //OpenGL-Rendersettings
+        GLRenderSettings::EnableMultisample();
+        GLRenderSettings::EnableDepthtest();
+        GLRenderSettings::SetDepthFunc(GL_LEQUAL);
+        GLRenderSettings::EnableBlending();
+        GLRenderSettings::SetBlendFunc(GL_ONE_MINUS_SRC_ALPHA);
     }
 
     void RenderManager::CleanUp()
@@ -22,7 +29,7 @@ namespace Engine
         GLRenderSettings::ClearBuffers();
     }
 
-    SceneRenderer* RenderManager::AddScene(const float nearPlane, const float farPlane, const glm::vec3 lightPos, const glm::vec3 lightCol)
+    SceneRenderer* RenderManager::AddScene(const float nearPlane, const float farPlane, const glm::vec3& lightPos, const glm::vec3& lightCol)
     {
         _sceneRenderer = new SceneRenderer(nearPlane, farPlane, lightPos, lightCol);
         _rendererStorage.push_back(_sceneRenderer);
@@ -30,17 +37,18 @@ namespace Engine
         return _sceneRenderer;
     }
 
-    ShadowRenderer* RenderManager::AddShadows(uint32 resolution, glm::vec3 lightPos, const std::string& shader)
+    ShadowRenderer* RenderManager::AddShadows(const uint32 resolution, const glm::vec3& lightPos)
     {
-        _shadowRenderer = new ShadowRenderer(resolution, resolution, lightPos, ResourceManager::GetShader(shader));
+        _shadowRenderer = new ShadowRenderer(resolution, resolution, lightPos);
         _rendererStorage.push_back(_shadowRenderer);
+        _sceneRenderer->AddLightProjection(_shadowRenderer->GetLightProjection());
 
         return _shadowRenderer;
     }
 
     void RenderManager::RenderScene()
     {
-        _sceneRenderer->Flush((Renderer*)_shadowRenderer);
+        _sceneRenderer->Flush(nullptr);
     }
 
     void RenderManager::RenderShadows()

@@ -19,7 +19,7 @@ namespace GW
     {
         //Shader
         Engine::ResourceManager::LoadShader("ShadowCreateShader", "../Res/Shader/GreenWorld/ShadowCreate_VS.glsl", "../Res/Shader/GreenWorld/ShadowCreate_FS.glsl");
-        Engine::ResourceManager::LoadShader("WaterPlaneShader", "../Res/Shader/GreenWorld/WaterPlane_VS.glsl", "../Res/Shader/GreenWorld/WaterPlane_FS.glsl");
+        Engine::ResourceManager::LoadShader("WaterShader", "../Res/Shader/GreenWorld/WaterPlane_VS.glsl", "../Res/Shader/GreenWorld/WaterPlane_FS.glsl");
         Engine::ResourceManager::LoadShader("ModelShader", "../Res/Shader/GreenWorld/Model_VS.glsl", "../Res/Shader/GreenWorld/Model_FS.glsl");
         Engine::ResourceManager::LoadShader("TerrainShader", "../Res/Shader/GreenWorld/Terrain_VS.glsl", "../Res/Shader/GreenWorld/Terrain_FS.glsl");
         Engine::ResourceManager::LoadShader("ParticleShader", "../Res/Shader/GreenWorld/Particle_VS.glsl", "../Res/Shader/GreenWorld/Particle_FS.glsl");
@@ -29,10 +29,10 @@ namespace GW
 
         //Textures
         Engine::ResourceManager::LoadTextureAtlasFromFile("ParticleTextureAtlas", "../Res/Assets/Textures/GreenWorld/SmokeAtlas.png", 8);
-        Engine::ResourceManager::LoadTextureFromFile("GrassTexture", "../Res/Assets/Textures/GreenWorld/Grass.jpg");
-        Engine::ResourceManager::LoadTextureFromFile("Colormap", "../Res/Assets/Textures/GreenWorld/Colormap128.png");
-        Engine::ResourceManager::LoadTextureFromFile("DuDvMap", "../Res/Assets/Textures/GreenWorld/DuDvMap.png");
-        Engine::ResourceManager::LoadTextureFromFile("NormalMap", "../Res/Assets/Textures/GreenWorld/WaterNormalMap.png");
+        Engine::ResourceManager::LoadTextureFromFile("TerrainGrassTexture", "../Res/Assets/Textures/GreenWorld/Grass.jpg");
+        Engine::ResourceManager::LoadTextureFromFile("TerrainColormap", "../Res/Assets/Textures/GreenWorld/Colormap128.png");
+        Engine::ResourceManager::LoadTextureFromFile("WaterDuDvMap", "../Res/Assets/Textures/GreenWorld/DuDvMap.png");
+        Engine::ResourceManager::LoadTextureFromFile("WaterNormalMap", "../Res/Assets/Textures/GreenWorld/WaterNormalMap.png");
     }
 
     void GreenWorldApp::InitModules()
@@ -44,10 +44,13 @@ namespace GW
         Engine::CameraController3D::Init();
         Engine::RenderManager::Init();
 
+        //Load up shaders and textures
+        LoadResources();
+
         //Create application specific renderers
         _sceneRenderer  = Engine::RenderManager::AddScene(_nearPlane, _farPlane, _lightPos, _lightCol);
         //_spriteRenderer = Engine::RenderManager::AddSprites();
-        _shadowRenderer = Engine::RenderManager::AddShadows(8192, _lightPos, "ShadowCreateShader");
+        _shadowRenderer = Engine::RenderManager::AddShadows(8192, _lightPos);
         /*_waterRenderer  = Engine::RenderManager::AddWater(0.025f);
         _smokeRenderer  = Engine::RenderManager::AddParticles
         (
@@ -62,11 +65,12 @@ namespace GW
             "ParticleShader"                                                //Shader
         );*/
 
+        //Set default shaders
+        _sceneRenderer->SetDefaultShaders("TerrainShader", "ModelShader", "WaterShader");
+        _shadowRenderer->SetShader("ShadowCreateShader");
+
         //Create UI
         _interface = Engine::MakeScope<GreenWorldInterface>();
-
-        //Load up shaders and textures
-        LoadResources();
     }
 
     void GreenWorldApp::AddObjects()
@@ -92,9 +96,8 @@ namespace GW
             glm::vec3(0.0f, -2.7f, 0.0f),                                   //Position
             _shadowRenderer->GetDepthTexture(),                             //Depth texture
             "../Res/Assets/Textures/GreenWorld/Heightmap128.bmp",           //Heightmap filepath
-            "GrassTexture",                                                 //Main texture
-            "Colormap",                                                     //Texture for coloring
-            "TerrainShader"                                                 //Shader
+            "TerrainGrassTexture",                                          //Main texture
+            "TerrainColormap"                                               //Texture for coloring
         );
 
         /*//Water
@@ -108,37 +111,40 @@ namespace GW
             "NormalMap",                                                    //Normal map
             _waterRenderer.get(),                                           //Water renderer
             "WaterPlaneShader"                                              //Shader
-        );
+        );*/
 
         //House
-        _sceneRenderer.AddObject
+        _sceneRenderer->AddObject
         (
             1.2f,                                                           //Size
-            glm::vec3(85.0f, 0.45f, 95.0f),                                 //Position
             glm::vec3(0.0f, -70.0f, 0.0f),                                  //Rotation
-            "../Res/Assets/Models/GreenWorld/House",                        //Path to obj file
-            "ModelShader"                                                   //Shader
+            glm::vec3(85.0f, 0.45f, 95.0f),                                 //Position
+            _shadowRenderer->GetDepthTexture(),                             //Depth texture
+            "House",                                                        //Name
+            "../Res/Assets/Models/GreenWorld/House"                         //Path to obj file
         );
 
         //Bridge
-        _sceneRenderer.AddObject
+        _sceneRenderer->AddObject
         (
             1.0f,                                                           //Size
-            glm::vec3(39.0f, -0.45f, 47.0f),                                //Position
             glm::vec3(0.0f),                                                //Rotation
-            "../Res/Assets/Models/GreenWorld/Bridge",                       //Path to obj file
-            "ModelShader"                                                   //Shader
+            glm::vec3(39.0f, -0.45f, 47.0f),                                //Position
+            _shadowRenderer->GetDepthTexture(),                             //Depth texture
+            "Bridge",                                                       //Name
+            "../Res/Assets/Models/GreenWorld/Bridge"                        //Path to obj file
         );
 
         //Tree
-        _sceneRenderer.AddObject
+        _sceneRenderer->AddObject
         (
             1.0f,                                                           //Size
-            glm::vec3(85.0f, 0.3f, 20.0f),                                  //Position
             glm::vec3(0.0f),                                                //Rotation
-            "../Res/Assets/Models/GreenWorld/Tree",                         //Path to obj file
-            "ModelShader"                                                   //Shader
-        );*/
+            glm::vec3(85.0f, 0.3f, 20.0f),                                  //Position
+            _shadowRenderer->GetDepthTexture(),                             //Depth texture
+            "Tree",                                                         //Name
+            "../Res/Assets/Models/GreenWorld/Tree"                          //Path to obj file
+        );
     }
 
     /*void GreenWorldApp::AddSprites()

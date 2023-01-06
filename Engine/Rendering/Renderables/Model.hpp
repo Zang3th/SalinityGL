@@ -41,7 +41,7 @@ namespace Engine
             void BindBuffers() const;
             void UnbindBuffers() const;
             void ChangePosition(const glm::vec3& position);
-            void ChangeRotation(float rotX, float rotY, float rotZ);
+            void ChangeRotation(const glm::vec3& rotation);
             void ChangeSize(float size);
             void AddTexture(Texture* texture);
             [[nodiscard]] const std::vector<Texture*>* GetTextures() const;

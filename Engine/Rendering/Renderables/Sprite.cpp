@@ -53,7 +53,7 @@ namespace Engine
 
     // ----- Public -----
 
-    Sprite::Sprite(Texture* texture, Shader* shader, glm::vec3 color)
+    Sprite::Sprite(Texture* texture, Shader* shader, const glm::vec3& color)
         :   _model(glm::mat4(1.0f)),
             _color(color),
             _texture(texture),

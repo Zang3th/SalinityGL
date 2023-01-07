@@ -39,7 +39,9 @@ namespace Engine
             void FlushModel(Model* model, Shader* shader);
 
         public:
-            void SetDefaultShaders(const std::string& terrainShader, const std::string& modelShader, const std::string& waterShader);
+            void SetTerrainShader(const std::string& terrainShader);
+            void SetModelShader(const std::string& modelShader);
+            void SetWaterShader(const std::string& waterShader);
             void AddLightProjection(const glm::mat4& lightProj);
             void Flush(Renderer* renderer) final;
             void FlushModels(Shader* shader);

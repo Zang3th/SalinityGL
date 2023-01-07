@@ -25,7 +25,7 @@ namespace GW
         Engine::ResourceManager::LoadShader("ParticleShader", "../Res/Shader/GreenWorld/Particle_VS.glsl", "../Res/Shader/GreenWorld/Particle_FS.glsl");
         Engine::ResourceManager::LoadShader("CubemapShader", "../Res/Shader/GreenWorld/Cubemap_VS.glsl", "../Res/Shader/GreenWorld/Cubemap_FS.glsl");
         Engine::ResourceManager::LoadShader("SpriteShader", "../Res/Shader/GreenWorld/Sprite_VS.glsl", "../Res/Shader/GreenWorld/Sprite_FS.glsl");
-        Engine::ResourceManager::LoadShader("SpriteShaderBW", "../Res/Shader/GreenWorld/Sprite_VS.glsl", "../Res/Shader/GreenWorld/SpriteBlackAndWhite_FS.glsl");
+        Engine::ResourceManager::LoadShader("SpriteShaderGreyscale", "../Res/Shader/GreenWorld/Sprite_VS.glsl", "../Res/Shader/GreenWorld/SpriteGreyscale_FS.glsl");
 
         //Textures
         Engine::ResourceManager::LoadTextureAtlasFromFile("ParticleTextureAtlas", "../Res/Assets/Textures/GreenWorld/SmokeAtlas.png", 8);
@@ -49,8 +49,8 @@ namespace GW
 
         //Create application specific renderers
         _sceneRenderer  = Engine::RenderManager::AddScene(_nearPlane, _farPlane, _lightPos, _lightCol);
-        //_spriteRenderer = Engine::RenderManager::AddSprites();
-        _shadowRenderer = Engine::RenderManager::AddShadows(8192, _lightPos);
+        _shadowRenderer = Engine::RenderManager::AddShadows(8192, _lightPos, "ShadowCreateShader");
+        _spriteRenderer = Engine::RenderManager::AddSprites();
         /*_waterRenderer  = Engine::RenderManager::AddWater(0.025f);
         _smokeRenderer  = Engine::RenderManager::AddParticles
         (
@@ -66,8 +66,9 @@ namespace GW
         );*/
 
         //Set default shaders
-        _sceneRenderer->SetDefaultShaders("TerrainShader", "ModelShader", "WaterShader");
-        _shadowRenderer->SetShader("ShadowCreateShader");
+        _sceneRenderer->SetTerrainShader("TerrainShader");
+        _sceneRenderer->SetModelShader("ModelShader");
+        _sceneRenderer->SetWaterShader("WaterShader");
 
         //Create UI
         _interface = Engine::MakeScope<GreenWorldInterface>();
@@ -147,18 +148,18 @@ namespace GW
         );
     }
 
-    /*void GreenWorldApp::AddSprites()
+    void GreenWorldApp::AddSprites()
     {
         //Shadow sprite
-        _spriteRenderer.AddSprite
+        _spriteRenderer->AddSprite
         (
             glm::vec2(200.0f, 200.0f),                                      //Size
             glm::vec2(210.0f, 0.0f),                                        //Position
             _shadowRenderer->GetDepthTexture(),                             //Texture
-            "SpriteShaderGreyscale"                                         //Shader
+            Engine::ResourceManager::GetShader("SpriteShaderGreyscale")     //Shader
         );
 
-        //Reflect sprite
+        /*//Reflect sprite
         _spriteRenderer.AddSprite
         (
             glm::vec2(200.0f, 200.0f),                                      //Size
@@ -183,8 +184,8 @@ namespace GW
             glm::vec2(810.0f, 0.0f),                                        //Position
             _waterRenderer->GetRefractDepthTexture(),                       //Texture
             "SpriteShaderGreyscale"                                         //Shader
-        );
-    }*/
+        );*/
+    }
 
     // ----- Public -----
 
@@ -192,7 +193,7 @@ namespace GW
     {
         InitModules();
         AddObjects();
-        /*AddSprites();*/
+        AddSprites();
     }
 
     GreenWorldApp::~GreenWorldApp()
@@ -235,10 +236,10 @@ namespace GW
             Engine::PROFILE_SCOPE("Render scene");
 
             Engine::RenderManager::RenderScene();
-            /*Engine::RenderManager::RenderParticles();
+            /*Engine::RenderManager::RenderParticles();*/
 
             if(Engine::DEBUG_SPRITES)
-                Engine::RenderManager::RenderSprites();*/
+                Engine::RenderManager::RenderSprites();
         }
 
         {

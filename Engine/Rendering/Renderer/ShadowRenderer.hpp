@@ -23,13 +23,12 @@ namespace Engine
             uint32              _shadowHeight;
             Shader*             _shadowShader;
 
-            ShadowRenderer(uint32 width, uint32 height, const glm::vec3& lightPos);
+            ShadowRenderer(uint32 width, uint32 height, const glm::vec3& lightPos, Shader* shader);
             void StartFrame();
             void EndFrame();
 
         public:
             void Flush(Renderer* sceneRenderer) final;
-            void SetShader(const std::string& shader);
             [[nodiscard]] Texture*  GetDepthTexture()    const;
             [[nodiscard]] glm::mat4 GetLightProjection() const;
     };

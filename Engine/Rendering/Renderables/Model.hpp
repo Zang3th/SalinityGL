@@ -29,11 +29,11 @@ namespace Engine
             float                 _rotationX, _rotationY, _rotationZ;
             float                 _size;
 
-            void                  InitGpuStorage(Mesh* mesh);
+            void                  InitGpuStorage(const Mesh* mesh);
             void                  SetModelMatrix();
 
         public:
-            explicit                    Model(Mesh* mesh);
+            explicit                    Model(const Mesh* mesh);
             [[nodiscard]] glm::mat4     GetModelMatrix()  const;
             [[nodiscard]] uint32        GetVerticeCount() const;
             [[nodiscard]] int32         GotNormalMap()    const;
@@ -44,6 +44,7 @@ namespace Engine
             void ChangeRotation(const glm::vec3& rotation);
             void ChangeSize(float size);
             void AddTexture(Texture* texture);
+            void SetTextureInSlot(Texture* texture, uint32_t slot);
             [[nodiscard]] const std::vector<Texture*>* GetTextures() const;
     };
 }

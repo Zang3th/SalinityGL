@@ -96,7 +96,7 @@ namespace GW
                     ImGui::Text("Terrain passes: %d", Engine::RENDER_STATS.terrainPasses);
                     //ImGui::Text("Water    render passes: %d", Engine::Renderer::GetWaterRenderPasses());
                     //ImGui::Text("Particle render passes: %d", Engine::Renderer::GetParticleRenderPasses());
-                    //ImGui::Text("Sprite   render passes: %d", Engine::Renderer::GetSpriteRenderPasses());
+                    ImGui::Text("Sprite  passes: %d", Engine::RENDER_STATS.spritePasses);
                     ImGui::Text("Cubemap passes: %d", Engine::RENDER_STATS.cubemapPasses);
                     ImGui::Separator();
 

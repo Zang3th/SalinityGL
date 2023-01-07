@@ -15,3 +15,4 @@
 #include "Interface.hpp"
 
 #include "SceneRenderer.hpp"
+#include "SpriteRenderer.hpp"

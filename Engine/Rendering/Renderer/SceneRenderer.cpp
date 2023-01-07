@@ -7,7 +7,7 @@ namespace Engine
     SceneRenderer::SceneRenderer(const float nearPlane, const float farPlane, const glm::vec3& lightPos, const glm::vec3& lightCol)
         : _nearPlane(nearPlane), _farPlane(farPlane), _lightPos(lightPos), _lightCol(lightCol),
           _perspProj(glm::perspective(glm::radians(45.0f), (float)WINDOW_WIDTH/(float)WINDOW_HEIGHT, _nearPlane, _farPlane)),
-          _terrainModel(nullptr), _terrainShader(nullptr), _modelShader(nullptr), _waterShader(nullptr)
+          _lightProj(0.0f), _terrainModel(nullptr), _terrainShader(nullptr), _modelShader(nullptr), _waterShader(nullptr)
     {
         Logger::Info("Created", __func__);
     }
@@ -105,8 +105,8 @@ namespace Engine
         shader->SetUniformVec3f("lightColor", _lightCol);
         shader->SetUniformMat4f("lightProjection", _lightProj);
         shader->SetUniform1i("diffuseTexture", 0);
-        shader->SetUniform1i("normalMap", 1);
-        shader->SetUniform1i("shadowMap", 2);
+        shader->SetUniform1i("shadowMap", 1);
+        shader->SetUniform1i("normalMap", 2);
         shader->SetUniform1i("gotNormalMap", model->GotNormalMap());
 
         //Render model
@@ -131,10 +131,18 @@ namespace Engine
 
     // ----- Public -----
 
-    void SceneRenderer::SetDefaultShaders(const std::string& terrainShader, const std::string& modelShader, const std::string& waterShader)
+    void SceneRenderer::SetTerrainShader(const std::string& terrainShader)
     {
         _terrainShader = ResourceManager::GetShader(terrainShader);
+    }
+
+    void SceneRenderer::SetModelShader(const std::string& modelShader)
+    {
         _modelShader   = ResourceManager::GetShader(modelShader);
+    }
+
+    void SceneRenderer::SetWaterShader(const std::string& waterShader)
+    {
         _waterShader   = ResourceManager::GetShader(waterShader);
     }
 
@@ -205,13 +213,15 @@ namespace Engine
         MeshCreator::CreateFromObj(objName, objFilepath, &meshes);
 
         //Create models out of meshes and store these
-        for(auto& mesh : meshes)
+        for(const auto& mesh : meshes)
         {
             auto objModel = new Model(&mesh);
-            objModel->AddTexture(depthTexture);
+
+            objModel->SetTextureInSlot(depthTexture, 1);
             objModel->ChangeSize(size);
             objModel->ChangeRotation(rotation);
             objModel->ChangePosition(position);
+
             _modelStorage.push_back(objModel);
         }
     }

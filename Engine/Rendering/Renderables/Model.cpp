@@ -4,7 +4,7 @@ namespace Engine
 {
     // ----- Private -----
 
-    void Model::InitGpuStorage(Mesh* mesh)
+    void Model::InitGpuStorage(const Mesh* mesh)
     {
         //Create and bind vao
         _vao = MakeScope<VertexArray>();
@@ -50,7 +50,7 @@ namespace Engine
 
     // ----- Public -----
 
-    Model::Model(Mesh* mesh)
+    Model::Model(const Mesh* mesh)
         :   _model(glm::mat4(1.0f)),
             _position(0.0f),
             _textures(mesh->textures),
@@ -118,6 +118,11 @@ namespace Engine
     void Model::AddTexture(Texture* texture)
     {
         _textures.push_back(texture);
+    }
+
+    void Model::SetTextureInSlot(Texture* texture, uint32_t slot)
+    {
+        _textures.insert(_textures.begin() + slot, texture);
     }
 
     [[nodiscard]] const std::vector<Texture*>* Model::GetTextures() const

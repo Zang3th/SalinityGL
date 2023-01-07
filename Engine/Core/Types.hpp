@@ -42,6 +42,7 @@ namespace Engine
         uint32 cubemapPasses = 0;
         uint32 terrainPasses = 0;
         uint32 modelPasses   = 0;
+        uint32 spritePasses  = 0;
 
         void Reset()
         {
@@ -50,6 +51,7 @@ namespace Engine
             cubemapPasses = 0;
             terrainPasses = 0;
             modelPasses   = 0;
+            spritePasses  = 0;
         }
     };
 }

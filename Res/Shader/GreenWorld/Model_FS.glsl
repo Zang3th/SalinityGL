@@ -9,8 +9,8 @@ in vec3 tangents;
 out vec4 fragColor;
 
 uniform sampler2D   diffuseTexture;
-uniform sampler2D   normalMap;
 uniform sampler2D   shadowMap;
+uniform sampler2D   normalMap;
 uniform int         gotNormalMap;
 uniform vec3        viewPos;
 uniform vec3        lightPos;

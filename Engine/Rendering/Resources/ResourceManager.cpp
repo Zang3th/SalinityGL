@@ -62,6 +62,18 @@ namespace Engine
         return output;
     }
 
+    Heightmap* ResourceManager::LoadHeightmap(const std::string& name, const std::string& filepath)
+    {
+        auto heightmap = new Heightmap(filepath);
+        _heightmapStorage[name] = heightmap;
+        return heightmap;
+    }
+
+    Heightmap* ResourceManager::GetHeightmap(const std::string& name)
+    {
+        return _heightmapStorage[name];
+    }
+
     void ResourceManager::CleanUp()
     {
         for(auto const& tex : _textureStorage)

@@ -231,13 +231,12 @@ namespace Engine
     void SceneRenderer::AddTerrain
     (
         const uint32 x, const uint32 z, const float tileSize, const glm::vec3& position, Texture* depthTexture,
-        const std::string& heightmapFilepath, const std::string& texture, const std::string& colormap
+        const std::string& texture, const std::string& colormap, const std::string& heightmap
     )
     {
         //Create terrain mesh
         Mesh terrainMesh;
-        Heightmap heightmap(heightmapFilepath);
-        MeshCreator::CreatePlane(x, z, tileSize, &terrainMesh, &heightmap);
+        MeshCreator::CreatePlane(x, z, tileSize, &terrainMesh, ResourceManager::GetHeightmap(heightmap));
 
         //Create and store model
         _terrainModel = new Model(&terrainMesh);

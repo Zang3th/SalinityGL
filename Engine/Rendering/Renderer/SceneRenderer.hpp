@@ -49,7 +49,7 @@ namespace Engine
             void AddTerrain
             (
                 uint32 x, uint32 z, float tileSize, const glm::vec3& position, Texture* depthTexture,
-                const std::string& heightmapFilepath, const std::string& texture, const std::string& colormap
+                const std::string& texture, const std::string& colormap, const std::string& heightmap
             );
             void AddObject
             (

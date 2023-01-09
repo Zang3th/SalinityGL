@@ -33,6 +33,9 @@ namespace GW
         Engine::ResourceManager::LoadTextureFromFile("TerrainColormap", "../Res/Assets/Textures/GreenWorld/Colormap128.png");
         Engine::ResourceManager::LoadTextureFromFile("WaterDuDvMap", "../Res/Assets/Textures/GreenWorld/DuDvMap.png");
         Engine::ResourceManager::LoadTextureFromFile("WaterNormalMap", "../Res/Assets/Textures/GreenWorld/WaterNormalMap.png");
+
+        //Heightmap(s)
+        Engine::ResourceManager::LoadHeightmap("TerrainHeightmap", "../Res/Assets/Textures/GreenWorld/Heightmap128.bmp");
     }
 
     void GreenWorldApp::InitModules()
@@ -65,7 +68,7 @@ namespace GW
             "ParticleShader"                                                //Shader
         );*/
 
-        //Set default shaders
+        //Set default shaders for the scene
         _sceneRenderer->SetTerrainShader("TerrainShader");
         _sceneRenderer->SetModelShader("ModelShader");
         _sceneRenderer->SetWaterShader("WaterShader");
@@ -96,9 +99,9 @@ namespace GW
             1.0f,                                                           //Tile size
             glm::vec3(0.0f, -2.7f, 0.0f),                                   //Position
             _shadowRenderer->GetDepthTexture(),                             //Depth texture
-            "../Res/Assets/Textures/GreenWorld/Heightmap128.bmp",           //Heightmap filepath
             "TerrainGrassTexture",                                          //Main texture
-            "TerrainColormap"                                               //Texture for coloring
+            "TerrainColormap",                                              //Texture for coloring
+            "TerrainHeightmap"                                              //Heightmap
         );
 
         //Water

@@ -6,6 +6,7 @@
 #include "Renderer.hpp"
 #include "SceneRenderer.hpp"
 #include "SpriteRenderer.hpp"
+#include "WaterRenderer.hpp"
 
 #include <vector>
 
@@ -18,6 +19,7 @@ namespace Engine
             inline static SceneRenderer*         _sceneRenderer   = nullptr;
             inline static ShadowRenderer*        _shadowRenderer  = nullptr;
             inline static SpriteRenderer*        _spriteRenderer  = nullptr;
+            inline static WaterRenderer*         _waterRenderer   = nullptr;
 
         public:
             RenderManager() = delete;
@@ -29,9 +31,11 @@ namespace Engine
             static SceneRenderer*  AddScene(float nearPlane, float farPlane, const glm::vec3& lightPos, const glm::vec3& lightCol);
             static ShadowRenderer* AddShadows(uint32 resolution, const glm::vec3& lightPos, const std::string& shader);
             static SpriteRenderer* AddSprites();
+            static WaterRenderer*  AddWater();
 
             static void RenderScene();
             static void RenderShadows();
             static void RenderSprites();
+            static void RenderWater();
     };
 }

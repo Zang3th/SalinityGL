@@ -51,8 +51,8 @@ namespace GW
         _sceneRenderer  = Engine::RenderManager::AddScene(_nearPlane, _farPlane, _lightPos, _lightCol);
         _shadowRenderer = Engine::RenderManager::AddShadows(8192, _lightPos, "ShadowCreateShader");
         _spriteRenderer = Engine::RenderManager::AddSprites();
-        /*_waterRenderer  = Engine::RenderManager::AddWater(0.025f);
-        _smokeRenderer  = Engine::RenderManager::AddParticles
+        _waterRenderer  = Engine::RenderManager::AddWater();
+        /*_smokeRenderer  = Engine::RenderManager::AddParticles
         (
             glm::vec3(87.0f, 34.0f, 92.5f),                                 //Spawn point
             200,                                                            //Number of particles
@@ -101,18 +101,20 @@ namespace GW
             "TerrainColormap"                                               //Texture for coloring
         );
 
-        /*//Water
-        _sceneRenderer.AddWater
+        //Water
+        _sceneRenderer->AddWater
         (
             Engine::PLANE_SIZE - 112,                                       //Length in x direction
             Engine::PLANE_SIZE,                                             //Length in z direction
             1.0f,                                                           //Tile size
             glm::vec3(30.5f, 0.0f, 0.0f),                                   //Position
-            "DuDvMap",                                                      //DuDv map
-            "NormalMap",                                                    //Normal map
-            _waterRenderer.get(),                                           //Water renderer
-            "WaterPlaneShader"                                              //Shader
-        );*/
+            0.025f,                                                         //Wave speed
+            "WaterDuDvMap",                                                 //DuDv map
+            "WaterNormalMap",                                               //Normal map
+            _waterRenderer->GetReflectTexture(),                            //Reflect texture
+            _waterRenderer->GetRefractTexture(),                            //Refract texture
+            _waterRenderer->GetRefractDepthTexture()                        //Refract depth texture
+        );
 
         //House
         _sceneRenderer->AddObject
@@ -159,32 +161,32 @@ namespace GW
             Engine::ResourceManager::GetShader("SpriteShaderGreyscale")     //Shader
         );
 
-        /*//Reflect sprite
-        _spriteRenderer.AddSprite
+        //Reflect sprite
+        _spriteRenderer->AddSprite
         (
             glm::vec2(200.0f, 200.0f),                                      //Size
             glm::vec2(410.0f, 0.0f),                                        //Position
             _waterRenderer->GetReflectTexture(),                            //Texture
-            "SpriteShader"                                                  //Shader
+            Engine::ResourceManager::GetShader("SpriteShader")              //Shader
         );
 
         //Refract sprite
-        _spriteRenderer.AddSprite
+        _spriteRenderer->AddSprite
         (
             glm::vec2(200.0f, 200.0f),                                      //Size
             glm::vec2(610.0f, 0.0f),                                        //Position
             _waterRenderer->GetRefractTexture(),                            //Texture
-            "SpriteShader"                                                  //Shader
+            Engine::ResourceManager::GetShader("SpriteShader")              //Shader
         );
 
         //Refract depth sprite
-        _spriteRenderer.AddSprite
+        _spriteRenderer->AddSprite
         (
             glm::vec2(200.0f, 200.0f),                                      //Size
             glm::vec2(810.0f, 0.0f),                                        //Position
             _waterRenderer->GetRefractDepthTexture(),                       //Texture
-            "SpriteShaderGreyscale"                                         //Shader
-        );*/
+            Engine::ResourceManager::GetShader("SpriteShaderGreyscale")     //Shader
+        );
     }
 
     // ----- Public -----
@@ -226,11 +228,11 @@ namespace GW
             Engine::RenderManager::RenderShadows();
         }
 
-        /*{
+        {
             Engine::PROFILE_SCOPE("Render water");
 
             Engine::RenderManager::RenderWater();
-        }*/
+        }
 
         {
             Engine::PROFILE_SCOPE("Render scene");

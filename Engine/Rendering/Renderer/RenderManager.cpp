@@ -54,6 +54,14 @@ namespace Engine
         return _spriteRenderer;
     }
 
+    WaterRenderer* RenderManager::AddWater()
+    {
+        _waterRenderer = new WaterRenderer();
+        _rendererStorage.push_back(_waterRenderer);
+
+        return _waterRenderer;
+    }
+
     void RenderManager::RenderScene()
     {
         _sceneRenderer->Flush(nullptr);
@@ -67,5 +75,10 @@ namespace Engine
     void RenderManager::RenderSprites()
     {
         _spriteRenderer->Flush(nullptr);
+    }
+
+    void RenderManager::RenderWater()
+    {
+        _waterRenderer->Flush((Renderer*)_sceneRenderer);
     }
 }

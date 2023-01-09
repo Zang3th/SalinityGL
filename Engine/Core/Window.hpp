@@ -35,5 +35,6 @@ namespace Engine
             [[nodiscard]] static double      GetFps();
             [[nodiscard]] static uint32      GetFrameCounter();
             [[nodiscard]] static GLFWwindow* GetWindow();
+            [[nodiscard]] static float       GetAspectRatio();
     };
 }

@@ -16,3 +16,4 @@
 
 #include "SceneRenderer.hpp"
 #include "SpriteRenderer.hpp"
+#include "WaterRenderer.hpp"

@@ -43,6 +43,7 @@ namespace Engine
         uint32 terrainPasses = 0;
         uint32 modelPasses   = 0;
         uint32 spritePasses  = 0;
+        uint32 waterPasses   = 0;
 
         void Reset()
         {
@@ -52,6 +53,7 @@ namespace Engine
             terrainPasses = 0;
             modelPasses   = 0;
             spritePasses  = 0;
+            waterPasses   = 0;
         }
     };
 }

@@ -4,11 +4,14 @@
 #include "Renderer.hpp"
 #include "Camera3D.hpp"
 #include "GLRenderSettings.hpp"
+#include "SceneRenderer.hpp"
 
 namespace Engine
 {
-    class WaterRenderer
+    class WaterRenderer final : public Renderer
     {
+        friend class RenderManager;
+
         private:
             Scope<FrameBuffer>  _reflectFBO, _refractFBO;
             const uint32        _reflectionWidth  = 1024;
@@ -19,19 +22,18 @@ namespace Engine
             const glm::vec4     _reflectionClipPlane = glm::vec4(0.0f, 1.0f, 0.0f, -_waterHeight);
             const glm::vec4     _refractionClipPlane = glm::vec4(0.0f, -1.0f, 0.0f, _waterHeight);
 
+            WaterRenderer();
             void InitReflectionFBO();
             void InitRefractionFBO();
             void StartReflectionFrame();
             void EndReflectionFrame();
             void StartRefractionFrame();
             void EndRefractionFrame();
-            void RenderReflectionFrame(Shader* modelShader);
-            void RenderRefractionFrame(Shader* terrainShader);
+            void RenderReflectionFrame(SceneRenderer* sceneRenderer);
+            void RenderRefractionFrame(SceneRenderer* sceneRenderer);
 
         public:
-            WaterRenderer();
-            void RenderToFramebuffer(Shader* terrainShader, Shader* modelShader);
-
+            void Flush(Renderer* sceneRenderer) final;
             [[nodiscard]] Texture* GetReflectTexture()      const;
             [[nodiscard]] Texture* GetRefractTexture()      const;
             [[nodiscard]] Texture* GetRefractDepthTexture() const;

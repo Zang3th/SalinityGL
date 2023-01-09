@@ -12,12 +12,11 @@ namespace GW
             const float                             _farPlane  = 300.0f;
             const glm::vec3                         _lightPos  = glm::vec3(150.0f, 100.0f, -30.0f);
             const glm::vec3                         _lightCol  = glm::vec3(1.0f, 1.0f, 1.0f);
-            /*const float                             _waveSpeed     = 0.025f;
-                  float                             _moveFactor    = 0.0f;*/
 
             Engine::SceneRenderer*                  _sceneRenderer  = nullptr;
             Engine::ShadowRenderer*                 _shadowRenderer = nullptr;
             Engine::SpriteRenderer*                 _spriteRenderer = nullptr;
+            Engine::WaterRenderer*                  _waterRenderer  = nullptr;
             Engine::Scope<GreenWorldInterface>      _interface;
     
             void LoadResources() final;

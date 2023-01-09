@@ -12,6 +12,7 @@
 #include "Heightmap.hpp"
 #include "MeshCreator.hpp"
 #include "ShadowRenderer.hpp"
+#include "Window.hpp"
 
 #include <array>
 #include <string>
@@ -23,28 +24,27 @@ namespace Engine
         friend class RenderManager;
 
         private:
-            float     _nearPlane, _farPlane;
+            float     _nearPlane, _farPlane, _moveFactor, _waveSpeed;
             glm::vec3 _lightPos,  _lightCol;
             glm::mat4 _perspProj, _lightProj;
 
             Scope<Cubemap>      _cubemap;
             std::vector<Model*> _modelStorage;
-            Model*              _terrainModel;
+            Model              *_terrainModel, *_waterModel;
             Shader             *_terrainShader, *_modelShader, *_waterShader;
 
             SceneRenderer(float nearPlane, float farPlane, const glm::vec3& lightPos, const glm::vec3& lightCol);
             ~SceneRenderer() final;
-            void FlushCubemap();
-            void FlushTerrain();
             void FlushModel(Model* model, Shader* shader);
+            void FlushWater();
+            void UpdateMoveFactor();
 
         public:
-            void SetTerrainShader(const std::string& terrainShader);
-            void SetModelShader(const std::string& modelShader);
-            void SetWaterShader(const std::string& waterShader);
-            void AddLightProjection(const glm::mat4& lightProj);
             void Flush(Renderer* renderer) final;
             void FlushModels(Shader* shader);
+            void FlushCubemap();
+            void FlushTerrain();
+            void AddLightProjection(const glm::mat4& lightProj);
             void AddCubemap(const std::array<const char*, 6>& faces, const std::string& shader);
             void AddTerrain
             (
@@ -56,5 +56,17 @@ namespace Engine
                 float size, const glm::vec3& rotation, const glm::vec3& position,
                 Texture* depthTexture, const std::string& objName, const std::string& objFilepath
             );
+            void AddWater
+            (
+                uint32 x, uint32 z, float tileSize, const glm::vec3& position,
+                float waveSpeed, const std::string& dudvMap, const std::string& normalMap,
+                Texture* reflectTex, Texture* refractTex, Texture* refractDepthTex
+            );
+            void SetTerrainShader(const std::string& terrainShader);
+            void SetModelShader(const std::string& modelShader);
+            void SetWaterShader(const std::string& waterShader);
+            [[nodiscard]] Shader* GetTerrainShader();
+            [[nodiscard]] Shader* GetModelShader();
+            [[nodiscard]] Shader* GetWaterShader();
     };
 }

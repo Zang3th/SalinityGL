@@ -116,4 +116,9 @@ namespace Engine
     {
         return _window;
     }
+
+    float Window::GetAspectRatio()
+    {
+        return (float)WINDOW_WIDTH/(float)WINDOW_HEIGHT;
+    }
 }

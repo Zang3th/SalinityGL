@@ -4,6 +4,13 @@ namespace Engine
 {
     // ----- Private -----
 
+    WaterRenderer::WaterRenderer()
+    {
+        Logger::Info("Created", __func__);
+        InitReflectionFBO();
+        InitRefractionFBO();
+    }
+
     void WaterRenderer::InitReflectionFBO()
     {
         //Create and configure framebuffer
@@ -55,11 +62,11 @@ namespace Engine
         _refractFBO->Unbind();
     }
 
-    void WaterRenderer::RenderReflectionFrame(Shader* modelShader)
+    void WaterRenderer::RenderReflectionFrame(SceneRenderer* sceneRenderer)
     {
         //Render to reflection framebuffer
         StartReflectionFrame();
-        //Renderer::ClearBuffers();
+        GLRenderSettings::ClearBuffers();
 
         //Move camera under the water
         glm::vec3 camPos = Camera3D::GetPosition();
@@ -69,13 +76,14 @@ namespace Engine
         Camera3D::Update();
 
         //Set shader variable(s)
+        Shader* modelShader = sceneRenderer->GetModelShader();
         modelShader->Bind();
         modelShader->SetUniformVec4f("clipPlane", _reflectionClipPlane);
         modelShader->Unbind();
 
         //Render scene
-        //Renderer::FlushModelBuffer(modelShader);
-        //Renderer::FlushCubemap();
+        sceneRenderer->FlushModels(modelShader);
+        sceneRenderer->FlushCubemap();
 
         //Reset camera
         Camera3D::SetPosition(camPos);
@@ -85,36 +93,31 @@ namespace Engine
         EndReflectionFrame();
     }
 
-    void WaterRenderer::RenderRefractionFrame(Shader* terrainShader)
+    void WaterRenderer::RenderRefractionFrame(SceneRenderer* sceneRenderer)
     {
         //Render to refraction framebuffer
         StartRefractionFrame();
-        //Renderer::ClearBuffers();
+        GLRenderSettings::ClearBuffers();
 
         //Set shader variable(s)
+        Shader* terrainShader = sceneRenderer->GetTerrainShader();
         terrainShader->Bind();
         terrainShader->SetUniformVec4f("clipPlane", _refractionClipPlane);
         terrainShader->Unbind();
 
         //Render scene
-        //Renderer::FlushTerrain(terrainShader);
+        sceneRenderer->FlushTerrain();
 
         EndRefractionFrame();
     }
 
     // ----- Public -----
 
-    WaterRenderer::WaterRenderer()
-    {
-        InitReflectionFBO();
-        InitRefractionFBO();
-    }
-
-    void WaterRenderer::RenderToFramebuffer(Shader* terrainShader, Shader* modelShader)
+    void WaterRenderer::Flush(Renderer* sceneRenderer)
     {
         GLRenderSettings::EnableClipDistance(GL_CLIP_DISTANCE0);
-        RenderReflectionFrame(modelShader);
-        RenderRefractionFrame(terrainShader);
+        RenderReflectionFrame((SceneRenderer*)sceneRenderer);
+        RenderRefractionFrame((SceneRenderer*)sceneRenderer);
         GLRenderSettings::DisableClipDistance(GL_CLIP_DISTANCE0);
     }
 

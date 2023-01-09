@@ -4,7 +4,6 @@
 #include "Window.hpp"
 #include "ResourceManager.hpp"
 #include "Types.hpp"
-#include "AppSettings.hpp"
 #include "Profiler.hpp"
 #include "RenderManager.hpp"
 #include "App.hpp"

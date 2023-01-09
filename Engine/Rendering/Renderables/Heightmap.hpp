@@ -2,7 +2,6 @@
 
 #include "stb_image.hpp"
 #include "Types.hpp"
-#include "AppSettings.hpp"
 #include "Logger.hpp"
 
 #include <vector>

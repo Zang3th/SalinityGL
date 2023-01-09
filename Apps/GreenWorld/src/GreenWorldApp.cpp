@@ -1,16 +1,5 @@
 #include "GreenWorldApp.hpp"
 
-//Initialize extern settings
-const Engine::int32  Engine::WINDOW_WIDTH       = 1920;
-const Engine::int32  Engine::WINDOW_HEIGHT      = 1080;
-const Engine::uint32 Engine::PLANE_SIZE         = 128;
-const float          Engine::GRAVITY            = -20.0f;
-
-bool                Engine::WIREFRAME_RENDERING = false;
-bool                Engine::DEBUG_SPRITES       = false;
-Engine::RenderStats Engine::RENDER_STATS;
-
-
 namespace GW
 {
     // ----- Private -----
@@ -46,6 +35,10 @@ namespace GW
         Engine::Camera3D::Init(glm::vec3(-75.0f, 74.0f, 70.0f), 0.4f, -23.0f, 25.0f);
         Engine::CameraController3D::Init();
         Engine::RenderManager::Init();
+
+        //Configure some application settings
+        Engine::APP_SETTINGS.planeSize = 128;
+        Engine::APP_SETTINGS.gravity   = -20.0f;
 
         //Load up shaders and textures
         LoadResources();
@@ -94,8 +87,8 @@ namespace GW
         //Terrain
         _sceneRenderer->AddTerrain
         (
-            Engine::PLANE_SIZE,                                             //Length in x direction
-            Engine::PLANE_SIZE,                                             //Length in z direction
+            Engine::APP_SETTINGS.planeSize,                                 //Length in x direction
+            Engine::APP_SETTINGS.planeSize,                                 //Length in z direction
             1.0f,                                                           //Tile size
             glm::vec3(0.0f, -2.7f, 0.0f),                                   //Position
             _shadowRenderer->GetDepthTexture(),                             //Depth texture
@@ -107,8 +100,8 @@ namespace GW
         //Water
         _sceneRenderer->AddWater
         (
-            Engine::PLANE_SIZE - 112,                                       //Length in x direction
-            Engine::PLANE_SIZE,                                             //Length in z direction
+            Engine::APP_SETTINGS.planeSize - 112,                           //Length in x direction
+            Engine::APP_SETTINGS.planeSize,                                 //Length in z direction
             1.0f,                                                           //Tile size
             glm::vec3(30.5f, 0.0f, 0.0f),                                   //Position
             0.025f,                                                         //Wave speed
@@ -243,7 +236,7 @@ namespace GW
             Engine::RenderManager::RenderScene();
             /*Engine::RenderManager::RenderParticles();*/
 
-            if(Engine::DEBUG_SPRITES)
+            if(Engine::APP_SETTINGS.debugSprites)
                 Engine::RenderManager::RenderSprites();
         }
 

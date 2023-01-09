@@ -6,7 +6,6 @@
 #include "Cubemap.hpp"
 #include "ResourceManager.hpp"
 #include "GLRenderSettings.hpp"
-#include "AppSettings.hpp"
 #include "Camera3D.hpp"
 #include "Model.hpp"
 #include "Heightmap.hpp"

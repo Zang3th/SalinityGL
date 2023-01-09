@@ -20,7 +20,7 @@ namespace Engine
         glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_TRUE);
 
         _windowName = title;
-        _window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, _windowName.c_str(), nullptr, nullptr);
+        _window = glfwCreateWindow(APP_SETTINGS.WINDOW_WIDTH, APP_SETTINGS.WINDOW_HEIGHT, _windowName.c_str(), nullptr, nullptr);
 
         if(!_window)
             Logger::Error("Failed", "GLFW-Window", std::to_string(glfwGetError(nullptr)));
@@ -40,7 +40,7 @@ namespace Engine
             Logger::Info("Loaded", "OpenGL", glInfo);
         }
 
-        GLRenderSettings::SetViewport(WINDOW_WIDTH, WINDOW_HEIGHT);
+        GLRenderSettings::SetViewport(APP_SETTINGS.WINDOW_WIDTH, APP_SETTINGS.WINDOW_HEIGHT);
         GLRenderSettings::EnableDebugging();
 
         //Start application
@@ -119,6 +119,6 @@ namespace Engine
 
     float Window::GetAspectRatio()
     {
-        return (float)WINDOW_WIDTH/(float)WINDOW_HEIGHT;
+        return (float)APP_SETTINGS.WINDOW_WIDTH/(float)APP_SETTINGS.WINDOW_HEIGHT;
     }
 }

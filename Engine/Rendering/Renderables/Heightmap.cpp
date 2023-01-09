@@ -13,11 +13,11 @@ namespace Engine
         stbi_set_flip_vertically_on_load(false);
 
         //Reserve space
-        _heightmap.reserve(PLANE_SIZE * PLANE_SIZE * sizeof(float));
+        _heightmap.reserve(APP_SETTINGS.planeSize * APP_SETTINGS.planeSize * sizeof(float));
 
         if(localBuffer)
         {
-            if(width < (int)PLANE_SIZE || height < (int)PLANE_SIZE)
+            if(width < (int)APP_SETTINGS.planeSize || height < (int)APP_SETTINGS.planeSize)
             {
                 std::string texInfo = "Texture too small: " + filepath;
                 Logger::Error("Failed", "Heightmap", texInfo);
@@ -59,17 +59,17 @@ namespace Engine
     {
         //Return value at given position with some special treatment for the edges
 
-        if(x < PLANE_SIZE && z < PLANE_SIZE)
-            return _heightmap.at(PLANE_SIZE * x + z);
+        if(x < APP_SETTINGS.planeSize && z < APP_SETTINGS.planeSize)
+            return _heightmap.at(APP_SETTINGS.planeSize * x + z);
 
-        else if(x-1 < PLANE_SIZE && z < PLANE_SIZE)
-            return _heightmap.at(PLANE_SIZE * (x-1) + z);
+        else if(x-1 < APP_SETTINGS.planeSize && z < APP_SETTINGS.planeSize)
+            return _heightmap.at(APP_SETTINGS.planeSize * (x-1) + z);
 
-        else if(x < PLANE_SIZE && z-1 < PLANE_SIZE)
-            return _heightmap.at(PLANE_SIZE * x + (z-1));
+        else if(x < APP_SETTINGS.planeSize && z-1 < APP_SETTINGS.planeSize)
+            return _heightmap.at(APP_SETTINGS.planeSize * x + (z-1));
 
-        else if(x-1 < PLANE_SIZE && z-1 < PLANE_SIZE)
-            return _heightmap.at(PLANE_SIZE * (x-1) + (z-1));
+        else if(x-1 < APP_SETTINGS.planeSize && z-1 < APP_SETTINGS.planeSize)
+            return _heightmap.at(APP_SETTINGS.planeSize * (x-1) + (z-1));
 
         return 0;
     }

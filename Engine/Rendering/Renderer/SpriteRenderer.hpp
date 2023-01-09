@@ -6,7 +6,6 @@
 #include "Shader.hpp"
 #include "GLRenderSettings.hpp"
 #include "Sprite.hpp"
-#include "AppSettings.hpp"
 
 #include <vector>
 

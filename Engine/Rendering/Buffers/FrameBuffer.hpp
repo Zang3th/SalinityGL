@@ -2,7 +2,6 @@
 
 #include "ErrorManager.hpp"
 #include "Types.hpp"
-#include "AppSettings.hpp"
 #include "ResourceManager.hpp"
 #include "GLRenderSettings.hpp"
 

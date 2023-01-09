@@ -66,8 +66,8 @@ namespace Engine
         shader->Unbind();
 
         //Save stats
-        RENDER_STATS.drawnVertices += verticeCount;
-        RENDER_STATS.drawCalls++;
+        APP_SETTINGS.renderStats.drawnVertices += verticeCount;
+        APP_SETTINGS.renderStats.drawCalls++;
     }
 
     void SceneRenderer::FlushWater()
@@ -118,9 +118,9 @@ namespace Engine
         _waterShader->Unbind();
 
         //Save stats
-        RENDER_STATS.drawnVertices += verticeCount;
-        RENDER_STATS.drawCalls++;
-        RENDER_STATS.waterPasses++;
+        APP_SETTINGS.renderStats.drawnVertices += verticeCount;
+        APP_SETTINGS.renderStats.drawCalls++;
+        APP_SETTINGS.renderStats.waterPasses++;
     }
 
     void SceneRenderer::UpdateMoveFactor()
@@ -134,7 +134,7 @@ namespace Engine
     void SceneRenderer::Flush(Renderer* renderer)
     {
         //Check for Wireframe-Mode
-        if(WIREFRAME_RENDERING)
+        if(APP_SETTINGS.wireframeRendering)
             GLRenderSettings::EnableWireframe();
         else
             GLRenderSettings::DisableWireframe();
@@ -155,7 +155,7 @@ namespace Engine
             FlushModel(model, shader);
         }
 
-        RENDER_STATS.modelPasses++;
+        APP_SETTINGS.renderStats.modelPasses++;
     }
 
     void SceneRenderer::FlushCubemap()
@@ -163,9 +163,9 @@ namespace Engine
         if(_cubemap)
         {
             GLRenderSettings::DisableWireframe();
-            RENDER_STATS.drawnVertices += _cubemap->Draw(_perspProj, Camera3D::GetViewMatrix());
-            RENDER_STATS.drawCalls++;
-            RENDER_STATS.cubemapPasses++;
+            APP_SETTINGS.renderStats.drawnVertices += _cubemap->Draw(_perspProj, Camera3D::GetViewMatrix());
+            APP_SETTINGS.renderStats.drawCalls++;
+            APP_SETTINGS.renderStats.cubemapPasses++;
         }
     }
 
@@ -213,9 +213,9 @@ namespace Engine
         _terrainShader->Unbind();
 
         //Save stats
-        RENDER_STATS.drawnVertices += verticeCount;
-        RENDER_STATS.drawCalls++;
-        RENDER_STATS.terrainPasses++;
+        APP_SETTINGS.renderStats.drawnVertices += verticeCount;
+        APP_SETTINGS.renderStats.drawCalls++;
+        APP_SETTINGS.renderStats.terrainPasses++;
     }
 
     void SceneRenderer::AddLightProjection(const glm::mat4 &lightProj)

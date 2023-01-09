@@ -56,4 +56,18 @@ namespace Engine
             waterPasses   = 0;
         }
     };
+
+    // --- Application settings
+    struct AppSettings
+    {
+        const int32  WINDOW_WIDTH  = 1920;
+        const int32  WINDOW_HEIGHT = 1080;
+        uint32 planeSize           = 64;
+        float  gravity             = 10.0f;
+        bool   wireframeRendering  = false;
+        bool   debugSprites        = false;
+        RenderStats renderStats;
+    };
+
+    extern struct AppSettings APP_SETTINGS;
 }

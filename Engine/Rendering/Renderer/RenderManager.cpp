@@ -25,7 +25,7 @@ namespace Engine
 
     void RenderManager::PrepareFrame()
     {
-        RENDER_STATS.Reset();
+        APP_SETTINGS.renderStats.Reset();
         GLRenderSettings::ClearBuffers();
     }
 

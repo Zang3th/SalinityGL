@@ -33,7 +33,7 @@ namespace Engine
     void FrameBuffer::Unbind() const
     {
         GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
-        GLRenderSettings::SetViewport(WINDOW_WIDTH, WINDOW_HEIGHT);
+        GLRenderSettings::SetViewport(APP_SETTINGS.WINDOW_WIDTH, APP_SETTINGS.WINDOW_HEIGHT);
     }
 
     void FrameBuffer::SetColorAttachment0()

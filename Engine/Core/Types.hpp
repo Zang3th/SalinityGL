@@ -37,23 +37,25 @@ namespace Engine
     // --- Custom datatypes
     struct RenderStats
     {
-        uint32 drawCalls     = 0;
-        uint32 drawnVertices = 0;
-        uint32 cubemapPasses = 0;
-        uint32 terrainPasses = 0;
-        uint32 modelPasses   = 0;
-        uint32 spritePasses  = 0;
-        uint32 waterPasses   = 0;
+        uint32 drawCalls      = 0;
+        uint32 drawnVertices  = 0;
+        uint32 cubemapPasses  = 0;
+        uint32 terrainPasses  = 0;
+        uint32 modelPasses    = 0;
+        uint32 spritePasses   = 0;
+        uint32 waterPasses    = 0;
+        uint32 particlePasses = 0;
 
         void Reset()
         {
-            drawCalls     = 0;
-            drawnVertices = 0;
-            cubemapPasses = 0;
-            terrainPasses = 0;
-            modelPasses   = 0;
-            spritePasses  = 0;
-            waterPasses   = 0;
+            drawCalls      = 0;
+            drawnVertices  = 0;
+            cubemapPasses  = 0;
+            terrainPasses  = 0;
+            modelPasses    = 0;
+            spritePasses   = 0;
+            waterPasses    = 0;
+            particlePasses = 0;
         }
     };
 

@@ -4,6 +4,25 @@ namespace Engine
 {
     // ----- Private -----
 
+    ParticleRenderer::ParticleRenderer
+    (
+        glm::vec3 position, uint32 count, float size, float speed, float gravityComplient,
+        float lifeLength, float respawnThreshold, Texture* textureAtlas, Shader* shader
+    )
+        :   _position(position), _count(count), _numberOfRows(textureAtlas->GetNumberOfRows()), _size(size),
+            _speed(speed), _gravityComplient(gravityComplient), _lifeLength(lifeLength), _respawnTreshold(respawnThreshold),
+            _verticeCount(4), _textureAtlas(textureAtlas), _shader(shader)
+    {
+        GenerateParticles();
+        InitGpuStorage();
+    }
+
+    ParticleRenderer::~ParticleRenderer()
+    {
+        for(auto const& p : _pointerStorage)
+            delete p;
+    }
+
     void ParticleRenderer::InitGpuStorage()
     {
         //Create data
@@ -119,42 +138,10 @@ namespace Engine
 
     // ----- Public -----
 
-    ParticleRenderer::ParticleRenderer
-    (
-        Texture*  textureAtlas,
-        Shader*   shader,
-        glm::vec3 position,
-        uint32    count,
-        float     size,
-        float     speed,
-        float     gravityComplient,
-        float     lifeLength,
-        float     respawnThreshold
-    )
-        :   _textureAtlas(textureAtlas),
-            _shader(shader),
-            _position(position),
-            _count(count),
-            _numberOfRows(_textureAtlas->GetNumberOfRows()),
-            _size(size),
-            _speed(speed),
-            _gravityComplient(gravityComplient),
-            _lifeLength(lifeLength),
-            _respawnTreshold(respawnThreshold),
-            _verticeCount(4)
+    void ParticleRenderer::Flush(Renderer* sceneRenderer)
     {
-        GenerateParticles();
-        InitGpuStorage();
-    }
+        GLRenderSettings::DisableDepthtest();
 
-    ParticleRenderer::~ParticleRenderer()
-    {
-        for(auto const& p : _pointerStorage)
-            delete p;
-    }
-
-    uint32 ParticleRenderer::Render(const glm::mat4& projMatrix)
-    {
         //Bind shader
         _shader->Bind();
 
@@ -169,7 +156,7 @@ namespace Engine
         _vboBlend->Bind();
 
         //Set uniforms
-        _shader->SetUniformMat4f("projection", projMatrix);
+        _shader->SetUniformMat4f("projection", ((SceneRenderer*)sceneRenderer)->GetProjMatrix());
         _shader->SetUniform1f("numberOfRows", (float)_numberOfRows);
 
         //Iterate over all particles
@@ -213,7 +200,11 @@ namespace Engine
         //Unbind shader
         _shader->Unbind();
 
-        //Return rendered particle count
-        return _count;
+        //Save stats
+        APP_SETTINGS.renderStats.drawnVertices += _verticeCount * _count;
+        APP_SETTINGS.renderStats.drawCalls++;
+        APP_SETTINGS.renderStats.particlePasses++;
+
+        GLRenderSettings::EnableDepthtest();
     }
 }

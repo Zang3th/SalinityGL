@@ -34,6 +34,7 @@ namespace Engine
 
             SceneRenderer(float nearPlane, float farPlane, const glm::vec3& lightPos, const glm::vec3& lightCol);
             ~SceneRenderer() final;
+
             void FlushModel(Model* model, Shader* shader);
             void FlushWater();
             void UpdateMoveFactor();
@@ -43,6 +44,7 @@ namespace Engine
             void FlushModels(Shader* shader);
             void FlushCubemap();
             void FlushTerrain();
+
             void AddLightProjection(const glm::mat4& lightProj);
             void AddCubemap(const std::array<const char*, 6>& faces, const std::string& shader);
             void AddTerrain
@@ -61,11 +63,13 @@ namespace Engine
                 float waveSpeed, const std::string& dudvMap, const std::string& normalMap,
                 Texture* reflectTex, Texture* refractTex, Texture* refractDepthTex
             );
+
             void SetTerrainShader(const std::string& terrainShader);
             void SetModelShader(const std::string& modelShader);
             void SetWaterShader(const std::string& waterShader);
             [[nodiscard]] Shader* GetTerrainShader();
             [[nodiscard]] Shader* GetModelShader();
             [[nodiscard]] Shader* GetWaterShader();
+            [[nodiscard]] glm::mat4 GetProjMatrix();
     };
 }

@@ -24,6 +24,7 @@ namespace Engine
             Shader*             _shadowShader;
 
             ShadowRenderer(uint32 width, uint32 height, const glm::vec3& lightPos, Shader* shader);
+            
             void StartFrame();
             void EndFrame();
 

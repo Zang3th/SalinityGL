@@ -92,12 +92,12 @@ namespace GW
                     ImGui::Separator();
                     ImGui::NewLine();
                     ImGui::Separator();
-                    ImGui::Text("Model   passes: %d", Engine::APP_SETTINGS.renderStats.modelPasses);
-                    ImGui::Text("Terrain passes: %d", Engine::APP_SETTINGS.renderStats.terrainPasses);
-                    ImGui::Text("Water   passes: %d", Engine::APP_SETTINGS.renderStats.waterPasses);
-                    //ImGui::Text("Particle render passes: %d", Engine::Renderer::GetParticleRenderPasses());
-                    ImGui::Text("Sprite  passes: %d", Engine::APP_SETTINGS.renderStats.spritePasses);
-                    ImGui::Text("Cubemap passes: %d", Engine::APP_SETTINGS.renderStats.cubemapPasses);
+                    ImGui::Text("Model    passes: %d", Engine::APP_SETTINGS.renderStats.modelPasses);
+                    ImGui::Text("Terrain  passes: %d", Engine::APP_SETTINGS.renderStats.terrainPasses);
+                    ImGui::Text("Water    passes: %d", Engine::APP_SETTINGS.renderStats.waterPasses);
+                    ImGui::Text("Particle passes: %d", Engine::APP_SETTINGS.renderStats.particlePasses);
+                    ImGui::Text("Sprite   passes: %d", Engine::APP_SETTINGS.renderStats.spritePasses);
+                    ImGui::Text("Cubemap  passes: %d", Engine::APP_SETTINGS.renderStats.cubemapPasses);
                     ImGui::Separator();
 
                     //Camera stats

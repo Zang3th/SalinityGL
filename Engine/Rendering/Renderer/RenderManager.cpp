@@ -62,6 +62,21 @@ namespace Engine
         return _waterRenderer;
     }
 
+    ParticleRenderer* RenderManager::AddParticles
+    (
+        glm::vec3 position, uint32 count, float size, float speed,
+        float gravityComplient, float lifeLength, float respawnThreshold,
+        const std::string& textureAtlas, const std::string& shader
+    )
+    {
+        _particleRenderer = new ParticleRenderer(position, count, size, speed, gravityComplient, lifeLength,
+                                                 respawnThreshold, ResourceManager::GetTexture(textureAtlas),
+                                                 ResourceManager::GetShader(shader));
+        _rendererStorage.push_back(_particleRenderer);
+
+        return _particleRenderer;
+    }
+
     void RenderManager::RenderScene()
     {
         _sceneRenderer->Flush(nullptr);
@@ -80,5 +95,10 @@ namespace Engine
     void RenderManager::RenderWater()
     {
         _waterRenderer->Flush((Renderer*)_sceneRenderer);
+    }
+
+    void RenderManager::RenderParticles()
+    {
+        _particleRenderer->Flush((Renderer*)_sceneRenderer);
     }
 }

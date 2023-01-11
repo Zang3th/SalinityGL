@@ -23,6 +23,7 @@ namespace Engine
             const glm::vec4     _refractionClipPlane = glm::vec4(0.0f, -1.0f, 0.0f, _waterHeight);
 
             WaterRenderer();
+
             void InitReflectionFBO();
             void InitRefractionFBO();
             void StartReflectionFrame();
@@ -34,6 +35,7 @@ namespace Engine
 
         public:
             void Flush(Renderer* sceneRenderer) final;
+            
             [[nodiscard]] Texture* GetReflectTexture()      const;
             [[nodiscard]] Texture* GetRefractTexture()      const;
             [[nodiscard]] Texture* GetRefractDepthTexture() const;

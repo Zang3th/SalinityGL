@@ -331,4 +331,9 @@ namespace Engine
     {
         return _waterShader;
     }
+
+    glm::mat4 SceneRenderer::GetProjMatrix()
+    {
+        return _perspProj;
+    }
 }

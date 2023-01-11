@@ -48,7 +48,7 @@ namespace GW
         _shadowRenderer = Engine::RenderManager::AddShadows(8192, _lightPos, "ShadowCreateShader");
         _spriteRenderer = Engine::RenderManager::AddSprites();
         _waterRenderer  = Engine::RenderManager::AddWater();
-        /*_smokeRenderer  = Engine::RenderManager::AddParticles
+        _smokeRenderer  = Engine::RenderManager::AddParticles
         (
             glm::vec3(87.0f, 34.0f, 92.5f),                                 //Spawn point
             200,                                                            //Number of particles
@@ -59,7 +59,7 @@ namespace GW
             44.0f,                                                          //Respawn threshold (Y-Position)
             "ParticleTextureAtlas",                                         //Texture atlas
             "ParticleShader"                                                //Shader
-        );*/
+        );
 
         //Set default shaders for the scene
         _sceneRenderer->SetTerrainShader("TerrainShader");
@@ -234,7 +234,7 @@ namespace GW
             Engine::PROFILE_SCOPE("Render scene");
 
             Engine::RenderManager::RenderScene();
-            /*Engine::RenderManager::RenderParticles();*/
+            Engine::RenderManager::RenderParticles();
 
             if(Engine::APP_SETTINGS.debugSprites)
                 Engine::RenderManager::RenderSprites();

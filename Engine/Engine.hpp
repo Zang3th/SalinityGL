@@ -14,5 +14,7 @@
 #include "Interface.hpp"
 
 #include "SceneRenderer.hpp"
+#include "ShadowRenderer.hpp"
 #include "SpriteRenderer.hpp"
 #include "WaterRenderer.hpp"
+#include "ParticleRenderer.hpp"

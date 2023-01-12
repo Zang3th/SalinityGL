@@ -37,7 +37,7 @@ namespace Engine
             Texture                     *_textureAtlas;
             Shader                      *_shader;
 
-            std::vector<Particle*>       _pointerStorage;
+            std::vector<Particle*>       _particleStorage;
             std::vector<glm::mat4>       _modelViewStorage;
             std::vector<glm::vec4>       _texOffsetStorage;
             std::vector<float>           _blendFactorStorage;

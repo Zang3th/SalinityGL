@@ -69,7 +69,7 @@
       sudo apt install libglu1-mesa-dev mesa-common-dev
 - Clone or download the repository and build it
 
-      git clone https://github.com/Zanget3u/GameEngine
+      git clone https://github.com/Zang3th/GameEngine
       mkdir Build
       cd Build
       cmake ..

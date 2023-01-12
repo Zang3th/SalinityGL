@@ -19,7 +19,7 @@ namespace Engine
 
     ParticleRenderer::~ParticleRenderer()
     {
-        for(auto const& p : _pointerStorage)
+        for(auto const& p : _particleStorage)
             delete p;
     }
 
@@ -104,7 +104,7 @@ namespace Engine
             auto particle = new Particle(pos, vel, grav, life, rot, size, _numberOfRows);
 
             //Save the different components
-            _pointerStorage.push_back(particle);
+            _particleStorage.push_back(particle);
             _modelViewStorage.push_back(GetModelViewMatrix(particle));
             _texOffsetStorage.emplace_back(0.0f);
             _blendFactorStorage.push_back(0.0f);
@@ -163,7 +163,7 @@ namespace Engine
         for(uint32 i = 0; i < _count; i++)
         {
             //Get current particle
-            Particle* particle = _pointerStorage[i];
+            Particle* particle = _particleStorage[i];
 
             if(!particle->Update((float) Window::GetDeltaTime()) || (particle->GetPosition().y >= _respawnTreshold))
             {
@@ -183,7 +183,7 @@ namespace Engine
         GLCall(glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, _verticeCount, _count));
 
         //Sort particles depending on the distance to the camera
-        std::sort(_pointerStorage.begin(), _pointerStorage.end(),
+        std::sort(_particleStorage.begin(), _particleStorage.end(),
                   [] (Particle const* a, Particle const* b)
                  { return a->GetDistanceToCam() < b->GetDistanceToCam(); });
 

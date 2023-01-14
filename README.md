@@ -57,8 +57,8 @@
 - [glm](https://github.com/g-truc/glm)
 - [stb_image](https://github.com/nothings/stb/blob/master/stb_image.h)
 - [imgui](https://github.com/ocornut/imgui), [imgui::plot_var](https://github.com/ocornut/imgui/wiki/plot_var_example)
-- [irrKlang](https://www.ambiera.com/irrklang/)
 - [tinyobjloader](https://github.com/tinyobjloader/tinyobjloader)
+- [miniaudio](https://github.com/mackron/miniaudio)
 
 ## Using & Compiling (currently for Linux with CMake)
 

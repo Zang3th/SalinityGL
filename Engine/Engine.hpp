@@ -7,6 +7,7 @@
 #include "Profiler.hpp"
 #include "RenderManager.hpp"
 #include "App.hpp"
+#include "Audio.hpp"
 
 #include "Camera3D.hpp"
 #include "CameraController3D.hpp"

@@ -19,6 +19,7 @@ namespace GW
             Engine::WaterRenderer*                  _waterRenderer  = nullptr;
             Engine::ParticleRenderer*               _smokeRenderer  = nullptr;
             Engine::Scope<GreenWorldInterface>      _interface;
+            Engine::Scope<Engine::Audio>            _audio;
     
             void LoadResources() final;
             void InitModules()   final;

@@ -1,3 +1,5 @@
+#define MINIAUDIO_IMPLEMENTATION
+
 #include "Audio.hpp"
 
 namespace Engine
@@ -5,64 +7,74 @@ namespace Engine
     // ----- Public -----
 
     Audio::Audio()
-        :   _engine(nullptr)
     {
-        //Init library
-        _engine = irrklang::createIrrKlangDevice();
-
-        if(!_engine)
-            Logger::Error("Failed", "Irrklang-Lib.");
+        if(ma_engine_init(nullptr, &_engine) != MA_SUCCESS)
+        {
+            ma_engine_start(&_engine);
+            Logger::Error("Failed", "Audio-Init.");
+        }
         else
-            Logger::Info("Init.", "Irrklang-Lib.");
+        {
+            Logger::Info("Loaded", "Miniaudio");
+        }
     }
 
     Audio::~Audio()
     {
-        //Release resources
-        for(auto& sound : _sounds)
-            sound->drop();
+        for(auto& sound : _soundStorage)
+        {
+            ma_sound_uninit(sound);
+            free(sound);
+        }
 
-        if(_engine)
-            _engine->drop();
+        ma_engine_uninit(&_engine);
     }
 
     void Audio::PlaySound2D(const std::string& filepath, const bool loop, const float volume)
     {
-        irrklang::ISound* sound = _engine->play2D(filepath.c_str(), loop, false, true);
+        auto sound = (ma_sound*)malloc(sizeof(ma_sound));
 
-        if(sound)
+        if(ma_sound_init_from_file(&_engine, filepath.c_str(), MA_SOUND_FLAG_NO_SPATIALIZATION, nullptr, nullptr, sound) != MA_SUCCESS)
         {
-            sound->setVolume(volume);
-            _sounds.push_back(sound);
-            Logger::Info("Loaded", "2D-Sound", filepath);
+            Logger::Error("Failed", "Sound-Loading", filepath);
         }
         else
-            Logger::Error("Failed", "2D-Sound-Load", filepath);
+        {
+            Logger::Info("Loaded", "2D-Sound", filepath);
+
+            ma_sound_set_looping(sound, loop);
+            ma_sound_set_volume(sound, volume);
+            ma_sound_start(sound);
+            _soundStorage.push_back(sound);
+        }
     }
 
-    void Audio::PlaySound3D(const std::string& filepath, const glm::vec3& position, const bool loop, const float distance, const float volume)
+    void Audio::PlaySound3D(const std::string& filepath, const bool loop, const float volume, const glm::vec3& pos, const float rolloff)
     {
-        irrklang::ISound* sound = _engine->play3D(filepath.c_str(), irrklang::vec3df(position.x, position.y, position.z), loop, false, true);
+        auto sound = (ma_sound*)malloc(sizeof(ma_sound));
 
-        if(sound)
+        if(ma_sound_init_from_file(&_engine, filepath.c_str(), 0, nullptr, nullptr, sound) != MA_SUCCESS)
         {
-            sound->setMinDistance(distance);
-            sound->setVolume(volume);
-            _sounds.push_back(sound);
-            Logger::Info("Loaded", "3D-Sound", filepath);
+            Logger::Error("Failed", "Sound-Loading", filepath);
         }
         else
-            Logger::Error("Failed", "3D-Sound-Load", filepath);
+        {
+            Logger::Info("Loaded", "3D-Sound", filepath);
+
+            ma_sound_set_looping(sound, loop);
+            ma_sound_set_volume(sound, volume);
+            ma_sound_set_pinned_listener_index(sound, 0);
+            ma_sound_set_position(sound, pos.x, pos.y, pos.z);
+            ma_sound_set_rolloff(sound, rolloff);
+            ma_sound_start(sound);
+            _soundStorage.push_back(sound);
+        }
     }
 
     void Audio::SetListenerPosition(const glm::vec3& pos, const glm::vec3& front, const glm::vec3& up)
     {
-        _engine->setListenerPosition
-        (
-            irrklang::vec3df(pos.x, pos.y, pos.z),
-            irrklang::vec3df(-front.x, front.y, front.z),
-            irrklang::vec3df(0, 0, 0),
-            irrklang::vec3df(up.x, up.y, up.z)
-        );
+        ma_engine_listener_set_position(&_engine, 0, pos.x, pos.y, pos.z);
+        ma_engine_listener_set_direction(&_engine, 0, front.x, front.y, front.z);
+        ma_engine_listener_set_world_up(&_engine, 0, up.x, up.y, up. z);
     }
 }

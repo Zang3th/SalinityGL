@@ -66,8 +66,11 @@ namespace GW
         _sceneRenderer->SetModelShader("ModelShader");
         _sceneRenderer->SetWaterShader("WaterShader");
 
-        //Create UI
+        //Create UI and init audio system
         _interface = Engine::MakeScope<GreenWorldInterface>();
+        _audio     = Engine::MakeScope<Engine::Audio>();
+        _audio->PlaySound2D("../Res/Assets/Audio/GreenWorld/Music/TrueBlueSky.wav", true, 0.2f);
+        _audio->PlaySound3D("../Res/Assets/Audio/GreenWorld/Sounds/River.wav", true, 4.0f, glm::vec3(39.0f, 14.0f, 56.0f), 0.5f);
     }
 
     void GreenWorldApp::AddObjects()
@@ -216,6 +219,7 @@ namespace GW
             Engine::Window::CalcFrametime();
             Engine::RenderManager::PrepareFrame();
             _interface->PrepareFrame();
+            _audio->SetListenerPosition(Engine::Camera3D::GetPosition(), Engine::Camera3D::GetFront(), Engine::Camera3D::GetUp());
         }
 
         {

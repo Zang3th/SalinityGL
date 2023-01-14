@@ -10,7 +10,6 @@ project(GameEngine)
 ############################### Settings ####################################
 
 set(GLFW_PATH "${CMAKE_SOURCE_DIR}/Vendor/GLFW/libglfw.so")
-set(IRRKLANG_PATH "${CMAKE_SOURCE_DIR}/Vendor/IrrKlang/libIrrKlang.so")
 set(ENGINE_LINKER_FLAGS "-lX11")
 set(APPLICATION_LINKER_FLAGS "-ldl -lpthread")
 
@@ -35,9 +34,9 @@ target_include_directories(GameEngine PUBLIC Engine/Rendering/Resources)
 
 target_include_directories(GameEngine PUBLIC Vendor/Other/include)
 target_include_directories(GameEngine PUBLIC Vendor/GLFW/include)
-target_include_directories(GameEngine PUBLIC Vendor/IrrKlang/include)
 target_include_directories(GameEngine PUBLIC Vendor/Imgui/include)
 target_include_directories(GameEngine PUBLIC Vendor/GLM/include)
+target_include_directories(GameEngine PUBLIC Vendor/Miniaudio)
 
 ### Engine linker flags ###
 target_link_libraries(GameEngine PUBLIC ${ENGINE_LINKER_FLAGS})
@@ -63,7 +62,6 @@ target_link_libraries(GreenWorld PUBLIC GameEngine)
 ### Link against dynamic libraries ###
 target_link_libraries(GreenWorld PUBLIC ${GLFW_PATH})
 target_link_libraries(GreenWorld PUBLIC OpenGL::GL)
-target_link_libraries(GreenWorld PUBLIC ${IRRKLANG_PATH})
 
 ### Application linker flags ###
 target_link_libraries(GreenWorld PUBLIC ${APPLICATION_LINKER_FLAGS})

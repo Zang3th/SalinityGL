@@ -17,13 +17,14 @@ namespace Engine
         friend class RenderManager;
 
         private:
-            glm::mat4           _orthoProjection, _lightView, _lightProjection;
+            glm::mat4           _lightView, _lightProjection;
             Scope<FrameBuffer>  _fbo;
             uint32              _shadowWidth;
             uint32              _shadowHeight;
             Shader*             _shadowShader;
 
-            ShadowRenderer(uint32 width, uint32 height, const glm::vec3& lightPos, Shader* shader);
+            ShadowRenderer(uint32 width, uint32 height, const glm::vec3& lightPos,
+                           const glm::vec3& targetPos, const glm::mat4& orthoProj, Shader* shader);
             
             void StartFrame();
             void EndFrame();

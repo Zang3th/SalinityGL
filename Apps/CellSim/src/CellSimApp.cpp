@@ -9,7 +9,7 @@ namespace CS
         //Shader
         Engine::ResourceManager::LoadShader("ShadowCreateShader", "../Res/Shader/GreenWorld/ShadowCreate_VS.glsl", "../Res/Shader/GreenWorld/ShadowCreate_FS.glsl");
         Engine::ResourceManager::LoadShader("ModelShader", "../Res/Shader/GreenWorld/Model_VS.glsl", "../Res/Shader/GreenWorld/Model_FS.glsl");
-
+        Engine::ResourceManager::LoadShader("SpriteShaderGreyscale", "../Res/Shader/GreenWorld/Sprite_VS.glsl", "../Res/Shader/GreenWorld/SpriteGreyscale_FS.glsl");
         //Textures
         Engine::ResourceManager::LoadTextureFromFile("PlaneTexture", "../Res/Assets/Textures/CellSim/Metal.jpg");
     }
@@ -19,19 +19,22 @@ namespace CS
         //Initialize engine components
         Engine::Logger::Init();
         Engine::Window::Init("CellSim");
-        Engine::Camera3D::Init(glm::vec3(-75.0f, 74.0f, 70.0f), 0.4f, -23.0f, 25.0f);
+        Engine::Camera3D::Init(glm::vec3(408.0f, 85.0f, 430.0f), 47.0f, -24.0f, 50.0f);
         Engine::CameraController3D::Init();
         Engine::RenderManager::Init();
 
         //Configure some application settings
-        Engine::APP_SETTINGS.planeSize = 128;
+        Engine::APP_SETTINGS.planeSize = 1024;
 
         //Load up shaders and textures
         LoadResources();
 
         //Create application specific renderers
         _sceneRenderer  = Engine::RenderManager::AddScene(_nearPlane, _farPlane, _lightPos, _lightCol);
-        _shadowRenderer = Engine::RenderManager::AddShadows(8192, _lightPos, "ShadowCreateShader");
+        _shadowRenderer = Engine::RenderManager::AddShadows(8192, _lightPos, _lightTarget,
+                                                            glm::ortho(-60.0f, 60.0f, -60.0f, 60.0f, 77.0f, 240.0f),
+                                                            "ShadowCreateShader");
+        _spriteRenderer = Engine::RenderManager::AddSprites();
 
         //Set default shaders for the scene
         _sceneRenderer->SetModelShader("ModelShader");
@@ -45,23 +48,46 @@ namespace CS
         //Ground plane
         _sceneRenderer->AddPlane
         (
-            Engine::APP_SETTINGS.planeSize,                     //Length in x direction
-            Engine::APP_SETTINGS.planeSize,                     //Length in z direction
-            1.0f,                                               //Tile size
-            glm::vec3(0.0f),                                    //Position
-            _shadowRenderer->GetDepthTexture(),                 //Depth texture
-            "PlaneTexture"                                      //Main texture
+            Engine::APP_SETTINGS.planeSize,                                 //Length in x direction
+            Engine::APP_SETTINGS.planeSize,                                 //Length in z direction
+            1.0f,                                                           //Tile size
+            glm::vec3(0.0f),                                                //Position
+            _shadowRenderer->GetDepthTexture(),                             //Depth texture
+            "PlaneTexture"                                                  //Main texture
         );
 
         //Frame
         _sceneRenderer->AddObject
         (
-            10.0f,                                              //Size
-            glm::vec3(0.0f),                                    //Rotation
-            glm::vec3(64.0f, 20.0f, 64.0f),                     //Position
-            _shadowRenderer->GetDepthTexture(),                 //Depth texture
-            "Cube",                                             //Name
-            "../Res/Assets/Models/CellSim/Frame"                //Path to obj file
+            1.0f,                                                           //Size
+            glm::vec3(0.0f),                                                //Rotation
+            glm::vec3(512.0f, 0.5f, 512.0f),                                //Position
+            _shadowRenderer->GetDepthTexture(),                             //Depth texture
+            "Frame",                                                        //Name
+            "../Res/Assets/Models/CellSim/Frame"                            //Path to obj file
+        );
+
+        //Cube
+        _sceneRenderer->AddObject
+        (
+            0.5f,                                                           //Size
+            glm::vec3(0.0f),                                                //Rotation
+            glm::vec3(500.0f, 10.0f, 524.0f),                               //Position
+            _shadowRenderer->GetDepthTexture(),                             //Depth texture
+            "Cube",                                                         //Name
+            "../Res/Assets/Models/CellSim/Cube"                             //Path to obj file
+        );
+    }
+
+    void CellSimApp::AddSprites()
+    {
+        //Shadow sprite
+        _spriteRenderer->AddSprite
+        (
+            glm::vec2(200.0f, 200.0f),                                      //Size
+            glm::vec2(0.0f, 0.0f),                                          //Position
+            _shadowRenderer->GetDepthTexture(),                             //Texture
+            Engine::ResourceManager::GetShader("SpriteShaderGreyscale")     //Shader
         );
     }
 
@@ -71,6 +97,7 @@ namespace CS
     {
         InitModules();
         AddObjects();
+        AddSprites();
     }
 
     CellSimApp::~CellSimApp()
@@ -107,6 +134,9 @@ namespace CS
             Engine::PROFILE_SCOPE("Render scene");
 
             Engine::RenderManager::RenderScene();
+
+            if(Engine::APP_SETTINGS.debugSprites)
+                Engine::RenderManager::RenderSprites();
         }
 
         {

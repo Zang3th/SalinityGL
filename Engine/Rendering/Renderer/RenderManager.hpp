@@ -31,7 +31,8 @@ namespace Engine
             static void PrepareFrame();
 
             static SceneRenderer*    AddScene(float nearPlane, float farPlane, const glm::vec3& lightPos, const glm::vec3& lightCol);
-            static ShadowRenderer*   AddShadows(uint32 resolution, const glm::vec3& lightPos, const std::string& shader);
+            static ShadowRenderer*   AddShadows(uint32 resolution, const glm::vec3& lightPos, const glm::vec3& targetPos,
+                                                const glm::mat4& orthoProj, const std::string& shader);
             static SpriteRenderer*   AddSprites();
             static WaterRenderer*    AddWater();
             static ParticleRenderer* AddParticles

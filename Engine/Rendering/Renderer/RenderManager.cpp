@@ -37,9 +37,10 @@ namespace Engine
         return _sceneRenderer;
     }
 
-    ShadowRenderer* RenderManager::AddShadows(const uint32 resolution, const glm::vec3& lightPos, const std::string& shader)
+    ShadowRenderer* RenderManager::AddShadows(uint32 resolution, const glm::vec3& lightPos, const glm::vec3& targetPos,
+                                              const glm::mat4& orthoProj, const std::string& shader)
     {
-        _shadowRenderer = new ShadowRenderer(resolution, resolution, lightPos, ResourceManager::GetShader(shader));
+        _shadowRenderer = new ShadowRenderer(resolution, resolution, lightPos, targetPos, orthoProj, ResourceManager::GetShader(shader));
         _rendererStorage.push_back(_shadowRenderer);
         _sceneRenderer->AddLightProjection(_shadowRenderer->GetLightProjection());
 

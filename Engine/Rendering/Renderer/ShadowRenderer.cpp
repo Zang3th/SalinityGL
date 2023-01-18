@@ -4,10 +4,10 @@ namespace Engine
 {
     // ----- Private -----
 
-    ShadowRenderer::ShadowRenderer(const uint32 width, const uint32 height, const glm::vec3& lightPos, Shader* shader)
-        :   _orthoProjection(glm::ortho(-90.0f, 90.0f, -90.0f, 90.0f, 110.0f, 210.0f)),
-            _lightView(glm::lookAt(lightPos, glm::vec3(64.0f, 0.0f, 64.0f), glm::vec3(0.0f, 1.0f, 0.0f))),
-            _lightProjection(_orthoProjection * _lightView),
+    ShadowRenderer::ShadowRenderer(const uint32 width, const uint32 height, const glm::vec3& lightPos,
+                                   const glm::vec3& targetPos, const glm::mat4& orthoProj, Shader* shader)
+        :   _lightView(glm::lookAt(lightPos, targetPos, glm::vec3(0.0f, 1.0f, 0.0f))),
+            _lightProjection(orthoProj * _lightView),
             _shadowWidth(width), _shadowHeight(height), _shadowShader(shader)
     {
         //Create and configure framebuffer
@@ -18,7 +18,7 @@ namespace Engine
         //Create and configure depth texture attachment
         Texture* depthTexture = _fbo->CreateDepthTextureAttachment("ShadowDepthTexture", _shadowWidth, _shadowHeight);
         depthTexture->AddFilterNearest();
-        depthTexture->AddWrapRepeat();
+        depthTexture->ClampToEdge();
         depthTexture->AddBorderColor();
 
         _fbo->Unbind();

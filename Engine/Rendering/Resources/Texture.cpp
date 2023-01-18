@@ -135,6 +135,13 @@ namespace Engine
         GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT));
     }
 
+    void Texture::ClampToEdge() const
+    {
+        Bind();
+        GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
+        GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
+    }
+
     void Texture::AddBorderColor() const
     {
         Bind();

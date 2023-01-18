@@ -30,6 +30,7 @@ namespace Engine
             void AddFilterNearest()                const;
             void AddFilterLinear()                 const;
             void AddWrapRepeat()                   const;
+            void ClampToEdge()                     const;
             void AddBorderColor()                  const;
 
             [[nodiscard]] uint32 GetTextureID()    const;

@@ -10,7 +10,7 @@
 - Abstraction layer and helper functions for 2D-/3D-Rendering
 - Basic OpenGL-Wrapping
 - Written in C++17 with OpenGL 4.5
-- Example applications that are using the engine:
+- Example applications that are using the engine
   - GreenWorld: Demo 3D nature scene (finished) ✅
   - CellSim: Cellular automata with 3D cubes (in development) ⌛
 
@@ -89,4 +89,4 @@
 
 ### CellSim
 
-![CellSim](Res/Screenshots/CellSim/Screenshot_CS_001.png)
+![CellSim](Res/Screenshots/CellSim/Screenshot_CS_002.png)

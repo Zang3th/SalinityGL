@@ -45,8 +45,9 @@ namespace GW
 
         //Create application specific renderers
         _sceneRenderer  = Engine::RenderManager::AddScene(_nearPlane, _farPlane, _lightPos, _lightCol);
-        _shadowRenderer = Engine::RenderManager::AddShadows(8192, _lightPos, "ShadowCreateShader");
-        _spriteRenderer = Engine::RenderManager::AddSprites();
+        _shadowRenderer = Engine::RenderManager::AddShadows(8192, _lightPos, _lightTarget,
+                                                            glm::ortho(-90.0f, 90.0f, -90.0f, 90.0f, 110.0f, 210.0f),
+                                                            "ShadowCreateShader");_spriteRenderer = Engine::RenderManager::AddSprites();
         _waterRenderer  = Engine::RenderManager::AddWater();
         _smokeRenderer  = Engine::RenderManager::AddParticles
         (

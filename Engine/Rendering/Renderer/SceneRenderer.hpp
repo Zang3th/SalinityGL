@@ -63,6 +63,11 @@ namespace Engine
                 float waveSpeed, const std::string& dudvMap, const std::string& normalMap,
                 Texture* reflectTex, Texture* refractTex, Texture* refractDepthTex
             );
+            void AddPlane
+            (
+                    uint32 x, uint32 z, float tileSize, const glm::vec3& position,
+                    Texture* depthTexture, const std::string& texture
+            );
 
             void SetTerrainShader(const std::string& terrainShader);
             void SetModelShader(const std::string& modelShader);

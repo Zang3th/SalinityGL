@@ -23,9 +23,6 @@ namespace Engine
 
     void SceneRenderer::FlushModel(Model* model, Shader* shader)
     {
-        //Bind shader
-        shader->Bind();
-
         //Get textures and bind them
         uint8_t slot = 0;
         for(const auto& tex : *model->GetTextures())
@@ -47,8 +44,6 @@ namespace Engine
         shader->SetUniformMat4f("lightProjection", _lightProj);
         shader->SetUniform1i("diffuseTexture", 0);
         shader->SetUniform1i("shadowMap", 1);
-        shader->SetUniform1i("normalMap", 2);
-        shader->SetUniform1i("gotNormalMap", model->GotNormalMap());
 
         //Render model
         GLCall(glDrawElements(GL_TRIANGLES, verticeCount, GL_UNSIGNED_INT, nullptr));
@@ -61,9 +56,6 @@ namespace Engine
         {
             tex->Unbind();
         }
-
-        //Unbind shader
-        shader->Unbind();
 
         //Save stats
         APP_SETTINGS.renderStats.drawnVertices += verticeCount;
@@ -142,17 +134,28 @@ namespace Engine
         //Modify water move factor
         UpdateMoveFactor();
 
-        FlushTerrain();
-        FlushModels(_modelShader);
-        FlushWater();
-        FlushCubemap();
+        if(_terrainModel)
+            FlushTerrain();
+
+        if(!_modelStorage.empty())
+            FlushModels(_modelShader);
+
+        if(_waterModel)
+            FlushWater();
+
+        if(_cubemap)
+            FlushCubemap();
     }
 
     void SceneRenderer::FlushModels(Shader* shader)
     {
         for(auto& model : _modelStorage)
         {
+            shader->Bind();
+            shader->SetUniform1i("normalMap", 2);
+            shader->SetUniform1i("gotNormalMap", model->GotNormalMap());
             FlushModel(model, shader);
+            shader->Unbind();
         }
 
         APP_SETTINGS.renderStats.modelPasses++;
@@ -160,61 +163,19 @@ namespace Engine
 
     void SceneRenderer::FlushCubemap()
     {
-        if(_cubemap)
-        {
-            GLRenderSettings::DisableWireframe();
-            APP_SETTINGS.renderStats.drawnVertices += _cubemap->Draw(_perspProj, Camera3D::GetViewMatrix());
-            APP_SETTINGS.renderStats.drawCalls++;
-            APP_SETTINGS.renderStats.cubemapPasses++;
-        }
+        GLRenderSettings::DisableWireframe();
+        APP_SETTINGS.renderStats.drawnVertices += _cubemap->Draw(_perspProj, Camera3D::GetViewMatrix());
+        APP_SETTINGS.renderStats.drawCalls++;
+        APP_SETTINGS.renderStats.cubemapPasses++;
     }
 
     void SceneRenderer::FlushTerrain()
     {
-        //Bind shader
         _terrainShader->Bind();
-
-        //Get textures and bind them
-        uint8_t slot = 0;
-        for(const auto& tex : *_terrainModel->GetTextures())
-        {
-            tex->BindToSlot(slot++);
-        }
-
-        //Bind buffers and get vertice count
-        _terrainModel->BindBuffers();
-        uint32 verticeCount = _terrainModel->GetVerticeCount();
-
-        //Set uniforms
-        _terrainShader->SetUniformMat4f("view", Camera3D::GetViewMatrix());
-        _terrainShader->SetUniformMat4f("model", _terrainModel->GetModelMatrix());
-        _terrainShader->SetUniformMat4f("projection", _perspProj);
-        _terrainShader->SetUniformVec3f("viewPos", Camera3D::GetPosition());
-        _terrainShader->SetUniformVec3f("lightPos", _lightPos);
-        _terrainShader->SetUniformVec3f("lightColor", _lightCol);
-        _terrainShader->SetUniformMat4f("lightProjection", _lightProj);
-        _terrainShader->SetUniform1i("diffuseTexture", 0);
-        _terrainShader->SetUniform1i("colorMap", 1);
-        _terrainShader->SetUniform1i("shadowMap", 2);
-
-        //Render model
-        GLCall(glDrawElements(GL_TRIANGLES, verticeCount, GL_UNSIGNED_INT, nullptr));
-
-        //Unbind buffers
-        _terrainModel->UnbindBuffers();
-
-        //Unbind textures
-        for(const auto& tex : *_terrainModel->GetTextures())
-        {
-            tex->Unbind();
-        }
-
-        //Unbind shader
+        _terrainShader->SetUniform1i("colorMap", 2);
+        FlushModel(_terrainModel, _terrainShader);
         _terrainShader->Unbind();
 
-        //Save stats
-        APP_SETTINGS.renderStats.drawnVertices += verticeCount;
-        APP_SETTINGS.renderStats.drawCalls++;
         APP_SETTINGS.renderStats.terrainPasses++;
     }
 
@@ -246,8 +207,8 @@ namespace Engine
 
         //Add textures
         _terrainModel->AddTexture(ResourceManager::GetTexture(texture));
-        _terrainModel->AddTexture(ResourceManager::GetTexture(colormap));
         _terrainModel->AddTexture(depthTexture);
+        _terrainModel->AddTexture(ResourceManager::GetTexture(colormap));
     }
 
     void SceneRenderer::AddObject
@@ -300,6 +261,30 @@ namespace Engine
 
         //Store other variable(s)
         _waveSpeed = waveSpeed;
+    }
+
+    void SceneRenderer::AddPlane
+    (
+        const uint32 x, const uint32 z, const float tileSize, const glm::vec3& position,
+        Texture* depthTexture, const std::string& texture
+    )
+    {
+        //Create terrain mesh
+        Mesh planeMesh;
+        MeshCreator::CreatePlane(x, z, tileSize, &planeMesh);
+
+        //Create model
+        auto planeModel = new Model(&planeMesh);
+
+        //Reposition model
+        planeModel->ChangePosition(position);
+
+        //Add textures
+        planeModel->AddTexture(ResourceManager::GetTexture(texture));
+        planeModel->AddTexture(depthTexture);
+
+        //Store model
+        _modelStorage.push_back(planeModel);
     }
 
     void SceneRenderer::SetTerrainShader(const std::string& terrainShader)

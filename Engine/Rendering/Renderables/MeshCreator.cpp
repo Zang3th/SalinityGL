@@ -118,8 +118,9 @@ namespace Engine
                     yPos = (float)heightmap->GetValueAt(i, j);
 
                 mesh->vertices.emplace_back(xPos * tileSize, yPos, zPos * tileSize);
-                mesh->texCoords.emplace_back(zPos, xPos);       //Flip texture coordinates
+                mesh->texCoords.emplace_back(zPos, xPos); //Flip texture coordinates
                 mesh->normals.emplace_back(0.0f, 1.0f, 0.0f);
+                mesh->tangents.emplace_back(0.0f, 0.0f, 0.0f);
 
                 if ((j != z) && (i != x))
                 {
@@ -140,6 +141,7 @@ namespace Engine
         }
 
         CalculateNormals(mesh);
+        CalculateTangents(mesh);
     }
 
     void MeshCreator::CreateFromObj(const std::string& filename, const std::string& baseFilepath, std::vector<Mesh>* meshes)

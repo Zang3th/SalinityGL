@@ -80,6 +80,7 @@ namespace Engine
     void Model::BindBuffers() const
     {
         _vao->Bind();
+        _ibo->Bind();
         _vboVert->Bind();
         _vboTex->Bind();
         _vboNorm->Bind();
@@ -92,6 +93,7 @@ namespace Engine
         _vboNorm->Unbind();
         _vboTex->Unbind();
         _vboVert->Unbind();
+        _ibo->Unbind();
         _vao->Unbind();
     }
 
@@ -122,7 +124,8 @@ namespace Engine
 
     void Model::SetTextureInSlot(Texture* texture, uint32_t slot)
     {
-        _textures.insert(_textures.begin() + slot, texture);
+        if(!_textures.empty())
+            _textures.insert(_textures.begin() + slot, texture);
     }
 
     [[nodiscard]] const std::vector<Texture*>* Model::GetTextures() const

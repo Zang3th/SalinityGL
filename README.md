@@ -7,30 +7,29 @@
 ## Objectives
 
 - For my personal educational purposes
-- Abstraction layer for 2D/3D-Rendering
-- OpenGL-Wrapper-Functions
+- Abstraction layer and helper functions for 2D-/3D-Rendering
+- Basic OpenGL-Wrapping
 - Written in C++17 with OpenGL 4.5
-- Example applications that are using the engine
-  - GreenWorld: Nature-Scene (3D)
+- Example applications that are using the engine:
+  - GreenWorld: Demo 3D nature scene (finished) ✅
+  - CellSim: Cellular automata with 3D cubes (in development) ⌛
 
-## Basic functionalities
+## Functionalities
 
 - Basic OpenGL-Wrapping (VAO, VBO, IBO, FBO, Errorhandling)
 - Windowcreation
 - Resourcemanagement (Shader, Textures)
-  - 2D-Sprite-Rendering
-  - 3D-Model-Rendering
-  - Camerasystem + Control
-  - Cubemaps/Skyboxes
 - File-Management
 - Profiling
 - UI
 - Audio
-- Loading of OBJ-Models
-- Creation of basic meshes
-
-## Additional functionalities
-
+- Rendering
+  - 2D-Sprite-Rendering
+  - 3D-Model-Rendering
+    - Loading of OBJ-Models
+    - Dynamic mesh creation (planes, terrains)
+- Camerasystem + Inputmanagement
+- Cubemaps/Skyboxes
 - Lighting
   - Blinn-Phong
   - Shadow-Rendering
@@ -40,16 +39,19 @@
   - Particles
     - Smoke
 
-## ToDo's
+## Plans for future releases
 
-- Grass
+### Graphical improvements
 - Bloom
 - Lensflare
-- Simple Raytracing
-  - Shadows and Lighting in 2D
-- And a lot more ...
+- Raytracing
+  - Shadows and lighting in 2D
 
-## Libraries (Credits to the Creators and Contributors)
+### Other
+- Grass simulation
+- Simulation of liquids
+
+## Libraries (credits to the creators and contributors)
 
 - [glad](https://github.com/Dav1dde/glad)
 - [glfw](https://github.com/glfw/glfw)
@@ -60,7 +62,7 @@
 - [tinyobjloader](https://github.com/tinyobjloader/tinyobjloader)
 - [miniaudio](https://github.com/mackron/miniaudio)
 
-## Using & Compiling (currently for Linux with CMake)
+## Using & compiling (currently for Linux with CMake)
 
 - Tested with Ubuntu 16.04 - 22.04
 - Install the external dependencies if needed
@@ -79,6 +81,12 @@
 
 - This code is provided under the MIT License. See the file LICENSE for details.
 
-## GreenWorld-Application
+## Applications
+
+### Greenworld
 
 ![GreenWorld](Res/Screenshots/GreenWorld/Screenshot_GW_022.png)
+
+### CellSim
+
+![CellSim](Res/Screenshots/CellSim/Screenshot_CS_001.png)

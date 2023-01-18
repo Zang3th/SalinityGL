@@ -48,20 +48,28 @@ find_package(OpenGL REQUIRED)
 
 ### Source files ###
 file(GLOB_RECURSE SRC_GREENWORLD Apps/GreenWorld/src/*.cpp)
+file(GLOB_RECURSE SRC_CELLSIM Apps/CellSim/src/*.cpp)
 
 ### Compile to an executable ###
 add_executable(GreenWorld Apps/GreenWorld/GreenWorld.cpp ${SRC_GREENWORLD})
+add_executable(CellSim Apps/CellSim/CellSim.cpp ${SRC_CELLSIM})
 
 ### Include directories ###
 target_include_directories(GreenWorld PUBLIC Apps/GreenWorld/src)
 target_include_directories(GreenWorld PUBLIC Engine)
+target_include_directories(CellSim PUBLIC Apps/CellSim/src)
+target_include_directories(CellSim PUBLIC Engine)
 
 ### Link against static libraries ###
 target_link_libraries(GreenWorld PUBLIC GameEngine)
+target_link_libraries(CellSim PUBLIC GameEngine)
 
 ### Link against dynamic libraries ###
 target_link_libraries(GreenWorld PUBLIC ${GLFW_PATH})
 target_link_libraries(GreenWorld PUBLIC OpenGL::GL)
+target_link_libraries(CellSim PUBLIC ${GLFW_PATH})
+target_link_libraries(CellSim PUBLIC OpenGL::GL)
 
 ### Application linker flags ###
 target_link_libraries(GreenWorld PUBLIC ${APPLICATION_LINKER_FLAGS})
+target_link_libraries(CellSim PUBLIC ${APPLICATION_LINKER_FLAGS})

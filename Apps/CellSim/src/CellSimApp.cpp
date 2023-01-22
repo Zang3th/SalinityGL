@@ -10,9 +10,6 @@ namespace CS
         Engine::ResourceManager::LoadShader("ShadowCreateShader", "../Res/Shader/GreenWorld/ShadowCreate_VS.glsl", "../Res/Shader/GreenWorld/ShadowCreate_FS.glsl");
         Engine::ResourceManager::LoadShader("ModelShader", "../Res/Shader/GreenWorld/Model_VS.glsl", "../Res/Shader/GreenWorld/Model_FS.glsl");
         Engine::ResourceManager::LoadShader("SpriteShaderGreyscale", "../Res/Shader/GreenWorld/Sprite_VS.glsl", "../Res/Shader/GreenWorld/SpriteGreyscale_FS.glsl");
-
-        //Textures
-        Engine::ResourceManager::LoadTextureFromFile("PlaneTexture", "../Res/Assets/Textures/CellSim/Metal.jpg");
     }
 
     void CellSimApp::InitModules()

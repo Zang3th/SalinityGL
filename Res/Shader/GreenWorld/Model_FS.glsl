@@ -11,6 +11,7 @@ out vec4 fragColor;
 uniform sampler2D   diffuseTexture;
 uniform sampler2D   shadowMap;
 uniform sampler2D   normalMap;
+uniform int         gotDiffuseTex;
 uniform int         gotNormalMap;
 uniform vec3        viewPos;
 uniform vec3        lightPos;
@@ -101,10 +102,15 @@ vec3 calculateBumpedNormal(vec3 normal)
 
 void main()
 {
-    vec4 texColor = texture(diffuseTexture, texCoords);
+    vec4 texColor = vec4(0.5, 0.5, 0.5, 1.0);
 
-    if(texColor.a < 0.5)
-        discard;
+    if(gotDiffuseTex == 1)
+    {
+        texColor = texture(diffuseTexture, texCoords);
+
+        if(texColor.a < 0.5)
+            discard;
+    }
 
     vec3 normal_n = normalize(normals);
 

@@ -15,6 +15,7 @@
 
 #include <array>
 #include <string>
+#include <optional>
 
 namespace Engine
 {
@@ -66,7 +67,7 @@ namespace Engine
             void AddPlane
             (
                     uint32 x, uint32 z, float tileSize, const glm::vec3& position,
-                    Texture* depthTexture, const std::string& texture
+                    Texture* depthTexture, std::optional<const std::string> texture
             );
 
             void SetTerrainShader(const std::string& terrainShader);

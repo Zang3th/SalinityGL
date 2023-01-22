@@ -27,7 +27,10 @@ namespace Engine
         uint8_t slot = 0;
         for(const auto& tex : *model->GetTextures())
         {
-            tex->BindToSlot(slot++);
+            if(tex != nullptr)
+                tex->BindToSlot(slot);
+
+            slot++;
         }
 
         //Bind buffers and get vertice count
@@ -154,6 +157,7 @@ namespace Engine
             shader->Bind();
             shader->SetUniform1i("normalMap", 2);
             shader->SetUniform1i("gotNormalMap", model->GotNormalMap());
+            shader->SetUniform1i("gotDiffuseTex", model->GotDiffuseTex());
             FlushModel(model, shader);
             shader->Unbind();
         }
@@ -226,7 +230,7 @@ namespace Engine
         {
             auto objModel = new Model(&mesh);
 
-            objModel->SetTextureInSlot(depthTexture, 1);
+            objModel->AddTextureToSlot(depthTexture, 1);
             objModel->ChangeSize(size);
             objModel->ChangeRotation(rotation);
             objModel->ChangePosition(position);
@@ -266,7 +270,7 @@ namespace Engine
     void SceneRenderer::AddPlane
     (
         const uint32 x, const uint32 z, const float tileSize, const glm::vec3& position,
-        Texture* depthTexture, const std::string& texture
+        Texture* depthTexture, std::optional<const std::string> texture
     )
     {
         //Create terrain mesh
@@ -279,9 +283,14 @@ namespace Engine
         //Reposition model
         planeModel->ChangePosition(position);
 
-        //Add textures
-        planeModel->AddTexture(ResourceManager::GetTexture(texture));
-        planeModel->AddTexture(depthTexture);
+        //Add texture(s)
+        if(texture.has_value())
+        {
+            planeModel->AddTexture(ResourceManager::GetTexture(texture.value()));
+            planeModel->SetDiffuseTexture();
+        }
+
+        planeModel->AddTextureToSlot(depthTexture, 1);
 
         //Store model
         _modelStorage.push_back(planeModel);

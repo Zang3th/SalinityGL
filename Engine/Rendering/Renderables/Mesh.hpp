@@ -17,6 +17,6 @@ namespace Engine
             std::vector<glm::vec3>  tangents;
             std::vector<uint32>     indices;
             std::vector<Texture*>   textures;
-            int32                   gotNormalMap = 0;
+            int32                   gotDiffuseTex = 0, gotNormalMap = 0;
     };
 }

@@ -55,7 +55,7 @@ namespace Engine
             _position(0.0f),
             _textures(mesh->textures),
             _verticeCount(mesh->indices.size()),
-            _gotNormalMap(mesh->gotNormalMap),
+            _gotDiffuseTex(mesh->gotDiffuseTex), _gotNormalMap(mesh->gotNormalMap),
             _rotationX(0.0f), _rotationY(0.0f), _rotationZ(0.0f),
             _size(1.0f)
     {
@@ -72,9 +72,19 @@ namespace Engine
         return _verticeCount;
     }
 
+    int32 Model::GotDiffuseTex() const
+    {
+        return _gotDiffuseTex;
+    }
+
     int32 Model::GotNormalMap() const
     {
         return _gotNormalMap;
+    }
+
+    [[nodiscard]] const std::vector<Texture*>* Model::GetTextures() const
+    {
+        return &_textures;
     }
 
     void Model::BindBuffers() const
@@ -122,14 +132,21 @@ namespace Engine
         _textures.push_back(texture);
     }
 
-    void Model::SetTextureInSlot(Texture* texture, uint32_t slot)
+    void Model::AddTextureToSlot(Texture* texture, uint32_t slot)
     {
-        if(!_textures.empty())
-            _textures.insert(_textures.begin() + slot, texture);
+        if(_textures.empty())
+        {
+            for(uint32_t i = 0; i < slot; i++)
+            {
+                _textures.push_back(nullptr);
+            }
+        }
+
+        _textures.insert(_textures.begin() + slot, texture);
     }
 
-    [[nodiscard]] const std::vector<Texture*>* Model::GetTextures() const
+    void Model::SetDiffuseTexture()
     {
-        return &_textures;
+        _gotDiffuseTex = true;
     }
 }

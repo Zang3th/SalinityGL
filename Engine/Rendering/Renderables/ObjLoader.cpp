@@ -74,6 +74,7 @@ namespace Engine
                 std::string textureName = filename + "DiffuseTexture";
                 ResourceManager::LoadTextureFromFile(textureName, textureFilepath);
                 mesh.textures.push_back(ResourceManager::GetTexture(textureName));
+                mesh.gotDiffuseTex = 1;
             }
 
             //Check for normal map

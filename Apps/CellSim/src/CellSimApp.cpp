@@ -10,6 +10,7 @@ namespace CS
         Engine::ResourceManager::LoadShader("ShadowCreateShader", "../Res/Shader/GreenWorld/ShadowCreate_VS.glsl", "../Res/Shader/GreenWorld/ShadowCreate_FS.glsl");
         Engine::ResourceManager::LoadShader("ModelShader", "../Res/Shader/GreenWorld/Model_VS.glsl", "../Res/Shader/GreenWorld/Model_FS.glsl");
         Engine::ResourceManager::LoadShader("SpriteShaderGreyscale", "../Res/Shader/GreenWorld/Sprite_VS.glsl", "../Res/Shader/GreenWorld/SpriteGreyscale_FS.glsl");
+
         //Textures
         Engine::ResourceManager::LoadTextureFromFile("PlaneTexture", "../Res/Assets/Textures/CellSim/Metal.jpg");
     }
@@ -24,7 +25,7 @@ namespace CS
         Engine::RenderManager::Init();
 
         //Configure some application settings
-        Engine::APP_SETTINGS.planeSize = 1024;
+        Engine::APP_SETTINGS.planeSize = 1;
 
         //Load up shaders and textures
         LoadResources();
@@ -50,10 +51,10 @@ namespace CS
         (
             Engine::APP_SETTINGS.planeSize,                                 //Length in x direction
             Engine::APP_SETTINGS.planeSize,                                 //Length in z direction
-            1.0f,                                                           //Tile size
+            1024.0f,                                                        //Tile size
             glm::vec3(0.0f),                                                //Position
             _shadowRenderer->GetDepthTexture(),                             //Depth texture
-            "PlaneTexture"                                                  //Main texture
+            {}                                                              //Main texture
         );
 
         //Frame

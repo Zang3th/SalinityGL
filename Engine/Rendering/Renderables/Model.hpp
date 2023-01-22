@@ -25,7 +25,7 @@ namespace Engine
             glm::vec3             _position;
             std::vector<Texture*> _textures;
             uint32                _verticeCount;
-            int32                 _gotNormalMap;
+            int32                 _gotDiffuseTex, _gotNormalMap;
             float                 _rotationX, _rotationY, _rotationZ;
             float                 _size;
 
@@ -33,10 +33,12 @@ namespace Engine
             void                  SetModelMatrix();
 
         public:
-            explicit                    Model(const Mesh* mesh);
-            [[nodiscard]] glm::mat4     GetModelMatrix()  const;
-            [[nodiscard]] uint32        GetVerticeCount() const;
-            [[nodiscard]] int32         GotNormalMap()    const;
+            explicit                                   Model(const Mesh* mesh);
+            [[nodiscard]] glm::mat4                    GetModelMatrix()  const;
+            [[nodiscard]] uint32                       GetVerticeCount() const;
+            [[nodiscard]] int32                        GotDiffuseTex()   const;
+            [[nodiscard]] int32                        GotNormalMap()    const;
+            [[nodiscard]] const std::vector<Texture*>* GetTextures()     const;
 
             void BindBuffers() const;
             void UnbindBuffers() const;
@@ -44,7 +46,7 @@ namespace Engine
             void ChangeRotation(const glm::vec3& rotation);
             void ChangeSize(float size);
             void AddTexture(Texture* texture);
-            void SetTextureInSlot(Texture* texture, uint32_t slot);
-            [[nodiscard]] const std::vector<Texture*>* GetTextures() const;
+            void AddTextureToSlot(Texture* texture, uint32_t slot);
+            void SetDiffuseTexture();
     };
 }

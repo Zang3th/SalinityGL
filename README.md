@@ -62,7 +62,7 @@
 - [tinyobjloader](https://github.com/tinyobjloader/tinyobjloader)
 - [miniaudio](https://github.com/mackron/miniaudio)
 
-## Using & compiling (currently for Linux with CMake)
+## Using & compiling (currently for linux with CMake)
 
 - Tested with Ubuntu 16.04 - 22.04
 - Install the external dependencies if needed
@@ -85,8 +85,8 @@
 
 ### Greenworld
 
-![GreenWorld](Res/Screenshots/GreenWorld/Screenshot_GW_022.png)
+![GreenWorld](Res/Screenshots/GreenWorld/Screenshot_GW_023.png)
 
 ### CellSim
 
-![CellSim](Res/Screenshots/CellSim/Screenshot_CS_002.png)
+![CellSim](Res/Screenshots/CellSim/Screenshot_CS_003.png)

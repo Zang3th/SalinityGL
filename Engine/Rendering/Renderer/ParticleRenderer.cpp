@@ -6,11 +6,11 @@ namespace Engine
 
     ParticleRenderer::ParticleRenderer
     (
-        glm::vec3 position, uint32 count, float size, float speed, float gravityComplient,
+        glm::vec3 position, uint32 count, float size, float speed, float gravityCompliance,
         float lifeLength, float respawnThreshold, Texture* textureAtlas, Shader* shader
     )
         :   _position(position), _count(count), _numberOfRows(textureAtlas->GetNumberOfRows()), _size(size),
-            _speed(speed), _gravityComplient(gravityComplient), _lifeLength(lifeLength), _respawnTreshold(respawnThreshold),
+            _speed(speed), _gravityCompliance(gravityCompliance), _lifeLength(lifeLength), _respawnTreshold(respawnThreshold),
             _verticeCount(4), _textureAtlas(textureAtlas), _shader(shader)
     {
         GenerateParticles();
@@ -95,7 +95,7 @@ namespace Engine
             glm::vec3 vel = glm::vec3(2.0f * ((Random::GetFloat() - 0.5f) * 2.0f),
                                      25.0f * ((Random::GetFloat())        * 1.5f),
                                       2.0f * ((Random::GetFloat() - 0.5f) * 2.0f)) * _speed;
-            float grav = _gravityComplient;
+            float grav = _gravityCompliance;
             float life = _lifeLength + ((Random::GetFloat() - 0.5f) * 4.0f);
             float rot  = 0.0f;
             float size = _size * Random::GetFloat();
@@ -201,9 +201,9 @@ namespace Engine
         _shader->Unbind();
 
         //Save stats
-        APP_SETTINGS.renderStats.drawnVertices += _verticeCount * _count;
-        APP_SETTINGS.renderStats.drawCalls++;
-        APP_SETTINGS.renderStats.particlePasses++;
+        AppSettings::renderStats.drawnVertices += _verticeCount * _count;
+        AppSettings::renderStats.drawCalls++;
+        AppSettings::renderStats.particlePasses++;
 
         GLRenderSettings::EnableDepthtest();
     }

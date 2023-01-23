@@ -8,8 +8,8 @@ namespace GW
     {
         const ImGuiViewport* viewport  = ImGui::GetMainViewport();
         const ImVec2 workPos           = viewport->WorkPos;
-        const auto   windowWidth       = (float)Engine::APP_SETTINGS.WINDOW_WIDTH;
-        const auto   windowHeight      = (float)Engine::APP_SETTINGS.WINDOW_HEIGHT;
+        const auto   windowWidth       = (float)Engine::AppSettings::WINDOW_WIDTH;
+        const auto   windowHeight      = (float)Engine::AppSettings::WINDOW_HEIGHT;
         const float  menuBarHeight     = 25.0f;
         const float  sidebarWidth      = 415.0f;
         const float  shaderTexBarWidth = 210.0f;
@@ -55,13 +55,13 @@ namespace GW
             if(ImGui::BeginMenu("Settings"))
             {
                 ImGui::MenuItem("Show overlay", "", &_showOverlay);
-                ImGui::MenuItem("Show debug sprites", "", &Engine::APP_SETTINGS.debugSprites);
+                ImGui::MenuItem("Show debug sprites", "", &Engine::AppSettings::debugSprites);
                 ImGui::EndMenu();
             }
 
             if(ImGui::BeginMenu("Rendering"))
             {
-                ImGui::MenuItem("Wireframe-Mode", "", &Engine::APP_SETTINGS.wireframeRendering);
+                ImGui::MenuItem("Wireframe-Mode", "", &Engine::AppSettings::wireframeRendering);
                 ImGui::EndMenu();
             }
         }
@@ -87,18 +87,18 @@ namespace GW
                     //Render stats
                     ImGui::NewLine();
                     ImGui::Separator();
-                    ImGui::Text("DrawCalls:      %d", Engine::APP_SETTINGS.renderStats.drawCalls);
-                    ImGui::Text("DrawnVertices:  %d", Engine::APP_SETTINGS.renderStats.drawnVertices);
+                    ImGui::Text("DrawCalls:      %d", Engine::AppSettings::renderStats.drawCalls);
+                    ImGui::Text("DrawnVertices:  %d", Engine::AppSettings::renderStats.drawnVertices);
                     ImGui::Separator();
 
                     ImGui::NewLine();
                     ImGui::Separator();
-                    ImGui::Text("Model    passes: %d", Engine::APP_SETTINGS.renderStats.modelPasses);
-                    ImGui::Text("Terrain  passes: %d", Engine::APP_SETTINGS.renderStats.terrainPasses);
-                    ImGui::Text("Water    passes: %d", Engine::APP_SETTINGS.renderStats.waterPasses);
-                    ImGui::Text("Particle passes: %d", Engine::APP_SETTINGS.renderStats.particlePasses);
-                    ImGui::Text("Sprite   passes: %d", Engine::APP_SETTINGS.renderStats.spritePasses);
-                    ImGui::Text("Cubemap  passes: %d", Engine::APP_SETTINGS.renderStats.cubemapPasses);
+                    ImGui::Text("Model    passes: %d", Engine::AppSettings::renderStats.modelPasses);
+                    ImGui::Text("Terrain  passes: %d", Engine::AppSettings::renderStats.terrainPasses);
+                    ImGui::Text("Water    passes: %d", Engine::AppSettings::renderStats.waterPasses);
+                    ImGui::Text("Particle passes: %d", Engine::AppSettings::renderStats.particlePasses);
+                    ImGui::Text("Sprite   passes: %d", Engine::AppSettings::renderStats.spritePasses);
+                    ImGui::Text("Cubemap  passes: %d", Engine::AppSettings::renderStats.cubemapPasses);
                     ImGui::Separator();
 
                     //Camera stats

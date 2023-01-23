@@ -61,8 +61,8 @@ namespace Engine
         }
 
         //Save stats
-        APP_SETTINGS.renderStats.drawnVertices += verticeCount;
-        APP_SETTINGS.renderStats.drawCalls++;
+        AppSettings::renderStats.drawnVertices += verticeCount;
+        AppSettings::renderStats.drawCalls++;
     }
 
     void SceneRenderer::FlushWater()
@@ -113,9 +113,9 @@ namespace Engine
         _waterShader->Unbind();
 
         //Save stats
-        APP_SETTINGS.renderStats.drawnVertices += verticeCount;
-        APP_SETTINGS.renderStats.drawCalls++;
-        APP_SETTINGS.renderStats.waterPasses++;
+        AppSettings::renderStats.drawnVertices += verticeCount;
+        AppSettings::renderStats.drawCalls++;
+        AppSettings::renderStats.waterPasses++;
     }
 
     void SceneRenderer::UpdateMoveFactor()
@@ -129,7 +129,7 @@ namespace Engine
     void SceneRenderer::Flush(Renderer* renderer)
     {
         //Check for Wireframe-Mode
-        if(APP_SETTINGS.wireframeRendering)
+        if(AppSettings::wireframeRendering)
             GLRenderSettings::EnableWireframe();
         else
             GLRenderSettings::DisableWireframe();
@@ -162,15 +162,15 @@ namespace Engine
             shader->Unbind();
         }
 
-        APP_SETTINGS.renderStats.modelPasses++;
+        AppSettings::renderStats.modelPasses++;
     }
 
     void SceneRenderer::FlushCubemap()
     {
         GLRenderSettings::DisableWireframe();
-        APP_SETTINGS.renderStats.drawnVertices += _cubemap->Draw(_perspProj, Camera3D::GetViewMatrix());
-        APP_SETTINGS.renderStats.drawCalls++;
-        APP_SETTINGS.renderStats.cubemapPasses++;
+        AppSettings::renderStats.drawnVertices += _cubemap->Draw(_perspProj, Camera3D::GetViewMatrix());
+        AppSettings::renderStats.drawCalls++;
+        AppSettings::renderStats.cubemapPasses++;
     }
 
     void SceneRenderer::FlushTerrain()
@@ -180,7 +180,7 @@ namespace Engine
         FlushModel(_terrainModel, _terrainShader);
         _terrainShader->Unbind();
 
-        APP_SETTINGS.renderStats.terrainPasses++;
+        AppSettings::renderStats.terrainPasses++;
     }
 
     void SceneRenderer::AddLightProjection(const glm::mat4 &lightProj)

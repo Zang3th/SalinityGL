@@ -19,3 +19,4 @@
 #include "SpriteRenderer.hpp"
 #include "WaterRenderer.hpp"
 #include "ParticleRenderer.hpp"
+#include "CellRenderer.hpp"

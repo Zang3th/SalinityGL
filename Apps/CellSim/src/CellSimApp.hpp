@@ -17,6 +17,7 @@ namespace CS
             Engine::SceneRenderer*          _sceneRenderer  = nullptr;
             Engine::ShadowRenderer*         _shadowRenderer = nullptr;
             Engine::SpriteRenderer*         _spriteRenderer = nullptr;
+            Engine::CellRenderer*           _cellRenderer   = nullptr;
             Engine::Scope<CellSimInterface> _interface;
 
             void LoadResources() final;

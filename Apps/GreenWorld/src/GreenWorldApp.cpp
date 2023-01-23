@@ -37,8 +37,8 @@ namespace GW
         Engine::RenderManager::Init();
 
         //Configure some application settings
-        Engine::APP_SETTINGS.planeSize = 128;
-        Engine::APP_SETTINGS.gravity   = -20.0f;
+        Engine::AppSettings::planeSize = 128;
+        Engine::AppSettings::gravity   = -20.0f;
 
         //Load up shaders and textures
         LoadResources();
@@ -91,8 +91,8 @@ namespace GW
         //Terrain
         _sceneRenderer->AddTerrain
         (
-            Engine::APP_SETTINGS.planeSize,                                 //Length in x direction
-            Engine::APP_SETTINGS.planeSize,                                 //Length in z direction
+            Engine::AppSettings::planeSize,                                 //Length in x direction
+            Engine::AppSettings::planeSize,                                 //Length in z direction
             1.0f,                                                           //Tile size
             glm::vec3(0.0f, -2.7f, 0.0f),                                   //Position
             _shadowRenderer->GetDepthTexture(),                             //Depth texture
@@ -104,8 +104,8 @@ namespace GW
         //Water
         _sceneRenderer->AddWater
         (
-            Engine::APP_SETTINGS.planeSize - 112,                           //Length in x direction
-            Engine::APP_SETTINGS.planeSize,                                 //Length in z direction
+            Engine::AppSettings::planeSize - 112,                           //Length in x direction
+            Engine::AppSettings::planeSize,                                 //Length in z direction
             1.0f,                                                           //Tile size
             glm::vec3(30.5f, 0.0f, 0.0f),                                   //Position
             0.025f,                                                         //Wave speed
@@ -241,7 +241,7 @@ namespace GW
             Engine::RenderManager::RenderScene();
             Engine::RenderManager::RenderParticles();
 
-            if(Engine::APP_SETTINGS.debugSprites)
+            if(Engine::AppSettings::debugSprites)
                 Engine::RenderManager::RenderSprites();
         }
 

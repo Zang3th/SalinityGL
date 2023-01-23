@@ -22,13 +22,14 @@ namespace CS
         Engine::RenderManager::Init();
 
         //Configure some application settings
-        Engine::APP_SETTINGS.planeSize = 1;
+        Engine::AppSettings::planeSize = 1;
 
         //Load up shaders and textures
         LoadResources();
 
         //Create application specific renderers
         _sceneRenderer  = Engine::RenderManager::AddScene(_nearPlane, _farPlane, _lightPos, _lightCol);
+        _cellRenderer   = new Engine::CellRenderer(glm::vec3(512.0f, 0.5f, 512.0f), 1.0f, _nearPlane, _farPlane);
         _shadowRenderer = Engine::RenderManager::AddShadows(8192, _lightPos, _lightTarget,
                                                             glm::ortho(-60.0f, 60.0f, -60.0f, 60.0f, 77.0f, 240.0f),
                                                             "ShadowCreateShader");
@@ -46,8 +47,8 @@ namespace CS
         //Ground plane
         _sceneRenderer->AddPlane
         (
-            Engine::APP_SETTINGS.planeSize,                                 //Length in x direction
-            Engine::APP_SETTINGS.planeSize,                                 //Length in z direction
+            Engine::AppSettings::planeSize,                                 //Length in x direction
+            Engine::AppSettings::planeSize,                                 //Length in z direction
             1024.0f,                                                        //Tile size
             glm::vec3(0.0f),                                                //Position
             _shadowRenderer->GetDepthTexture(),                             //Depth texture
@@ -66,7 +67,7 @@ namespace CS
         );
 
         //Cube
-        _sceneRenderer->AddObject
+        /*_sceneRenderer->AddObject
         (
             0.5f,                                                           //Size
             glm::vec3(0.0f),                                                //Rotation
@@ -74,7 +75,7 @@ namespace CS
             _shadowRenderer->GetDepthTexture(),                             //Depth texture
             "Cube",                                                         //Name
             "../Res/Assets/Models/CellSim/Cube"                             //Path to obj file
-        );
+        );*/
     }
 
     void CellSimApp::AddSprites()
@@ -102,6 +103,8 @@ namespace CS
     {
         Engine::ResourceManager::CleanUp();
         Engine::RenderManager::CleanUp();
+
+        delete _cellRenderer; //TODO: Move into RenderManager after prototyping
     }
 
     void CellSimApp::Update()
@@ -132,8 +135,9 @@ namespace CS
             Engine::PROFILE_SCOPE("Render scene");
 
             Engine::RenderManager::RenderScene();
+            _cellRenderer->Flush(nullptr);
 
-            if(Engine::APP_SETTINGS.debugSprites)
+            if(Engine::AppSettings::debugSprites)
                 Engine::RenderManager::RenderSprites();
         }
 

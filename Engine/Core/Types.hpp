@@ -62,14 +62,15 @@ namespace Engine
     // --- Application settings
     struct AppSettings
     {
-        const int32  WINDOW_WIDTH  = 1920;
-        const int32  WINDOW_HEIGHT = 1080;
-        uint32 planeSize           = 64;
-        float  gravity             = 10.0f;
-        bool   wireframeRendering  = false;
-        bool   debugSprites        = false;
-        RenderStats renderStats;
-    };
+        inline static constexpr int32       WINDOW_WIDTH       = 1920;
+        inline static constexpr int32       WINDOW_HEIGHT      = 1080;
+        inline static constexpr uint32      CELL_CUBE_SIZE     = 512;
+        inline static           uint32      planeSize          = 64;
+        inline static           float       gravity            = 10.0f;
+        inline static           bool        wireframeRendering = false;
+        inline static           bool        debugSprites       = false;
+        inline static           RenderStats renderStats;
 
-    extern struct AppSettings APP_SETTINGS;
+        AppSettings() = delete;
+    };
 }

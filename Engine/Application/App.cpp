@@ -2,8 +2,6 @@
 
 namespace Engine
 {
-    AppSettings APP_SETTINGS;
-
     // ----- Public -----
 
     App::~App() = default;

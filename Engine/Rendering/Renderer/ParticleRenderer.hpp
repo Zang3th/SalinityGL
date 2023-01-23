@@ -30,7 +30,7 @@ namespace Engine
             uint32                       _numberOfRows;
             float                        _size;
             float                        _speed;
-            float                        _gravityComplient;
+            float                        _gravityCompliance;
             float                        _lifeLength;
             float                        _respawnTreshold;
             uint32                       _verticeCount;
@@ -44,7 +44,7 @@ namespace Engine
 
             ParticleRenderer
             (
-                glm::vec3 position, uint32 count, float size, float speed, float gravityComplient,
+                glm::vec3 position, uint32 count, float size, float speed, float gravityCompliance,
                 float lifeLength, float respawnThreshold, Texture* textureAtlas, Shader* shader
             );
             ~ParticleRenderer() final;

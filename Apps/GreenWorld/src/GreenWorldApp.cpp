@@ -23,7 +23,7 @@ namespace GW
         Engine::ResourceManager::LoadTextureFromFile("WaterDuDvMap", "../Res/Assets/Textures/GreenWorld/DuDvMap.png");
         Engine::ResourceManager::LoadTextureFromFile("WaterNormalMap", "../Res/Assets/Textures/GreenWorld/WaterNormalMap.png");
 
-        //Heightmap(s)
+        //Heightmap
         Engine::ResourceManager::LoadHeightmap("TerrainHeightmap", "../Res/Assets/Textures/GreenWorld/Heightmap128.bmp");
     }
 
@@ -45,21 +45,27 @@ namespace GW
 
         //Create application specific renderers
         _sceneRenderer  = Engine::RenderManager::AddScene(_nearPlane, _farPlane, _lightPos, _lightCol);
-        _shadowRenderer = Engine::RenderManager::AddShadows(8192, _lightPos, _lightTarget,
-                                                            glm::ortho(-90.0f, 90.0f, -90.0f, 90.0f, 110.0f, 210.0f),
-                                                            "ShadowCreateShader");_spriteRenderer = Engine::RenderManager::AddSprites();
-        _waterRenderer  = Engine::RenderManager::AddWater();
-        _smokeRenderer  = Engine::RenderManager::AddParticles
+        _shadowRenderer = Engine::RenderManager::AddShadows
         (
-            glm::vec3(87.0f, 34.0f, 92.5f),                                 //Spawn point
-            200,                                                            //Number of particles
-            5.0f,                                                           //Size
-            0.05f,                                                          //Speed
-            0.0f,                                                           //Gravity compliance
-            6.0f,                                                           //Lifetime
-            44.0f,                                                          //Respawn threshold (Y-Position)
-            "ParticleTextureAtlas",                                         //Texture atlas
-            "ParticleShader"                                                //Shader
+            8192,
+            _lightPos,
+            _lightTarget,
+            glm::ortho(-90.0f, 90.0f, -90.0f, 90.0f, 110.0f, 210.0f),
+            "ShadowCreateShader"
+        );
+        _spriteRenderer = Engine::RenderManager::AddSprites();
+        _waterRenderer  = Engine::RenderManager::AddWater();
+        Engine::RenderManager::AddParticles
+        (
+            glm::vec3(87.0f, 34.0f, 92.5f),
+            200,
+            5.0f,
+            0.05f,
+            0.0f,
+            6.0f,
+            44.0f,
+            "ParticleTextureAtlas",
+            "ParticleShader"
         );
 
         //Set default shaders for the scene
@@ -91,62 +97,62 @@ namespace GW
         //Terrain
         _sceneRenderer->AddTerrain
         (
-            Engine::AppSettings::planeSize,                                 //Length in x direction
-            Engine::AppSettings::planeSize,                                 //Length in z direction
-            1.0f,                                                           //Tile size
-            glm::vec3(0.0f, -2.7f, 0.0f),                                   //Position
-            _shadowRenderer->GetDepthTexture(),                             //Depth texture
-            "TerrainGrassTexture",                                          //Main texture
-            "TerrainColormap",                                              //Texture for coloring
-            "TerrainHeightmap"                                              //Heightmap
+            Engine::AppSettings::planeSize,
+            Engine::AppSettings::planeSize,
+            1.0f,
+            glm::vec3(0.0f, -2.7f, 0.0f),
+            _shadowRenderer->GetDepthTexture(),
+            "TerrainGrassTexture",
+            "TerrainColormap",
+            "TerrainHeightmap"
         );
 
         //Water
         _sceneRenderer->AddWater
         (
-            Engine::AppSettings::planeSize - 112,                           //Length in x direction
-            Engine::AppSettings::planeSize,                                 //Length in z direction
-            1.0f,                                                           //Tile size
-            glm::vec3(30.5f, 0.0f, 0.0f),                                   //Position
-            0.025f,                                                         //Wave speed
-            "WaterDuDvMap",                                                 //DuDv map
-            "WaterNormalMap",                                               //Normal map
-            _waterRenderer->GetReflectTexture(),                            //Reflect texture
-            _waterRenderer->GetRefractTexture(),                            //Refract texture
-            _waterRenderer->GetRefractDepthTexture()                        //Refract depth texture
+            Engine::AppSettings::planeSize - 112,
+            Engine::AppSettings::planeSize,
+            1.0f,
+            glm::vec3(30.5f, 0.0f, 0.0f),
+            0.025f,
+            "WaterDuDvMap",
+            "WaterNormalMap",
+            _waterRenderer->GetReflectTexture(),
+            _waterRenderer->GetRefractTexture(),
+            _waterRenderer->GetRefractDepthTexture()
         );
 
         //House
         _sceneRenderer->AddObject
         (
-            1.2f,                                                           //Size
-            glm::vec3(0.0f, -70.0f, 0.0f),                                  //Rotation
-            glm::vec3(85.0f, 0.45f, 95.0f),                                 //Position
-            _shadowRenderer->GetDepthTexture(),                             //Depth texture
-            "House",                                                        //Name
-            "../Res/Assets/Models/GreenWorld/House"                         //Path to obj file
+            1.2f,
+            glm::vec3(0.0f, -70.0f, 0.0f),
+            glm::vec3(85.0f, 0.45f, 95.0f),
+            _shadowRenderer->GetDepthTexture(),
+            "House",
+            "../Res/Assets/Models/GreenWorld/House"
         );
 
         //Bridge
         _sceneRenderer->AddObject
         (
-            1.0f,                                                           //Size
-            glm::vec3(0.0f),                                                //Rotation
-            glm::vec3(39.0f, -0.45f, 47.0f),                                //Position
-            _shadowRenderer->GetDepthTexture(),                             //Depth texture
-            "Bridge",                                                       //Name
-            "../Res/Assets/Models/GreenWorld/Bridge"                        //Path to obj file
+            1.0f,
+            glm::vec3(0.0f),
+            glm::vec3(39.0f, -0.45f, 47.0f),
+            _shadowRenderer->GetDepthTexture(),
+            "Bridge",
+            "../Res/Assets/Models/GreenWorld/Bridge"
         );
 
         //Tree
         _sceneRenderer->AddObject
         (
-            1.0f,                                                           //Size
-            glm::vec3(0.0f),                                                //Rotation
-            glm::vec3(85.0f, 0.3f, 20.0f),                                  //Position
-            _shadowRenderer->GetDepthTexture(),                             //Depth texture
-            "Tree",                                                         //Name
-            "../Res/Assets/Models/GreenWorld/Tree"                          //Path to obj file
+            1.0f,
+            glm::vec3(0.0f),
+            glm::vec3(85.0f, 0.3f, 20.0f),
+            _shadowRenderer->GetDepthTexture(),
+            "Tree",
+            "../Res/Assets/Models/GreenWorld/Tree"
         );
     }
 
@@ -155,37 +161,37 @@ namespace GW
         //Shadow sprite
         _spriteRenderer->AddSprite
         (
-            glm::vec2(200.0f, 200.0f),                                      //Size
-            glm::vec2(210.0f, 0.0f),                                        //Position
-            _shadowRenderer->GetDepthTexture(),                             //Texture
-            Engine::ResourceManager::GetShader("SpriteShaderGreyscale")     //Shader
+            glm::vec2(200.0f, 200.0f),
+            glm::vec2(210.0f, 0.0f),
+            _shadowRenderer->GetDepthTexture(),
+            Engine::ResourceManager::GetShader("SpriteShaderGreyscale")
         );
 
         //Reflect sprite
         _spriteRenderer->AddSprite
         (
-            glm::vec2(200.0f, 200.0f),                                      //Size
-            glm::vec2(410.0f, 0.0f),                                        //Position
-            _waterRenderer->GetReflectTexture(),                            //Texture
-            Engine::ResourceManager::GetShader("SpriteShader")              //Shader
+            glm::vec2(200.0f, 200.0f),
+            glm::vec2(410.0f, 0.0f),
+            _waterRenderer->GetReflectTexture(),
+            Engine::ResourceManager::GetShader("SpriteShader")
         );
 
         //Refract sprite
         _spriteRenderer->AddSprite
         (
-            glm::vec2(200.0f, 200.0f),                                      //Size
-            glm::vec2(610.0f, 0.0f),                                        //Position
-            _waterRenderer->GetRefractTexture(),                            //Texture
-            Engine::ResourceManager::GetShader("SpriteShader")              //Shader
+            glm::vec2(200.0f, 200.0f),
+            glm::vec2(610.0f, 0.0f),
+            _waterRenderer->GetRefractTexture(),
+            Engine::ResourceManager::GetShader("SpriteShader")
         );
 
         //Refract depth sprite
         _spriteRenderer->AddSprite
         (
-            glm::vec2(200.0f, 200.0f),                                      //Size
-            glm::vec2(810.0f, 0.0f),                                        //Position
-            _waterRenderer->GetRefractDepthTexture(),                       //Texture
-            Engine::ResourceManager::GetShader("SpriteShaderGreyscale")     //Shader
+            glm::vec2(200.0f, 200.0f),
+            glm::vec2(810.0f, 0.0f),
+            _waterRenderer->GetRefractDepthTexture(),
+            Engine::ResourceManager::GetShader("SpriteShaderGreyscale")
         );
     }
 

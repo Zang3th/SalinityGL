@@ -18,7 +18,6 @@ namespace GW
             Engine::ShadowRenderer*                 _shadowRenderer = nullptr;
             Engine::SpriteRenderer*                 _spriteRenderer = nullptr;
             Engine::WaterRenderer*                  _waterRenderer  = nullptr;
-            Engine::ParticleRenderer*               _smokeRenderer  = nullptr;
             Engine::Scope<GreenWorldInterface>      _interface;
             Engine::Scope<Engine::Audio>            _audio;
     

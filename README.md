@@ -44,25 +44,29 @@
 ## Plans for future releases
 
 ### Graphical improvements
+
 - Bloom
 - Lensflare
 - Raytracing
   - Shadows and lighting in 2D
 
 ### Other
+
 - Grass simulation
 - Simulation of liquids
 
 ## Libraries (credits to the creators and contributors)
 
-- [glad](https://github.com/Dav1dde/glad)
-- [glfw](https://github.com/glfw/glfw)
-- [easylogging++](https://github.com/amrayn/easyloggingpp)
-- [glm](https://github.com/g-truc/glm)
-- [stb_image](https://github.com/nothings/stb/blob/master/stb_image.h)
-- [imgui](https://github.com/ocornut/imgui), [imgui::plot_var](https://github.com/ocornut/imgui/wiki/plot_var_example)
-- [tinyobjloader](https://github.com/tinyobjloader/tinyobjloader)
-- [miniaudio](https://github.com/mackron/miniaudio)
+| **Library**                                                          | **Version** | **Commit** | **Updated in Engine** | **Functionality**           |
+|--------------------------------------------------------------------- |-------------|------------|-----------------------|-----------------------------|
+| [imgui](https://github.com/ocornut/imgui)                            | 1.89.9      | c6e0284    | 20.09.2023            | GUI                         |
+| [miniaudio](https://github.com/mackron/miniaudio)                    | 0.11.18     | 3898fff    | 20.09.2023            | Audio                       |
+| [stb_image](https://github.com/nothings/stb/blob/master/stb_image.h) | 2.28        | 3ecc60f    | 20.09.2023            | Image loading               |
+| [tinyobjloader](https://github.com/tinyobjloader/tinyobjloader)      | /           | 853f059    | 20.09.2023            | Obj file loading            |
+| [GLFW](https://github.com/glfw/glfw)                                 | 3.3.6       | 7d5a16c    | 13.01.2022            | Window and input management |
+| [glad](https://github.com/Dav1dde/glad)                              | 0.1.34      | a5ca31c    | 11.08.2021            | OpenGL loader               |
+| [GLM](https://github.com/g-truc/glm)                                 | 0.9.9.8     | bf71a83    | 23.07.2021            | Mathematics                 |
+| [Easylogging++](https://github.com/amrayn/easyloggingpp)             | 9.96.7      | 5181b40    | 19.07.2021            | Logging                     |
 
 ## Using & compiling (currently for linux with CMake)
 

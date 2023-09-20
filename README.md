@@ -1,7 +1,7 @@
 # GameEngine in C++ with OpenGL
 
 [![Codefactor](https://www.codefactor.io/repository/github/zang3th/gameengine/badge)](https://www.codefactor.io/repository/github/zang3th/gameengine)
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/d686ef7441db4844a6cee39ce19a8505)](https://app.codacy.com/gh/Zang3th/GameEngine/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/9a7b0eee56a3406390e321bcbcbecf4e)](https://app.codacy.com/gh/Zang3th/GameEngine/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 [![CMake](https://github.com/Zanget3u/GameEngine/actions/workflows/cmake.yml/badge.svg)](https://github.com/Zanget3u/GameEngine/actions/workflows/cmake.yml)
 ![OS](https://img.shields.io/badge/OS-linux-green)
 ![Release](https://img.shields.io/badge/Latest%20release-v0.1.1-green)

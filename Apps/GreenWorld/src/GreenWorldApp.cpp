@@ -57,7 +57,6 @@ namespace GW
         _waterRenderer  = Engine::RenderManager::AddWater();
         Engine::RenderManager::AddParticles
         (
-            glm::vec3(87.0f, 34.0f, 92.5f),
             200,
             5.0f,
             0.05f,
@@ -65,7 +64,8 @@ namespace GW
             6.0f,
             44.0f,
             "ParticleTextureAtlas",
-            "ParticleShader"
+            "ParticleShader",
+            glm::vec3(87.0f, 34.0f, 92.5f)
         );
 
         //Set default shaders for the scene

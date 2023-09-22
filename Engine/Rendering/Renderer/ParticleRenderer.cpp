@@ -6,13 +6,14 @@ namespace Engine
 
     ParticleRenderer::ParticleRenderer
     (
-        glm::vec3 position, uint32 count, float size, float speed, float gravityCompliance,
-        float lifeLength, float respawnThreshold, Texture* textureAtlas, Shader* shader
+        uint32 count, float size, float speed, float gravityCompliance, float lifeLength,
+        float respawnThreshold, Texture* textureAtlas, Shader* shader, const glm::vec3& position
     )
-        :   _position(position), _count(count), _numberOfRows(textureAtlas->GetNumberOfRows()), _size(size),
-            _speed(speed), _gravityCompliance(gravityCompliance), _lifeLength(lifeLength), _respawnTreshold(respawnThreshold),
-            _verticeCount(4), _textureAtlas(textureAtlas), _shader(shader)
+        :   _count(count), _numberOfRows(textureAtlas->GetNumberOfRows()), _verticeCount(4), _size(size),
+            _speed(speed), _gravityCompliance(gravityCompliance), _lifeLength(lifeLength),
+            _respawnTreshold(respawnThreshold), _textureAtlas(textureAtlas), _shader(shader), _position(position)
     {
+        Logger::Info("Created", __func__);
         GenerateParticles();
         InitGpuStorage();
     }

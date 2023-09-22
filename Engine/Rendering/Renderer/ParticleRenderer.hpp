@@ -25,17 +25,11 @@ namespace Engine
             Scope<VertexArray>           _vao;
             Scope<VertexBuffer>          _vboVert, _vboModel, _vboTex, _vboBlend;
 
-            glm::vec3                    _position;
-            uint32                       _count;
-            uint32                       _numberOfRows;
-            float                        _size;
-            float                        _speed;
-            float                        _gravityCompliance;
-            float                        _lifeLength;
-            float                        _respawnTreshold;
-            uint32                       _verticeCount;
+            uint32                       _count, _numberOfRows, _verticeCount;
+            float                        _size, _speed, _gravityCompliance, _lifeLength, _respawnTreshold;
             Texture                     *_textureAtlas;
             Shader                      *_shader;
+            glm::vec3                    _position;
 
             std::vector<Particle*>       _particleStorage;
             std::vector<glm::mat4>       _modelViewStorage;
@@ -44,8 +38,8 @@ namespace Engine
 
             ParticleRenderer
             (
-                glm::vec3 position, uint32 count, float size, float speed, float gravityCompliance,
-                float lifeLength, float respawnThreshold, Texture* textureAtlas, Shader* shader
+                uint32 count, float size, float speed, float gravityCompliance, float lifeLength,
+                float respawnThreshold, Texture* textureAtlas, Shader* shader, const glm::vec3& position
             );
             ~ParticleRenderer() final;
 

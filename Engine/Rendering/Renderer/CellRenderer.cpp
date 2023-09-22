@@ -6,10 +6,13 @@ namespace Engine
 
     CellRenderer::CellRenderer
     (
-        const glm::vec3& worldPos, float cellSize, float nearPlane, float farPlane
+        float cellSize, float nearPlane, float farPlane,
+        Shader* shader, const glm::vec3& worldPos
     )
-        :   _worldPos(worldPos), _cellSize(cellSize), _nearPlane(nearPlane), _farPlane(farPlane)
+        :   _cellSize(cellSize), _nearPlane(nearPlane), _farPlane(farPlane),
+            _shader(shader), _worldPos(worldPos)
     {
+        Logger::Info("Created", __func__);
         InitGpuStorage();
         UpdateGpuStorage();
     }
@@ -109,6 +112,34 @@ namespace Engine
 
     void CellRenderer::Flush(Renderer* sceneRenderer)
     {
-        //TODO: Render all prepared cells
+        //Bind shader
+        _shader->Bind();
+
+        //Bind vao and vbo's
+        _vao->Bind();
+        _vboVert->Bind();
+        _vboModel->Bind();
+
+        //Set uniforms
+        _shader->SetUniformMat4f("view", Camera3D::GetViewMatrix());
+        _shader->SetUniformMat4f("projection", ((SceneRenderer*)sceneRenderer)->GetProjMatrix());
+
+        _modelViewStorage.at(0) = glm::mat4(1.0f);
+
+        //Upload updated vbo's to the gpu
+        UpdateGpuStorage();
+
+        //Render cells instanced
+        GLCall(glDrawArraysInstanced(GL_TRIANGLES, 0, 6, 1));
+
+        //Unbind vao and vbo's
+        _vboModel->Unbind();
+        _vboVert->Unbind();
+        _vao->Unbind();
+
+        //Unbind shader
+        _shader->Unbind();
+
+        //Save stats
     }
 }

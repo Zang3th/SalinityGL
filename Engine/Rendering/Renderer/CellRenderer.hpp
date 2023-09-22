@@ -4,9 +4,10 @@
 #include "Types.hpp"
 #include "glm.hpp"
 #include "Shader.hpp"
-#include "Cell.hpp"
+#include "Camera3D.hpp"
 #include "VertexArray.hpp"
 #include "VertexBuffer.hpp"
+#include "SceneRenderer.hpp"
 
 #include <array>
 
@@ -16,20 +17,20 @@ namespace Engine
     {
         friend class RenderManager;
 
-        public: //TODO: Make private after prototyping
-            Scope<VertexArray>           _vao;
-            Scope<VertexBuffer>          _vboVert, _vboModel;
+        private:
+            Scope<VertexArray>                                          _vao;
+            Scope<VertexBuffer>                                         _vboVert, _vboModel;
 
-            glm::vec3 _worldPos;
-            float     _cellSize, _nearPlane, _farPlane;
+            float                                                       _cellSize, _nearPlane, _farPlane;
+            Shader*                                                     _shader;
+            glm::vec3                                                   _worldPos;
 
-            std::array<Cell*,     AppSettings::CELL_CUBE_SIZE * 3> _cellStorage;
-            std::array<glm::mat4, AppSettings::CELL_CUBE_SIZE * 3> _modelViewStorage;
-            Shader*   _cellShader;
+            std::array<glm::mat4, AppSettings::CELL_CUBE_SIZE * 3>      _modelViewStorage;
 
             CellRenderer
             (
-                const glm::vec3& worldPos, float cellSize, float nearPlane, float farPlane
+                float cellSize, float nearPlane, float farPlane,
+                Shader* shader, const glm::vec3& worldPos
             );
             ~CellRenderer() final;
 

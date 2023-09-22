@@ -8,6 +8,7 @@
 #include "SpriteRenderer.hpp"
 #include "WaterRenderer.hpp"
 #include "ParticleRenderer.hpp"
+#include "CellRenderer.hpp"
 
 #include <vector>
 
@@ -22,6 +23,7 @@ namespace Engine
             inline static SpriteRenderer*        _spriteRenderer   = nullptr;
             inline static WaterRenderer*         _waterRenderer    = nullptr;
             inline static ParticleRenderer*      _particleRenderer = nullptr;
+            inline static CellRenderer*          _cellRenderer     = nullptr;
 
         public:
             RenderManager() = delete;
@@ -31,15 +33,22 @@ namespace Engine
             static void PrepareFrame();
 
             static SceneRenderer*    AddScene(float nearPlane, float farPlane, const glm::vec3& lightPos, const glm::vec3& lightCol);
-            static ShadowRenderer*   AddShadows(uint32 resolution, const glm::vec3& lightPos, const glm::vec3& targetPos,
-                                                const glm::mat4& orthoProj, const std::string& shader);
+            static ShadowRenderer*   AddShadows
+            (
+                uint32 resolution, const glm::vec3& lightPos, const glm::vec3& targetPos,
+                const glm::mat4& orthoProj, const std::string& shader
+            );
             static SpriteRenderer*   AddSprites();
             static WaterRenderer*    AddWater();
             static ParticleRenderer* AddParticles
             (
-                glm::vec3 position, uint32 count, float size, float speed,
-                float gravityComplient, float lifeLength, float respawnThreshold,
-                const std::string& textureAtlas, const std::string& shader
+                uint32 count, float size, float speed, float gravityCompliance, float lifeLength,
+                float respawnThreshold, const std::string& textureAtlas, const std::string& shader, const glm::vec3& position
+            );
+            static CellRenderer*     AddCells
+            (
+                float cellSize, float nearPlane, float farPlane,
+                const std::string& shader, const glm::vec3& worldPos
             );
 
             static void RenderScene();
@@ -47,5 +56,6 @@ namespace Engine
             static void RenderSprites();
             static void RenderWater();
             static void RenderParticles();
+            static void RenderCells();
     };
 }

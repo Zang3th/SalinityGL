@@ -10,11 +10,11 @@ namespace Engine
         Shader* shader, const glm::vec3& worldPos
     )
         :   _cellSize(cellSize), _nearPlane(nearPlane), _farPlane(farPlane),
-            _shader(shader), _worldPos(worldPos)
+            _verticeCount(36), _instanceCount(1), _shader(shader), _worldPos(worldPos)
     {
         Logger::Info("Created", __func__);
+        GenerateCells();
         InitGpuStorage();
-        UpdateGpuStorage();
     }
 
     CellRenderer::~CellRenderer()
@@ -105,7 +105,14 @@ namespace Engine
 
     void CellRenderer::GenerateCells()
     {
-        //TODO: Generate 3D cell cube
+        //Create model matrix
+        glm::mat4 model(1.0f);
+
+        //Set transformations
+        model = glm::translate(model, _worldPos);
+        model = glm::scale(model, glm::vec3(_cellSize));
+
+        _modelViewStorage.at(0) = model;
     }
 
     // ----- Public -----
@@ -124,13 +131,11 @@ namespace Engine
         _shader->SetUniformMat4f("view", Camera3D::GetViewMatrix());
         _shader->SetUniformMat4f("projection", ((SceneRenderer*)sceneRenderer)->GetProjMatrix());
 
-        _modelViewStorage.at(0) = glm::mat4(1.0f);
-
         //Upload updated vbo's to the gpu
         UpdateGpuStorage();
 
         //Render cells instanced
-        GLCall(glDrawArraysInstanced(GL_TRIANGLES, 0, 6, 1));
+        GLCall(glDrawArraysInstanced(GL_TRIANGLES, 0, _verticeCount, _instanceCount));
 
         //Unbind vao and vbo's
         _vboModel->Unbind();
@@ -141,5 +146,8 @@ namespace Engine
         _shader->Unbind();
 
         //Save stats
+        AppSettings::renderStats.drawnVertices += _verticeCount * _instanceCount;
+        AppSettings::renderStats.drawCalls++;
+        AppSettings::renderStats.cellPasses++;
     }
 }

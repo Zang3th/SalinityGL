@@ -18,7 +18,7 @@ namespace CS
         //Initialize engine components
         Engine::Logger::Init();
         Engine::Window::Init("CellSim");
-        Engine::Camera3D::Init(glm::vec3(408.0f, 85.0f, 430.0f), 47.0f, -24.0f, 50.0f);
+        Engine::Camera3D::Init(glm::vec3(350.0f, 125.0f, 415.0f), 38.0f, -29.0f, 75.0f);
         Engine::CameraController3D::Init();
         Engine::RenderManager::Init();
 
@@ -36,14 +36,14 @@ namespace CS
             _nearPlane,
             _farPlane,
             "CellShader",
-            glm::vec3(512.0f, 0.5f, 512.0f)
+            glm::vec3(512.0f, 0.0f, 512.0f)
         );
         _shadowRenderer = Engine::RenderManager::AddShadows
         (
             8192,
             _lightPos,
             _lightTarget,
-            glm::ortho(-60.0f, 60.0f, -60.0f, 60.0f, 77.0f, 240.0f),
+            glm::ortho(-60.0f, 60.0f, -60.0f, 60.0f, 109.0f, 228.0f),
             "ShadowCreateShader"
         );
         _spriteRenderer = Engine::RenderManager::AddSprites();
@@ -63,7 +63,7 @@ namespace CS
             Engine::AppSettings::planeSize,
             Engine::AppSettings::planeSize,
             1024.0f,
-            glm::vec3(0.0f),
+            glm::vec3(0.0f, -1.0f, 0.0f),
             _shadowRenderer->GetDepthTexture(),
             {}
         );
@@ -73,7 +73,7 @@ namespace CS
         (
             1.0f,
             glm::vec3(0.0f),
-            glm::vec3(512.0f, 0.5f, 512.0f),
+            glm::vec3(512.0f, 0.0f, 512.0f),
             _shadowRenderer->GetDepthTexture(),
             "Frame",
             "../Res/Assets/Models/CellSim/Frame"

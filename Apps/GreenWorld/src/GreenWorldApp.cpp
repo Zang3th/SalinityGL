@@ -38,7 +38,6 @@ namespace GW
 
         //Configure some application settings
         Engine::AppSettings::planeSize = 128;
-        Engine::AppSettings::gravity   = -20.0f;
 
         //Load up shaders and textures
         LoadResources();

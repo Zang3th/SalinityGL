@@ -89,6 +89,7 @@ namespace CS
                     ImGui::NewLine();
                     ImGui::Separator();
                     ImGui::Text("Model passes: %d", Engine::AppSettings::renderStats.modelPasses);
+                    ImGui::Text("Cell passes: %d", Engine::AppSettings::renderStats.cellPasses);
                     ImGui::Separator();
 
                     //Camera stats

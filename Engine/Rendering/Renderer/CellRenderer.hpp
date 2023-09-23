@@ -8,6 +8,7 @@
 #include "VertexArray.hpp"
 #include "VertexBuffer.hpp"
 #include "SceneRenderer.hpp"
+#include "Cell.hpp"
 
 #include <array>
 
@@ -22,6 +23,7 @@ namespace Engine
             Scope<VertexBuffer>                                         _vboVert, _vboModel;
 
             float                                                       _cellSize, _nearPlane, _farPlane;
+            uint32                                                      _verticeCount, _instanceCount;
             Shader*                                                     _shader;
             glm::vec3                                                   _worldPos;
 

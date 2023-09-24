@@ -20,10 +20,10 @@ namespace CS
             Engine::CellRenderer*           _cellRenderer   = nullptr;
             Engine::Scope<CellSimInterface> _interface;
 
-            void LoadResources() final;
-            void InitModules()   final;
-            void AddObjects();
-            void AddSprites();
+            void           LoadResources() final;
+            Engine::uint32 InitModules()   final;
+            void           AddObjects();
+            void           AddSprites();
 
         public:
             CellSimApp();

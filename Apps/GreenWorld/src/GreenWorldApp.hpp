@@ -21,10 +21,10 @@ namespace GW
             Engine::Scope<GreenWorldInterface>      _interface;
             Engine::Scope<Engine::Audio>            _audio;
     
-            void LoadResources() final;
-            void InitModules()   final;
-            void AddObjects();
-            void AddSprites();
+            void           LoadResources() final;
+            Engine::uint32 InitModules()   final;
+            void           AddObjects();
+            void           AddSprites();
 
         public:
             GreenWorldApp();

@@ -28,6 +28,13 @@ jobs:
       - name: Build
         run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
 
-      - name: Run apps
+      - name: Export settings
+        run: export DISPLAY=:0
+
+      - name: Run GreenWorld
         working-directory: ${{github.workspace}}/build
-        run: ./GreenWorld && ./CellSim
+        run: ./GreenWorld & sleep 10 ; kill $!
+
+      - name: Run CellSim
+        working-directory: ${{github.workspace}}/build
+        run: ./CellSim & sleep 10 ; kill $!

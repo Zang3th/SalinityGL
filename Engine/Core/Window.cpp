@@ -4,13 +4,18 @@ namespace Engine
 {
     // ----- Public -----
 
-    void Window::Init(const std::string& title)
+    uint32 Window::Init(const std::string& title)
     {
+        //Initialize GLFW
         if(!glfwInit())
+        {
             Logger::Error("Failed", "GLFW-Library", std::to_string(glfwGetError(nullptr)));
-        else
-            Logger::Info("Loaded", "GLFW-Library");
+            return EXIT_FAILURE;
+        }
 
+        Logger::Info("Loaded", "GLFW-Library");
+
+        //Set window hints
         glfwWindowHint(GLFW_SAMPLES, 8);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
@@ -19,32 +24,46 @@ namespace Engine
         glfwWindowHint(GLFW_MAXIMIZED, GLFW_FALSE);
         glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_TRUE);
 
+        //Create window
         _windowName = title;
         _window = glfwCreateWindow(AppSettings::WINDOW_WIDTH, AppSettings::WINDOW_HEIGHT, _windowName.c_str(), nullptr, nullptr);
 
         if(!_window)
+        {
             Logger::Error("Failed", "GLFW-Window", std::to_string(glfwGetError(nullptr)));
-        else
-            Logger::Info("Created", "GLFW-Window", _windowName);
+            return EXIT_FAILURE;
+        }
+
+        Logger::Info("Created", "GLFW-Window", _windowName);
 
         glfwMakeContextCurrent(_window);
         glfwSwapInterval(0);
 
+        //Initialize glad
         if(!gladLoadGL())
-            Logger::Error("Failed", "OpenGL-Load.");
-        else
         {
-            std::string rendererString(reinterpret_cast<const char *>(glGetString(GL_RENDERER)));
-            std::string versionString(reinterpret_cast<const char *>(glGetString(GL_VERSION)));
-            std::string glInfo = rendererString + ", " + versionString;
-            Logger::Info("Loaded", "OpenGL", glInfo);
+            Logger::Error("Failed", "OpenGL-Load.");
+            return EXIT_FAILURE;
         }
+
+        //Log version
+        std::string rendererString(reinterpret_cast<const char *>(glGetString(GL_RENDERER)));
+        std::string versionString(reinterpret_cast<const char *>(glGetString(GL_VERSION)));
+        std::string glInfo = rendererString + ", " + versionString;
+        Logger::Info("Loaded", "OpenGL", glInfo);
 
         GLRenderSettings::SetViewport(AppSettings::WINDOW_WIDTH, AppSettings::WINDOW_HEIGHT);
         GLRenderSettings::EnableDebugging();
 
         //Start application
         _isRunning = true;
+
+        return EXIT_SUCCESS;
+    }
+
+    void Window::Close()
+    {
+        glfwTerminate();
     }
 
     void Window::CalcFrametime()

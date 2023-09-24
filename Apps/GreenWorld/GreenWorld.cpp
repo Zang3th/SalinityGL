@@ -5,9 +5,17 @@ int main()
     //Create app
     GW::GreenWorldApp greenWorldApp;
 
-    //Start app
-    while(greenWorldApp.IsRunning())
-        greenWorldApp.Update();
+    //Check for success
+    if(greenWorldApp.appStartSuccess)
+    {
+        //Start app
+        while(greenWorldApp.IsRunning())
+            greenWorldApp.Update();
+    }
+    else
+    {
+        return EXIT_FAILURE;
+    }
 
-    return 0;    
+    return EXIT_SUCCESS;
 }

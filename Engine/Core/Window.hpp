@@ -23,7 +23,8 @@ namespace Engine
 
         public:
             Window() = delete;
-            static void Init(const std::string& title);
+            static uint32 Init(const std::string& title);
+            static void Close();
             static void CalcFrametime();
             static void PollEvents();
             static void ProcessEvents();

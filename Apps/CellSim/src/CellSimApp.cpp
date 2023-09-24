@@ -13,11 +13,14 @@ namespace CS
         Engine::ResourceManager::LoadShader("CellShader", "../Res/Shader/CellSim/Cell_VS.glsl", "../Res/Shader/CellSim/Cell_FS.glsl");
     }
 
-    void CellSimApp::InitModules()
+    Engine::uint32 CellSimApp::InitModules()
     {
         //Initialize engine components
         Engine::Logger::Init();
-        Engine::Window::Init("CellSim");
+        if(Engine::Window::Init("CellSim") != EXIT_SUCCESS)
+        {
+            return EXIT_FAILURE;
+        }
         Engine::Camera3D::Init(glm::vec3(350.0f, 125.0f, 415.0f), 38.0f, -29.0f, 75.0f);
         Engine::CameraController3D::Init();
         Engine::RenderManager::Init();
@@ -53,6 +56,8 @@ namespace CS
 
         //Create UI
         _interface = Engine::MakeScope<CellSimInterface>();
+
+        return EXIT_SUCCESS;
     }
 
     void CellSimApp::AddObjects()
@@ -107,15 +112,23 @@ namespace CS
 
     CellSimApp::CellSimApp()
     {
-        InitModules();
-        AddObjects();
-        AddSprites();
+        if(InitModules() != EXIT_SUCCESS)
+        {
+            appStartSuccess = false;
+        }
+        else
+        {
+            appStartSuccess = true;
+            AddObjects();
+            AddSprites();
+        }
     }
 
     CellSimApp::~CellSimApp()
     {
         Engine::ResourceManager::CleanUp();
         Engine::RenderManager::CleanUp();
+        Engine::Window::Close();
     }
 
     void CellSimApp::Update()

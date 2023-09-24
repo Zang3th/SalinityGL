@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Window.hpp"
+#include "Types.hpp"
 
 namespace Engine
 {
@@ -8,9 +9,10 @@ namespace Engine
     {
         protected:
             virtual void LoadResources() = 0;
-            virtual void InitModules() = 0;
+            virtual uint32 InitModules() = 0;
 
         public:
+            bool appStartSuccess;
             virtual ~App() = 0;
             virtual void Update() = 0;
             static bool IsRunning();

@@ -69,6 +69,10 @@
 | [GLM](https://github.com/g-truc/glm)                                 | 0.9.9.8     | bf71a83    | 23.07.2021            | Mathematics                 |
 | [Easylogging++](https://github.com/amrayn/easyloggingpp)             | 9.96.7      | 5181b40    | 19.07.2021            | Logging                     |
 
+## Static analysis
+
+[PVS-Studio](https://pvs-studio.com/pvs-studio/?utm_source=website&utm_medium=github&utm_campaign=open_source) - Static analyzer for C, C++, C#, and Java code
+
 ## Using & compiling (currently for linux with CMake)
 
 - Tested with Ubuntu 16.04 - 22.04

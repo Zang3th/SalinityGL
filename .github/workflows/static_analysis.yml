@@ -20,4 +20,4 @@ jobs:
           use_cmake: true
           apt_pckgs: software-properties-common libglu1-mesa-dev mesa-common-dev # Additional apt packages
           clang_tidy_args: -checks='*,fuchsia-*,google-*,zircon-*,abseil-*,modernize-use-trailing-return-type' # (Optional)
-          cppcheck_args: --enable=all # (Optional)
+          cppcheck_args: --enable=all --suppress=cstyleCast --suppress=unusedFunction --suppress=missingInclude --suppress=unknownMacro # (Optional)

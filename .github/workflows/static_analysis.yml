@@ -31,7 +31,7 @@ jobs:
 
       - name: Analyze
         run: |
-          pvs-studio-analyzer analyze -f build/compile_commands.json -j
+          pvs-studio-analyzer analyze -e /Vendor -f build/compile_commands.json -j
 
       - name: Convert report
         run: |

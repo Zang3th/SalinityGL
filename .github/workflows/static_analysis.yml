@@ -19,9 +19,10 @@ jobs:
             | sudo apt-key add -
           sudo wget -O /etc/apt/sources.list.d/viva64.list \
             https://files.pvs-studio.com/etc/viva64.list
-          sudo apt update
+          sudo apt update && sudo apt upgrade
           sudo apt install pvs-studio
           pvs-studio-analyzer credentials ${{ secrets.PVS_STUDIO_CREDENTIALS }}
+          sudo apt install libglu1-mesa-dev mesa-common-dev
 
       - name: Build
         run: |

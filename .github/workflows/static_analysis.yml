@@ -1,0 +1,23 @@
+name: Static analysis
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  static_analysis:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Run static analysis
+        uses: JacobDomagala/StaticAnalysis@master
+        with:
+          exclude_dir: Vendor # Exclude any issues found in ${Project_root_dir}/Vendor
+          use_cmake: true
+          apt_pckgs: software-properties-common libglu1-mesa-dev mesa-common-dev # Additional apt packages
+          clang_tidy_args: -checks='*,fuchsia-*,google-*,zircon-*,abseil-*,modernize-use-trailing-return-type' # (Optional)
+          cppcheck_args: --enable=all # (Optional)

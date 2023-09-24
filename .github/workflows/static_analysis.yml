@@ -16,7 +16,8 @@ jobs:
       - name: Run static analysis
         uses: JacobDomagala/StaticAnalysis@master
         with:
+          exclude_dir: Vendor
           use_cmake: true
-          apt_pckgs: "software-properties-common libglu1-mesa-dev mesa-common-dev" # Additional apt packages
-          clang_tidy_args: "-checks='*,google-*"
-          cppcheck_args: "${Project_root_dir}/Apps ${Project_root_dir}/Engine --enable=all --suppress=cstyleCast --suppress=unusedFunction --suppress=missingInclude --suppress=unknownMacro"
+          apt_pckgs: software-properties-common libglu1-mesa-dev mesa-common-dev
+          clang_tidy_args: -checks='*,google-*
+          cppcheck_args: -enable=all --suppress=missingInclude --suppress=cstyleCast --suppress=unusedFunction --suppress=unknownMacro

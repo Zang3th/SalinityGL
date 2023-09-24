@@ -20,4 +20,4 @@ jobs:
           use_cmake: true
           apt_pckgs: software-properties-common libglu1-mesa-dev mesa-common-dev
           clang_tidy_args: -checks='*,google-*
-          cppcheck_args: -enable=all --suppress=missingInclude --suppress=cstyleCast --suppress=unusedFunction --suppress=unknownMacro
+          cppcheck_args: --enable=all --suppress=missingInclude --suppress=cstyleCast --suppress=unusedFunction --suppress=unknownMacro

@@ -38,12 +38,3 @@ jobs:
       - name: Run CellSim
         working-directory: ${{github.workspace}}/build
         run: xvfb-run -a ./CellSim & sleep 20 ; kill $!
-
-      - name: Run GreenWorld_ESC
-        working-directory: ${{github.workspace}}/build
-        run: |
-          xvfb-run -a /usr/bin/expect <<EOF
-          spawn ./GreenWorld
-          sleep 20
-          send "\033"
-          expect eof

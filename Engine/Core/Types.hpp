@@ -61,18 +61,42 @@ namespace Engine
         }
     };
 
-    // --- Application settings
-    struct AppSettings
+    // --- Read in of cell types via X-Macro
+    enum CellTypes
     {
+    #   define X(a) a,
+    #   include "CellTypes.def"
+    #   undef X
+    };
+
+    inline static const char* const CellTypeStrings[] =
+    {
+    #   define X(a) #a,
+    #   include "CellTypes.def"
+    #   undef X
+    };
+
+    // --- Application settings
+    struct AppSettings //ToDo: Separate all application settings from another
+    {
+        // --- General
         inline static constexpr int32       WINDOW_WIDTH       = 1920;
         inline static constexpr int32       WINDOW_HEIGHT      = 1080;
-        inline static constexpr uint32      CELL_CUBE_SIZE     = 64;
         inline static           uint32      planeSize          = 64;
-        inline static constexpr float       GRAVITY            = -20.0f;
         inline static           bool        wireframeRendering = false;
         inline static           bool        debugSprites       = false;
-        inline static           bool        resetCamera        = false;
         inline static           RenderStats renderStats;
+
+        // --- GreenWorld
+        inline static constexpr float       GRAVITY            = -20.0f;
+
+        // --- CellSim
+        inline static constexpr uint32      CELL_FRAME_SIZE    = 64;
+        inline static           bool        resetCamera        = false;
+        inline static           CellTypes   selectedCellType   = None;
+        inline static           int32       selectedXCoord     = 0;
+        inline static           int32       selectedYCoord     = 0;
+        inline static           int32       selectedZCoord     = 0;
 
         AppSettings() = delete;
     };

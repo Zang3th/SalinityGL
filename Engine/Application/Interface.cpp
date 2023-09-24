@@ -6,7 +6,7 @@ namespace Engine
 
     void Interface::SetDarkThemeColors()
     {
-        auto& colors              = ImGui::GetStyle().Colors;
+        auto& colors = ImGui::GetStyle().Colors;
         colors[ImGuiCol_WindowBg] = ImVec4{0.1f, 0.105f, 0.11f, 1.0f};
 
         // Headers
@@ -35,6 +35,10 @@ namespace Engine
         colors[ImGuiCol_TitleBg]          = ImVec4{0.15f, 0.1505f, 0.151f, 1.0f};
         colors[ImGuiCol_TitleBgActive]    = ImVec4{0.15f, 0.1505f, 0.151f, 1.0f};
         colors[ImGuiCol_TitleBgCollapsed] = ImVec4{0.15f, 0.1505f, 0.151f, 1.0f};
+
+        // Slider
+        colors[ImGuiCol_SliderGrab]       = ImVec4{0.20f, 0.25f, 0.55f, 1.0f};
+        colors[ImGuiCol_SliderGrabActive] = ImVec4{0.45f, 0.50f, 0.80f, 1.0f};
     }
 
     void Interface::TextCentered(const char* text)

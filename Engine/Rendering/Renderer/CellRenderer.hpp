@@ -27,7 +27,7 @@ namespace Engine
             Shader*                                                     _shader;
             glm::vec3                                                   _worldPos;
 
-            std::array<glm::mat4, AppSettings::CELL_CUBE_SIZE * 3>      _modelViewStorage;
+            std::array<glm::mat4, AppSettings::CELL_FRAME_SIZE * 3>     _modelViewStorage;
 
             CellRenderer
             (

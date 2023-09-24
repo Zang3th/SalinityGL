@@ -19,7 +19,7 @@ namespace Engine
 
     CellRenderer::~CellRenderer()
     {
-        //TODO: Iterate over all cells and delete them
+        //ToDo: Iterate over all cells and delete them
     }
 
     void CellRenderer::InitGpuStorage()

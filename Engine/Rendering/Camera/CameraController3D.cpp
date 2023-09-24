@@ -25,7 +25,8 @@ namespace Engine
     void CameraController3D::MouseButtonCallback(GLFWwindow* window, int32 button, int32 action, int32 mods)
     {
         //_lastY needs to be greater than 27 to not trigger on the titlebar
-        if(button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS && _lastY > 27)
+        //_lastX needs to be less than 1505 to not trigger on the sidebar
+        if(button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS && _lastY > 27 && _lastX < 1505)
         {
             glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
             _windowInFocus = true;

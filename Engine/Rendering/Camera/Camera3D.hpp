@@ -30,7 +30,7 @@ namespace Engine
             };
 
             Camera3D() = delete;
-            static void Init(glm::vec3 position, float yaw, float pitch, float movementSpeed);
+            static void Init(const glm::vec3& position, float yaw, float pitch, float movementSpeed);
             static void Update();
             static inline glm::mat4 GetViewMatrix(){return glm::lookAt(_position, _position + _front, _up);}
             static void ProcessKeyboard(Camera_Movement direction, float deltaTime);
@@ -41,6 +41,7 @@ namespace Engine
             [[nodiscard]] static float GetYaw();
             [[nodiscard]] static float GetPitch();
             static void SetPosition(const glm::vec3& position);
+            static void SetPosition(const glm::vec3& position, float yaw, float pitch);
             static void InvertPitch();
     };
 }

@@ -21,7 +21,7 @@ namespace CS
         {
             return EXIT_FAILURE;
         }
-        Engine::Camera3D::Init(glm::vec3(350.0f, 125.0f, 415.0f), 38.0f, -29.0f, 75.0f);
+        Engine::Camera3D::Init(_camStartPos, _camStartYaw, _camStartPitch, 75.0f);
         Engine::CameraController3D::Init();
         Engine::RenderManager::Init();
 
@@ -83,17 +83,6 @@ namespace CS
             "Frame",
             "../Res/Assets/Models/CellSim/Frame"
         );
-
-        //Cube
-        //_sceneRenderer->AddObject
-        //(
-        //    0.5f,
-        //    glm::vec3(0.0f),
-        //    glm::vec3(500.0f, 10.0f, 524.0f),
-        //    _shadowRenderer->GetDepthTexture(),
-        //    "Cube",
-        //    "../Res/Assets/Models/CellSim/Cube"
-        //);
     }
 
     void CellSimApp::AddSprites()
@@ -139,6 +128,12 @@ namespace CS
             Engine::Window::PollEvents();
             Engine::Window::ProcessEvents();
             Engine::CameraController3D::ProcessInput();
+
+            if(Engine::AppSettings::resetCamera)
+            {
+                Engine::Camera3D::SetPosition(_camStartPos, _camStartYaw, _camStartPitch);
+                Engine::AppSettings::resetCamera = false;
+            }
         }
 
         {
@@ -162,7 +157,9 @@ namespace CS
             Engine::RenderManager::RenderCells();
 
             if(Engine::AppSettings::debugSprites)
+            {
                 Engine::RenderManager::RenderSprites();
+            }
         }
 
         {

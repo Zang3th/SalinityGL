@@ -12,11 +12,11 @@ namespace Engine
     class Cubemap
     {
         private:
+            uint32                  _verticeCount;
+            Shader*                 _shader;
             Scope<VertexArray>      _vao;
             Scope<VertexBuffer>     _vboVert;
             Scope<CubemapTexture>   _cubemapTexture;
-            Shader*                 _shader;
-            uint32                  _verticeCount;
 
             void                    InitGpuStorage();
 

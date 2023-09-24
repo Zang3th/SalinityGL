@@ -4,7 +4,7 @@ namespace Engine
 {
     // ----- Public -----
 
-    void Camera3D::Init(glm::vec3 position, float yaw, float pitch, float movementSpeed)
+    void Camera3D::Init(const glm::vec3& position, float yaw, float pitch, float movementSpeed)
     {
         _position         = position;
         _front            = glm::vec3(0.0f);
@@ -109,6 +109,15 @@ namespace Engine
     void Camera3D::SetPosition(const glm::vec3& position)
     {
         _position = position;
+    }
+
+    void Camera3D::SetPosition(const glm::vec3& position, float yaw, float pitch)
+    {
+        _position = position;
+        _yaw = yaw;
+        _pitch = pitch;
+
+        Update();
     }
 
     void Camera3D::InvertPitch()

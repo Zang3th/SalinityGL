@@ -33,8 +33,7 @@ namespace Engine
 
         if(button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
         {
-            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-            _windowInFocus = false;
+            DeFocusWindow(window);
         }
     }
 
@@ -42,7 +41,6 @@ namespace Engine
 
     void CameraController3D::Init()
     {
-        //Set static member variables
         _windowInFocus = false;
 
         //Set callbacks
@@ -71,5 +69,11 @@ namespace Engine
 
         if(glfwGetKey(Window::GetWindow(), GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
             Camera3D::ProcessKeyboard(Camera3D::DOWN, dt);
+    }
+
+    void CameraController3D::DeFocusWindow(GLFWwindow* window)
+    {
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        _windowInFocus = false;
     }
 }

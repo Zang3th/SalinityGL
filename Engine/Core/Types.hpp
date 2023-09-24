@@ -71,6 +71,7 @@ namespace Engine
         inline static constexpr float       GRAVITY            = -20.0f;
         inline static           bool        wireframeRendering = false;
         inline static           bool        debugSprites       = false;
+        inline static           bool        resetCamera        = false;
         inline static           RenderStats renderStats;
 
         AppSettings() = delete;

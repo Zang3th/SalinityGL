@@ -260,7 +260,9 @@ namespace GW
             Engine::RenderManager::RenderParticles();
 
             if(Engine::AppSettings::debugSprites)
+            {
                 Engine::RenderManager::RenderSprites();
+            }
         }
 
         {

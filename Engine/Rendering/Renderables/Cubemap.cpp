@@ -66,9 +66,7 @@ namespace Engine
     // ----- Public -----
 
     Cubemap::Cubemap(const std::array<const char*, 6>& faces, Shader* shader)
-        :   _cubemapTexture(MakeScope<CubemapTexture>(faces)),
-            _shader(shader),
-            _verticeCount(36)
+        :   _verticeCount(36), _shader(shader), _cubemapTexture(MakeScope<CubemapTexture>(faces))
     {
         InitGpuStorage();
     }

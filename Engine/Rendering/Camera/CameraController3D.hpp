@@ -20,5 +20,6 @@ namespace Engine
             CameraController3D() = delete;
             static void Init();
             static void ProcessInput();
+            static void DeFocusWindow(GLFWwindow* window);
     };
 }

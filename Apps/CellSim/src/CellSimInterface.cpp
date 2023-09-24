@@ -52,12 +52,21 @@ namespace CS
                 ImGui::MenuItem("Show overlay", "", &_showOverlay);
                 ImGui::MenuItem("Show debug sprites", "", &Engine::AppSettings::debugSprites);
                 ImGui::EndMenu();
+                Engine::CameraController3D::DeFocusWindow(Engine::Window::GetWindow());
             }
 
             if(ImGui::BeginMenu("Rendering"))
             {
                 ImGui::MenuItem("Wireframe-Mode", "", &Engine::AppSettings::wireframeRendering);
                 ImGui::EndMenu();
+                Engine::CameraController3D::DeFocusWindow(Engine::Window::GetWindow());
+            }
+
+            if(ImGui::BeginMenu("Camera"))
+            {
+                ImGui::MenuItem("Reset", "", &Engine::AppSettings::resetCamera);
+                ImGui::EndMenu();
+                Engine::CameraController3D::DeFocusWindow(Engine::Window::GetWindow());
             }
         }
         ImGui::EndMainMenuBar();
@@ -89,6 +98,7 @@ namespace CS
                     ImGui::NewLine();
                     ImGui::Separator();
                     ImGui::Text("Model passes: %d", Engine::AppSettings::renderStats.modelPasses);
+                    ImGui::Text("Sprite passes: %d", Engine::AppSettings::renderStats.spritePasses);
                     ImGui::Text("Cell passes: %d", Engine::AppSettings::renderStats.cellPasses);
                     ImGui::Separator();
 

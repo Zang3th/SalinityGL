@@ -270,7 +270,7 @@ namespace Engine
     void SceneRenderer::AddPlane
     (
         const uint32 x, const uint32 z, const float tileSize, const glm::vec3& position,
-        Texture* depthTexture, std::optional<const std::string> texture
+        Texture* depthTexture, const std::optional<const std::string>& texture
     )
     {
         //Create terrain mesh
@@ -286,7 +286,7 @@ namespace Engine
         //Add texture(s)
         if(texture.has_value())
         {
-            planeModel->AddTexture(ResourceManager::GetTexture(texture.value()));
+            planeModel->AddTexture(ResourceManager::GetTexture(*texture));
             planeModel->SetDiffuseTexture();
         }
 

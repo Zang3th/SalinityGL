@@ -7,17 +7,14 @@ namespace GW
     class GreenWorldInterface final : public Engine::Interface
     {
         private:
-            ImVec2           _sidebarPos,     _sidebarSize;
-            ImVec2           _shaderFieldPos, _shaderFieldSize;
-            ImVec2           _texFieldPos,    _texFieldSize;
-            ImVec2           _overlayPivot    = ImVec2(1.0f, 0.0f);
-            ImVec2           _shaderPivot     = ImVec2(0.0f, 0.0f);
-            ImVec2           _texturePivot    = ImVec2(0.0f, 0.0f);
             ImGuiWindowFlags _windowFlags;
-            float            _windowAlphaValue;
+            ImVec2           _sidebarPos, _sidebarSize;
+            ImVec2           _shaderFieldPos, _shaderFieldSize, _texFieldPos, _texFieldSize;
+            ImVec2           _overlayPivot, _shaderPivot, _texturePivot;
+            float            _windowAlphaValue, _menuBarHeight, _sidebarWidth, _shaderTexBarWidth;
             bool             _showOverlay;
 
-            void             SetOverlayParameters();
+            void             CalculateSidebarDimensions();
 
         public:
             GreenWorldInterface();

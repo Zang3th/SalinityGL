@@ -2,3 +2,5 @@
 /.idea
 StaticAnalysis.sh
 /.PVS-Studio
+.i
+.cfg

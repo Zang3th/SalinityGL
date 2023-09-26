@@ -4,20 +4,17 @@ namespace GW
 {
     // ----- Private -----
 
-    void GreenWorldInterface::SetOverlayParameters()
+    void GreenWorldInterface::CalculateSidebarDimensions()
     {
         const ImGuiViewport* viewport  = ImGui::GetMainViewport();
         const ImVec2 workPos           = viewport->WorkPos;
         const auto   windowWidth       = (float)Engine::AppSettings::WINDOW_WIDTH;
         const auto   windowHeight      = (float)Engine::AppSettings::WINDOW_HEIGHT;
-        const float  menuBarHeight     = 25.0f;
-        const float  sidebarWidth      = 415.0f;
-        const float  shaderTexBarWidth = 210.0f;
 
-        _sidebarPos      = ImVec2(workPos.x + windowWidth, menuBarHeight);
-        _sidebarSize     = ImVec2(sidebarWidth,windowHeight - menuBarHeight);
-        _shaderFieldPos  = ImVec2(0.0f, menuBarHeight);
-        _shaderFieldSize = ImVec2(shaderTexBarWidth, (windowHeight / 2.0f) - menuBarHeight);
+        _sidebarPos  = ImVec2(workPos.x + windowWidth, _menuBarHeight);
+        _sidebarSize = ImVec2(_sidebarWidth,windowHeight - _menuBarHeight);
+        _shaderFieldPos  = ImVec2(0.0f, _menuBarHeight);
+        _shaderFieldSize = ImVec2(_shaderTexBarWidth, (windowHeight / 2.0f) - _menuBarHeight);
         _texFieldPos     = ImVec2(_shaderFieldPos.x, _shaderFieldPos.y + _shaderFieldSize.y);
         _texFieldSize    = ImVec2(_shaderFieldSize.x, windowHeight / 2.0f);
     }
@@ -25,11 +22,10 @@ namespace GW
     // ----- Public -----
 
     GreenWorldInterface::GreenWorldInterface()
-        :   _windowFlags(ImGuiWindowFlags_NoDecoration       | ImGuiWindowFlags_NoSavedSettings |
-                         ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav           |
-                         ImGuiWindowFlags_NoMove),
-            _windowAlphaValue(0.65f),
-            _showOverlay(true)
+        :   _windowFlags(ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing |
+                         ImGuiWindowFlags_NoNav        | ImGuiWindowFlags_NoMove),
+            _overlayPivot(ImVec2(1.0f, 0.0f)), _shaderPivot(ImVec2(0.0f, 0.0f)), _texturePivot(ImVec2(0.0f, 0.0f)),
+            _windowAlphaValue(0.65f), _menuBarHeight(25.0f), _sidebarWidth(415.0f), _shaderTexBarWidth(210.0f), _showOverlay(true)
     {
         //Load custom font
         ImGuiIO& io = ImGui::GetIO();
@@ -40,7 +36,7 @@ namespace GW
         SetDarkThemeColors();
 
         //Calculate and set overlay parameters
-        SetOverlayParameters();
+        CalculateSidebarDimensions();
     }
 
     void GreenWorldInterface::AddElements()
@@ -48,6 +44,9 @@ namespace GW
         //Discard old plotting data every 120 frames
         if(Engine::Window::GetFrameCounter() > 120)
             ImGui::PlotVarFlushOldEntries();
+
+        // --- Remove all window borders
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
 
         //Menu bar
         if(ImGui::BeginMainMenuBar())
@@ -70,15 +69,13 @@ namespace GW
         //Overlay
         if(_showOverlay)
         {
-            SetOverlayParameters();
-
             //Sidebar
             {
                 ImGui::SetNextWindowBgAlpha(_windowAlphaValue);
                 ImGui::SetNextWindowPos(_sidebarPos, ImGuiCond_Always, _overlayPivot);
                 ImGui::SetNextWindowSize(_sidebarSize);
 
-                if(ImGui::Begin("Sidebar", &_showOverlay, _windowFlags))
+                if(ImGui::Begin("Sidebar", nullptr, _windowFlags))
                 {
                     //Application stats
                     ImGui::Text("Application average %.2f ms/frame (%.1f FPS)", Engine::Window::GetDeltaTime() * 1000.0f, Engine::Window::GetFps());
@@ -127,9 +124,10 @@ namespace GW
 
                 if(ImGui::Begin("ShaderWindow", &_showOverlay, _windowFlags))
                 {
-                    TextCentered("Shader:");
+                    CenterText("Shader:");
+                    ImGui::Separator();
                     ImGui::NewLine();
-                    TextCentered(Engine::ResourceManager::OutputShaderStorage().c_str());
+                    CenterText(Engine::ResourceManager::OutputShaderStorage().c_str());
                 }
                 ImGui::End();
             }
@@ -142,12 +140,16 @@ namespace GW
 
                 if(ImGui::Begin("TextureWindow", &_showOverlay, _windowFlags))
                 {
-                    TextCentered("Textures:");
+                    ImGui::Separator();
+                    CenterText("Textures:");
+                    ImGui::Separator();
                     ImGui::NewLine();
-                    TextCentered(Engine::ResourceManager::OutputTextureStorage().c_str());
+                    CenterText(Engine::ResourceManager::OutputTextureStorage().c_str());
                 }
                 ImGui::End();
             }
         }
+
+        ImGui::PopStyleVar();
     }
 }

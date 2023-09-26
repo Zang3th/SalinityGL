@@ -13,7 +13,8 @@ namespace Engine
     {
         protected:
             static void SetDarkThemeColors();
-            static void TextCentered(const char* text);
+            static void CenterText(const char* text);
+            static void CenterCursor(const char* characterAmount);
 
         public:
             Interface();

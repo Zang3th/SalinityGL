@@ -7,13 +7,15 @@ namespace CS
     class CellSimInterface final : public Engine::Interface
     {
         private:
-            ImVec2           _sidebarPos, _sidebarSize;
-            ImVec2           _overlayPivot = ImVec2(1.0f, 0.0f);
             ImGuiWindowFlags _windowFlags;
-            float            _windowAlphaValue;
+            ImVec2           _sidebarPos, _sidebarSize, _overlayPivot;
+            float            _windowAlphaValue, _menuBarHeight, _sidebarWidth;
             bool             _showOverlay;
 
-            void             SetOverlayParameters();
+            void             CalculateSidebarDimensions();
+            void             AddMenuBar();
+            void             CheckCellBoundaries();
+            void             AddSideBar();
 
         public:
             CellSimInterface();

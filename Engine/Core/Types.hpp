@@ -91,12 +91,12 @@ namespace Engine
         inline static constexpr float       GRAVITY            = -20.0f;
 
         // --- CellSim
-        inline static constexpr uint32      CELL_FRAME_SIZE    = 64;
-        inline static           bool        resetCamera        = false;
-        inline static           CellTypes   selectedCellType   = None;
-        inline static           int32       selectedXCoord     = 0;
-        inline static           int32       selectedYCoord     = 0;
-        inline static           int32       selectedZCoord     = 0;
+        inline static constexpr uint32      CELL_FRAME_SIZE       = 64;
+        inline static           bool        resetCamera           = false;
+        inline static           CellTypes   selectedCellType      = None;
+        inline static           int32       selectedCellCoords[3] = {0, 0, 0};
+        inline static           int32       selectedCellAmount    = 0;
+        inline static           uint32      cellsAlive            = 0;
 
         AppSettings() = delete;
     };

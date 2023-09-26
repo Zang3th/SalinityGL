@@ -39,15 +39,26 @@ namespace Engine
         // Slider
         colors[ImGuiCol_SliderGrab]       = ImVec4{0.20f, 0.25f, 0.55f, 1.0f};
         colors[ImGuiCol_SliderGrabActive] = ImVec4{0.45f, 0.50f, 0.80f, 1.0f};
+
+        // Radio buttons and checkmarks
+        colors[ImGuiCol_CheckMark] = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
     }
 
-    void Interface::TextCentered(const char* text)
+    void Interface::CenterText(const char* text)
     {
         auto windowWidth = ImGui::GetWindowSize().x;
         auto textWidth   = ImGui::CalcTextSize(text).x;
 
         ImGui::SetCursorPosX((windowWidth - textWidth) * 0.5f);
-        ImGui::Text("%s", text);
+        ImGui::Text("%s",text);
+    }
+
+    void Interface::CenterCursor(const char* characterAmount)
+    {
+        auto windowWidth = ImGui::GetWindowSize().x;
+        auto textWidth   = ImGui::CalcTextSize(characterAmount).x;
+
+        ImGui::SetCursorPosX((windowWidth - textWidth) * 0.5f);
     }
 
     // ----- Public -----

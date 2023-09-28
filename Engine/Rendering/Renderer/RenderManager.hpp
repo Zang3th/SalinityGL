@@ -32,20 +32,20 @@ namespace Engine
             static void CleanUp();
             static void PrepareFrame();
 
-            static SceneRenderer*    AddScene(float nearPlane, float farPlane, const glm::vec3& lightPos, const glm::vec3& lightCol);
-            static ShadowRenderer*   AddShadows
+            static SceneRenderer*    AddSceneRenderer(float nearPlane, float farPlane, const glm::vec3& lightPos, const glm::vec3& lightCol);
+            static ShadowRenderer*   AddShadowRenderer
             (
                 uint32 resolution, const glm::vec3& lightPos, const glm::vec3& targetPos,
                 const glm::mat4& orthoProj, const std::string& shader
             );
-            static SpriteRenderer*   AddSprites();
-            static WaterRenderer*    AddWater();
-            static ParticleRenderer* AddParticles
+            static SpriteRenderer*   AddSpriteRenderer();
+            static WaterRenderer*    AddWaterRenderer();
+            static ParticleRenderer* AddParticleRenderer
             (
                 uint32 count, float size, float speed, float gravityCompliance, float lifeLength,
                 float respawnThreshold, const std::string& textureAtlas, const std::string& shader, const glm::vec3& position
             );
-            static CellRenderer*     AddCells
+            static CellRenderer*     AddCellRenderer
             (
                 float cellSize, float nearPlane, float farPlane,
                 const std::string& shader, const glm::vec3& worldPos

@@ -38,6 +38,11 @@ namespace Engine
         GLCall(glEnable(distance));
     }
 
+    void GLRenderSettings::EnableCulling()
+    {
+        GLCall(glEnable(GL_CULL_FACE));
+    }
+
     void GLRenderSettings::DisableMultisample()
     {
         GLCall(glDisable(GL_MULTISAMPLE));
@@ -61,6 +66,11 @@ namespace Engine
     void GLRenderSettings::DisableClipDistance(GLushort distance)
     {
         GLCall(glDisable(distance));
+    }
+
+    void GLRenderSettings::DisableCulling()
+    {
+        GLCall(glDisable(GL_CULL_FACE));
     }
 
     void GLRenderSettings::SetViewport(uint32 width, uint32 height)

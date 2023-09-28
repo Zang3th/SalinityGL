@@ -84,18 +84,18 @@ namespace GW
                     //Render stats
                     ImGui::NewLine();
                     ImGui::Separator();
-                    ImGui::Text("DrawCalls:      %d", Engine::AppSettings::renderStats.drawCalls);
-                    ImGui::Text("DrawnVertices:  %d", Engine::AppSettings::renderStats.drawnVertices);
+                    ImGui::Text("Draw calls:     %d", Engine::AppSettings::renderStats.drawCalls);
+                    ImGui::Text("Drawn vertices: %d", Engine::AppSettings::renderStats.drawnVertices);
                     ImGui::Separator();
 
                     ImGui::NewLine();
                     ImGui::Separator();
-                    ImGui::Text("Model    passes: %d", Engine::AppSettings::renderStats.modelPasses);
-                    ImGui::Text("Terrain  passes: %d", Engine::AppSettings::renderStats.terrainPasses);
-                    ImGui::Text("Water    passes: %d", Engine::AppSettings::renderStats.waterPasses);
+                    ImGui::Text("Model passes:    %d", Engine::AppSettings::renderStats.modelPasses);
+                    ImGui::Text("Terrain passes:  %d", Engine::AppSettings::renderStats.terrainPasses);
+                    ImGui::Text("Water passes:    %d", Engine::AppSettings::renderStats.waterPasses);
                     ImGui::Text("Particle passes: %d", Engine::AppSettings::renderStats.particlePasses);
-                    ImGui::Text("Sprite   passes: %d", Engine::AppSettings::renderStats.spritePasses);
-                    ImGui::Text("Cubemap  passes: %d", Engine::AppSettings::renderStats.cubemapPasses);
+                    ImGui::Text("Sprite passes:   %d", Engine::AppSettings::renderStats.spritePasses);
+                    ImGui::Text("Cubemap passes:  %d", Engine::AppSettings::renderStats.cubemapPasses);
                     ImGui::Separator();
 
                     //Camera stats

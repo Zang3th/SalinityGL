@@ -9,73 +9,22 @@ namespace Engine
         float cellSize, float nearPlane, float farPlane,
         Shader* shader, const glm::vec3& worldPos
     )
-        :   _cellSize(cellSize), _nearPlane(nearPlane), _farPlane(farPlane),
-            _verticeCount(36), _instanceCount(1), _shader(shader), _worldPos(worldPos)
+        :   _cellSize(cellSize), _nearPlane(nearPlane), _farPlane(farPlane), _verticeCount(36),
+            _instanceCount(AppSettings::MAX_CELL_AMOUNT), _shader(shader), _worldPos(worldPos)
     {
-        Logger::Info("Created", __func__);
+        Logger::Info("Created", "Renderer",__func__);
         GenerateCells();
         InitGpuStorage();
     }
 
-    CellRenderer::~CellRenderer()
-    {
-        //ToDo: Iterate over all cells and delete them
-    }
-
     void CellRenderer::InitGpuStorage()
     {
-        //Create data
-        static const float cubeVertices[] =
-        {
-            -1.0f,  1.0f, -1.0f,
-            -1.0f, -1.0f, -1.0f,
-             1.0f, -1.0f, -1.0f,
-             1.0f, -1.0f, -1.0f,
-             1.0f,  1.0f, -1.0f,
-            -1.0f,  1.0f, -1.0f,
-
-            -1.0f, -1.0f,  1.0f,
-            -1.0f, -1.0f, -1.0f,
-            -1.0f,  1.0f, -1.0f,
-            -1.0f,  1.0f, -1.0f,
-            -1.0f,  1.0f,  1.0f,
-            -1.0f, -1.0f,  1.0f,
-
-             1.0f, -1.0f, -1.0f,
-             1.0f, -1.0f,  1.0f,
-             1.0f,  1.0f,  1.0f,
-             1.0f,  1.0f,  1.0f,
-             1.0f,  1.0f, -1.0f,
-             1.0f, -1.0f, -1.0f,
-
-            -1.0f, -1.0f,  1.0f,
-            -1.0f,  1.0f,  1.0f,
-             1.0f,  1.0f,  1.0f,
-             1.0f,  1.0f,  1.0f,
-             1.0f, -1.0f,  1.0f,
-            -1.0f, -1.0f,  1.0f,
-
-            -1.0f,  1.0f, -1.0f,
-             1.0f,  1.0f, -1.0f,
-             1.0f,  1.0f,  1.0f,
-             1.0f,  1.0f,  1.0f,
-            -1.0f,  1.0f,  1.0f,
-            -1.0f,  1.0f, -1.0f,
-
-            -1.0f, -1.0f, -1.0f,
-            -1.0f, -1.0f,  1.0f,
-             1.0f, -1.0f, -1.0f,
-             1.0f, -1.0f, -1.0f,
-            -1.0f, -1.0f,  1.0f,
-             1.0f, -1.0f,  1.0f
-        };
-
         //Create and bind vao
         _vao = MakeScope<VertexArray>();
         _vao->Bind();
 
         //Create vbo's, send it data and configure vao
-        _vboVert = MakeScope<VertexBuffer>(cubeVertices, sizeof(cubeVertices), GL_STATIC_DRAW);
+        _vboVert = MakeScope<VertexBuffer>(CUBE_VERTICES, sizeof(CUBE_VERTICES), GL_STATIC_DRAW);
         _vao->DefineAttributes(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
 
         _vboModel = MakeScope<VertexBuffer>(&_modelViewStorage[0], _modelViewStorage.size() * 16 * sizeof(float), GL_DYNAMIC_DRAW);
@@ -105,14 +54,24 @@ namespace Engine
 
     void CellRenderer::GenerateCells()
     {
-        //Create model matrix
         glm::mat4 model(1.0f);
+        uint32 count = 0;
 
-        //Set transformations
-        model = glm::translate(model, _worldPos);
-        model = glm::scale(model, glm::vec3(_cellSize));
-
-        _modelViewStorage.at(0) = model;
+        for(uint32 x = 0; x < AppSettings::CELL_FRAME_SIZE; x++)
+        {
+            for(uint32 y = 0; y < AppSettings::CELL_FRAME_SIZE; y++)
+            {
+                for(uint32 z = 0; z < AppSettings::CELL_FRAME_SIZE; z++)
+                {
+                    //Set transformations
+                    model = glm::mat4(1.0f);
+                    model = glm::translate(model, _worldPos + glm::vec3(x, y, z));
+                    model = glm::scale(model, glm::vec3(_cellSize));
+                    _modelViewStorage.at(count) = model;
+                    count++;
+                }
+            }
+        }
     }
 
     // ----- Public -----
@@ -132,7 +91,7 @@ namespace Engine
         _shader->SetUniformMat4f("projection", ((SceneRenderer*)sceneRenderer)->GetProjMatrix());
 
         //Upload updated vbo's to the gpu
-        UpdateGpuStorage();
+        //UpdateGpuStorage();
 
         //Render cells instanced
         GLCall(glDrawArraysInstanced(GL_TRIANGLES, 0, _verticeCount, _instanceCount));

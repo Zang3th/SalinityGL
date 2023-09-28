@@ -6,7 +6,7 @@ namespace Engine
 
     WaterRenderer::WaterRenderer()
     {
-        Logger::Info("Created", __func__);
+        Logger::Info("Created", "Renderer",__func__);
         InitReflectionFBO();
         InitRefractionFBO();
     }

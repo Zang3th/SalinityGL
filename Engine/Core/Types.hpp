@@ -62,7 +62,7 @@ namespace Engine
     };
 
     // --- Read in of cell types via X-Macro
-    enum CellTypes
+    enum CellType
     {
     #   define X(a) a,
     #   include "CellTypes.def"
@@ -91,12 +91,14 @@ namespace Engine
         inline static constexpr float       GRAVITY            = -20.0f;
 
         // --- CellSim
-        inline static constexpr uint32      CELL_FRAME_SIZE       = 64;
+        inline static constexpr uint32      CELL_FRAME_SIZE       = 61;
+        inline static constexpr uint32      MAX_CELL_AMOUNT       = CELL_FRAME_SIZE * CELL_FRAME_SIZE * CELL_FRAME_SIZE;
         inline static           bool        resetCamera           = false;
-        inline static           CellTypes   selectedCellType      = None;
+        inline static           CellType    selectedCellType      = None;
         inline static           int32       selectedCellCoords[3] = {0, 0, 0};
         inline static           int32       selectedCellAmount    = 0;
         inline static           uint32      cellsAlive            = 0;
+        inline static           bool        spawnNewCell          = false;
 
         AppSettings() = delete;
     };

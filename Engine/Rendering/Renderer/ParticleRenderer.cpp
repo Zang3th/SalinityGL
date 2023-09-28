@@ -13,7 +13,7 @@ namespace Engine
             _speed(speed), _gravityCompliance(gravityCompliance), _lifeLength(lifeLength),
             _respawnTreshold(respawnThreshold), _textureAtlas(textureAtlas), _shader(shader), _position(position)
     {
-        Logger::Info("Created", __func__);
+        Logger::Info("Created", "Renderer",__func__);
         GenerateParticles();
         InitGpuStorage();
     }

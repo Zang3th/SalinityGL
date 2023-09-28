@@ -23,19 +23,17 @@ namespace Engine
 
         _fbo->Unbind();
 
-        Logger::Info("Created", __func__);
+        Logger::Info("Created", "Renderer",__func__);
     }
 
     void ShadowRenderer::StartFrame()
     {
-        GLRenderSettings::SetCullFace(GL_FRONT);
         _fbo->Bind(_shadowWidth, _shadowHeight);
     }
 
     void ShadowRenderer::EndFrame()
     {
         _fbo->Unbind();
-        GLRenderSettings::SetCullFace(GL_BACK);
     }
 
     // ----- Public -----

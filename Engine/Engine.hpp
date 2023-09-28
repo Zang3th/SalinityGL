@@ -1,19 +1,26 @@
 #pragma once
 
+// ----- Engine core -----
 #include "Logger.hpp"
 #include "Window.hpp"
-#include "ResourceManager.hpp"
 #include "Types.hpp"
 #include "Profiler.hpp"
-#include "RenderManager.hpp"
-#include "App.hpp"
 #include "Audio.hpp"
+#include "App.hpp"
 
+// ----- Resources and renderables -----
+#include "ResourceManager.hpp"
+#include "RenderManager.hpp"
+#include "CellManager.hpp"
+
+// ----- Camera -----
 #include "Camera3D.hpp"
 #include "CameraController3D.hpp"
 
+// ----- UI -----
 #include "Interface.hpp"
 
+// ----- Rendering -----
 #include "SceneRenderer.hpp"
 #include "ShadowRenderer.hpp"
 #include "SpriteRenderer.hpp"

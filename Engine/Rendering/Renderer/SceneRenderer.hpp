@@ -30,7 +30,7 @@ namespace Engine
 
             Scope<Cubemap>      _cubemap;
             std::vector<Model*> _modelStorage;
-            Model              *_terrainModel, *_waterModel;
+            Model              *_terrainModel, *_waterModel, *_planeModel;
             Shader             *_terrainShader, *_modelShader, *_waterShader;
 
             SceneRenderer(float nearPlane, float farPlane, const glm::vec3& lightPos, const glm::vec3& lightCol);
@@ -45,6 +45,7 @@ namespace Engine
             void FlushModels(Shader* shader);
             void FlushCubemap();
             void FlushTerrain();
+            void FlushPlane();
 
             void AddLightProjection(const glm::mat4& lightProj);
             void AddCubemap(const std::array<const char*, 6>& faces, const std::string& shader);

@@ -46,8 +46,8 @@ namespace GW
         LoadResources();
 
         //Create application specific renderers
-        _sceneRenderer  = Engine::RenderManager::AddScene(_nearPlane, _farPlane, _lightPos, _lightCol);
-        _shadowRenderer = Engine::RenderManager::AddShadows
+        _sceneRenderer  = Engine::RenderManager::AddSceneRenderer(_nearPlane, _farPlane, _lightPos, _lightCol);
+        _shadowRenderer = Engine::RenderManager::AddShadowRenderer
         (
             8192,
             _lightPos,
@@ -55,9 +55,9 @@ namespace GW
             glm::ortho(-90.0f, 90.0f, -90.0f, 90.0f, 110.0f, 210.0f),
             "ShadowCreateShader"
         );
-        _spriteRenderer = Engine::RenderManager::AddSprites();
-        _waterRenderer  = Engine::RenderManager::AddWater();
-        Engine::RenderManager::AddParticles
+        _spriteRenderer = Engine::RenderManager::AddSpriteRenderer();
+        _waterRenderer  = Engine::RenderManager::AddWaterRenderer();
+        Engine::RenderManager::AddParticleRenderer
         (
             200,
             5.0f,

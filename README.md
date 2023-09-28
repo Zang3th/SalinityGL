@@ -96,8 +96,8 @@
 
 ### Greenworld
 
-![GreenWorld](Res/Screenshots/GreenWorld/Screenshot_GW_023.png)
+![GreenWorld](Res/Screenshots/GreenWorld/Screenshot_GW_024.png)
 
 ### CellSim
 
-![CellSim](Res/Screenshots/CellSim/Screenshot_CS_005.png)
+![CellSim](Res/Screenshots/CellSim/Screenshot_CS_006.png)

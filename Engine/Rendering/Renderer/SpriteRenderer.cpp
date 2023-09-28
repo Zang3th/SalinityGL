@@ -7,7 +7,7 @@ namespace Engine
     SpriteRenderer::SpriteRenderer()
         : _orthoProj(glm::ortho(0.0f, (float)AppSettings::WINDOW_WIDTH, 0.0f, (float)AppSettings::WINDOW_HEIGHT, -1.0f, 1.0f))
     {
-        Logger::Info("Created", __func__);
+        Logger::Info("Created", "Renderer",__func__);
     }
 
     // ----- Public -----
@@ -15,6 +15,7 @@ namespace Engine
     void SpriteRenderer::Flush(Renderer* renderer)
     {
         GLRenderSettings::DisableWireframe();
+        GLRenderSettings::DisableCulling();
 
         //Render sprites
         for(const auto& sprite : _spriteStorage)
@@ -25,6 +26,8 @@ namespace Engine
 
         //Increase render pass counter
         AppSettings::renderStats.spritePasses++;
+
+        GLRenderSettings::EnableCulling();
     }
 
     void SpriteRenderer::AddSprite(const glm::vec2& size, const glm::vec2& pos, Texture* texture, Shader* shader)

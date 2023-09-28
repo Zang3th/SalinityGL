@@ -15,6 +15,8 @@ namespace Engine
         GLRenderSettings::SetDepthFunc(GL_LEQUAL);
         GLRenderSettings::EnableBlending();
         GLRenderSettings::SetBlendFunc(GL_ONE_MINUS_SRC_ALPHA);
+        GLRenderSettings::EnableCulling();
+        GLRenderSettings::SetCullFace(GL_BACK);
     }
 
     void RenderManager::CleanUp()
@@ -29,7 +31,7 @@ namespace Engine
         GLRenderSettings::ClearBuffers();
     }
 
-    SceneRenderer* RenderManager::AddScene(const float nearPlane, const float farPlane, const glm::vec3& lightPos, const glm::vec3& lightCol)
+    SceneRenderer* RenderManager::AddSceneRenderer(const float nearPlane, const float farPlane, const glm::vec3& lightPos, const glm::vec3& lightCol)
     {
         _sceneRenderer = new SceneRenderer(nearPlane, farPlane, lightPos, lightCol);
         _rendererStorage.push_back(_sceneRenderer);
@@ -37,7 +39,7 @@ namespace Engine
         return _sceneRenderer;
     }
 
-    ShadowRenderer* RenderManager::AddShadows
+    ShadowRenderer* RenderManager::AddShadowRenderer
     (
         uint32 resolution, const glm::vec3& lightPos, const glm::vec3& targetPos,
         const glm::mat4& orthoProj, const std::string& shader
@@ -50,7 +52,7 @@ namespace Engine
         return _shadowRenderer;
     }
 
-    SpriteRenderer* RenderManager::AddSprites()
+    SpriteRenderer* RenderManager::AddSpriteRenderer()
     {
         _spriteRenderer = new SpriteRenderer();
         _rendererStorage.push_back(_spriteRenderer);
@@ -58,7 +60,7 @@ namespace Engine
         return _spriteRenderer;
     }
 
-    WaterRenderer* RenderManager::AddWater()
+    WaterRenderer* RenderManager::AddWaterRenderer()
     {
         _waterRenderer = new WaterRenderer();
         _rendererStorage.push_back(_waterRenderer);
@@ -66,7 +68,7 @@ namespace Engine
         return _waterRenderer;
     }
 
-    ParticleRenderer* RenderManager::AddParticles
+    ParticleRenderer* RenderManager::AddParticleRenderer
     (
         uint32 count, float size, float speed, float gravityCompliance, float lifeLength,
         float respawnThreshold, const std::string& textureAtlas, const std::string& shader, const glm::vec3& position
@@ -89,7 +91,7 @@ namespace Engine
         return _particleRenderer;
     }
 
-    CellRenderer* RenderManager::AddCells
+    CellRenderer* RenderManager::AddCellRenderer
     (
         float cellSize, float nearPlane, float farPlane,
         const std::string& shader, const glm::vec3& worldPos

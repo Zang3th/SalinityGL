@@ -17,10 +17,11 @@ namespace CS
             const glm::vec3                 _lightCol      = glm::vec3(1.0f, 1.0f, 1.0f);
             const glm::vec3                 _camStartPos   = glm::vec3(350.0f, 125.0f, 415.0f);
 
-            Engine::SceneRenderer*          _sceneRenderer  = nullptr;
-            Engine::ShadowRenderer*         _shadowRenderer = nullptr;
-            Engine::SpriteRenderer*         _spriteRenderer = nullptr;
-            Engine::Scope<CellSimInterface> _interface;
+            Engine::SceneRenderer*             _sceneRenderer  = nullptr;
+            Engine::ShadowRenderer*            _shadowRenderer = nullptr;
+            Engine::SpriteRenderer*            _spriteRenderer = nullptr;
+            Engine::Scope<CellSimInterface>    _interface;
+            Engine::Scope<Engine::CellManager> _cellManager;
 
             void           LoadResources() final;
             Engine::uint32 InitModules()   final;

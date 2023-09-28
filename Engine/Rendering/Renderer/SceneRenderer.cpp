@@ -7,9 +7,9 @@ namespace Engine
     SceneRenderer::SceneRenderer(const float nearPlane, const float farPlane, const glm::vec3& lightPos, const glm::vec3& lightCol)
         : _nearPlane(nearPlane), _farPlane(farPlane), _moveFactor(0.0f), _waveSpeed(0.0f), _lightPos(lightPos), _lightCol(lightCol),
           _perspProj(glm::perspective(glm::radians(45.0f), Window::GetAspectRatio(), _nearPlane, _farPlane)), _lightProj(0.0f),
-          _terrainModel(nullptr), _waterModel(nullptr), _terrainShader(nullptr), _modelShader(nullptr), _waterShader(nullptr)
+          _terrainModel(nullptr), _waterModel(nullptr), _planeModel(nullptr), _terrainShader(nullptr), _modelShader(nullptr), _waterShader(nullptr)
     {
-        Logger::Info("Created", __func__);
+        Logger::Info("Created", "Renderer",__func__);
     }
 
     SceneRenderer::~SceneRenderer()
@@ -67,6 +67,8 @@ namespace Engine
 
     void SceneRenderer::FlushWater()
     {
+        GLRenderSettings::SetCullFace(GL_FRONT);
+
         //Bind shader
         _waterShader->Bind();
 
@@ -116,6 +118,8 @@ namespace Engine
         AppSettings::renderStats.drawnVertices += verticeCount;
         AppSettings::renderStats.drawCalls++;
         AppSettings::renderStats.waterPasses++;
+
+        GLRenderSettings::SetCullFace(GL_BACK);
     }
 
     void SceneRenderer::UpdateMoveFactor()
@@ -139,6 +143,9 @@ namespace Engine
 
         if(_terrainModel)
             FlushTerrain();
+
+        if(_planeModel)
+            FlushPlane();
 
         if(!_modelStorage.empty())
             FlushModels(_modelShader);
@@ -167,20 +174,33 @@ namespace Engine
 
     void SceneRenderer::FlushCubemap()
     {
+        GLRenderSettings::SetCullFace(GL_FRONT);
         GLRenderSettings::DisableWireframe();
         AppSettings::renderStats.drawnVertices += _cubemap->Draw(_perspProj, Camera3D::GetViewMatrix());
         AppSettings::renderStats.drawCalls++;
         AppSettings::renderStats.cubemapPasses++;
+        GLRenderSettings::SetCullFace(GL_BACK);
     }
 
     void SceneRenderer::FlushTerrain()
     {
+        GLRenderSettings::SetCullFace(GL_FRONT);
         _terrainShader->Bind();
         _terrainShader->SetUniform1i("colorMap", 2);
         FlushModel(_terrainModel, _terrainShader);
         _terrainShader->Unbind();
-
         AppSettings::renderStats.terrainPasses++;
+        GLRenderSettings::SetCullFace(GL_BACK);
+    }
+
+    void SceneRenderer::FlushPlane()
+    {
+        GLRenderSettings::SetCullFace(GL_FRONT);
+        _modelShader->Bind();
+        FlushModel(_planeModel, _modelShader);
+        _modelShader->Unbind();
+        AppSettings::renderStats.terrainPasses++;
+        GLRenderSettings::SetCullFace(GL_BACK);
     }
 
     void SceneRenderer::AddLightProjection(const glm::mat4 &lightProj)
@@ -278,22 +298,20 @@ namespace Engine
         MeshCreator::CreatePlane(x, z, tileSize, &planeMesh);
 
         //Create model
-        auto planeModel = new Model(&planeMesh);
+        _planeModel = new Model(&planeMesh);
 
         //Reposition model
-        planeModel->ChangePosition(position);
+        _planeModel->ChangePosition(position);
 
         //Add texture(s)
         if(texture.has_value())
         {
-            planeModel->AddTexture(ResourceManager::GetTexture(*texture));
-            planeModel->SetDiffuseTexture();
+            _planeModel->AddTexture(ResourceManager::GetTexture(*texture));
+            _planeModel->SetDiffuseTexture();
         }
 
-        planeModel->AddTextureToSlot(depthTexture, 1);
+        _planeModel->AddTextureToSlot(depthTexture, 1);
 
-        //Store model
-        _modelStorage.push_back(planeModel);
     }
 
     void SceneRenderer::SetTerrainShader(const std::string& terrainShader)

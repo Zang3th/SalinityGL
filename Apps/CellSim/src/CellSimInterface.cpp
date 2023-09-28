@@ -76,8 +76,8 @@ namespace CS
                 // --- Render stats
                 ImGui::NewLine();
                 ImGui::Separator();
-                ImGui::Text("DrawCalls:      %d", Engine::AppSettings::renderStats.drawCalls);
-                ImGui::Text("DrawnVertices:  %d", Engine::AppSettings::renderStats.drawnVertices);
+                ImGui::Text("Draw calls:     %d", Engine::AppSettings::renderStats.drawCalls);
+                ImGui::Text("Drawn vertices: %d", Engine::AppSettings::renderStats.drawnVertices);
                 ImGui::Separator();
 
                 ImGui::NewLine();
@@ -126,17 +126,17 @@ namespace CS
                 {
                     if(ImGui::MenuItem("None"))
                     {
-                        Engine::AppSettings::selectedCellType = Engine::CellTypes::None;
+                        Engine::AppSettings::selectedCellType = Engine::CellType::None;
                     }
 
                     if(ImGui::MenuItem("Water"))
                     {
-                        Engine::AppSettings::selectedCellType = Engine::CellTypes::Water;
+                        Engine::AppSettings::selectedCellType = Engine::CellType::Water;
                     }
 
                     if(ImGui::MenuItem("Magma"))
                     {
-                        Engine::AppSettings::selectedCellType = Engine::CellTypes::Magma;
+                        Engine::AppSettings::selectedCellType = Engine::CellType::Magma;
                     }
 
                     ImGui::EndMenu();
@@ -182,7 +182,7 @@ namespace CS
                 CenterCursor("Spawn");
                 if (ImGui::Button("Spawn"))
                 {
-                    //ToDo: Implement cell spawn logic
+                    Engine::AppSettings::spawnNewCell = true;
                 }
                 ImGui::Separator();
 

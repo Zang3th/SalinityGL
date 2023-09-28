@@ -6,6 +6,7 @@
 #include "VertexBuffer.hpp"
 #include "Types.hpp"
 #include "ErrorManager.hpp"
+#include "VerticeData.hpp"
 
 namespace Engine
 {

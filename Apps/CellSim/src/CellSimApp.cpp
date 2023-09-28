@@ -32,30 +32,33 @@ namespace CS
         LoadResources();
 
         //Create application specific renderers
-        _sceneRenderer  = Engine::RenderManager::AddScene(_nearPlane, _farPlane, _lightPos, _lightCol);
-        Engine::RenderManager::AddCells
+        _sceneRenderer  = Engine::RenderManager::AddSceneRenderer(_nearPlane, _farPlane, _lightPos, _lightCol);
+        Engine::RenderManager::AddCellRenderer
         (
             1.0f,
             _nearPlane,
             _farPlane,
             "CellShader",
-            glm::vec3(512.0f, 0.0f, 512.0f)
+            glm::vec3(482.0f, 2.0f, 482.0f)
         );
-        _shadowRenderer = Engine::RenderManager::AddShadows
+        _shadowRenderer = Engine::RenderManager::AddShadowRenderer
         (
             8192,
             _lightPos,
             _lightTarget,
-            glm::ortho(-60.0f, 60.0f, -60.0f, 60.0f, 109.0f, 228.0f),
+            glm::ortho(-60.0f, 60.0f, -60.0f, 60.0f, 105.0f, 228.0f),
             "ShadowCreateShader"
         );
-        _spriteRenderer = Engine::RenderManager::AddSprites();
+        _spriteRenderer = Engine::RenderManager::AddSpriteRenderer();
 
         //Set default shaders for the scene
         _sceneRenderer->SetModelShader("ModelShader");
 
         //Create UI
         _interface = Engine::MakeScope<CellSimInterface>();
+
+        //Create cell manager
+        _cellManager = Engine::MakeScope<Engine::CellManager>();
 
         return EXIT_SUCCESS;
     }
@@ -133,6 +136,32 @@ namespace CS
             {
                 Engine::Camera3D::SetPosition(_camStartPos, _camStartYaw, _camStartPitch);
                 Engine::AppSettings::resetCamera = false;
+            }
+        }
+
+        {
+            //ToDo: Add profiling
+
+            Engine::AppSettings::cellsAlive = _cellManager->GetAliveCellAmount();
+
+            if(Engine::AppSettings::spawnNewCell)
+            {
+                _cellManager->SpawnCell
+                (
+                    Engine::AppSettings::selectedCellType,
+                    Engine::AppSettings::selectedCellAmount,
+                    glm::vec3(Engine::AppSettings::selectedCellCoords[0],
+                                      Engine::AppSettings::selectedCellCoords[1],
+                                      Engine::AppSettings::selectedCellCoords[2])
+                );
+
+                Engine::AppSettings::spawnNewCell = false;
+            }
+
+            if(Engine::AppSettings::cellsAlive > 0)
+            {
+                _cellManager->CalculateCellPhysics();
+                _cellManager->UpdateCellRenderer();
             }
         }
 

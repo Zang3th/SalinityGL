@@ -39,11 +39,11 @@ namespace Engine
     )
         :   _initPosition(position), _position(position),
             _initVelocity(velocity), _velocity(velocity),
-            _textureOffset0(glm::vec2(0.0f)),    _textureOffset1(glm::vec2(0.0f)),
+            _textureOffset0(glm::vec2(0.0f)), _textureOffset1(glm::vec2(0.0f)),
             _gravityFactor(gravity),
             _lifeLength(lifeLength), _elapsedTime(0.0f), _blendFactor(0.0f),
             _initRotation(rotation), _rotation(rotation),
-            _initSize(size),         _size(size),
+            _initSize(size), _size(size),
             _distanceToCamera(0.0f),
             _numberOfRows(numberOfRows)
     {}

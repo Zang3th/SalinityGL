@@ -49,8 +49,7 @@ namespace Engine
         //Log version
         std::string rendererString(reinterpret_cast<const char *>(glGetString(GL_RENDERER)));
         std::string versionString(reinterpret_cast<const char *>(glGetString(GL_VERSION)));
-        std::string glInfo = rendererString + ", " + versionString;
-        Logger::Info("Loaded", "OpenGL", glInfo);
+        Logger::Info("Loaded", "OpenGL", std::string(rendererString + ", " + versionString));
 
         GLRenderSettings::SetViewport(AppSettings::WINDOW_WIDTH, AppSettings::WINDOW_HEIGHT);
         GLRenderSettings::EnableDebugging();

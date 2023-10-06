@@ -19,6 +19,7 @@ namespace Engine
 
         delete _terrainModel;
         delete _waterModel;
+        delete _planeModel;
     }
 
     void SceneRenderer::FlushModel(Model* model, Shader* shader)

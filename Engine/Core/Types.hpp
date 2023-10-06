@@ -91,7 +91,7 @@ namespace Engine
         inline static constexpr float       GRAVITY            = -20.0f;
 
         // --- CellSim
-        inline static constexpr uint32      CELL_FRAME_SIZE       = 61;
+        inline static constexpr uint32      CELL_FRAME_SIZE       = 60;
         inline static constexpr uint32      MAX_CELL_AMOUNT       = CELL_FRAME_SIZE * CELL_FRAME_SIZE * CELL_FRAME_SIZE;
         inline static           bool        resetCamera           = false;
         inline static           CellType    selectedCellType      = None;

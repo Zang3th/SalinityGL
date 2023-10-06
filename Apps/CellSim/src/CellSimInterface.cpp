@@ -134,9 +134,9 @@ namespace CS
                         Engine::AppSettings::selectedCellType = Engine::CellType::Water;
                     }
 
-                    if(ImGui::MenuItem("Magma"))
+                    if(ImGui::MenuItem("Lava"))
                     {
-                        Engine::AppSettings::selectedCellType = Engine::CellType::Magma;
+                        Engine::AppSettings::selectedCellType = Engine::CellType::Lava;
                     }
 
                     ImGui::EndMenu();

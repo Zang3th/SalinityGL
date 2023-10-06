@@ -7,14 +7,15 @@ namespace Engine
     // ----- Public -----
 
     Audio::Audio()
+        : _initStatus(EXIT_FAILURE)
     {
         if(ma_engine_init(nullptr, &_engine) != MA_SUCCESS)
         {
-            ma_engine_start(&_engine);
             Logger::Error("Failed", "Audio-Init.");
         }
         else
         {
+            _initStatus = EXIT_SUCCESS;
             Logger::Info("Loaded", "Miniaudio");
         }
     }
@@ -27,7 +28,10 @@ namespace Engine
             free(sound);
         }
 
-        ma_engine_uninit(&_engine);
+        if(_initStatus == EXIT_SUCCESS)
+        {
+            ma_engine_uninit(&_engine);
+        }
     }
 
     void Audio::PlaySound2D(const std::string& filepath, const bool loop, const float volume)
@@ -76,5 +80,10 @@ namespace Engine
         ma_engine_listener_set_position(&_engine, 0, pos.x, pos.y, pos.z);
         ma_engine_listener_set_direction(&_engine, 0, front.x, front.y, front.z);
         ma_engine_listener_set_world_up(&_engine, 0, up.x, up.y, up. z);
+    }
+
+    uint32 Audio::GetInitStatus() const
+    {
+        return _initStatus;
     }
 }

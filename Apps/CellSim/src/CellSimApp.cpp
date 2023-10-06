@@ -33,7 +33,8 @@ namespace CS
 
         //Create application specific renderers
         _sceneRenderer  = Engine::RenderManager::AddSceneRenderer(_nearPlane, _farPlane, _lightPos, _lightCol);
-        Engine::RenderManager::AddCellRenderer
+
+        _cellRenderer = Engine::RenderManager::AddCellRenderer
         (
             1.0f,
             _nearPlane,
@@ -41,6 +42,7 @@ namespace CS
             "CellShader",
             glm::vec3(482.0f, 2.0f, 482.0f)
         );
+
         _shadowRenderer = Engine::RenderManager::AddShadowRenderer
         (
             8192,
@@ -49,6 +51,7 @@ namespace CS
             glm::ortho(-60.0f, 60.0f, -60.0f, 60.0f, 105.0f, 228.0f),
             "ShadowCreateShader"
         );
+
         _spriteRenderer = Engine::RenderManager::AddSpriteRenderer();
 
         //Set default shaders for the scene
@@ -56,9 +59,6 @@ namespace CS
 
         //Create UI
         _interface = Engine::MakeScope<CellSimInterface>();
-
-        //Create cell manager
-        _cellManager = Engine::MakeScope<Engine::CellManager>();
 
         return EXIT_SUCCESS;
     }
@@ -142,17 +142,17 @@ namespace CS
         {
             //ToDo: Add profiling
 
-            Engine::AppSettings::cellsAlive = _cellManager->GetAliveCellAmount();
+            Engine::AppSettings::cellsAlive = _cellRenderer->GetAliveCellAmount();
 
             if(Engine::AppSettings::spawnNewCell)
             {
-                _cellManager->SpawnCell
+                _cellRenderer->SpawnCell
                 (
                     Engine::AppSettings::selectedCellType,
                     Engine::AppSettings::selectedCellAmount,
                     glm::vec3(Engine::AppSettings::selectedCellCoords[0],
-                                      Engine::AppSettings::selectedCellCoords[1],
-                                      Engine::AppSettings::selectedCellCoords[2])
+                              Engine::AppSettings::selectedCellCoords[1],
+                              Engine::AppSettings::selectedCellCoords[2])
                 );
 
                 Engine::AppSettings::spawnNewCell = false;
@@ -160,8 +160,7 @@ namespace CS
 
             if(Engine::AppSettings::cellsAlive > 0)
             {
-                _cellManager->CalculateCellPhysics();
-                _cellManager->UpdateCellRenderer();
+                _cellRenderer->CalculateCellPhysics();
             }
         }
 

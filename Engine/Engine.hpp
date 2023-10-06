@@ -11,7 +11,6 @@
 // ----- Resources and renderables -----
 #include "ResourceManager.hpp"
 #include "RenderManager.hpp"
-#include "CellManager.hpp"
 
 // ----- Camera -----
 #include "Camera3D.hpp"

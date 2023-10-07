@@ -13,7 +13,7 @@ namespace Engine
             _cellCount(0), _shader(shader), _worldSpawnPos(worldSpawnPos)
     {
         Logger::Info("Created", "Renderer",__func__);
-        //GenerateAllCells();
+        InitCellStorage();
         InitGpuStorage();
     }
 
@@ -48,51 +48,46 @@ namespace Engine
     void CellRenderer::UpdateGpuStorage()
     {
         _vboModel->Bind();
-        _vboModel->Update(&_modelViewStorage[0], _cellCount * 16 * sizeof(float));
+        _vboModel->Update(&_modelViewStorage[0], _modelViewStorage.size() * 16 * sizeof(float));
         _vboModel->Unbind();
     }
 
     void CellRenderer::UpdateModelViewStorage()
     {
         glm::mat4 model(1.0f);
-
-        for(uint32 i = 0; i < _cellCount; i++)
-        {
-            model = glm::mat4(1.0f);
-            model = glm::translate(model, _cellStorage.at(i).position);
-            model = glm::scale(model, glm::vec3(_cellSize));
-            _modelViewStorage.at(i) = model;
-        }
-    }
-
-    //Function only used for stress testing
-    void CellRenderer::GenerateAllCells()
-    {
         uint32 count = 0;
 
-        //Get initial world position
         for(uint32 x = 0; x < AppSettings::CELL_FRAME_SIZE; x++)
         {
             for(uint32 y = 0; y < AppSettings::CELL_FRAME_SIZE; y++)
             {
                 for(uint32 z = 0; z < AppSettings::CELL_FRAME_SIZE; z++)
                 {
-                    _cellStorage.at(count).position = _worldSpawnPos + glm::vec3(x, y, z);
+                    if(_cellStorage[x][y][z].amount > 0)
+                    {
+                        model = glm::mat4(1.0f);
+                        model = glm::translate(model, _worldSpawnPos + glm::vec3(x, y, z));
+                        model = glm::scale(model, glm::vec3(_cellSize));
+                        _modelViewStorage.at(count) = model;
+                    }
                     count++;
                 }
             }
         }
+    }
 
-        _cellCount = count;
-
-        //Sort depending on distance to camera
-        std::sort(_cellStorage.begin(), _cellStorage.end(),
-        [](const Cell& a, const Cell& b)
+    void CellRenderer::InitCellStorage()
+    {
+        for(uint32 x = 0; x < AppSettings::CELL_FRAME_SIZE; x++)
         {
-            return glm::length(Camera3D::GetPosition() - a.position) < glm::length(Camera3D::GetPosition() - b.position);
-        });
-
-        UpdateModelViewStorage();
+            for(uint32 y = 0; y < AppSettings::CELL_FRAME_SIZE; y++)
+            {
+                for(uint32 z = 0; z < AppSettings::CELL_FRAME_SIZE; z++)
+                {
+                    _cellStorage[x][y][z] = {None, 0};
+                }
+            }
+        }
     }
 
     // ----- Public -----
@@ -131,16 +126,22 @@ namespace Engine
         AppSettings::renderStats.cellPasses++;
     }
 
-    uint32 CellRenderer::GetAliveCellAmount()
+    uint32 CellRenderer::GetAliveCellAmount() const
     {
         return _cellCount;
     }
 
-    void CellRenderer::SpawnCell(CellType cellType, int32 cellAmount, const glm::vec3& cellPos)
+    void CellRenderer::SpawnCell(CellType cellType, uint32 cellAmount, const glm::u32vec3& cellPos)
     {
-        _cellStorage.at(_cellCount) = {cellType, _worldSpawnPos + cellPos};
-        _cellCount++;
+        _cellStorage[cellPos.x][cellPos.y][cellPos.z] = {cellType, cellAmount};
+        _cellCount += cellAmount;
+        UpdateModelViewStorage();
+    }
 
+    void CellRenderer::DeleteAllCells()
+    {
+        InitCellStorage();
+        _cellCount = 0;
         UpdateModelViewStorage();
     }
 

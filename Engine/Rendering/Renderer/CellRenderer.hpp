@@ -20,11 +20,10 @@ namespace Engine
         friend class RenderManager;
 
         private:
-
             struct Cell
             {
                 CellType type;
-                glm::vec3 position;
+                uint32   amount;
             };
 
             Scope<VertexArray>                                  _vao;
@@ -35,7 +34,7 @@ namespace Engine
             Shader*                                             _shader;
             glm::vec3                                           _worldSpawnPos;
 
-            std::array<Cell, AppSettings::MAX_CELL_AMOUNT>      _cellStorage;
+            Cell _cellStorage[AppSettings::CELL_FRAME_SIZE][AppSettings::CELL_FRAME_SIZE][AppSettings::CELL_FRAME_SIZE];
             std::array<glm::mat4, AppSettings::MAX_CELL_AMOUNT> _modelViewStorage;
 
             CellRenderer
@@ -48,12 +47,13 @@ namespace Engine
             void InitGpuStorage();
             void UpdateGpuStorage();
             void UpdateModelViewStorage();
-            void GenerateAllCells();
+            void InitCellStorage();
 
         public:
-            void   Flush(Renderer* renderer) final;
-            uint32 GetAliveCellAmount();
-            void   SpawnCell(CellType cellType, int32 cellAmount, const glm::vec3& cellPos);
-            void   CalculateCellPhysics();
+            void Flush(Renderer* renderer) final;
+            [[nodiscard]] uint32 GetAliveCellAmount() const;
+            void SpawnCell(CellType cellType, uint32 cellAmount, const glm::u32vec3& cellPos);
+            void DeleteAllCells();
+            void CalculateCellPhysics();
     };
 }

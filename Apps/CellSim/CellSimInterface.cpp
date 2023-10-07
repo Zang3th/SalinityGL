@@ -161,7 +161,7 @@ namespace CS
                 ImGui::PopItemWidth();
                 CheckCellBoundaries();
 
-                // Cell spawn amount
+                // --- Cell spawn amount
                 ImGui::Text("Amount:\t");
                 ImGui::SameLine();
                 ImGui::RadioButton("1", &Engine::AppSettings::selectedCellAmount, 1);
@@ -179,14 +179,22 @@ namespace CS
                 ImGui::RadioButton("49", &Engine::AppSettings::selectedCellAmount, 49);
 
                 // --- Spawn button
-                CenterCursor("Spawn");
-                if (ImGui::Button("Spawn"))
+                ImGui::Text("\t\t");
+                ImGui::SameLine();
+                if(ImGui::Button("Spawn"))
                 {
                     Engine::AppSettings::spawnNewCell = true;
                 }
-                ImGui::Separator();
+                ImGui::SameLine();
 
-                //ToDo: Add "delete all cells" Button
+                // --- Delete all cells
+                ImGui::Text("\t\t");
+                ImGui::SameLine();
+                if(ImGui::Button("Delete all"))
+                {
+                    Engine::AppSettings::deleteAllCells = true;
+                }
+                ImGui::Separator();
 
                 //ToDo: Add "generate stone ground" Button
 

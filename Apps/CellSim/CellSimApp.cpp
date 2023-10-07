@@ -142,21 +142,30 @@ namespace CS
         {
             //ToDo: Add profiling
 
-            Engine::AppSettings::cellsAlive = _cellRenderer->GetAliveCellAmount();
-
             if(Engine::AppSettings::spawnNewCell)
             {
-                _cellRenderer->SpawnCell
-                (
-                    Engine::AppSettings::selectedCellType,
-                    Engine::AppSettings::selectedCellAmount,
-                    glm::vec3(Engine::AppSettings::selectedCellCoords[0],
-                              Engine::AppSettings::selectedCellCoords[1],
-                              Engine::AppSettings::selectedCellCoords[2])
-                );
+                if(Engine::AppSettings::selectedCellAmount > 0)
+                {
+                    _cellRenderer->SpawnCell
+                    (
+                        Engine::AppSettings::selectedCellType,
+                        Engine::AppSettings::selectedCellAmount,
+                        glm::u32vec3(Engine::AppSettings::selectedCellCoords[0],
+                                  Engine::AppSettings::selectedCellCoords[1],
+                                  Engine::AppSettings::selectedCellCoords[2])
+                    );
+                }
 
                 Engine::AppSettings::spawnNewCell = false;
             }
+
+            if(Engine::AppSettings::deleteAllCells)
+            {
+                _cellRenderer->DeleteAllCells();
+                Engine::AppSettings::deleteAllCells = false;
+            }
+
+            Engine::AppSettings::cellsAlive = _cellRenderer->GetAliveCellAmount();
 
             if(Engine::AppSettings::cellsAlive > 0)
             {

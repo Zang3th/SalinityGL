@@ -99,6 +99,7 @@ namespace Engine
         inline static           int32       selectedCellAmount    = 0;
         inline static           uint32      cellsAlive            = 0;
         inline static           bool        spawnNewCell          = false;
+        inline static           bool        deleteAllCells        = false;
 
         AppSettings() = delete;
     };

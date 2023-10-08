@@ -150,13 +150,13 @@ namespace CS
 
                 ImGui::Text("X Coordinate:\t");
                 ImGui::SameLine();
-                ImGui::InputInt("##1", &Engine::AppSettings::selectedCellCoords[0], 10, 0, ImGuiInputTextFlags_CharsDecimal);
+                ImGui::InputFloat("##1", &Engine::AppSettings::selectedCellCoords[0], 10, 0);
                 ImGui::Text("Y Coordinate:\t");
                 ImGui::SameLine();
-                ImGui::InputInt("##2", &Engine::AppSettings::selectedCellCoords[1], 10, 0, ImGuiInputTextFlags_CharsDecimal);
+                ImGui::InputFloat("##2", &Engine::AppSettings::selectedCellCoords[1], 10, 0);
                 ImGui::Text("Z Coordinate:\t");
                 ImGui::SameLine();
-                ImGui::InputInt("##3", &Engine::AppSettings::selectedCellCoords[2], 10, 0, ImGuiInputTextFlags_CharsDecimal);
+                ImGui::InputFloat("##3", &Engine::AppSettings::selectedCellCoords[2], 10, 0);
 
                 ImGui::PopItemWidth();
                 CheckCellBoundaries();

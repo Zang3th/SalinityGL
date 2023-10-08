@@ -142,6 +142,7 @@ namespace CS
         {
             //ToDo: Add profiling
 
+            //Check for cell spawn
             if(Engine::AppSettings::spawnNewCell)
             {
                 if(Engine::AppSettings::selectedCellAmount > 0)
@@ -159,6 +160,7 @@ namespace CS
                 Engine::AppSettings::spawnNewCell = false;
             }
 
+            //Check for cell delete
             if(Engine::AppSettings::deleteAllCells)
             {
                 _cellRenderer->DeleteAllCells();

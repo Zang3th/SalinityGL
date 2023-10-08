@@ -65,8 +65,12 @@ namespace Engine
                 {
                     if(_cellStorage[x][y][z].amount > 0)
                     {
+                        glm::vec3 pos((float)x, (float)y, (float)z);
+                        glm::vec3 pos2(50.0f);
+                        glm::vec3 pos3(AppSettings::selectedCellCoords[0], AppSettings::selectedCellCoords[1],
+                                       AppSettings::selectedCellCoords[2]);
                         model = glm::mat4(1.0f);
-                        model = glm::translate(model, _worldSpawnPos + glm::vec3(x, y, z));
+                        model = glm::translate(model, _worldSpawnPos + pos3);
                         model = glm::scale(model, glm::vec3(_cellSize));
                         _modelViewStorage.at(count) = model;
                     }
@@ -131,9 +135,9 @@ namespace Engine
         return _cellCount;
     }
 
-    void CellRenderer::SpawnCell(CellType cellType, uint32 cellAmount, const glm::u32vec3& cellPos)
+    void CellRenderer::SpawnCell(CellType cellType, uint32 cellAmount, const glm::vec3& cellPos)
     {
-        _cellStorage[cellPos.x][cellPos.y][cellPos.z] = {cellType, cellAmount};
+        _cellStorage[(uint32)cellPos.x][(uint32)cellPos.y][(uint32)cellPos.z] = {cellType, cellAmount};
         _cellCount += cellAmount;
         UpdateModelViewStorage();
     }

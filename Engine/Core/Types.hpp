@@ -95,7 +95,7 @@ namespace Engine
         inline static constexpr uint32      MAX_CELL_AMOUNT       = CELL_FRAME_SIZE * CELL_FRAME_SIZE * CELL_FRAME_SIZE;
         inline static           bool        resetCamera           = false;
         inline static           CellType    selectedCellType      = None;
-        inline static           int32       selectedCellCoords[3] = {0, 0, 0};
+        inline static           float       selectedCellCoords[3] = {0.0f, 0.0f, 0.0f};
         inline static           int32       selectedCellAmount    = 0;
         inline static           uint32      cellsAlive            = 0;
         inline static           bool        spawnNewCell          = false;

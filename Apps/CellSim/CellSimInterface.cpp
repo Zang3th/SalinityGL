@@ -48,11 +48,7 @@ namespace CS
     {
         for(Engine::uint8 i = 0; i < 3; i++)
         {
-            if(Engine::AppSettings::selectedCellCoords[i] < 0)
-            {
-                Engine::AppSettings::selectedCellCoords[i] = 0;
-            }
-            else if((uint32_t)Engine::AppSettings::selectedCellCoords[i] > Engine::AppSettings::CELL_FRAME_SIZE)
+            if((uint32_t)Engine::AppSettings::selectedCellCoords[i] > Engine::AppSettings::CELL_FRAME_SIZE)
             {
                 Engine::AppSettings::selectedCellCoords[i] = Engine::AppSettings::CELL_FRAME_SIZE;
             }
@@ -150,13 +146,13 @@ namespace CS
 
                 ImGui::Text("X Coordinate:\t");
                 ImGui::SameLine();
-                ImGui::InputFloat("##1", &Engine::AppSettings::selectedCellCoords[0], 10, 0);
+                Input_u32("##1", &Engine::AppSettings::selectedCellCoords[0], 1, 10, ImGuiInputTextFlags_CharsDecimal);
                 ImGui::Text("Y Coordinate:\t");
                 ImGui::SameLine();
-                ImGui::InputFloat("##2", &Engine::AppSettings::selectedCellCoords[1], 10, 0);
+                Input_u32("##2", &Engine::AppSettings::selectedCellCoords[1], 1, 10, ImGuiInputTextFlags_CharsDecimal);
                 ImGui::Text("Z Coordinate:\t");
                 ImGui::SameLine();
-                ImGui::InputFloat("##3", &Engine::AppSettings::selectedCellCoords[2], 10, 0);
+                Input_u32("##3", &Engine::AppSettings::selectedCellCoords[2], 1, 10, ImGuiInputTextFlags_CharsDecimal);
 
                 ImGui::PopItemWidth();
                 CheckCellBoundaries();
@@ -164,19 +160,19 @@ namespace CS
                 // --- Cell spawn amount
                 ImGui::Text("Amount:\t");
                 ImGui::SameLine();
-                ImGui::RadioButton("1", &Engine::AppSettings::selectedCellAmount, 1);
+                RadioButton_u32("1", &Engine::AppSettings::selectedCellAmount, 1);
                 ImGui::SameLine();
                 ImGui::Text("\t");
                 ImGui::SameLine();
-                ImGui::RadioButton("9", &Engine::AppSettings::selectedCellAmount, 9);
+                RadioButton_u32("9", &Engine::AppSettings::selectedCellAmount, 9);
                 ImGui::SameLine();
                 ImGui::Text("\t");
                 ImGui::SameLine();
-                ImGui::RadioButton("25", &Engine::AppSettings::selectedCellAmount, 25);
+                RadioButton_u32("25", &Engine::AppSettings::selectedCellAmount, 25);
                 ImGui::SameLine();
                 ImGui::Text("\t");
                 ImGui::SameLine();
-                ImGui::RadioButton("49", &Engine::AppSettings::selectedCellAmount, 49);
+                RadioButton_u32("49", &Engine::AppSettings::selectedCellAmount, 49);
 
                 // --- Spawn button
                 ImGui::Text("\t\t");

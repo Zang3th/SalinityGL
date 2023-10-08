@@ -61,6 +61,20 @@ namespace Engine
         ImGui::SetCursorPosX((windowWidth - textWidth) * 0.5f);
     }
 
+    bool Interface::RadioButton_u32(const char* label, uint32* v, uint32 v_button)
+    {
+        const bool pressed = ImGui::RadioButton(label, *v == v_button);
+        if (pressed)
+            *v = v_button;
+        return pressed;
+    }
+
+    bool Interface::Input_u32(const char* label, uint32* v, uint32 step, uint32 step_fast, ImGuiInputTextFlags flags)
+    {
+        const char* format = (flags & ImGuiInputTextFlags_CharsHexadecimal) ? "%08X" : "%d";
+        return ImGui::InputScalar(label, ImGuiDataType_S32, (void*)v, (void*)(step > 0 ? &step : NULL), (void*)(step_fast > 0 ? &step_fast : NULL), format, flags);
+    }
+
     // ----- Public -----
 
     Interface::Interface()

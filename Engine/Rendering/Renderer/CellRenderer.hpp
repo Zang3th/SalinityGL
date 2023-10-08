@@ -46,13 +46,13 @@ namespace Engine
 
             void InitGpuStorage();
             void UpdateGpuStorage();
-            void UpdateModelViewStorage();
+            void UpdateModelViewStorage(uint32 index, const glm::vec3& pos);
             void InitCellStorage();
 
         public:
             void Flush(Renderer* renderer) final;
             [[nodiscard]] uint32 GetAliveCellAmount() const;
-            void SpawnCell(CellType cellType, uint32 cellAmount, const glm::vec3& cellPos);
+            void SpawnCell(CellType cellType, uint32 cellAmount, const glm::u32vec3& cellPos);
             void DeleteAllCells();
             void CalculateCellPhysics();
     };

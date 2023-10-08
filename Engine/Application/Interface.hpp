@@ -15,6 +15,8 @@ namespace Engine
             static void SetDarkThemeColors();
             static void CenterText(const char* text);
             static void CenterCursor(const char* characterAmount);
+            static bool RadioButton_u32(const char* label, uint32* v, uint32 v_button);
+            static bool Input_u32(const char* label, uint32* v, uint32 step, uint32 step_fast, ImGuiInputTextFlags flags);
 
         public:
             Interface();

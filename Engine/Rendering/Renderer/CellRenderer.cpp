@@ -52,43 +52,25 @@ namespace Engine
         _vboModel->Unbind();
     }
 
-    void CellRenderer::UpdateModelViewStorage()
+    void CellRenderer::UpdateModelViewStorage(uint32 index, const glm::vec3& pos)
     {
         glm::mat4 model(1.0f);
-        uint32 count = 0;
-
-        for(uint32 x = 0; x < AppSettings::CELL_FRAME_SIZE; x++)
-        {
-            for(uint32 y = 0; y < AppSettings::CELL_FRAME_SIZE; y++)
-            {
-                for(uint32 z = 0; z < AppSettings::CELL_FRAME_SIZE; z++)
-                {
-                    if(_cellStorage[x][y][z].amount > 0)
-                    {
-                        glm::vec3 pos((float)x, (float)y, (float)z);
-                        glm::vec3 pos2(50.0f);
-                        glm::vec3 pos3(AppSettings::selectedCellCoords[0], AppSettings::selectedCellCoords[1],
-                                       AppSettings::selectedCellCoords[2]);
-                        model = glm::mat4(1.0f);
-                        model = glm::translate(model, _worldSpawnPos + pos3);
-                        model = glm::scale(model, glm::vec3(_cellSize));
-                        _modelViewStorage.at(count) = model;
-                    }
-                    count++;
-                }
-            }
-        }
+        model = glm::translate(model, _worldSpawnPos + pos);
+        model = glm::scale(model, glm::vec3(_cellSize));
+        _modelViewStorage.at(index) = model;
     }
 
     void CellRenderer::InitCellStorage()
     {
+        _cellCount = 0;
+
         for(uint32 x = 0; x < AppSettings::CELL_FRAME_SIZE; x++)
         {
             for(uint32 y = 0; y < AppSettings::CELL_FRAME_SIZE; y++)
             {
                 for(uint32 z = 0; z < AppSettings::CELL_FRAME_SIZE; z++)
                 {
-                    _cellStorage[x][y][z] = {None, 0};
+                    SpawnCell(CellType::None, 1, glm::u32vec3(x, y, z));
                 }
             }
         }
@@ -135,18 +117,18 @@ namespace Engine
         return _cellCount;
     }
 
-    void CellRenderer::SpawnCell(CellType cellType, uint32 cellAmount, const glm::vec3& cellPos)
+    void CellRenderer::SpawnCell(CellType cellType, uint32 cellAmount, const glm::u32vec3& cellPos)
     {
-        _cellStorage[(uint32)cellPos.x][(uint32)cellPos.y][(uint32)cellPos.z] = {cellType, cellAmount};
-        _cellCount += cellAmount;
-        UpdateModelViewStorage();
+        _cellStorage[cellPos.x][cellPos.y][cellPos.z] = {cellType, cellAmount};
+        UpdateModelViewStorage(_cellCount, glm::vec3((float)cellPos.x, (float)cellPos.y, (float)cellPos.z));
+        _cellCount++;
+
+        //ToDo: Resolve amount > 1 in one cell
     }
 
     void CellRenderer::DeleteAllCells()
     {
-        InitCellStorage();
         _cellCount = 0;
-        UpdateModelViewStorage();
     }
 
     void CellRenderer::CalculateCellPhysics()

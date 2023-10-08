@@ -100,4 +100,4 @@
 
 ### CellSim
 
-![CellSim](Res/Screenshots/CellSim/Screenshot_CS_006.png)
+![CellSim](Res/Screenshots/CellSim/Screenshot_CS_007.png)

@@ -22,8 +22,9 @@ namespace Engine
         private:
             struct Cell
             {
-                CellType type;
+                uint32   id;
                 uint32   amount;
+                CellType type;
             };
 
             Scope<VertexArray>                                  _vao;
@@ -36,6 +37,7 @@ namespace Engine
 
             Cell _cellStorage[AppSettings::CELL_FRAME_SIZE][AppSettings::CELL_FRAME_SIZE][AppSettings::CELL_FRAME_SIZE];
             std::array<glm::mat4, AppSettings::MAX_CELL_AMOUNT> _modelViewStorage;
+            std::array<uint32, AppSettings::MAX_CELL_AMOUNT>    _cellIndexStorage;
 
             CellRenderer
             (
@@ -48,6 +50,8 @@ namespace Engine
             void UpdateGpuStorage();
             void UpdateModelViewStorage(uint32 index, const glm::vec3& pos);
             void InitCellStorage();
+            inline static uint32 GetIndexFromCoords(const glm::u32vec3& cellPos);
+            inline static glm::vec3 GetCoordsFromIndex(uint32 index);
 
         public:
             void Flush(Renderer* renderer) final;

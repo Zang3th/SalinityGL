@@ -131,6 +131,7 @@ namespace CS
             Engine::Window::PollEvents();
             Engine::Window::ProcessEvents();
             Engine::CameraController3D::ProcessInput();
+            _timeElapsed += Engine::Window::GetDeltaTime();
 
             if(Engine::AppSettings::resetCamera)
             {
@@ -169,9 +170,11 @@ namespace CS
 
             Engine::AppSettings::cellsAlive = _cellRenderer->GetAliveCellAmount();
 
-            if(Engine::AppSettings::cellsAlive > 0)
+            //Check if we need to do physics (every 10ms)
+            if(Engine::AppSettings::cellsAlive > 0 && _timeElapsed >= 0.01)
             {
                 _cellRenderer->CalculateCellPhysics();
+                _timeElapsed = 0;
             }
         }
 

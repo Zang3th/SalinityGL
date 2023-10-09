@@ -62,18 +62,30 @@ namespace Engine
 
     void CellRenderer::InitCellStorage()
     {
-        _cellCount = 0;
-
         for(uint32 x = 0; x < AppSettings::CELL_FRAME_SIZE; x++)
         {
             for(uint32 y = 0; y < AppSettings::CELL_FRAME_SIZE; y++)
             {
                 for(uint32 z = 0; z < AppSettings::CELL_FRAME_SIZE; z++)
                 {
-                    SpawnCell(CellType::None, 1, glm::u32vec3(x, y, z));
+                    _cellStorage[x][y][z] = {0, 0, CellType::None};
                 }
             }
         }
+    }
+
+    inline uint32 CellRenderer::GetIndexFromCoords(const glm::u32vec3& cellPos)
+    {
+        return (cellPos.x * AppSettings::CELL_FRAME_SIZE * AppSettings::CELL_FRAME_SIZE ) + (cellPos.y * AppSettings::CELL_FRAME_SIZE ) + cellPos.z;
+    }
+
+    inline glm::vec3 CellRenderer::GetCoordsFromIndex(uint32 index)
+    {
+        uint32 x = index / (AppSettings::CELL_FRAME_SIZE * AppSettings::CELL_FRAME_SIZE);
+        index -= (x * AppSettings::CELL_FRAME_SIZE * AppSettings::CELL_FRAME_SIZE );
+        uint32 y = index / AppSettings::CELL_FRAME_SIZE;
+        uint32 z = index % AppSettings::CELL_FRAME_SIZE;
+        return glm::u32vec3(x, y, z);
     }
 
     // ----- Public -----
@@ -119,11 +131,20 @@ namespace Engine
 
     void CellRenderer::SpawnCell(CellType cellType, uint32 cellAmount, const glm::u32vec3& cellPos)
     {
-        _cellStorage[cellPos.x][cellPos.y][cellPos.z] = {cellType, cellAmount};
-        UpdateModelViewStorage(_cellCount, glm::vec3((float)cellPos.x, (float)cellPos.y, (float)cellPos.z));
-        _cellCount++;
+        //ToDo: Find a better way to solve this
+        if(cellType != CellType::None && cellAmount > 0)
+        {
+            //Save cell in 3D array with type and amount
+            _cellStorage[cellPos.x][cellPos.y][cellPos.z] = {_cellCount, cellAmount, cellType};
 
-        //ToDo: Resolve amount > 1 in one cell
+            //Save the index of the cell (how to directly access it in the 3d array)
+            _cellIndexStorage.at(_cellCount) = GetIndexFromCoords(cellPos);
+
+            //Update the corresponding model view buffer for upload to the gpu
+            UpdateModelViewStorage(_cellCount, glm::vec3((float)cellPos.x, (float)cellPos.y, (float)cellPos.z));
+
+            _cellCount++;
+        }
     }
 
     void CellRenderer::DeleteAllCells()
@@ -133,6 +154,36 @@ namespace Engine
 
     void CellRenderer::CalculateCellPhysics()
     {
-        //ToDo: Implement
+        //ToDo: Fix this bullshit
+        //Iterate over all cell indexes
+        for(uint32 i = 0; i < _cellCount; i++)
+        {
+            //Recalculate the corresponding 3D coordinates
+            glm::u32vec3 cellCoords = GetCoordsFromIndex(_cellIndexStorage.at(i));
+
+            //Check if the cell is not touching the ground
+            if(cellCoords.y > 0)
+            {
+                //Check if there is a free cell below
+                if(_cellStorage[cellCoords.x][cellCoords.y - 1][cellCoords.z].amount == 0)
+                {
+                    //Move cell down
+                    _cellStorage[cellCoords.x][cellCoords.y - 1][cellCoords.z].type   = _cellStorage[cellCoords.x][cellCoords.y][cellCoords.z].type;
+                    _cellStorage[cellCoords.x][cellCoords.y - 1][cellCoords.z].amount = _cellStorage[cellCoords.x][cellCoords.y][cellCoords.z].amount;
+
+                    //Delete old cell
+                    _cellStorage[cellCoords.x][cellCoords.y][cellCoords.z].type = CellType::None;
+                    _cellStorage[cellCoords.x][cellCoords.y][cellCoords.z].amount = 0;
+
+                    //Update the corresponding model view buffer for upload to the gpu
+                    UpdateModelViewStorage(_cellStorage[cellCoords.x][cellCoords.y - 1][cellCoords.z].id, glm::vec3((float)cellCoords.x, (float)cellCoords.y - 1, (float)cellCoords.z));
+
+                    //Update index
+                    _cellIndexStorage.at(i) = GetIndexFromCoords(glm::u32vec3(cellCoords.x, cellCoords.y - 1, cellCoords.z));
+                }
+            }
+        }
+
+        //ToDo: Resolve amount > 1 in one cell
     }
 }

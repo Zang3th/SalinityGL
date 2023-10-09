@@ -48,7 +48,7 @@ namespace CS
     {
         for(Engine::uint8 i = 0; i < 3; i++)
         {
-            if((uint32_t)Engine::AppSettings::selectedCellCoords[i] > Engine::AppSettings::CELL_FRAME_SIZE)
+            if(Engine::AppSettings::selectedCellCoords[i] > Engine::AppSettings::CELL_FRAME_SIZE)
             {
                 Engine::AppSettings::selectedCellCoords[i] = Engine::AppSettings::CELL_FRAME_SIZE;
             }

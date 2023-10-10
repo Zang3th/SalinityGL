@@ -32,11 +32,12 @@ target_include_directories(GameEngine PUBLIC Engine/Rendering/Renderables)
 target_include_directories(GameEngine PUBLIC Engine/Rendering/Renderer)
 target_include_directories(GameEngine PUBLIC Engine/Rendering/Resources)
 
-target_include_directories(GameEngine PUBLIC Vendor/Other/include)
+target_include_directories(GameEngine PUBLIC Vendor/Glad/include)
 target_include_directories(GameEngine PUBLIC Vendor/GLFW/include)
 target_include_directories(GameEngine PUBLIC Vendor/Imgui/include)
 target_include_directories(GameEngine PUBLIC Vendor/GLM/include)
 target_include_directories(GameEngine PUBLIC Vendor/Miniaudio)
+target_include_directories(GameEngine PUBLIC Vendor/Other/include)
 
 ### Engine linker flags ###
 target_link_libraries(GameEngine PUBLIC ${ENGINE_LINKER_FLAGS})

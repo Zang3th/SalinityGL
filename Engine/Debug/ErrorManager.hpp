@@ -1,6 +1,6 @@
 #pragma once
 
-#include "glad.hpp"
+#include "glad/gl.hpp"
 #include "Logger.hpp"
 #include "Types.hpp"
 

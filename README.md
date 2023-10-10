@@ -60,12 +60,12 @@
 
 | **Library**                                                          | **Version** | **Commit** | **Updated in Engine** | **Functionality**           |
 |--------------------------------------------------------------------- |-------------|------------|-----------------------|-----------------------------|
+| [GLFW](https://github.com/glfw/glfw)                                 | 3.3.8       | 7482de6    | 10.10.2023            | Window and input management |
+| [glad](https://github.com/Dav1dde/glad)                              | 2.0.4       | d08b1aa    | 10.10.2023            | OpenGL function loading     |
 | [imgui](https://github.com/ocornut/imgui)                            | 1.89.9      | c6e0284    | 20.09.2023            | GUI                         |
 | [miniaudio](https://github.com/mackron/miniaudio)                    | 0.11.18     | 3898fff    | 20.09.2023            | Audio                       |
 | [stb_image](https://github.com/nothings/stb/blob/master/stb_image.h) | 2.28        | 3ecc60f    | 20.09.2023            | Image loading               |
 | [tinyobjloader](https://github.com/tinyobjloader/tinyobjloader)      | /           | 853f059    | 20.09.2023            | Obj file loading            |
-| [GLFW](https://github.com/glfw/glfw)                                 | 3.3.6       | 7d5a16c    | 13.01.2022            | Window and input management |
-| [glad](https://github.com/Dav1dde/glad)                              | 0.1.34      | a5ca31c    | 11.08.2021            | OpenGL loader               |
 | [GLM](https://github.com/g-truc/glm)                                 | 0.9.9.8     | bf71a83    | 23.07.2021            | Mathematics                 |
 | [Easylogging++](https://github.com/amrayn/easyloggingpp)             | 9.96.7      | 5181b40    | 19.07.2021            | Logging                     |
 

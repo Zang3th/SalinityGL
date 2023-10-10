@@ -39,8 +39,8 @@ namespace Engine
         glfwMakeContextCurrent(_window);
         glfwSwapInterval(0);
 
-        //Initialize glad
-        if(!gladLoadGL())
+        //Load OpenGL-Functions via glad
+        if(!gladLoadGL(glfwGetProcAddress))
         {
             Logger::Error("Failed", "OpenGL-Load.");
             return EXIT_FAILURE;

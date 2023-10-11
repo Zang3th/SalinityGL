@@ -181,7 +181,7 @@ namespace Engine
         UpdateGpuStorage();
 
         //Render particles instanced
-        GLCall(glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, _verticeCount, _count));
+        GLCall(glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, _verticeCount, _count))
 
         //Sort particles depending on the distance to the camera
         std::sort(_particleStorage.begin(), _particleStorage.end(),
@@ -202,9 +202,9 @@ namespace Engine
         _shader->Unbind();
 
         //Save stats
-        AppSettings::renderStats.drawnVertices += _verticeCount * _count;
-        AppSettings::renderStats.drawCalls++;
-        AppSettings::renderStats.particlePasses++;
+        RenderStatistics::drawnVertices += _verticeCount * _count;
+        RenderStatistics::drawCalls++;
+        RenderStatistics::particlePasses++;
 
         GLRenderSettings::EnableDepthtest();
     }

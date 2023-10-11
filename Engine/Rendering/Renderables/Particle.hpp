@@ -2,6 +2,7 @@
 
 #include "glm.hpp"
 #include "Types.hpp"
+#include "GlobalParams.hpp"
 #include "Camera3D.hpp"
 
 #include <cmath>

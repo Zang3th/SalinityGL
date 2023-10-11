@@ -2,6 +2,7 @@
 
 #include "Renderer.hpp"
 #include "Types.hpp"
+#include "GlobalParams.hpp"
 #include "glm.hpp"
 #include "Shader.hpp"
 #include "Camera3D.hpp"
@@ -30,20 +31,16 @@ namespace Engine
             Scope<VertexArray>                                  _vao;
             Scope<VertexBuffer>                                 _vboVert, _vboModel;
 
-            float                                               _cellSize, _nearPlane, _farPlane;
+            float                                               _cellSize;
             uint32                                              _verticeCount, _cellCount;
             Shader*                                             _shader;
             glm::vec3                                           _worldSpawnPos;
 
-            Cell _cellStorage[AppSettings::CELL_FRAME_SIZE][AppSettings::CELL_FRAME_SIZE][AppSettings::CELL_FRAME_SIZE];
-            std::array<glm::mat4, AppSettings::MAX_CELL_AMOUNT> _modelViewStorage;
-            std::array<uint32, AppSettings::MAX_CELL_AMOUNT>    _cellIndexStorage;
+            Cell _cellStorage[CellSimParams::CELL_FRAME_SIZE][CellSimParams::CELL_FRAME_SIZE][CellSimParams::CELL_FRAME_SIZE];
+            std::array<glm::mat4, CellSimParams::MAX_CELL_AMOUNT> _modelViewStorage;
+            std::array<uint32, CellSimParams::MAX_CELL_AMOUNT>    _cellIndexStorage;
 
-            CellRenderer
-            (
-                float cellSize, float nearPlane, float farPlane,
-                Shader* shader, const glm::vec3& worldSpawnPos
-            );
+            CellRenderer(float cellSize, Shader* shader, const glm::vec3& worldSpawnPos);
             ~CellRenderer() final = default;
 
             void InitGpuStorage();

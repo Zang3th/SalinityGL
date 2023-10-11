@@ -16,7 +16,6 @@ namespace Engine
             inline static std::map<std::string, Shader*>    _shaderStorage    = std::map<std::string, Shader*>();
             inline static std::map<std::string, Heightmap*> _heightmapStorage = std::map<std::string, Heightmap*>();
 
-        public:
             ResourceManager() = delete;
 
             static Texture* LoadTexture(const std::string& name, uint32 width, uint32 height, GLint internalFormat, GLenum format, GLenum type);

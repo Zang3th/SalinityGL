@@ -3,6 +3,7 @@
 #include "ErrorManager.hpp"
 #include "glfw3.h"
 #include "Types.hpp"
+#include "GlobalParams.hpp"
 #include "GLRenderSettings.hpp"
 
 #include <string>

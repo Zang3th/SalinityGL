@@ -26,7 +26,7 @@ namespace Engine
 
         //Create window
         _windowName = title;
-        _window = glfwCreateWindow(AppSettings::WINDOW_WIDTH, AppSettings::WINDOW_HEIGHT, _windowName.c_str(), nullptr, nullptr);
+        _window = glfwCreateWindow(WindowParams::WIDTH, WindowParams::HEIGHT, _windowName.c_str(), nullptr, nullptr);
 
         if(!_window)
         {
@@ -51,7 +51,7 @@ namespace Engine
         std::string versionString(reinterpret_cast<const char*>(glGetString(GL_VERSION)));
         Logger::Info("Loaded", "OpenGL", std::string(rendererString + ", " + versionString));
 
-        GLRenderSettings::SetViewport(AppSettings::WINDOW_WIDTH, AppSettings::WINDOW_HEIGHT);
+        GLRenderSettings::SetViewport(WindowParams::WIDTH, WindowParams::HEIGHT);
         GLRenderSettings::EnableDebugging();
 
         //Start application
@@ -137,6 +137,6 @@ namespace Engine
 
     float Window::GetAspectRatio()
     {
-        return (float)AppSettings::WINDOW_WIDTH/(float)AppSettings::WINDOW_HEIGHT;
+        return (float)WindowParams::WIDTH/(float)WindowParams::HEIGHT;
     }
 }

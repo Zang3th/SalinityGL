@@ -4,13 +4,8 @@ namespace Engine
 {
     // ----- Private -----
 
-    CellRenderer::CellRenderer
-    (
-        float cellSize, float nearPlane, float farPlane,
-        Shader* shader, const glm::vec3& worldSpawnPos
-    )
-        :   _cellSize(cellSize), _nearPlane(nearPlane), _farPlane(farPlane), _verticeCount(36),
-            _cellCount(0), _shader(shader), _worldSpawnPos(worldSpawnPos)
+    CellRenderer::CellRenderer(float cellSize, Shader* shader, const glm::vec3& worldSpawnPos)
+        :   _cellSize(cellSize), _verticeCount(36), _cellCount(0), _shader(shader), _worldSpawnPos(worldSpawnPos)
     {
         Logger::Info("Created", "Renderer",__func__);
         InitCellStorage();
@@ -62,11 +57,11 @@ namespace Engine
 
     void CellRenderer::InitCellStorage()
     {
-        for(uint32 x = 0; x < AppSettings::CELL_FRAME_SIZE; x++)
+        for(uint32 x = 0; x < CellSimParams::CELL_FRAME_SIZE; x++)
         {
-            for(uint32 y = 0; y < AppSettings::CELL_FRAME_SIZE; y++)
+            for(uint32 y = 0; y < CellSimParams::CELL_FRAME_SIZE; y++)
             {
-                for(uint32 z = 0; z < AppSettings::CELL_FRAME_SIZE; z++)
+                for(uint32 z = 0; z < CellSimParams::CELL_FRAME_SIZE; z++)
                 {
                     _cellStorage[x][y][z] = {0, 0, CellType::None};
                 }
@@ -76,15 +71,15 @@ namespace Engine
 
     inline uint32 CellRenderer::GetIndexFromCoords(const glm::u32vec3& cellPos)
     {
-        return (cellPos.x * AppSettings::CELL_FRAME_SIZE * AppSettings::CELL_FRAME_SIZE ) + (cellPos.y * AppSettings::CELL_FRAME_SIZE ) + cellPos.z;
+        return (cellPos.x * CellSimParams::CELL_FRAME_SIZE * CellSimParams::CELL_FRAME_SIZE ) + (cellPos.y * CellSimParams::CELL_FRAME_SIZE ) + cellPos.z;
     }
 
     inline glm::vec3 CellRenderer::GetCoordsFromIndex(uint32 index)
     {
-        uint32 x = index / (AppSettings::CELL_FRAME_SIZE * AppSettings::CELL_FRAME_SIZE);
-        index -= (x * AppSettings::CELL_FRAME_SIZE * AppSettings::CELL_FRAME_SIZE );
-        uint32 y = index / AppSettings::CELL_FRAME_SIZE;
-        uint32 z = index % AppSettings::CELL_FRAME_SIZE;
+        uint32 x = index / (CellSimParams::CELL_FRAME_SIZE * CellSimParams::CELL_FRAME_SIZE);
+        index -= (x * CellSimParams::CELL_FRAME_SIZE * CellSimParams::CELL_FRAME_SIZE );
+        uint32 y = index / CellSimParams::CELL_FRAME_SIZE;
+        uint32 z = index % CellSimParams::CELL_FRAME_SIZE;
         return glm::u32vec3(x, y, z);
     }
 
@@ -108,7 +103,7 @@ namespace Engine
         UpdateGpuStorage();
 
         //Render cells instanced
-        GLCall(glDrawArraysInstanced(GL_TRIANGLES, 0, _verticeCount, _cellCount));
+        GLCall(glDrawArraysInstanced(GL_TRIANGLES, 0, _verticeCount, _cellCount))
 
         //Unbind vao and vbo's
         _vboModel->Unbind();
@@ -119,9 +114,9 @@ namespace Engine
         _shader->Unbind();
 
         //Save stats
-        AppSettings::renderStats.drawnVertices += _verticeCount * _cellCount;
-        AppSettings::renderStats.drawCalls++;
-        AppSettings::renderStats.cellPasses++;
+        RenderStatistics::drawnVertices += _verticeCount * _cellCount;
+        RenderStatistics::drawCalls++;
+        RenderStatistics::cellPasses++;
     }
 
     uint32 CellRenderer::GetAliveCellAmount() const

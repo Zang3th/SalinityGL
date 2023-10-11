@@ -27,25 +27,21 @@ namespace Engine
 
     void RenderManager::PrepareFrame()
     {
-        AppSettings::renderStats.Reset();
+        RenderStatistics::Reset();
         GLRenderSettings::ClearBuffers();
     }
 
-    SceneRenderer* RenderManager::AddSceneRenderer(const float nearPlane, const float farPlane, const glm::vec3& lightPos, const glm::vec3& lightCol)
+    SceneRenderer* RenderManager::AddSceneRenderer()
     {
-        _sceneRenderer = new SceneRenderer(nearPlane, farPlane, lightPos, lightCol);
+        _sceneRenderer = new SceneRenderer();
         _rendererStorage.push_back(_sceneRenderer);
 
         return _sceneRenderer;
     }
 
-    ShadowRenderer* RenderManager::AddShadowRenderer
-    (
-        uint32 resolution, const glm::vec3& lightPos, const glm::vec3& targetPos,
-        const glm::mat4& orthoProj, const std::string& shader
-    )
+    ShadowRenderer* RenderManager::AddShadowRenderer(uint32 resolution, const glm::mat4& orthoProj, const std::string& shader)
     {
-        _shadowRenderer = new ShadowRenderer(resolution, resolution, lightPos, targetPos, orthoProj, ResourceManager::GetShader(shader));
+        _shadowRenderer = new ShadowRenderer(resolution, resolution, orthoProj, ResourceManager::GetShader(shader));
         _rendererStorage.push_back(_shadowRenderer);
         _sceneRenderer->AddLightProjection(_shadowRenderer->GetLightProjection());
 
@@ -91,20 +87,9 @@ namespace Engine
         return _particleRenderer;
     }
 
-    CellRenderer* RenderManager::AddCellRenderer
-    (
-        float cellSize, float nearPlane, float farPlane,
-        const std::string& shader, const glm::vec3& worldPos
-    )
+    CellRenderer* RenderManager::AddCellRenderer(float cellSize, const std::string& shader, const glm::vec3& worldSpawnPos)
     {
-        _cellRenderer = new CellRenderer
-        (
-            cellSize,
-            nearPlane,
-            farPlane,
-            ResourceManager::GetShader(shader),
-            worldPos
-        );
+        _cellRenderer = new CellRenderer(cellSize, ResourceManager::GetShader(shader), worldSpawnPos);
         _rendererStorage.push_back(_cellRenderer);
 
         return _cellRenderer;

@@ -47,7 +47,7 @@ namespace Engine
         _shader->SetUniform1i("textureSampler", 0);
 
         //Render
-        GLCall(glDrawArrays(GL_TRIANGLES, 0, _verticeCount));
+        GLCall(glDrawArrays(GL_TRIANGLES, 0, _verticeCount))
 
         //Unbind vao and vbo
         _vboVert->Unbind();

@@ -8,7 +8,7 @@ namespace Engine
         :   _textureID(0)
     {
         stbi_set_flip_vertically_on_load(false);
-        GLCall(glGenTextures(1, &_textureID));
+        GLCall(glGenTextures(1, &_textureID))
         Bind();
 
         int32 width, height, nrChannels;
@@ -29,7 +29,7 @@ namespace Engine
 
                 if(format != 0)
                 {
-                    GLCall(glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, localBuffer));
+                    GLCall(glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, localBuffer))
 
                     std::string cubemapInfo = "(X: " + std::to_string(width) + ", Y: " + std::to_string(height) + ", Channels: " + std::to_string(nrChannels) + ")";
                     Logger::Info("Loaded", "Cubemap", faces[i]);
@@ -43,28 +43,28 @@ namespace Engine
         }
 
         //Texture parameters
-        GLCall(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
-        GLCall(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
-        GLCall(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
-        GLCall(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
-        GLCall(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE));
+        GLCall(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR))
+        GLCall(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR))
+        GLCall(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE))
+        GLCall(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE))
+        GLCall(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE))
 
         stbi_set_flip_vertically_on_load(true);
     }
 
     CubemapTexture::~CubemapTexture()
     {
-        GLCall(glDeleteTextures(1, &_textureID));
+        GLCall(glDeleteTextures(1, &_textureID))
     }
 
     void CubemapTexture::Bind() const
     {
-        GLCall(glActiveTexture(GL_TEXTURE0));
-        GLCall(glBindTexture(GL_TEXTURE_CUBE_MAP, _textureID));
+        GLCall(glActiveTexture(GL_TEXTURE0))
+        GLCall(glBindTexture(GL_TEXTURE_CUBE_MAP, _textureID))
     }
 
     void CubemapTexture::Unbind() const
     {
-        GLCall(glBindTexture(GL_TEXTURE_2D, 0));
+        GLCall(glBindTexture(GL_TEXTURE_2D, 0))
     }
 }

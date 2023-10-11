@@ -29,34 +29,32 @@ namespace GW
 
     Engine::uint32 GreenWorldApp::InitModules()
     {
+        Engine::CameraParams::startPitch = -24.0f;
+        Engine::CameraParams::startPos   = glm::vec3(-75.0f, 74.0f, 70.0f);
+        Engine::LightParams::position    = glm::vec3(150.0f, 100.0f, -30.0f);
+        Engine::LightParams::target      = glm::vec3(64.0f, 0.0f, 64.0f);
+
         //Initialize engine components
         Engine::Logger::Init();
         if(Engine::Window::Init("GreenWorld") != EXIT_SUCCESS)
         {
             return EXIT_FAILURE;
         }
-        Engine::Camera3D::Init(glm::vec3(-75.0f, 74.0f, 70.0f), 0.4f, -23.0f, 25.0f);
+        Engine::Camera3D::Init();
         Engine::CameraController3D::Init();
         Engine::RenderManager::Init();
 
-        //Configure some application settings
-        Engine::AppSettings::planeSize = 128;
-
-        //Load up shaders and textures
+        //Load shaders and textures
         LoadResources();
 
         //Create application specific renderers
-        _sceneRenderer  = Engine::RenderManager::AddSceneRenderer(_nearPlane, _farPlane, _lightPos, _lightCol);
-        _shadowRenderer = Engine::RenderManager::AddShadowRenderer
-        (
-            8192,
-            _lightPos,
-            _lightTarget,
-            glm::ortho(-90.0f, 90.0f, -90.0f, 90.0f, 110.0f, 210.0f),
-            "ShadowCreateShader"
-        );
-        _spriteRenderer = Engine::RenderManager::AddSpriteRenderer();
+        _sceneRenderer  = Engine::RenderManager::AddSceneRenderer();
+        _sceneRenderer->SetTerrainShader("TerrainShader");
+        _sceneRenderer->SetModelShader("ModelShader");
+        _sceneRenderer->SetWaterShader("WaterShader");
+        _shadowRenderer = Engine::RenderManager::AddShadowRenderer(8192, glm::ortho(-90.0f, 90.0f, -90.0f, 90.0f, 110.0f, 210.0f), "ShadowCreateShader");
         _waterRenderer  = Engine::RenderManager::AddWaterRenderer();
+        _spriteRenderer = Engine::RenderManager::AddSpriteRenderer();
         Engine::RenderManager::AddParticleRenderer
         (
             200,
@@ -69,11 +67,6 @@ namespace GW
             "ParticleShader",
             glm::vec3(87.0f, 34.0f, 92.5f)
         );
-
-        //Set default shaders for the scene
-        _sceneRenderer->SetTerrainShader("TerrainShader");
-        _sceneRenderer->SetModelShader("ModelShader");
-        _sceneRenderer->SetWaterShader("WaterShader");
 
         //Create UI
         _interface = Engine::MakeScope<GreenWorldInterface>();
@@ -106,8 +99,8 @@ namespace GW
         //Terrain
         _sceneRenderer->AddTerrain
         (
-            Engine::AppSettings::planeSize,
-            Engine::AppSettings::planeSize,
+            Engine::RenderParams::planeSize,
+            Engine::RenderParams::planeSize,
             1.0f,
             glm::vec3(0.0f, -2.7f, 0.0f),
             _shadowRenderer->GetDepthTexture(),
@@ -119,8 +112,8 @@ namespace GW
         //Water
         _sceneRenderer->AddWater
         (
-            Engine::AppSettings::planeSize - 112,
-            Engine::AppSettings::planeSize,
+            Engine::RenderParams::planeSize - 112,
+            Engine::RenderParams::planeSize,
             1.0f,
             glm::vec3(30.5f, 0.0f, 0.0f),
             0.025f,
@@ -264,7 +257,7 @@ namespace GW
             Engine::RenderManager::RenderScene();
             Engine::RenderManager::RenderParticles();
 
-            if(Engine::AppSettings::debugSprites)
+            if(Engine::WindowParams::debugSprites)
             {
                 Engine::RenderManager::RenderSprites();
             }

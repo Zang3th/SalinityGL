@@ -9,29 +9,29 @@ namespace Engine
         const char* src = source.c_str();
 
         GLCall(uint32 id = glCreateShader(shaderType))
-        GLCall(glShaderSource(id, 1, &src, nullptr));
-        GLCall(glCompileShader(id));
+        GLCall(glShaderSource(id, 1, &src, nullptr))
+        GLCall(glCompileShader(id))
 
         //Errorhandling
         int32 result;
-        GLCall(glGetShaderiv(id, GL_COMPILE_STATUS, &result));
+        GLCall(glGetShaderiv(id, GL_COMPILE_STATUS, &result))
 
         if(result == GL_FALSE)
         {
             //Get error message length
             int32 length;
-            GLCall(glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length));
+            GLCall(glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length))
 
             //Get error message
             Scope<char[]> msg(new char[length]);
-            GLCall(glGetShaderInfoLog(id, length, &length, msg.get()));
+            GLCall(glGetShaderInfoLog(id, length, &length, msg.get()))
 
             //Log error message
             std::string errorMsg = "Type: " + std::to_string(shaderType) + ", Error: " + std::string(msg.get());
             Logger::Error("Failed", "Shader-Comp.", errorMsg);
 
             //Free resources and return
-            GLCall(glDeleteShader(id));
+            GLCall(glDeleteShader(id))
         }
         else
         {
@@ -45,30 +45,30 @@ namespace Engine
 
     uint32 Shader::Build(uint32 vsID, uint32 fsID)
     {
-        GLCall(uint32 programID = glCreateProgram());
-        GLCall(glAttachShader(programID, vsID));
-        GLCall(glAttachShader(programID, fsID));
-        GLCall(glLinkProgram(programID));
+        GLCall(uint32 programID = glCreateProgram())
+        GLCall(glAttachShader(programID, vsID))
+        GLCall(glAttachShader(programID, fsID))
+        GLCall(glLinkProgram(programID))
 
         //Errorhandling
         int32 result;
-        GLCall(glGetProgramiv(programID, GL_LINK_STATUS, &result));
+        GLCall(glGetProgramiv(programID, GL_LINK_STATUS, &result))
         if(!result)
         {
             //Get error message length
             int32 length;
-            GLCall(glGetProgramiv(programID, GL_INFO_LOG_LENGTH, &length));
+            GLCall(glGetProgramiv(programID, GL_INFO_LOG_LENGTH, &length))
 
             //Get error message
             Scope<char[]> msg(new char[length]);
-            GLCall(glGetProgramInfoLog(programID, length, &length, msg.get()));
+            GLCall(glGetProgramInfoLog(programID, length, &length, msg.get()))
 
             //Log error message
             std::string errorMsg = "Program: " + std::to_string(programID) + ", Error: " + std::string(msg.get());
             Logger::Error("Failed", "Shader-Link.", errorMsg);
 
             //Free resources and return
-            GLCall(glDeleteProgram(programID));
+            GLCall(glDeleteProgram(programID))
         }
         else
         {
@@ -76,13 +76,13 @@ namespace Engine
             Logger::Info("Linked", "Shader", shaderInfo);
         }
 
-        GLCall(glValidateProgram(programID));
+        GLCall(glValidateProgram(programID))
 
         //Free shader
-        GLCall(glDetachShader(programID, vsID));
-        GLCall(glDetachShader(programID, fsID));
-        GLCall(glDeleteShader(vsID));
-        GLCall(glDeleteShader(fsID));
+        GLCall(glDetachShader(programID, vsID))
+        GLCall(glDetachShader(programID, fsID))
+        GLCall(glDeleteShader(vsID))
+        GLCall(glDeleteShader(fsID))
 
         return programID;
     }
@@ -107,7 +107,7 @@ namespace Engine
         if (_uniformLocationCache.find(name) != _uniformLocationCache.end())
                 return _uniformLocationCache[name];
 
-        GLCall(int32 location = glGetUniformLocation(_shaderID, name.c_str()));
+        GLCall(int32 location = glGetUniformLocation(_shaderID, name.c_str()))
         _uniformLocationCache[name] = location;
         return location;
     }
@@ -120,22 +120,22 @@ namespace Engine
 
     Shader::~Shader()
     {
-        GLCall(glDeleteProgram(_shaderID));
+        GLCall(glDeleteProgram(_shaderID))
     }
 
     void Shader::Bind() const
     {
-        GLCall(glUseProgram(_shaderID));
+        GLCall(glUseProgram(_shaderID))
     }
 
     void Shader::Unbind() const
     {
-        GLCall(glUseProgram(0));
+        GLCall(glUseProgram(0))
     }   
 
     void Shader::SetUniform1i(const std::string& name, int32 value)
     {
-        GLCall(glUniform1i(GetUniformLocation(name), value));
+        GLCall(glUniform1i(GetUniformLocation(name), value))
     }
 
     void Shader::SetUniform1f(const std::string& name, float value)
@@ -145,27 +145,27 @@ namespace Engine
 
     void Shader::SetUniform4f(const std::string& name, float v0, float v1, float v2, float v3)
     {
-        GLCall(glUniform4f(GetUniformLocation(name), v0, v1, v2, v3));
+        GLCall(glUniform4f(GetUniformLocation(name), v0, v1, v2, v3))
     }
 
     void Shader::SetUniformMat4f(const std::string& name, const glm::mat4& matrix)
     {
-        GLCall(glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, &matrix[0][0]));
+        GLCall(glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, &matrix[0][0]))
     }
 
     void Shader::SetUniformVec2f(const std::string& name, const glm::vec2& vec)
     {
-        GLCall(glUniform2fv(GetUniformLocation(name), 1, &vec[0]));
+        GLCall(glUniform2fv(GetUniformLocation(name), 1, &vec[0]))
     }
 
     void Shader::SetUniformVec3f(const std::string& name, const glm::vec3& vec)
     {
-        GLCall(glUniform3fv(GetUniformLocation(name), 1, &vec[0]));
+        GLCall(glUniform3fv(GetUniformLocation(name), 1, &vec[0]))
     }
 
     void Shader::SetUniformVec4f(const std::string& name, const glm::vec4& vec)
     {
-        GLCall(glUniform4fv(GetUniformLocation(name), 1, &vec[0]));
+        GLCall(glUniform4fv(GetUniformLocation(name), 1, &vec[0]))
     }
 
     uint32 Shader::GetShaderID() const

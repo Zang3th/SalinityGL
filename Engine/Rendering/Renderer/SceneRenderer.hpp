@@ -24,8 +24,7 @@ namespace Engine
         friend class RenderManager;
 
         private:
-            float     _nearPlane, _farPlane, _moveFactor, _waveSpeed;
-            glm::vec3 _lightPos,  _lightCol;
+            float     _moveFactor, _waveSpeed;
             glm::mat4 _perspProj, _lightProj;
 
             Scope<Cubemap>      _cubemap;
@@ -33,7 +32,7 @@ namespace Engine
             Model              *_terrainModel, *_waterModel, *_planeModel;
             Shader             *_terrainShader, *_modelShader, *_waterShader;
 
-            SceneRenderer(float nearPlane, float farPlane, const glm::vec3& lightPos, const glm::vec3& lightCol);
+            SceneRenderer();
             ~SceneRenderer() final;
 
             void FlushModel(Model* model, Shader* shader);

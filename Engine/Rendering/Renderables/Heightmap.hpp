@@ -3,6 +3,7 @@
 #include "stb_image.hpp"
 #include "Types.hpp"
 #include "Logger.hpp"
+#include "GlobalParams.hpp"
 
 #include <vector>
 

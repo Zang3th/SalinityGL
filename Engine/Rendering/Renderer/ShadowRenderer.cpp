@@ -4,9 +4,8 @@ namespace Engine
 {
     // ----- Private -----
 
-    ShadowRenderer::ShadowRenderer(const uint32 width, const uint32 height, const glm::vec3& lightPos,
-                                   const glm::vec3& targetPos, const glm::mat4& orthoProj, Shader* shader)
-        :   _lightView(glm::lookAt(lightPos, targetPos, glm::vec3(0.0f, 1.0f, 0.0f))),
+    ShadowRenderer::ShadowRenderer(uint32 width, uint32 height, const glm::mat4& orthoProj, Shader* shader)
+        :   _lightView(glm::lookAt(LightParams::position, LightParams::target, glm::vec3(0.0f, 1.0f, 0.0f))),
             _lightProjection(orthoProj * _lightView),
             _shadowWidth(width), _shadowHeight(height), _shadowShader(shader)
     {

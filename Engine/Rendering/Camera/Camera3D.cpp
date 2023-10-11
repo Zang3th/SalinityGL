@@ -4,17 +4,12 @@ namespace Engine
 {
     // ----- Public -----
 
-    void Camera3D::Init(const glm::vec3& position, float yaw, float pitch, float movementSpeed)
+    void Camera3D::Init()
     {
-        _position         = position;
-        _front            = glm::vec3(0.0f);
-        _up               = glm::vec3(0.0f);
-        _right            = glm::vec3(0.0f);
-        _worldUp          = glm::vec3(0.0f, 1.0f, 0.0f);
-        _yaw              = yaw;
-        _pitch            = pitch;
-        _movementSpeed    = movementSpeed;
-        _mouseSensitivity = 0.1f;
+        _position      = CameraParams::startPos;
+        _yaw           = CameraParams::startYaw;
+        _pitch         = CameraParams::startPitch;
+        _movementSpeed = CameraParams::movementSpeed;
 
         Update();
     }
@@ -26,11 +21,11 @@ namespace Engine
         front.x = (float)(cos(glm::radians(_yaw)) * cos(glm::radians(_pitch)));
         front.y = (float)(sin(glm::radians(_pitch)));
         front.z = (float)(sin(glm::radians(_yaw)) * cos(glm::radians(_pitch)));
-        _front = glm::normalize(front);
+        _front  = glm::normalize(front);
 
-        //Also, re-calculate the right and up vector
-        _right = glm::normalize(glm::cross(_front, _worldUp)); //Normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement
-        _up = glm::normalize(glm::cross(_right, _front));
+        //Also re-calculate the right and up vector
+        _right = glm::normalize(glm::cross(_front, _worldUp));
+        _up    = glm::normalize(glm::cross(_right, _front));
     }
 
     void Camera3D::ProcessKeyboard(Camera_Movement direction, float deltaTime)
@@ -111,11 +106,11 @@ namespace Engine
         _position = position;
     }
 
-    void Camera3D::SetPosition(const glm::vec3& position, float yaw, float pitch)
+    void Camera3D::ResetPosition()
     {
-        _position = position;
-        _yaw = yaw;
-        _pitch = pitch;
+        _position = CameraParams::startPos;
+        _yaw      = CameraParams::startYaw;
+        _pitch    = CameraParams::startPitch;
 
         Update();
     }

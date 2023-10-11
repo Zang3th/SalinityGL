@@ -4,6 +4,7 @@
 #include "Logger.hpp"
 #include "Window.hpp"
 #include "Types.hpp"
+#include "GlobalParams.hpp"
 #include "Profiler.hpp"
 #include "Audio.hpp"
 #include "App.hpp"

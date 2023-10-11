@@ -15,47 +15,35 @@ namespace CS
 
     Engine::uint32 CellSimApp::InitModules()
     {
+        //Configure some global application parameters
+        Engine::RenderParams::farPlane      = 1024.0f;
+        Engine::RenderParams::planeSize     = 1;
+        Engine::CameraParams::movementSpeed = 75.0f;
+        Engine::CameraParams::startYaw      = 38.0f;
+        Engine::CameraParams::startPitch    = -29.0f;
+        Engine::CameraParams::startPos      = glm::vec3(350.0f, 125.0f, 415.0f);
+        Engine::LightParams::position       = glm::vec3(565.0f, 170.0f, 455.0f);
+        Engine::LightParams::target         = glm::vec3(515.0f, 40.0f, 505.0f);
+
         //Initialize engine components
         Engine::Logger::Init();
         if(Engine::Window::Init("CellSim") != EXIT_SUCCESS)
         {
             return EXIT_FAILURE;
         }
-        Engine::Camera3D::Init(_camStartPos, _camStartYaw, _camStartPitch, 75.0f);
+        Engine::Camera3D::Init();
         Engine::CameraController3D::Init();
         Engine::RenderManager::Init();
 
-        //Configure some application settings
-        Engine::AppSettings::planeSize = 1;
-
-        //Load up shaders and textures
+        //Load shaders and textures
         LoadResources();
 
         //Create application specific renderers
-        _sceneRenderer  = Engine::RenderManager::AddSceneRenderer(_nearPlane, _farPlane, _lightPos, _lightCol);
-
-        _cellRenderer = Engine::RenderManager::AddCellRenderer
-        (
-            1.0f,
-            _nearPlane,
-            _farPlane,
-            "CellShader",
-            glm::vec3(482.0f, 2.0f, 482.0f)
-        );
-
-        _shadowRenderer = Engine::RenderManager::AddShadowRenderer
-        (
-            8192,
-            _lightPos,
-            _lightTarget,
-            glm::ortho(-60.0f, 60.0f, -60.0f, 60.0f, 105.0f, 228.0f),
-            "ShadowCreateShader"
-        );
-
-        _spriteRenderer = Engine::RenderManager::AddSpriteRenderer();
-
-        //Set default shaders for the scene
+        _sceneRenderer  = Engine::RenderManager::AddSceneRenderer();
         _sceneRenderer->SetModelShader("ModelShader");
+        _shadowRenderer = Engine::RenderManager::AddShadowRenderer(8192, glm::ortho(-60.0f, 60.0f, -60.0f, 60.0f, 105.0f, 228.0f), "ShadowCreateShader");
+        _cellRenderer   = Engine::RenderManager::AddCellRenderer(1.0f, "CellShader", glm::vec3(482.0f, 2.0f, 482.0f));
+        _spriteRenderer = Engine::RenderManager::AddSpriteRenderer();
 
         //Create UI
         _interface = Engine::MakeScope<CellSimInterface>();
@@ -68,8 +56,8 @@ namespace CS
         //Ground plane
         _sceneRenderer->AddPlane
         (
-            Engine::AppSettings::planeSize,
-            Engine::AppSettings::planeSize,
+            Engine::RenderParams::planeSize,
+            Engine::RenderParams::planeSize,
             1024.0f,
             glm::vec3(0.0f, -1.0f, 0.0f),
             _shadowRenderer->GetDepthTexture(),
@@ -133,10 +121,10 @@ namespace CS
             Engine::CameraController3D::ProcessInput();
             _timeElapsed += Engine::Window::GetDeltaTime();
 
-            if(Engine::AppSettings::resetCamera)
+            if(Engine::WindowParams::resetCamera)
             {
-                Engine::Camera3D::SetPosition(_camStartPos, _camStartYaw, _camStartPitch);
-                Engine::AppSettings::resetCamera = false;
+                Engine::Camera3D::ResetPosition();
+                Engine::WindowParams::resetCamera = false;
             }
         }
 
@@ -144,34 +132,34 @@ namespace CS
             //ToDo: Add profiling
 
             //Check for cell spawn
-            if(Engine::AppSettings::spawnNewCell)
+            if(Engine::CellSimParams::spawnNewCell)
             {
-                if(Engine::AppSettings::selectedCellAmount > 0)
+                if(Engine::CellSimParams::selectedCellAmount > 0)
                 {
                     _cellRenderer->SpawnCell
                     (
-                        Engine::AppSettings::selectedCellType,
-                        Engine::AppSettings::selectedCellAmount,
-                        glm::u32vec3(Engine::AppSettings::selectedCellCoords[0],
-                                  Engine::AppSettings::selectedCellCoords[1],
-                                  Engine::AppSettings::selectedCellCoords[2])
+                        Engine::CellSimParams::selectedCellType,
+                        Engine::CellSimParams::selectedCellAmount,
+                        glm::u32vec3(Engine::CellSimParams::selectedCellCoords[0],
+                                     Engine::CellSimParams::selectedCellCoords[1],
+                                     Engine::CellSimParams::selectedCellCoords[2])
                     );
                 }
 
-                Engine::AppSettings::spawnNewCell = false;
+                Engine::CellSimParams::spawnNewCell = false;
             }
 
             //Check for cell delete
-            if(Engine::AppSettings::deleteAllCells)
+            if(Engine::CellSimParams::deleteAllCells)
             {
                 _cellRenderer->DeleteAllCells();
-                Engine::AppSettings::deleteAllCells = false;
+                Engine::CellSimParams::deleteAllCells = false;
             }
 
-            Engine::AppSettings::cellsAlive = _cellRenderer->GetAliveCellAmount();
+            Engine::CellSimParams::cellsAlive = _cellRenderer->GetAliveCellAmount();
 
             //Check if we need to do physics (every 10ms)
-            if(Engine::AppSettings::cellsAlive > 0 && _timeElapsed >= 0.01)
+            if(Engine::CellSimParams::cellsAlive > 0 && _timeElapsed >= 0.01)
             {
                 _cellRenderer->CalculateCellPhysics();
                 _timeElapsed = 0;
@@ -198,7 +186,7 @@ namespace CS
             Engine::RenderManager::RenderScene();
             Engine::RenderManager::RenderCells();
 
-            if(Engine::AppSettings::debugSprites)
+            if(Engine::WindowParams::debugSprites)
             {
                 Engine::RenderManager::RenderSprites();
             }

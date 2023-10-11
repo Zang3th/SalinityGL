@@ -4,10 +4,9 @@ namespace Engine
 {
     // ----- Private -----
 
-    SceneRenderer::SceneRenderer(const float nearPlane, const float farPlane, const glm::vec3& lightPos, const glm::vec3& lightCol)
-        : _nearPlane(nearPlane), _farPlane(farPlane), _moveFactor(0.0f), _waveSpeed(0.0f), _lightPos(lightPos), _lightCol(lightCol),
-          _perspProj(glm::perspective(glm::radians(45.0f), Window::GetAspectRatio(), _nearPlane, _farPlane)), _lightProj(0.0f),
-          _terrainModel(nullptr), _waterModel(nullptr), _planeModel(nullptr), _terrainShader(nullptr), _modelShader(nullptr), _waterShader(nullptr)
+    SceneRenderer::SceneRenderer()
+        : _moveFactor(0.0f), _waveSpeed(0.0f), _perspProj(glm::perspective(glm::radians(45.0f), Window::GetAspectRatio(), RenderParams::nearPlane, RenderParams::farPlane)),
+          _lightProj(0.0f), _terrainModel(nullptr), _waterModel(nullptr), _planeModel(nullptr), _terrainShader(nullptr), _modelShader(nullptr), _waterShader(nullptr)
     {
         Logger::Info("Created", "Renderer",__func__);
     }
@@ -43,14 +42,14 @@ namespace Engine
         shader->SetUniformMat4f("model", model->GetModelMatrix());
         shader->SetUniformMat4f("projection", _perspProj);
         shader->SetUniformVec3f("viewPos", Camera3D::GetPosition());
-        shader->SetUniformVec3f("lightPos", _lightPos);
-        shader->SetUniformVec3f("lightColor", _lightCol);
+        shader->SetUniformVec3f("lightPos", LightParams::position);
+        shader->SetUniformVec3f("lightColor", LightParams::color);
         shader->SetUniformMat4f("lightProjection", _lightProj);
         shader->SetUniform1i("diffuseTexture", 0);
         shader->SetUniform1i("shadowMap", 1);
 
         //Render model
-        GLCall(glDrawElements(GL_TRIANGLES, verticeCount, GL_UNSIGNED_INT, nullptr));
+        GLCall(glDrawElements(GL_TRIANGLES, verticeCount, GL_UNSIGNED_INT, nullptr))
 
         //Unbind buffers
         model->UnbindBuffers();
@@ -62,8 +61,8 @@ namespace Engine
         }
 
         //Save stats
-        AppSettings::renderStats.drawnVertices += verticeCount;
-        AppSettings::renderStats.drawCalls++;
+        RenderStatistics::drawnVertices += verticeCount;
+        RenderStatistics::drawCalls++;
     }
 
     void SceneRenderer::FlushWater()
@@ -89,19 +88,19 @@ namespace Engine
         _waterShader->SetUniformMat4f("model", _waterModel->GetModelMatrix());
         _waterShader->SetUniformMat4f("projection", _perspProj);
         _waterShader->SetUniformVec3f("viewPos", Camera3D::GetPosition());
-        _waterShader->SetUniformVec3f("lightPos", _lightPos);
-        _waterShader->SetUniformVec3f("lightColor", _lightCol);
+        _waterShader->SetUniformVec3f("lightPos", LightParams::position);
+        _waterShader->SetUniformVec3f("lightColor", LightParams::color);
         _waterShader->SetUniform1i("reflectionTexture", 0);
         _waterShader->SetUniform1i("refractionTexture", 1);
         _waterShader->SetUniform1i("dudvMap", 2);
         _waterShader->SetUniform1i("normalMap", 3);
         _waterShader->SetUniform1i("depthMap", 4);
         _waterShader->SetUniform1f("moveFactor", _moveFactor);
-        _waterShader->SetUniform1f("nearPlane", _nearPlane);
-        _waterShader->SetUniform1f("farPlane", _farPlane);
+        _waterShader->SetUniform1f("nearPlane", RenderParams::nearPlane);
+        _waterShader->SetUniform1f("farPlane", RenderParams::farPlane);
 
         //Render model
-        GLCall(glDrawElements(GL_TRIANGLES, verticeCount, GL_UNSIGNED_INT, nullptr));
+        GLCall(glDrawElements(GL_TRIANGLES, verticeCount, GL_UNSIGNED_INT, nullptr))
 
         //Unbind buffers
         _waterModel->UnbindBuffers();
@@ -116,9 +115,9 @@ namespace Engine
         _waterShader->Unbind();
 
         //Save stats
-        AppSettings::renderStats.drawnVertices += verticeCount;
-        AppSettings::renderStats.drawCalls++;
-        AppSettings::renderStats.waterPasses++;
+        RenderStatistics::drawnVertices += verticeCount;
+        RenderStatistics::drawCalls++;
+        RenderStatistics::waterPasses++;
 
         GLRenderSettings::SetCullFace(GL_BACK);
     }
@@ -126,7 +125,7 @@ namespace Engine
     void SceneRenderer::UpdateMoveFactor()
     {
         _moveFactor += _waveSpeed * (float)Window::GetDeltaTime();
-        _moveFactor = (float)fmod(_moveFactor, 1.0f);
+        _moveFactor = (float)fmodf(_moveFactor, 1.0f);
     }
 
     // ----- Public -----
@@ -134,7 +133,7 @@ namespace Engine
     void SceneRenderer::Flush(Renderer* renderer)
     {
         //Check for Wireframe-Mode
-        if(AppSettings::wireframeRendering)
+        if(WindowParams::wireframeRendering)
             GLRenderSettings::EnableWireframe();
         else
             GLRenderSettings::DisableWireframe();
@@ -170,16 +169,16 @@ namespace Engine
             shader->Unbind();
         }
 
-        AppSettings::renderStats.modelPasses++;
+        RenderStatistics::modelPasses++;
     }
 
     void SceneRenderer::FlushCubemap()
     {
         GLRenderSettings::SetCullFace(GL_FRONT);
         GLRenderSettings::DisableWireframe();
-        AppSettings::renderStats.drawnVertices += _cubemap->Draw(_perspProj, Camera3D::GetViewMatrix());
-        AppSettings::renderStats.drawCalls++;
-        AppSettings::renderStats.cubemapPasses++;
+        RenderStatistics::drawnVertices += _cubemap->Draw(_perspProj, Camera3D::GetViewMatrix());
+        RenderStatistics::drawCalls++;
+        RenderStatistics::cubemapPasses++;
         GLRenderSettings::SetCullFace(GL_BACK);
     }
 
@@ -190,7 +189,7 @@ namespace Engine
         _terrainShader->SetUniform1i("colorMap", 2);
         FlushModel(_terrainModel, _terrainShader);
         _terrainShader->Unbind();
-        AppSettings::renderStats.terrainPasses++;
+        RenderStatistics::terrainPasses++;
         GLRenderSettings::SetCullFace(GL_BACK);
     }
 
@@ -200,7 +199,7 @@ namespace Engine
         _modelShader->Bind();
         FlushModel(_planeModel, _modelShader);
         _modelShader->Unbind();
-        AppSettings::renderStats.terrainPasses++;
+        RenderStatistics::terrainPasses++;
         GLRenderSettings::SetCullFace(GL_BACK);
     }
 

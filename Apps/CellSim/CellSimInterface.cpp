@@ -8,8 +8,8 @@ namespace CS
     {
         const ImGuiViewport* viewport  = ImGui::GetMainViewport();
         const ImVec2 workPos           = viewport->WorkPos;
-        const auto   windowWidth       = (float)Engine::AppSettings::WINDOW_WIDTH;
-        const auto   windowHeight      = (float)Engine::AppSettings::WINDOW_HEIGHT;
+        const auto   windowWidth       = (float)Engine::WindowParams::WIDTH;
+        const auto   windowHeight      = (float)Engine::WindowParams::HEIGHT;
 
         _sidebarPos  = ImVec2(workPos.x + windowWidth, _menuBarHeight);
         _sidebarSize = ImVec2(_sidebarWidth,windowHeight - _menuBarHeight);
@@ -22,21 +22,21 @@ namespace CS
             if(ImGui::BeginMenu("Settings"))
             {
                 ImGui::MenuItem("Show overlay", "", &_showOverlay);
-                ImGui::MenuItem("Show debug sprites", "", &Engine::AppSettings::debugSprites);
+                ImGui::MenuItem("Show debug sprites", "", &Engine::WindowParams::debugSprites);
                 ImGui::EndMenu();
                 Engine::CameraController3D::DeFocusWindow(Engine::Window::GetWindow());
             }
 
             if(ImGui::BeginMenu("Rendering"))
             {
-                ImGui::MenuItem("Wireframe-Mode", "", &Engine::AppSettings::wireframeRendering);
+                ImGui::MenuItem("Wireframe-Mode", "", &Engine::WindowParams::wireframeRendering);
                 ImGui::EndMenu();
                 Engine::CameraController3D::DeFocusWindow(Engine::Window::GetWindow());
             }
 
             if(ImGui::BeginMenu("Camera"))
             {
-                ImGui::MenuItem("Reset", "", &Engine::AppSettings::resetCamera);
+                ImGui::MenuItem("Reset", "", &Engine::WindowParams::resetCamera);
                 ImGui::EndMenu();
                 Engine::CameraController3D::DeFocusWindow(Engine::Window::GetWindow());
             }
@@ -48,9 +48,9 @@ namespace CS
     {
         for(Engine::uint8 i = 0; i < 3; i++)
         {
-            if(Engine::AppSettings::selectedCellCoords[i] > Engine::AppSettings::CELL_FRAME_SIZE)
+            if(Engine::CellSimParams::selectedCellCoords[i] > Engine::CellSimParams::CELL_FRAME_SIZE)
             {
-                Engine::AppSettings::selectedCellCoords[i] = Engine::AppSettings::CELL_FRAME_SIZE;
+                Engine::CellSimParams::selectedCellCoords[i] = Engine::CellSimParams::CELL_FRAME_SIZE;
             }
         }
     }
@@ -72,15 +72,15 @@ namespace CS
                 // --- Render stats
                 ImGui::NewLine();
                 ImGui::Separator();
-                ImGui::Text("Draw calls:     %d", Engine::AppSettings::renderStats.drawCalls);
-                ImGui::Text("Drawn vertices: %d", Engine::AppSettings::renderStats.drawnVertices);
+                ImGui::Text("Draw calls:     %d", Engine::RenderStatistics::drawCalls);
+                ImGui::Text("Drawn vertices: %d", Engine::RenderStatistics::drawnVertices);
                 ImGui::Separator();
 
                 ImGui::NewLine();
                 ImGui::Separator();
-                ImGui::Text("Model passes:  %d", Engine::AppSettings::renderStats.modelPasses);
-                ImGui::Text("Sprite passes: %d", Engine::AppSettings::renderStats.spritePasses);
-                ImGui::Text("Cell passes:   %d", Engine::AppSettings::renderStats.cellPasses);
+                ImGui::Text("Model passes:  %d", Engine::RenderStatistics::modelPasses);
+                ImGui::Text("Sprite passes: %d", Engine::RenderStatistics::spritePasses);
+                ImGui::Text("Cell passes:   %d", Engine::RenderStatistics::cellPasses);
                 ImGui::Separator();
 
                 // --- Camera stats
@@ -112,27 +112,30 @@ namespace CS
                 ImGui::Separator();
 
                 // --- General information
-                ImGui::Text("Frame dimensions: (%d, %d, %d)", Engine::AppSettings::CELL_FRAME_SIZE, Engine::AppSettings::CELL_FRAME_SIZE, Engine::AppSettings::CELL_FRAME_SIZE);
-                ImGui::Text("Cells alive: %d", Engine::AppSettings::cellsAlive);
+                ImGui::Text("Frame dimensions: (%d, %d, %d)",
+                            Engine::CellSimParams::CELL_FRAME_SIZE,
+                            Engine::CellSimParams::CELL_FRAME_SIZE,
+                            Engine::CellSimParams::CELL_FRAME_SIZE);
+                ImGui::Text("Cells alive: %d", Engine::CellSimParams::cellsAlive);
                 ImGui::Separator();
 
                 // --- Cell selection menu
-                std::string cellTypeString = std::string("Selected cell type: ") + Engine::CellTypeStrings[Engine::AppSettings::selectedCellType];
+                std::string cellTypeString = std::string("Selected cell type: ") + Engine::CellTypeStrings[Engine::CellSimParams::selectedCellType];
                 if(ImGui::BeginMenu(cellTypeString.c_str()))
                 {
                     if(ImGui::MenuItem("None"))
                     {
-                        Engine::AppSettings::selectedCellType = Engine::CellType::None;
+                        Engine::CellSimParams::selectedCellType = Engine::CellType::None;
                     }
 
                     if(ImGui::MenuItem("Water"))
                     {
-                        Engine::AppSettings::selectedCellType = Engine::CellType::Water;
+                        Engine::CellSimParams::selectedCellType = Engine::CellType::Water;
                     }
 
                     if(ImGui::MenuItem("Lava"))
                     {
-                        Engine::AppSettings::selectedCellType = Engine::CellType::Lava;
+                        Engine::CellSimParams::selectedCellType = Engine::CellType::Lava;
                     }
 
                     ImGui::EndMenu();
@@ -146,13 +149,13 @@ namespace CS
 
                 ImGui::Text("X Coordinate:\t");
                 ImGui::SameLine();
-                Input_u32("##1", &Engine::AppSettings::selectedCellCoords[0], 1, 10, ImGuiInputTextFlags_CharsDecimal);
+                Input_u32("##1", &Engine::CellSimParams::selectedCellCoords[0], 1, 10, ImGuiInputTextFlags_CharsDecimal);
                 ImGui::Text("Y Coordinate:\t");
                 ImGui::SameLine();
-                Input_u32("##2", &Engine::AppSettings::selectedCellCoords[1], 1, 10, ImGuiInputTextFlags_CharsDecimal);
+                Input_u32("##2", &Engine::CellSimParams::selectedCellCoords[1], 1, 10, ImGuiInputTextFlags_CharsDecimal);
                 ImGui::Text("Z Coordinate:\t");
                 ImGui::SameLine();
-                Input_u32("##3", &Engine::AppSettings::selectedCellCoords[2], 1, 10, ImGuiInputTextFlags_CharsDecimal);
+                Input_u32("##3", &Engine::CellSimParams::selectedCellCoords[2], 1, 10, ImGuiInputTextFlags_CharsDecimal);
 
                 ImGui::PopItemWidth();
                 CheckCellBoundaries();
@@ -160,26 +163,26 @@ namespace CS
                 // --- Cell spawn amount
                 ImGui::Text("Amount:\t");
                 ImGui::SameLine();
-                RadioButton_u32("1", &Engine::AppSettings::selectedCellAmount, 1);
+                RadioButton_u32("1", &Engine::CellSimParams::selectedCellAmount, 1);
                 ImGui::SameLine();
                 ImGui::Text("\t");
                 ImGui::SameLine();
-                RadioButton_u32("9", &Engine::AppSettings::selectedCellAmount, 9);
+                RadioButton_u32("9", &Engine::CellSimParams::selectedCellAmount, 9);
                 ImGui::SameLine();
                 ImGui::Text("\t");
                 ImGui::SameLine();
-                RadioButton_u32("25", &Engine::AppSettings::selectedCellAmount, 25);
+                RadioButton_u32("25", &Engine::CellSimParams::selectedCellAmount, 25);
                 ImGui::SameLine();
                 ImGui::Text("\t");
                 ImGui::SameLine();
-                RadioButton_u32("49", &Engine::AppSettings::selectedCellAmount, 49);
+                RadioButton_u32("49", &Engine::CellSimParams::selectedCellAmount, 49);
 
                 // --- Spawn button
                 ImGui::Text("\t\t");
                 ImGui::SameLine();
                 if(ImGui::Button("Spawn"))
                 {
-                    Engine::AppSettings::spawnNewCell = true;
+                    Engine::CellSimParams::spawnNewCell = true;
                 }
                 ImGui::SameLine();
 
@@ -188,7 +191,7 @@ namespace CS
                 ImGui::SameLine();
                 if(ImGui::Button("Delete all"))
                 {
-                    Engine::AppSettings::deleteAllCells = true;
+                    Engine::CellSimParams::deleteAllCells = true;
                 }
                 ImGui::Separator();
 

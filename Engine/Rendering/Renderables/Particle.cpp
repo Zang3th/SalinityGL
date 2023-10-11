@@ -50,7 +50,7 @@ namespace Engine
 
     bool Particle::Update(float dt)
     {
-        _velocity.y  += AppSettings::GRAVITY * _gravityFactor * dt;
+        _velocity.y  += RenderParams::GRAVITY * _gravityFactor * dt;
         _position    += _velocity * dt;
         _elapsedTime += dt;
 

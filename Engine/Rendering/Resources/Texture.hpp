@@ -22,18 +22,18 @@ namespace Engine
             Texture(uint32 width, uint32 height, GLint internalFormat, GLenum format, GLenum type);
             ~Texture();
 
-            void Bind()                            const;
-            void BindToSlot(uint32 slot)           const;
-            void Unbind()                          const;
-            void ActivateTextureFlipOnLoad()       const;
-            void DeactivateTextureFlipOnLoad()     const;
-            void AddFilterNearest()                const;
-            void AddFilterLinear()                 const;
-            void AddWrapRepeat()                   const;
-            void ClampToEdge()                     const;
-            void AddBorderColor()                  const;
+            void Bind() const;
+            void BindToSlot(uint32 slot) const;
+            void Unbind() const;
+            void ActivateTextureFlipOnLoad() const;
+            void DeactivateTextureFlipOnLoad() const;
+            void AddFilterNearest() const;
+            void AddFilterLinear() const;
+            void AddWrapRepeat() const;
+            void ClampToEdge() const;
+            void AddBorderColor() const;
 
-            [[nodiscard]] uint32 GetTextureID()    const;
+            [[nodiscard]] uint32 GetTextureID() const;
             [[nodiscard]] uint32 GetNumberOfRows() const;
     };
 }

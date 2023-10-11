@@ -2,6 +2,7 @@
 
 #include "ErrorManager.hpp"
 #include "Types.hpp"
+#include "GlobalParams.hpp"
 #include "ResourceManager.hpp"
 #include "GLRenderSettings.hpp"
 

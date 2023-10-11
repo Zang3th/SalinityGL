@@ -5,7 +5,7 @@ namespace Engine
     // ----- Private -----
 
     SpriteRenderer::SpriteRenderer()
-        : _orthoProj(glm::ortho(0.0f, (float)AppSettings::WINDOW_WIDTH, 0.0f, (float)AppSettings::WINDOW_HEIGHT, -1.0f, 1.0f))
+        : _orthoProj(glm::ortho(0.0f, (float)WindowParams::WIDTH, 0.0f, (float)WindowParams::HEIGHT, -1.0f, 1.0f))
     {
         Logger::Info("Created", "Renderer",__func__);
     }
@@ -20,12 +20,12 @@ namespace Engine
         //Render sprites
         for(const auto& sprite : _spriteStorage)
         {
-            AppSettings::renderStats.drawnVertices += sprite->Draw(_orthoProj);
-            AppSettings::renderStats.drawCalls++;
+            RenderStatistics::drawnVertices += sprite->Draw(_orthoProj);
+            RenderStatistics::drawCalls++;
         }
 
         //Increase render pass counter
-        AppSettings::renderStats.spritePasses++;
+        RenderStatistics::spritePasses++;
 
         GLRenderSettings::EnableCulling();
     }

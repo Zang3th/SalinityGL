@@ -26,7 +26,7 @@ namespace Engine
 
     void Logger::Warn(const std::string& action, const std::string&obj, const std::string& params)
     {
-        LOG(WARNING) << "| "  << FileManager::PadString(action, 8)
+        LOG(WARNING) << " | " << FileManager::PadString(action, 8)
                      << " | " << FileManager::PadString(obj, 12)
                      << " | " << params;
     }
@@ -43,5 +43,15 @@ namespace Engine
         LOG(TRACE) << "| "  << FileManager::PadString(action, 8)
                    << " | " << FileManager::PadString(obj, 12)
                    << " | " << params;
+    }
+
+    void Logger::Print(const std::string& msg)
+    {
+        LOG(INFO) << " | " << msg;
+    }
+
+    void Logger::LineBreak()
+    {
+        std::cout << "\n";
     }
 }

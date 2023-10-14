@@ -103,7 +103,7 @@ namespace Engine
 
     struct CellSimParams
     {
-        inline static constexpr uint32   CELL_FRAME_SIZE       = 60;
+        inline static constexpr uint32   CELL_FRAME_SIZE       = 61;
         inline static constexpr uint32   MAX_CELL_AMOUNT       = CELL_FRAME_SIZE * CELL_FRAME_SIZE * CELL_FRAME_SIZE;
         inline static           CellType selectedCellType      = None;
         inline static           uint32   selectedCellCoords[3] = {0, 0, 0};
@@ -111,5 +111,6 @@ namespace Engine
         inline static           uint32   cellsAlive            = 0;
         inline static           bool     spawnNewCell          = false;
         inline static           bool     deleteAllCells        = false;
+        inline static           bool     printDebug            = false;
     };
 }

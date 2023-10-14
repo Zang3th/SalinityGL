@@ -10,6 +10,7 @@
 #include "VertexBuffer.hpp"
 #include "SceneRenderer.hpp"
 #include "VerticeData.hpp"
+#include "CellStorage.hpp"
 
 #include <array>
 #include <algorithm>
@@ -21,13 +22,6 @@ namespace Engine
         friend class RenderManager;
 
         private:
-            struct Cell
-            {
-                uint32   id;
-                uint32   amount;
-                CellType type;
-            };
-
             Scope<VertexArray>                                  _vao;
             Scope<VertexBuffer>                                 _vboVert, _vboModel;
 
@@ -35,8 +29,8 @@ namespace Engine
             uint32                                              _verticeCount, _cellCount;
             Shader*                                             _shader;
             glm::vec3                                           _worldSpawnPos;
+            CellStorage                                         _cellStorage;
 
-            Cell _cellStorage[CellSimParams::CELL_FRAME_SIZE][CellSimParams::CELL_FRAME_SIZE][CellSimParams::CELL_FRAME_SIZE];
             std::array<glm::mat4, CellSimParams::MAX_CELL_AMOUNT> _modelViewStorage;
             std::array<uint32, CellSimParams::MAX_CELL_AMOUNT>    _cellIndexStorage;
 
@@ -45,16 +39,15 @@ namespace Engine
 
             void InitGpuStorage();
             void UpdateGpuStorage();
-            void UpdateModelViewStorage(uint32 index, const glm::vec3& pos);
-            void InitCellStorage();
-            inline static uint32 GetIndexFromCoords(const glm::u32vec3& cellPos);
-            inline static glm::vec3 GetCoordsFromIndex(uint32 index);
+            void UpdateModelViewStorage(uint32 index, const glm::u32vec3& cellPos);
+            void MoveCellDown(uint32 index, const glm::u32vec3& cellPos, const glm::u32vec3& cellPosBelow);
 
         public:
             void Flush(Renderer* renderer) final;
             [[nodiscard]] uint32 GetAliveCellAmount() const;
-            void SpawnCell(CellType cellType, uint32 cellAmount, const glm::u32vec3& cellPos);
+            void SpawnCell(CellType cellType, const glm::u32vec3& cellPos);
             void DeleteAllCells();
             void CalculateCellPhysics();
+            void PrintDebug();
     };
 }

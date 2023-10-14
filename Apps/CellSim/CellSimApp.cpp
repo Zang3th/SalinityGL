@@ -134,12 +134,11 @@ namespace CS
             //Check for cell spawn
             if(Engine::CellSimParams::spawnNewCell)
             {
-                if(Engine::CellSimParams::selectedCellAmount > 0)
+                if(Engine::CellSimParams::selectedCellAmount == 1)
                 {
                     _cellRenderer->SpawnCell
                     (
                         Engine::CellSimParams::selectedCellType,
-                        Engine::CellSimParams::selectedCellAmount,
                         glm::u32vec3(Engine::CellSimParams::selectedCellCoords[0],
                                      Engine::CellSimParams::selectedCellCoords[1],
                                      Engine::CellSimParams::selectedCellCoords[2])
@@ -163,6 +162,12 @@ namespace CS
             {
                 _cellRenderer->CalculateCellPhysics();
                 _timeElapsed = 0;
+            }
+
+            if(Engine::CellSimParams::printDebug)
+            {
+                _cellRenderer->PrintDebug();
+                Engine::CellSimParams::printDebug = false;
             }
         }
 

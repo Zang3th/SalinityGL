@@ -50,7 +50,7 @@ namespace CS
         {
             if(Engine::CellSimParams::selectedCellCoords[i] > Engine::CellSimParams::CELL_FRAME_SIZE)
             {
-                Engine::CellSimParams::selectedCellCoords[i] = Engine::CellSimParams::CELL_FRAME_SIZE;
+                Engine::CellSimParams::selectedCellCoords[i] = Engine::CellSimParams::CELL_FRAME_SIZE - 1;
             }
         }
     }
@@ -192,6 +192,15 @@ namespace CS
                 if(ImGui::Button("Delete all"))
                 {
                     Engine::CellSimParams::deleteAllCells = true;
+                }
+                ImGui::Separator();
+
+                // --- Print debug information
+                ImGui::Text("\t\t");
+                ImGui::SameLine();
+                if(ImGui::Button("Print cell debug information"))
+                {
+                    Engine::CellSimParams::printDebug = true;
                 }
                 ImGui::Separator();
 

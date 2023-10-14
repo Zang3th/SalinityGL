@@ -13,5 +13,7 @@ namespace Engine
             static void Warn(const std::string& action, const std::string& obj, const std::string& params = "");
             static void Error(const std::string& action, const std::string& obj, const std::string& params = "");
             static void Trace(const std::string& action, const std::string& obj, const std::string& params = "");
+            static void Print(const std::string& msg);
+            static void LineBreak();
     };
 }

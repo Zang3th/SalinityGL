@@ -7,7 +7,7 @@ namespace Engine
     void RenderManager::Init()
     {
         _rendererStorage.clear();
-        _rendererStorage.reserve(5);
+        _rendererStorage.reserve(10);
 
         //OpenGL-Rendersettings
         GLRenderSettings::EnableMultisample();
@@ -17,6 +17,8 @@ namespace Engine
         GLRenderSettings::SetBlendFunc(GL_ONE_MINUS_SRC_ALPHA);
         GLRenderSettings::EnableCulling();
         GLRenderSettings::SetCullFace(GL_BACK);
+
+        _initialized = true;
     }
 
     void RenderManager::CleanUp()
@@ -29,6 +31,11 @@ namespace Engine
     {
         RenderStatistics::Reset();
         GLRenderSettings::ClearBuffers();
+    }
+
+    bool RenderManager::GetInitStatus()
+    {
+        return _initialized;
     }
 
     SceneRenderer* RenderManager::AddSceneRenderer()

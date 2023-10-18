@@ -73,7 +73,7 @@ Nature scene with water rendering, normal mapped objects, and a particle system 
 
 Cellular automata system with 3D cells/cubes. The plan is to simulate and render >1M cells/cubes at a good framerate. The system should include physics (multithreaded) and pretty graphics (lighting, shadows).
 
-![CellSim](Res/Screenshots/CellSim/Screenshot_CS_007.png)
+![CellSim](Res/Screenshots/CellSim/Screenshot_CS_008.png)
 
 ## Building and compiling
 

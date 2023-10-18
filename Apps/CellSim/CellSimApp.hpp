@@ -8,17 +8,18 @@ namespace CS
     class CellSimApp final : public Engine::App
     {
         private:
-            double                          _timeElapsed    = 0.0;
-            Engine::SceneRenderer*          _sceneRenderer  = nullptr;
-            Engine::CellRenderer*           _cellRenderer   = nullptr;
-            Engine::ShadowRenderer*         _shadowRenderer = nullptr;
-            Engine::SpriteRenderer*         _spriteRenderer = nullptr;
-            Engine::Scope<CellSimInterface> _interface;
+            double                             _timeElapsed    = 0.0;
+            Engine::SceneRenderer*             _sceneRenderer  = nullptr;
+            Engine::ShadowRenderer*            _shadowRenderer = nullptr;
+            Engine::SpriteRenderer*            _spriteRenderer = nullptr;
+            Engine::Scope<Engine::CellManager> _cellManager;
+            Engine::Scope<CellSimInterface>    _interface;
 
             void           LoadResources() final;
             Engine::uint32 InitModules()   final;
             void           AddObjects();
             void           AddSprites();
+            void           HandleCellSpawn();
 
         public:
             CellSimApp();

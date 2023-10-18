@@ -105,11 +105,12 @@ namespace Engine
     {
         inline static constexpr uint32   CELL_FRAME_SIZE       = 61;
         inline static constexpr uint32   MAX_CELL_AMOUNT       = CELL_FRAME_SIZE * CELL_FRAME_SIZE * CELL_FRAME_SIZE;
-        inline static           CellType selectedCellType      = None;
+        inline static           CellType selectedCellType      = Water;
         inline static           uint32   selectedCellCoords[3] = {0, 0, 0};
         inline static           uint32   selectedCellAmount    = 0;
         inline static           uint32   cellsAlive            = 0;
         inline static           bool     spawnNewCell          = false;
+        inline static           bool     createSpawner         = false;
         inline static           bool     deleteAllCells        = false;
         inline static           bool     printDebug            = false;
     };

@@ -42,8 +42,11 @@ namespace CS
         _sceneRenderer  = Engine::RenderManager::AddSceneRenderer();
         _sceneRenderer->SetModelShader("ModelShader");
         _shadowRenderer = Engine::RenderManager::AddShadowRenderer(8192, glm::ortho(-60.0f, 60.0f, -60.0f, 60.0f, 105.0f, 228.0f), "ShadowCreateShader");
-        _cellRenderer   = Engine::RenderManager::AddCellRenderer(1.0f, "CellShader", glm::vec3(482.0f, 2.0f, 482.0f));
         _spriteRenderer = Engine::RenderManager::AddSpriteRenderer();
+
+        //Create cell manager and add cell renderer
+        _cellManager = Engine::MakeScope<Engine::CellManager>();
+        _cellManager->AddCellRenderer(1.0f, "CellShader", glm::vec3(482.0f, 2.0f, 482.0f));
 
         //Create UI
         _interface = Engine::MakeScope<CellSimInterface>();
@@ -88,6 +91,24 @@ namespace CS
         );
     }
 
+    void CellSimApp::HandleCellSpawn()
+    {
+        if(Engine::CellSimParams::selectedCellAmount == 1)
+        {
+            _cellManager->SpawnCell
+            (
+                Engine::CellSimParams::selectedCellType,
+                glm::u32vec3(Engine::CellSimParams::selectedCellCoords[0],
+                             Engine::CellSimParams::selectedCellCoords[1],
+                             Engine::CellSimParams::selectedCellCoords[2])
+            );
+        }
+        else if(Engine::CellSimParams::createSpawner)
+        {
+            //ToDo: Implement
+        }
+    }
+
     // ----- Public -----
 
     CellSimApp::CellSimApp()
@@ -129,44 +150,32 @@ namespace CS
         }
 
         {
-            //ToDo: Add profiling
+            Engine::PROFILE_SCOPE("Manage cells");
 
             //Check for cell spawn
             if(Engine::CellSimParams::spawnNewCell)
             {
-                if(Engine::CellSimParams::selectedCellAmount == 1)
-                {
-                    _cellRenderer->SpawnCell
-                    (
-                        Engine::CellSimParams::selectedCellType,
-                        glm::u32vec3(Engine::CellSimParams::selectedCellCoords[0],
-                                     Engine::CellSimParams::selectedCellCoords[1],
-                                     Engine::CellSimParams::selectedCellCoords[2])
-                    );
-                }
-
+                HandleCellSpawn();
                 Engine::CellSimParams::spawnNewCell = false;
             }
 
             //Check for cell delete
             if(Engine::CellSimParams::deleteAllCells)
             {
-                _cellRenderer->DeleteAllCells();
+                _cellManager->DeleteAllCells();
                 Engine::CellSimParams::deleteAllCells = false;
             }
-
-            Engine::CellSimParams::cellsAlive = _cellRenderer->GetAliveCellAmount();
 
             //Check if we need to do physics (every 10ms)
             if(Engine::CellSimParams::cellsAlive > 0 && _timeElapsed >= 0.01)
             {
-                _cellRenderer->CalculateCellPhysics();
+                _cellManager->CalculateCellPhysics();
                 _timeElapsed = 0;
             }
 
             if(Engine::CellSimParams::printDebug)
             {
-                _cellRenderer->PrintDebug();
+                _cellManager->PrintDebug();
                 Engine::CellSimParams::printDebug = false;
             }
         }
@@ -189,12 +198,17 @@ namespace CS
             Engine::PROFILE_SCOPE("Render scene");
 
             Engine::RenderManager::RenderScene();
-            Engine::RenderManager::RenderCells();
 
             if(Engine::WindowParams::debugSprites)
             {
                 Engine::RenderManager::RenderSprites();
             }
+        }
+
+        {
+            Engine::PROFILE_SCOPE("Render cells");
+
+            Engine::RenderManager::RenderCells();
         }
 
         {

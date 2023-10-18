@@ -70,45 +70,34 @@ namespace CS
                 ImGui::PlotVar("", (float)Engine::Window::GetDeltaTime() * 1000.0f, 0.0f, 30.0f);
 
                 // --- Render stats
-                ImGui::NewLine();
                 ImGui::Separator();
                 ImGui::Text("Draw calls:     %d", Engine::RenderStatistics::drawCalls);
                 ImGui::Text("Drawn vertices: %d", Engine::RenderStatistics::drawnVertices);
-                ImGui::Separator();
 
-                ImGui::NewLine();
                 ImGui::Separator();
                 ImGui::Text("Model passes:  %d", Engine::RenderStatistics::modelPasses);
                 ImGui::Text("Sprite passes: %d", Engine::RenderStatistics::spritePasses);
                 ImGui::Text("Cell passes:   %d", Engine::RenderStatistics::cellPasses);
-                ImGui::Separator();
 
                 // --- Camera stats
-                ImGui::NewLine();
                 ImGui::Separator();
                 ImGui::Text("Camera-Position:   ( %.1f, %.1f, %.1f )", Engine::Camera3D::GetPosition().x, Engine::Camera3D::GetPosition().y, Engine::Camera3D::GetPosition().z);
                 ImGui::Text("Camera-Front:      ( %.1f, %.1f, %.1f )", Engine::Camera3D::GetFront().x, Engine::Camera3D::GetFront().y, Engine::Camera3D::GetFront().z);
                 ImGui::Text("Camera-Yaw, Pitch: ( %.2f, %.2f )", Engine::Camera3D::GetYaw(), Engine::Camera3D::GetPitch());
-                ImGui::Separator();
 
                 // --- Profiling/Timing-Results
-                ImGui::NewLine();
                 ImGui::Separator();
                 for(auto const& entry : Engine::Profiler::_results)
                 {
                     ImGui::Text("%.3fms - %s", entry.second, entry.first);
                 }
-                ImGui::Separator();
             }
 
-            // --- Cell spawn menu
+            // --- Cell management
             {
-                ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 10));
-
                 // --- Titlebar
-                ImGui::NewLine();
                 ImGui::Separator();
-                CenterText("Cell management panel");
+                CenterText("Cell management");
                 ImGui::Separator();
 
                 // --- General information
@@ -116,97 +105,114 @@ namespace CS
                             Engine::CellSimParams::CELL_FRAME_SIZE,
                             Engine::CellSimParams::CELL_FRAME_SIZE,
                             Engine::CellSimParams::CELL_FRAME_SIZE);
+
                 ImGui::Text("Cells alive: %d", Engine::CellSimParams::cellsAlive);
-                ImGui::Separator();
-
-                // --- Cell selection menu
-                std::string cellTypeString = std::string("Selected cell type: ") + Engine::CellTypeStrings[Engine::CellSimParams::selectedCellType];
-                if(ImGui::BeginMenu(cellTypeString.c_str()))
-                {
-                    if(ImGui::MenuItem("None"))
-                    {
-                        Engine::CellSimParams::selectedCellType = Engine::CellType::None;
-                    }
-
-                    if(ImGui::MenuItem("Water"))
-                    {
-                        Engine::CellSimParams::selectedCellType = Engine::CellType::Water;
-                    }
-
-                    if(ImGui::MenuItem("Lava"))
-                    {
-                        Engine::CellSimParams::selectedCellType = Engine::CellType::Lava;
-                    }
-
-                    ImGui::EndMenu();
-
-                    Engine::CameraController3D::DeFocusWindow(Engine::Window::GetWindow());
-                }
-
-                // --- Cell spawn coordinate input
-                float width = ImGui::CalcItemWidth();
-                ImGui::PushItemWidth(width / 1.5f);
-
-                ImGui::Text("X Coordinate:\t");
-                ImGui::SameLine();
-                Input_u32("##1", &Engine::CellSimParams::selectedCellCoords[0], 1, 10, ImGuiInputTextFlags_CharsDecimal);
-                ImGui::Text("Y Coordinate:\t");
-                ImGui::SameLine();
-                Input_u32("##2", &Engine::CellSimParams::selectedCellCoords[1], 1, 10, ImGuiInputTextFlags_CharsDecimal);
-                ImGui::Text("Z Coordinate:\t");
-                ImGui::SameLine();
-                Input_u32("##3", &Engine::CellSimParams::selectedCellCoords[2], 1, 10, ImGuiInputTextFlags_CharsDecimal);
-
-                ImGui::PopItemWidth();
-                CheckCellBoundaries();
-
-                // --- Cell spawn amount
-                ImGui::Text("Amount:\t");
-                ImGui::SameLine();
-                RadioButton_u32("1", &Engine::CellSimParams::selectedCellAmount, 1);
-                ImGui::SameLine();
-                ImGui::Text("\t");
-                ImGui::SameLine();
-                RadioButton_u32("9", &Engine::CellSimParams::selectedCellAmount, 9);
-                ImGui::SameLine();
-                ImGui::Text("\t");
-                ImGui::SameLine();
-                RadioButton_u32("25", &Engine::CellSimParams::selectedCellAmount, 25);
-                ImGui::SameLine();
-                ImGui::Text("\t");
-                ImGui::SameLine();
-                RadioButton_u32("49", &Engine::CellSimParams::selectedCellAmount, 49);
-
-                // --- Spawn button
-                ImGui::Text("\t\t");
-                ImGui::SameLine();
-                if(ImGui::Button("Spawn"))
-                {
-                    Engine::CellSimParams::spawnNewCell = true;
-                }
-                ImGui::SameLine();
 
                 // --- Delete all cells
-                ImGui::Text("\t\t");
-                ImGui::SameLine();
                 if(ImGui::Button("Delete all"))
                 {
                     Engine::CellSimParams::deleteAllCells = true;
                 }
                 ImGui::Separator();
 
-                // --- Print debug information
-                ImGui::Text("\t\t");
-                ImGui::SameLine();
-                if(ImGui::Button("Print cell debug information"))
+                // --- Cell management tabs
+                if(ImGui::BeginTabBar("##Tabs", ImGuiTabBarFlags_None))
                 {
-                    Engine::CellSimParams::printDebug = true;
+                    // --- Cell spawn menu
+                    if(ImGui::BeginTabItem("Spawn"))
+                    {
+                        // --- Cell selection menu
+                        std::string cellTypeString = std::string("Selected cell type: ") + Engine::CellTypeStrings[Engine::CellSimParams::selectedCellType];
+                        if(ImGui::BeginMenu(cellTypeString.c_str()))
+                        {
+                            if(ImGui::MenuItem("Water"))
+                            {
+                                Engine::CellSimParams::selectedCellType = Engine::CellType::Water;
+                            }
+
+                            if(ImGui::MenuItem("Lava"))
+                            {
+                                Engine::CellSimParams::selectedCellType = Engine::CellType::Lava;
+                            }
+
+                            ImGui::EndMenu();
+
+                            Engine::CameraController3D::DeFocusWindow(Engine::Window::GetWindow());
+                        }
+
+                        // --- Cell spawn coordinate input
+                        float width = ImGui::CalcItemWidth();
+                        ImGui::PushItemWidth(width / 1.5f);
+
+                        ImGui::Text("X Coordinate:\t");
+                        ImGui::SameLine();
+                        Input_u32("##Input1", &Engine::CellSimParams::selectedCellCoords[0], 1, 10, ImGuiInputTextFlags_CharsDecimal);
+                        ImGui::Text("Y Coordinate:\t");
+                        ImGui::SameLine();
+                        Input_u32("##Input2", &Engine::CellSimParams::selectedCellCoords[1], 1, 10, ImGuiInputTextFlags_CharsDecimal);
+                        ImGui::Text("Z Coordinate:\t");
+                        ImGui::SameLine();
+                        Input_u32("##Input3", &Engine::CellSimParams::selectedCellCoords[2], 1, 10, ImGuiInputTextFlags_CharsDecimal);
+
+                        ImGui::PopItemWidth();
+                        CheckCellBoundaries();
+
+                        // --- Checkbox to create a continuous spawner
+                        ImGui::Checkbox("Continuous spawner", &Engine::CellSimParams::createSpawner);
+
+                        // --- If a spawner should be created reset cell amount selection value
+                        if(Engine::CellSimParams::createSpawner)
+                        {
+                            Engine::CellSimParams::selectedCellAmount = 0;
+                        }
+                        // --- Else allow manual cell amount selection for single spawns
+                        else
+                        {
+                            ImGui::Text("Amount:\t");
+                            ImGui::SameLine();
+                            RadioButton_u32("1", &Engine::CellSimParams::selectedCellAmount, 1);
+                            ImGui::SameLine();
+                            ImGui::Text("\t");
+                            ImGui::SameLine();
+                            RadioButton_u32("9", &Engine::CellSimParams::selectedCellAmount, 9);
+                            ImGui::SameLine();
+                            ImGui::Text("\t");
+                            ImGui::SameLine();
+                            RadioButton_u32("25", &Engine::CellSimParams::selectedCellAmount, 25);
+                            ImGui::SameLine();
+                            ImGui::Text("\t");
+                            ImGui::SameLine();
+                            RadioButton_u32("49", &Engine::CellSimParams::selectedCellAmount, 49);
+                        }
+
+                        // --- Spawn button
+                        ImGui::Text("\t\t\t\t\t");
+                        ImGui::SameLine();
+                        if(ImGui::Button("Spawn"))
+                        {
+                            Engine::CellSimParams::spawnNewCell = true;
+                        }
+                        ImGui::SameLine();
+
+                        ImGui::EndTabItem();
+                    }
+
+                    // --- Debug menu
+                    if(ImGui::BeginTabItem("Debug"))
+                    {
+                        // --- Print debug information
+                        ImGui::Text("\t\t");
+                        ImGui::SameLine();
+                        if(ImGui::Button("Print cell debug information"))
+                        {
+                            Engine::CellSimParams::printDebug = true;
+                        }
+                        ImGui::Separator();
+
+                        ImGui::EndTabItem();
+                    }
+                    ImGui::EndTabBar();
                 }
-                ImGui::Separator();
-
-                //ToDo: Add "generate stone ground" Button
-
-                ImGui::PopStyleVar();
             }
         }
         ImGui::End();
@@ -245,12 +251,16 @@ namespace CS
         // --- Menu bar
         AddMenuBar();
 
+        // --- Add more space between all items
+        ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 10));
+
         // --- Overlay/Sidebar
         if(_showOverlay)
         {
             AddSideBar();
         }
 
+        ImGui::PopStyleVar();
         ImGui::PopStyleVar();
     }
 }

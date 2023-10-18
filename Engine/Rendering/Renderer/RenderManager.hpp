@@ -24,6 +24,7 @@ namespace Engine
             inline static WaterRenderer*         _waterRenderer    = nullptr;
             inline static ParticleRenderer*      _particleRenderer = nullptr;
             inline static CellRenderer*          _cellRenderer     = nullptr;
+            inline static bool                   _initialized      = false;
 
         public:
             RenderManager() = delete;
@@ -31,6 +32,7 @@ namespace Engine
             static void Init();
             static void CleanUp();
             static void PrepareFrame();
+            static bool GetInitStatus();
 
             static SceneRenderer*    AddSceneRenderer();
             static ShadowRenderer*   AddShadowRenderer(uint32 resolution, const glm::mat4& orthoProj, const std::string& shader);

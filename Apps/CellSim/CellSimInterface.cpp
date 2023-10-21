@@ -108,10 +108,17 @@ namespace CS
 
                 ImGui::Text("Cells alive: %d", Engine::CellSimParams::cellsAlive);
 
-                // --- Delete all cells
-                if(ImGui::Button("Delete all"))
+                // --- Delete buttons
+                ImGui::SetCursorPosX(_sidebarWidth / 6);
+                if(ImGui::Button("Delete cells"))
                 {
-                    Engine::CellSimParams::deleteAllCells = true;
+                    Engine::CellSimParams::deleteCells = true;
+                }
+                ImGui::SameLine();
+                ImGui::SetCursorPosX(_sidebarWidth / 2);
+                if(ImGui::Button("Delete spawners"))
+                {
+                    Engine::CellSimParams::deleteSpawners = true;
                 }
                 ImGui::Separator();
 

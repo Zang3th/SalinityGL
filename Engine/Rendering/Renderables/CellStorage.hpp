@@ -11,6 +11,12 @@ namespace Engine
         CellType type;
     };
 
+    struct CellParams
+    {
+        Cell cell;
+        glm::u32vec3 pos;
+    };
+
     class CellStorage
     {
         private:
@@ -21,7 +27,7 @@ namespace Engine
             ~CellStorage() = default;
             void Init();
             Cell Get(const glm::u32vec3& cellPos);
-            void Set(const glm::u32vec3& cellPos, const Cell& cell);
+            void Set(const CellParams& cellParams);
             static uint32 GetIndexFrom3DPos(const glm::u32vec3& cellPos);
             static glm::vec3 Get3DPosFromIndex(uint32 index);
             static std::string Get3DPosAsString(const glm::u32vec3& cellPos);

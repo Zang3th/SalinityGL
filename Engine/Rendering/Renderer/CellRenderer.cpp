@@ -90,7 +90,7 @@ namespace Engine
     void CellRenderer::UpdateModelViewStorage(uint32 index, const glm::u32vec3& cellPos)
     {
         glm::mat4 model(1.0f);
-        model = glm::translate(model, _worldSpawnPos + (glm::vec3)cellPos);
+        model = glm::translate(model, _worldSpawnPos + glm::vec3(cellPos));
         model = glm::scale(model, glm::vec3(_cellSize));
         _modelViewStorage.at(index) = model;
     }

@@ -29,5 +29,5 @@ void main()
     tangents = vec3(model * vec4(tangentsIn, -1.0));
     normals  = vec3(model * vec4(normalsIn, 0.0));
 
-    gl_Position         = projection * view * worldPos;
+    gl_Position = projection * view * worldPos;
 }

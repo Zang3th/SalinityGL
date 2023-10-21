@@ -111,7 +111,8 @@ namespace Engine
         inline static           uint32   cellsAlive            = 0;
         inline static           bool     spawnNewCell          = false;
         inline static           bool     createSpawner         = false;
-        inline static           bool     deleteAllCells        = false;
+        inline static           bool     deleteCells           = false;
+        inline static           bool     deleteSpawners        = false;
         inline static           bool     printDebug            = false;
     };
 }

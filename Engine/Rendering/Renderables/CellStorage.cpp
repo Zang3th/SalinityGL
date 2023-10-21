@@ -26,9 +26,9 @@ namespace Engine
         return _cellBuffer[cellPos.x][cellPos.y][cellPos.z];
     }
 
-    void CellStorage::Set(const glm::u32vec3& cellPos, const Cell& cell)
+    void CellStorage::Set(const CellParams& cellParams)
     {
-        _cellBuffer[cellPos.x][cellPos.y][cellPos.z] = cell;
+        _cellBuffer[cellParams.pos.x][cellParams.pos.y][cellParams.pos.z] = cellParams.cell;
     }
 
     uint32 CellStorage::GetIndexFrom3DPos(const glm::u32vec3& cellPos)

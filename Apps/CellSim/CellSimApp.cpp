@@ -93,19 +93,18 @@ namespace CS
 
     void CellSimApp::HandleCellSpawn()
     {
+        Engine::CellParams cellParams{{0, Engine::CellSimParams::selectedCellType},
+                                      glm::u32vec3(Engine::CellSimParams::selectedCellCoords[0],
+                                                   Engine::CellSimParams::selectedCellCoords[1],
+                                                   Engine::CellSimParams::selectedCellCoords[2])};
+
         if(Engine::CellSimParams::selectedCellAmount == 1)
         {
-            _cellManager->SpawnCell
-            (
-                Engine::CellSimParams::selectedCellType,
-                glm::u32vec3(Engine::CellSimParams::selectedCellCoords[0],
-                             Engine::CellSimParams::selectedCellCoords[1],
-                             Engine::CellSimParams::selectedCellCoords[2])
-            );
+            _cellManager->AddCell(cellParams);
         }
         else if(Engine::CellSimParams::createSpawner)
         {
-            //ToDo: Implement
+            _cellManager->AddCellSpawner(cellParams);
         }
     }
 
@@ -160,23 +159,45 @@ namespace CS
             }
 
             //Check for cell delete
-            if(Engine::CellSimParams::deleteAllCells)
+            if(Engine::CellSimParams::deleteCells)
             {
-                _cellManager->DeleteAllCells();
-                Engine::CellSimParams::deleteAllCells = false;
+                _cellManager->DeleteCells();
+                Engine::CellSimParams::deleteCells = false;
             }
 
-            //Check if we need to do physics (every 10ms)
-            if(Engine::CellSimParams::cellsAlive > 0 && _timeElapsed >= 0.01)
+            //Check for cell spawner delete
+            if(Engine::CellSimParams::deleteSpawners)
             {
-                _cellManager->CalculateCellPhysics();
-                _timeElapsed = 0;
+                _cellManager->DeleteSpawners();
+                Engine::CellSimParams::deleteSpawners = false;
             }
 
+            //Check for debug print
             if(Engine::CellSimParams::printDebug)
             {
                 _cellManager->PrintDebug();
                 Engine::CellSimParams::printDebug = false;
+            }
+
+            //Check if 10ms have elapsed
+            if(_timeElapsed >= 0.01)
+            {
+                //Reset time and increase tick counter
+                _timeElapsed = 0;
+                _tickCounter++;
+
+                //Do physics
+                if(Engine::CellSimParams::cellsAlive > 0)
+                {
+                    _cellManager->CalculateCellPhysics();
+                }
+
+                //Add new cells for every existing spawner
+                if(_tickCounter > 5)
+                {
+                    _cellManager->ResolveCellSpawners();
+                    _tickCounter = 0;
+                }
             }
         }
 

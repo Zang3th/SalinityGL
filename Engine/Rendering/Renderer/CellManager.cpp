@@ -7,10 +7,10 @@ namespace Engine
     void CellManager::MoveCellDown(const uint32 index, const glm::u32vec3& cellPos, const glm::u32vec3& cellPosBelow)
     {
         //Move cell down (set values of the cell below to the values of the current cell)
-        _cellStorage.Set(cellPosBelow, _cellStorage.Get(cellPos));
+        _cellStorage.Set({_cellStorage.Get(cellPos), cellPosBelow});
 
         //Delete old cell
-        _cellStorage.Set(cellPos, {0, CellType::None});
+        _cellStorage.Set({{0, CellType::None}, cellPos});
 
         //Update the corresponding model view buffer for upload to the gpu
         _cellRenderer->UpdateModelViewStorage(_cellStorage.Get(cellPosBelow).id, cellPosBelow);
@@ -21,6 +21,11 @@ namespace Engine
 
     // ----- Public -----
 
+    CellManager::CellManager()
+    {
+        _cellSpawnerStorage.reserve(5);
+    }
+
     void CellManager::AddCellRenderer(float cellSize, const std::string& shader, const glm::vec3& worldSpawnPos)
     {
         if(RenderManager::GetInitStatus())
@@ -29,34 +34,44 @@ namespace Engine
         }
         else
         {
-            Logger::Warn("Adding", "CellRenderer", "RenderManager wasn't initialized!");
+            Logger::Error("Failed", "CellRenderer", "RenderManager wasn't initialized!");
         }
     }
 
-    void CellManager::SpawnCell(CellType cellType, const glm::u32vec3& cellPos)
+    void CellManager::AddCell(const CellParams& cellParams)
     {
         uint32 cellCount = CellSimParams::cellsAlive;
 
         //Check if cell is empty
-        if(_cellStorage.Get(cellPos).type == CellType::None)
+        if(_cellStorage.Get(cellParams.pos).type == CellType::None)
         {
             //Save cell in 3D array with type and amount
-            _cellStorage.Set(cellPos, {cellCount, cellType});
+            _cellStorage.Set({{cellCount, cellParams.cell.type}, cellParams.pos});
 
             //Save the index of the cell (how to directly access it in the 3d array)
-            _cellIndexStorage.at(cellCount) = CellStorage::GetIndexFrom3DPos(cellPos);
+            _cellIndexStorage.at(cellCount) = CellStorage::GetIndexFrom3DPos(cellParams.pos);
 
             //Update the corresponding model view buffer for upload to the gpu
-            _cellRenderer->UpdateModelViewStorage(cellCount, glm::vec3((float)cellPos.x, (float)cellPos.y, (float)cellPos.z));
+            _cellRenderer->UpdateModelViewStorage(cellCount, glm::vec3(cellParams.pos));
 
             CellSimParams::cellsAlive++;
         }
     }
 
-    void CellManager::DeleteAllCells()
+    void CellManager::AddCellSpawner(const CellParams& cellParams)
+    {
+        _cellSpawnerStorage.push_back(cellParams);
+    }
+
+    void CellManager::DeleteCells()
     {
         _cellStorage.Init();
         CellSimParams::cellsAlive = 0;
+    }
+
+    void CellManager::DeleteSpawners()
+    {
+        _cellSpawnerStorage.clear();
     }
 
     void CellManager::CalculateCellPhysics()
@@ -79,6 +94,14 @@ namespace Engine
                     MoveCellDown(i, cellPos, cellPosBelow);
                 }
             }
+        }
+    }
+
+    void CellManager::ResolveCellSpawners()
+    {
+        for(CellParams cellParams : _cellSpawnerStorage)
+        {
+            AddCell(cellParams);
         }
     }
 

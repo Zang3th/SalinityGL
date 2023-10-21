@@ -9,6 +9,7 @@ namespace CS
     {
         private:
             double                             _timeElapsed    = 0.0;
+            Engine::uint8                      _tickCounter    = 0;
             Engine::SceneRenderer*             _sceneRenderer  = nullptr;
             Engine::ShadowRenderer*            _shadowRenderer = nullptr;
             Engine::SpriteRenderer*            _spriteRenderer = nullptr;

@@ -43,7 +43,7 @@ namespace Engine
                 uint32 count, float size, float speed, float gravityCompliance, float lifeLength,
                 float respawnThreshold, const std::string& textureAtlas, const std::string& shader, const glm::vec3& position
             );
-            static CellRenderer* AddCellRenderer(float cellSize, const std::string& shader, const glm::vec3& worldSpawnPos);
+            static CellRenderer* AddCellRenderer(const std::string& shader, const glm::vec3& worldSpawnPos);
 
             static void RenderScene();
             static void RenderShadows();

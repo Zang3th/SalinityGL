@@ -46,7 +46,7 @@ namespace CS
 
         //Create cell manager and add cell renderer
         _cellManager = Engine::MakeScope<Engine::CellManager>();
-        _cellManager->AddCellRenderer(1.0f, "CellShader", glm::vec3(482.0f, 2.0f, 482.0f));
+        _cellManager->AddCellRenderer("CellShader", glm::vec3(482.0f, 2.0f, 482.0f));
 
         //Create UI
         _interface = Engine::MakeScope<CellSimInterface>();

@@ -94,9 +94,9 @@ namespace Engine
         return _particleRenderer;
     }
 
-    CellRenderer* RenderManager::AddCellRenderer(float cellSize, const std::string& shader, const glm::vec3& worldSpawnPos)
+    CellRenderer* RenderManager::AddCellRenderer(const std::string& shader, const glm::vec3& worldSpawnPos)
     {
-        _cellRenderer = new CellRenderer(cellSize, ResourceManager::GetShader(shader), worldSpawnPos);
+        _cellRenderer = new CellRenderer(ResourceManager::GetShader(shader), worldSpawnPos);
         _rendererStorage.push_back(_cellRenderer);
 
         return _cellRenderer;

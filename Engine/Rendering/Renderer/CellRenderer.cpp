@@ -4,8 +4,8 @@ namespace Engine
 {
     // ----- Private -----
 
-    CellRenderer::CellRenderer(float cellSize, Shader* shader, const glm::vec3& worldSpawnPos)
-        :   _cellSize(cellSize), _verticeCount(36), _shader(shader), _worldSpawnPos(worldSpawnPos), _modelViewStorage{glm::mat4(0.0f)}
+    CellRenderer::CellRenderer(Shader* shader, const glm::vec3& worldSpawnPos)
+        :   _verticeCount(36), _shader(shader), _worldSpawnPos(worldSpawnPos), _positionStorage{glm::vec3(0.0f)}
     {
         Logger::Info("Created", "Renderer",__func__);
         InitGpuStorage();
@@ -21,29 +21,23 @@ namespace Engine
         _vboVert = MakeScope<VertexBuffer>(CUBE_VERTICES, sizeof(CUBE_VERTICES), GL_STATIC_DRAW);
         _vao->DefineAttributes(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
 
-        _vboModel = MakeScope<VertexBuffer>(&_modelViewStorage[0], _modelViewStorage.size() * 16 * sizeof(float), GL_DYNAMIC_DRAW);
-        _vao->DefineAttributes(1, 4, GL_FLOAT, GL_FALSE, 16 * sizeof(float), nullptr);
-        _vao->DefineAttributes(2, 4, GL_FLOAT, GL_FALSE, 16 * sizeof(float), (void*)(4 * sizeof(float)));
-        _vao->DefineAttributes(3, 4, GL_FLOAT, GL_FALSE, 16 * sizeof(float), (void*)(8 * sizeof(float)));
-        _vao->DefineAttributes(4, 4, GL_FLOAT, GL_FALSE, 16 * sizeof(float), (void*)(12 * sizeof(float)));
+        _vboPos = MakeScope<VertexBuffer>(&_positionStorage[0], _positionStorage.size() * 3 * sizeof(float), GL_DYNAMIC_DRAW);
+        _vao->DefineAttributes(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
 
         //Set attribute divisors for per instance data
         _vao->AttributeDivisor(1, 1);
-        _vao->AttributeDivisor(2, 1);
-        _vao->AttributeDivisor(3, 1);
-        _vao->AttributeDivisor(4, 1);
 
         //Unbind everything
         _vao->Unbind();
         _vboVert->Unbind();
-        _vboModel->Unbind();
+        _vboPos->Unbind();
     }
 
     void CellRenderer::UpdateGpuStorage()
     {
-        _vboModel->Bind();
-        _vboModel->Update(&_modelViewStorage[0], _modelViewStorage.size() * 16 * sizeof(float));
-        _vboModel->Unbind();
+        _vboPos->Bind();
+        _vboPos->Update(&_positionStorage[0], _positionStorage.size() * 3 * sizeof(float));
+        _vboPos->Unbind();
     }
 
     // ----- Public -----
@@ -60,9 +54,10 @@ namespace Engine
             //Bind vao and vbo's
             _vao->Bind();
             _vboVert->Bind();
-            _vboModel->Bind();
+            _vboPos->Bind();
 
             //Set uniforms
+            _shader->SetUniformMat4f("model", glm::mat4(1.0f));
             _shader->SetUniformMat4f("view", Camera3D::GetViewMatrix());
             _shader->SetUniformMat4f("projection", ((SceneRenderer*)sceneRenderer)->GetProjMatrix());
 
@@ -73,7 +68,7 @@ namespace Engine
             GLCall(glDrawArraysInstanced(GL_TRIANGLES, 0, _verticeCount, cellCount))
 
             //Unbind vao and vbo's
-            _vboModel->Unbind();
+            _vboPos->Unbind();
             _vboVert->Unbind();
             _vao->Unbind();
 
@@ -89,9 +84,6 @@ namespace Engine
 
     void CellRenderer::UpdateModelViewStorage(uint32 index, const glm::u32vec3& cellPos)
     {
-        glm::mat4 model(1.0f);
-        model = glm::translate(model, _worldSpawnPos + glm::vec3(cellPos));
-        model = glm::scale(model, glm::vec3(_cellSize));
-        _modelViewStorage.at(index) = model;
+        _positionStorage.at(index) = _worldSpawnPos + glm::vec3(cellPos);
     }
 }

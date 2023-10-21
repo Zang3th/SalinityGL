@@ -17,7 +17,7 @@ namespace Engine
 
         public:
             CellManager();
-            void AddCellRenderer(float cellSize, const std::string& shader, const glm::vec3& worldSpawnPos);
+            void AddCellRenderer(const std::string& shader, const glm::vec3& worldSpawnPos);
             void AddCell(const CellParams& cellParams);
             void AddCellSpawner(const CellParams& cellParams);
             void DeleteCells();

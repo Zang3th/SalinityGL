@@ -26,11 +26,11 @@ namespace Engine
         _cellSpawnerStorage.reserve(5);
     }
 
-    void CellManager::AddCellRenderer(float cellSize, const std::string& shader, const glm::vec3& worldSpawnPos)
+    void CellManager::AddCellRenderer(const std::string& shader, const glm::vec3& worldSpawnPos)
     {
         if(RenderManager::GetInitStatus())
         {
-            _cellRenderer = Engine::RenderManager::AddCellRenderer(cellSize, shader, worldSpawnPos);
+            _cellRenderer = Engine::RenderManager::AddCellRenderer(shader, worldSpawnPos);
         }
         else
         {

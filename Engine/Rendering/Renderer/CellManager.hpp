@@ -2,6 +2,7 @@
 #include "Types.hpp"
 #include "GlobalParams.hpp"
 #include "RenderManager.hpp"
+#include "Random.hpp"
 
 namespace Engine
 {
@@ -13,7 +14,8 @@ namespace Engine
             std::array<uint32, CellSimParams::MAX_CELL_AMOUNT> _cellIndexStorage = {0};
             std::vector<CellParams>                            _cellSpawnerStorage;
 
-            void MoveCellDown(uint32 index, const glm::u32vec3& cellPos, const glm::u32vec3& cellPosBelow);
+            void MoveCell(uint32 index, const glm::u32vec3& currCellPos, const glm::u32vec3& targetCellPos);
+            bool GetRandomNextFreeCell(const glm::u32vec3& currCellPos, glm::u32vec3* targetCellPos);
 
         public:
             CellManager();

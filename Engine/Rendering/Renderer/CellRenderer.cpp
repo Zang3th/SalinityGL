@@ -82,7 +82,7 @@ namespace Engine
         }
     }
 
-    void CellRenderer::UpdateModelViewStorage(uint32 index, const glm::u32vec3& cellPos)
+    void CellRenderer::UpdatePositionStorage(uint32 index, const glm::u32vec3& cellPos)
     {
         _positionStorage.at(index) = _worldSpawnPos + glm::vec3(cellPos);
     }

@@ -37,6 +37,6 @@ namespace Engine
 
         public:
             void Flush(Renderer* renderer) final;
-            void UpdateModelViewStorage(uint32 index, const glm::u32vec3& cellPos);
+            void UpdatePositionStorage(uint32 index, const glm::u32vec3& cellPos);
     };
 }

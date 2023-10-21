@@ -17,5 +17,15 @@ namespace Engine
 
         public:
             static float GetFloat();
+
+            template<typename RandomIter>
+            inline static void Shuffle(RandomIter first, RandomIter last)
+            {
+                for (auto i = (last - first) - 1; i > 0; --i)
+                {
+                    //Rand has obvious weaknesses, good enough for now
+                    std::swap(first[i], first[std::rand() % (i + 1)]);
+                }
+            }
     };
 }

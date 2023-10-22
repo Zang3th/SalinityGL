@@ -179,8 +179,8 @@ namespace CS
                 Engine::CellSimParams::printDebug = false;
             }
 
-            //Check if 10ms have elapsed
-            if(_timeElapsed >= 0.01)
+            //Check if 5ms have elapsed
+            if(_timeElapsed >= 0.005)
             {
                 //Reset time and increase tick counter
                 _timeElapsed = 0;

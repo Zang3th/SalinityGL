@@ -50,4 +50,63 @@ namespace Engine
     {
         return "(" + std::to_string(cellPos.x) + ", " + std::to_string(cellPos.y) + ", " + std::to_string(cellPos.z) + ")";
     }
+
+    void CellStorage::GetPositionsToCheck(const glm::u32vec3& cellPos, const int32 level, std::vector<glm::u32vec3>* posToCheck)
+    {
+        // ################################################################################################## //
+        // Position 1: (x+1, y+level, z-1) | Position 2: (x+1, y+level, z) | Position 3: (x+1, y+level, z+1)  //
+        // --------------------------------|-------------------------------|--------------------------------- //
+        // Position 4: (x,   y+level, z-1) |          currCellPos          | Position 6: (x,   y+level, z+1)  //
+        // --------------------------------|-------------------------------|--------------------------------- //
+        // Position 7: (x-1, y+level, z-1) | Position 8: (x-1, y+level, z) | Position 9: (x-1, y+level, z+1)  //
+        // ################################################################################################## //
+
+        //Get all boundary violations
+        bool x_posInBounds = (cellPos.x+1 < CellSimParams::CELL_FRAME_SIZE);
+        bool x_negInBounds = (cellPos.x-1 != UINT32_MAX);
+        bool z_posInBounds = (cellPos.z+1 < CellSimParams::CELL_FRAME_SIZE);
+        bool z_negInBounds = (cellPos.z-1 != UINT32_MAX);
+
+        if(x_posInBounds)
+        {
+            // Position 1
+            if(z_negInBounds)
+                posToCheck->emplace_back(cellPos.x+1, cellPos.y+level, cellPos.z-1);
+
+            // Position 2
+            posToCheck->emplace_back(cellPos.x+1, cellPos.y+level, cellPos.z);
+
+            // Position 3
+            if(z_posInBounds)
+                posToCheck->emplace_back(cellPos.x+1, cellPos.y+level, cellPos.z+1);
+        }
+
+        if(x_negInBounds)
+        {
+            // Position 7
+            if(z_negInBounds)
+            {
+                posToCheck->emplace_back(cellPos.x-1, cellPos.y+level, cellPos.z-1);
+            }
+
+            // Position 8
+            posToCheck->emplace_back(cellPos.x-1, cellPos.y+level, cellPos.z);
+        }
+
+        if(z_posInBounds)
+        {
+            // Position 6
+            posToCheck->emplace_back(cellPos.x, cellPos.y+level, cellPos.z+1);
+
+            // Position 9
+            if(x_negInBounds)
+                posToCheck->emplace_back(cellPos.x-1, cellPos.y+level, cellPos.z+1);
+        }
+
+        if(z_negInBounds)
+        {
+            // Position 4
+            posToCheck->emplace_back(cellPos.x, cellPos.y+level, cellPos.z-1);
+        }
+    }
 }

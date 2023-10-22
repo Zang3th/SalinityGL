@@ -19,48 +19,44 @@ namespace Engine
         _cellIndexStorage.at(index) = CellStorage::GetIndexFrom3DPos(targetCellPos);
     }
 
-    bool CellManager::GetRandomNextFreeCell(const glm::u32vec3& currCellPos, glm::u32vec3* targetCellPos)
+    bool CellManager::CellBelowIsFree(const glm::u32vec3& cellPos)
     {
-        // #######################################################################
-        // Position 1: (x+1, z-1) | Position 2: (x+1, z) | Position 3: (x+1, z+1)
-        // -----------------------|----------------------|------------------------
-        // Position 4: (x,   z-1) |     currCellPos      | Position 6: (x,   z+1)
-        // -----------------------|----------------------|------------------------
-        // Position 7: (x-1, z-1) | Position 8: (x-1, z) | Position 9: (x-1, z+1)
-        // #######################################################################
+        //Check if we are still in bounds
+        if(cellPos.y-1 == UINT32_MAX)
+            return false;
 
-        const uint32 arraySize = 8;
+        //Get coordinates from cell below (y-1)
+        glm::u32vec3 targetCellPos = glm::u32vec3(cellPos.x, cellPos.y-1, cellPos.z);
 
-        //Init array with all positions that need to be checked
-        std::array<glm::u32vec3, arraySize> posToCheck
-        {
-            glm::u32vec3(currCellPos.x+1, currCellPos.y, currCellPos.z-1), //Position 1
-            glm::u32vec3(currCellPos.x+1, currCellPos.y, currCellPos.z),   //Position 2
-            glm::u32vec3(currCellPos.x+1, currCellPos.y, currCellPos.z+1), //Position 3
-            glm::u32vec3(currCellPos.x,   currCellPos.y, currCellPos.z-1), //Position 4
-                                                                           //currCellPos
-            glm::u32vec3(currCellPos.x,   currCellPos.y, currCellPos.z+1),  //Position 6
-            glm::u32vec3(currCellPos.x-1, currCellPos.y, currCellPos.z-1),  //Position 7
-            glm::u32vec3(currCellPos.x-1, currCellPos.y, currCellPos.z),    //Position 8
-            glm::u32vec3(currCellPos.x-1, currCellPos.y, currCellPos.z+1)   //Position 9
-        };
+        if(_cellStorage.Get(targetCellPos).type == CellType::None)
+            return true;
 
-        //Shuffle all entries
+        return false;
+    }
+
+    bool CellManager::GetRandomNextFreeCell(const glm::u32vec3& currCellPos, const int32 level, glm::u32vec3* targetCellPos)
+    {
+        //Check if we are still in bounds
+        if(currCellPos.y-1 == UINT32_MAX)
+            return false;
+
+        std::vector<glm::u32vec3> posToCheck;
+        posToCheck.reserve(8);
+
+        //Init vector with all positions that need to be checked
+        CellStorage::GetPositionsToCheck(currCellPos, level, &posToCheck);
+
+        //Shuffle all the entries
         Random::Shuffle(posToCheck.begin(), posToCheck.end());
 
-        uint32 index = 0;
-
-        //Check until a free cell is found or end of array is reached
-        while(index < arraySize)
+        //Check vector for a free cell
+        for(auto pos : posToCheck)
         {
-            //ToDo: Fix this
-            if(_cellStorage.Get(posToCheck[index]).type == CellType::None)
+            if(_cellStorage.Get(pos).type == CellType::None)
             {
-                *targetCellPos = posToCheck[index];
+                *targetCellPos = pos;
                 return true;
             }
-
-            index++;
         }
 
         return false;
@@ -123,32 +119,34 @@ namespace Engine
 
     void CellManager::CalculateCellPhysics()
     {
+        //Cell target in which we move the current cell into
+        glm::u32vec3 targetCellPos;
+
         //Iterate over all cell indexes
         for(uint32 i = 0; i < CellSimParams::cellsAlive; i++)
         {
             //Get coordinates from current cell
             glm::u32vec3 cellPos = CellStorage::Get3DPosFromIndex(_cellIndexStorage.at(i));
 
-            //Check if the cell is not touching the ground
-            if(cellPos.y > 0)
+            //Check if cell below is free
+            if(CellBelowIsFree(cellPos))
             {
-                //Set to coordinates from cell below (y - 1)
-                glm::u32vec3 targetCellPos = glm::u32vec3(cellPos.x, cellPos.y - 1, cellPos.z);
-
-                //Check if cell below is free
-                if(_cellStorage.Get(targetCellPos).type == CellType::None)
-                {
-                    MoveCell(i, cellPos, targetCellPos);
-                }
-                //Check all cells one level below for free space (adjacent cells first)
-                else
-                {
-                    //If a free cell was found
-                    if(GetRandomNextFreeCell(cellPos, &targetCellPos))
-                    {
-                        MoveCell(i, cellPos, targetCellPos);
-                    }
-                }
+                targetCellPos = {cellPos.x, cellPos.y-1, cellPos.z};
+                MoveCell(i, cellPos, targetCellPos);
+            }
+            //Check all adjacent cells one level below for free space
+            else if(GetRandomNextFreeCell(cellPos, -1, &targetCellPos))
+            {
+                MoveCell(i, cellPos, targetCellPos);
+            }
+            //Check all adjacent cells at the same level for free space
+            else if(GetRandomNextFreeCell(cellPos, 0, &targetCellPos))
+            {
+                MoveCell(i, cellPos, targetCellPos);
+            }
+            else
+            {
+                //Do nothing (stay put)
             }
         }
     }

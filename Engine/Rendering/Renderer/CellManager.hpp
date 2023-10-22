@@ -15,7 +15,8 @@ namespace Engine
             std::vector<CellParams>                            _cellSpawnerStorage;
 
             void MoveCell(uint32 index, const glm::u32vec3& currCellPos, const glm::u32vec3& targetCellPos);
-            bool GetRandomNextFreeCell(const glm::u32vec3& currCellPos, glm::u32vec3* targetCellPos);
+            bool CellBelowIsFree(const glm::u32vec3& cellPos);
+            bool GetRandomNextFreeCell(const glm::u32vec3& currCellPos, int32 level, glm::u32vec3* targetCellPos);
 
         public:
             CellManager();

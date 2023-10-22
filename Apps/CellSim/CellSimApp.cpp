@@ -19,11 +19,10 @@ namespace CS
         Engine::RenderParams::farPlane      = 1024.0f;
         Engine::RenderParams::planeSize     = 1;
         Engine::CameraParams::movementSpeed = 75.0f;
-        Engine::CameraParams::startYaw      = 38.0f;
-        Engine::CameraParams::startPitch    = -29.0f;
-        Engine::CameraParams::startPos      = glm::vec3(350.0f, 125.0f, 415.0f);
-        Engine::LightParams::position       = glm::vec3(565.0f, 170.0f, 455.0f);
-        Engine::LightParams::target         = glm::vec3(515.0f, 40.0f, 505.0f);
+        Engine::CameraParams::startPitch    = -33.0f;
+        Engine::CameraParams::startPos      = glm::vec3(-115.0f, 105.0f, 5.0f);
+        Engine::LightParams::position       = glm::vec3(250.0f, 250.0f, -250.0f);
+        Engine::LightParams::target         = glm::vec3(0.0f, 0.0f, 0.0f);
 
         //Initialize engine components
         Engine::Logger::Init();
@@ -41,12 +40,11 @@ namespace CS
         //Create application specific renderers
         _sceneRenderer  = Engine::RenderManager::AddSceneRenderer();
         _sceneRenderer->SetModelShader("ModelShader");
-        _shadowRenderer = Engine::RenderManager::AddShadowRenderer(8192, glm::ortho(-60.0f, 60.0f, -60.0f, 60.0f, 105.0f, 228.0f), "ShadowCreateShader");
         _spriteRenderer = Engine::RenderManager::AddSpriteRenderer();
 
         //Create cell manager and add cell renderer
         _cellManager = Engine::MakeScope<Engine::CellManager>();
-        _cellManager->AddCellRenderer("CellShader", glm::vec3(482.0f, 2.0f, 482.0f));
+        _cellManager->AddCellRenderer("CellShader", glm::vec3(-30.0f, 0.5f, -30.0f));
 
         //Create UI
         _interface = Engine::MakeScope<CellSimInterface>();
@@ -61,9 +59,9 @@ namespace CS
         (
             Engine::RenderParams::planeSize,
             Engine::RenderParams::planeSize,
-            1024.0f,
-            glm::vec3(0.0f, -1.0f, 0.0f),
-            _shadowRenderer->GetDepthTexture(),
+            64.0f,
+            glm::vec3(-32.0f, 0.0f, -32.0f),
+            nullptr,
             {}
         );
 
@@ -72,8 +70,8 @@ namespace CS
         (
             1.0f,
             glm::vec3(0.0f),
-            glm::vec3(512.0f, 0.0f, 512.0f),
-            _shadowRenderer->GetDepthTexture(),
+            glm::vec3(0.0f, 0.0f, 0.0f),
+            nullptr,
             "Frame",
             "../Res/Assets/Models/CellSim/Frame"
         );
@@ -81,14 +79,7 @@ namespace CS
 
     void CellSimApp::AddSprites()
     {
-        //Shadow sprite
-        _spriteRenderer->AddSprite
-        (
-            glm::vec2(200.0f, 200.0f),
-            glm::vec2(0.0f, 0.0f),
-            _shadowRenderer->GetDepthTexture(),
-            Engine::ResourceManager::GetShader("SpriteShaderGreyscale")
-        );
+        //Nothing here (yet)
     }
 
     void CellSimApp::HandleCellSpawn()
@@ -178,6 +169,10 @@ namespace CS
                 _cellManager->PrintDebug();
                 Engine::CellSimParams::printDebug = false;
             }
+        }
+
+        {
+            Engine::PROFILE_SCOPE("Calculate physics");
 
             //Check if 5ms have elapsed
             if(_timeElapsed >= 0.005)
@@ -207,12 +202,6 @@ namespace CS
             Engine::Window::CalcFrametime();
             Engine::RenderManager::PrepareFrame();
             _interface->PrepareFrame();
-        }
-
-        {
-            Engine::PROFILE_SCOPE("Render shadows");
-
-            Engine::RenderManager::RenderShadows();
         }
 
         {

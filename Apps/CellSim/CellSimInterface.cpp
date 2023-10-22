@@ -137,11 +137,6 @@ namespace CS
                                 Engine::CellSimParams::selectedCellType = Engine::CellType::Water;
                             }
 
-                            if(ImGui::MenuItem("Lava"))
-                            {
-                                Engine::CellSimParams::selectedCellType = Engine::CellType::Lava;
-                            }
-
                             ImGui::EndMenu();
 
                             Engine::CameraController3D::DeFocusWindow(Engine::Window::GetWindow());

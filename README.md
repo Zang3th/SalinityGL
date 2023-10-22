@@ -22,7 +22,7 @@ SalinityGL is licensed under the [MIT LICENSE](https://github.com/Zang3th/GameEn
     SalinityGL/
     ├── Apps/                       # Demo applications
     │   ├── GreenWorld/             # 3D nature scene
-    │   └── CellSim/                # Cellular automata with 3D cubes (in development) ⌛
+    │   └── CellSim/                # 3D Cellular Automata (in development) ⌛
     ├── Engine/
     │   ├── Application/            # Application and interface stuff
     │   ├── Core/                   # Utilities and core engine functionalities
@@ -55,7 +55,7 @@ SalinityGL is licensed under the [MIT LICENSE](https://github.com/Zang3th/GameEn
   - Instanced rendering
     - Flexible 2D particle system
       - Smoke
-    - Cellular automata system (in development) ⌛
+    - Cellular Automata System (in development) ⌛
 - File management
 - Profiling
 - Audio
@@ -71,9 +71,9 @@ Nature scene with water rendering, normal mapped objects, and a particle system 
 
 ### CellSim (in development) ⌛
 
-Cellular automata system with 3D cells/cubes. The plan is to simulate and render >1M cells/cubes at a good framerate. The system should include physics (multithreaded) and pretty graphics (lighting, shadows).
+3D Cellular Automata System. The objective is to build a basic fluid simulation. The system should be able to simulate and render >1M cells at a good framerate. More realistic fluid behaviour using Finite Element Analysis and performance improvements via multithreading are also planned.
 
-![CellSim](Res/Screenshots/CellSim/Screenshot_CS_009.png)
+![CellSim](Res/Screenshots/CellSim/Screenshot_CS_010.png)
 
 ## Building and compiling
 
@@ -122,9 +122,8 @@ I always worked *on and off* on this project, but I try to make more regular rel
 ### Release preview
 
 - v0.2.0: Completion of the base foundation of the *CellSim* app
-- v0.2.1: Integration of more cell types
-- v0.2.2: Improvements to the engine core
-- v0.2.3: Performance improvements and multithreading
+- v0.2.1: Integration of more cell types. Improvements to the engine core
+- v0.2.2: Performance improvements and multithreading
 
 ### Backlog
 

@@ -8,13 +8,13 @@ namespace Engine
 {
     struct Cell
     {
-        uint32 id;
+        int64 id;
         CellType type;
     };
 
     struct CellParams
     {
-        Cell cell;
+        CellType type;
         glm::u32vec3 pos;
     };
 
@@ -28,7 +28,7 @@ namespace Engine
             ~CellStorage() = default;
             void Init();
             Cell Get(const glm::u32vec3& cellPos);
-            void Set(const CellParams& cellParams);
+            void Set(const Cell& cell, const glm::u32vec3& cellPos);
             static uint32 GetIndexFrom3DPos(const glm::u32vec3& cellPos);
             static glm::vec3 Get3DPosFromIndex(uint32 index);
             static std::string Get3DPosAsString(const glm::u32vec3& cellPos);

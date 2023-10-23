@@ -15,7 +15,7 @@ namespace Engine
             {
                 for(uint32 z = 0; z < CellSimParams::CELL_FRAME_SIZE; z++)
                 {
-                    _cellBuffer[x][y][z] = {0, CellType::None};
+                    _cellBuffer[x][y][z] = {0, CellType::Air};
                 }
             }
         }
@@ -26,9 +26,9 @@ namespace Engine
         return _cellBuffer[cellPos.x][cellPos.y][cellPos.z];
     }
 
-    void CellStorage::Set(const CellParams& cellParams)
+    void CellStorage::Set(const Cell& cell, const glm::u32vec3& cellPos)
     {
-        _cellBuffer[cellParams.pos.x][cellParams.pos.y][cellParams.pos.z] = cellParams.cell;
+        _cellBuffer[cellPos.x][cellPos.y][cellPos.z] = cell;
     }
 
     uint32 CellStorage::GetIndexFrom3DPos(const glm::u32vec3& cellPos)

@@ -87,16 +87,31 @@ namespace Engine
     // ############################################### CellSim ###############################################
     // #######################################################################################################
 
+    //Read in of cell types via X-Macro
     enum CellType
     {
-    #   define X(a) a,
-    #   include "CellTypes.def" //Read in of cell types via X-Macro
+    #   define X(a, b, c) a,
+    #   include "CellTypes.def"
     #   undef X
     };
 
     inline static const char* const CellTypeStrings[] =
     {
-    #   define X(a) #a,
+    #   define X(a, b, c) #a,
+    #   include "CellTypes.def"
+    #   undef X
+    };
+
+    inline static const float CellTypeMass[] =
+    {
+    #   define X(a, b, c) b,
+    #   include "CellTypes.def"
+    #   undef X
+    };
+
+    inline static const glm::vec3 CellTypeColor[] =
+    {
+    #   define X(a, b, c) c,
     #   include "CellTypes.def"
     #   undef X
     };

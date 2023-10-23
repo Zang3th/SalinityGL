@@ -77,6 +77,11 @@ namespace CS
         );
     }
 
+    void CellSimApp::AddCellWorld()
+    {
+        _cellManager->CreateCellWorld();
+    }
+
     void CellSimApp::AddSprites()
     {
         //Nothing here (yet)
@@ -84,7 +89,7 @@ namespace CS
 
     void CellSimApp::HandleCellSpawn()
     {
-        Engine::CellParams cellParams{{0, Engine::CellSimParams::selectedCellType},
+        Engine::CellParams cellParams{Engine::CellSimParams::selectedCellType,
                                       glm::u32vec3(Engine::CellSimParams::selectedCellCoords[0],
                                                    Engine::CellSimParams::selectedCellCoords[1],
                                                    Engine::CellSimParams::selectedCellCoords[2])};
@@ -112,6 +117,7 @@ namespace CS
             appStartSuccess = true;
             AddObjects();
             AddSprites();
+            AddCellWorld();
         }
     }
 

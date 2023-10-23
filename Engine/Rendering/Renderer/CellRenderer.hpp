@@ -21,22 +21,23 @@ namespace Engine
 
         private:
             Scope<VertexArray>  _vao;
-            Scope<VertexBuffer> _vboVert, _vboPos;
+            Scope<VertexBuffer> _vboVert, _vboPos, _vboColor;
 
             uint32    _verticeCount;
             Shader*   _shader;
             glm::vec3 _worldSpawnPos;
 
             std::array<glm::vec3, CellSimParams::MAX_CELL_AMOUNT> _positionStorage;
+            std::array<glm::vec3, CellSimParams::MAX_CELL_AMOUNT> _colorStorage;
 
             CellRenderer(Shader* shader, const glm::vec3& worldSpawnPos);
             ~CellRenderer() final = default;
 
             void InitGpuStorage();
-            void UpdateGpuStorage();
+            void UploadGPUStorage();
 
         public:
             void Flush(Renderer* renderer) final;
-            void UpdatePositionStorage(uint32 index, const glm::u32vec3& cellPos);
+            void UpdateGPUStorage(uint32 index, const glm::u32vec3& cellPos, const glm::vec3& cellColor);
     };
 }

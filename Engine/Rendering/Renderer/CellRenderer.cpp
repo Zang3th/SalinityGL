@@ -5,7 +5,8 @@ namespace Engine
     // ----- Private -----
 
     CellRenderer::CellRenderer(Shader* shader, const glm::vec3& worldSpawnPos)
-        :   _verticeCount(36), _shader(shader), _worldSpawnPos(worldSpawnPos), _positionStorage{glm::vec3(0.0f)}
+        :   _verticeCount(36), _shader(shader), _worldSpawnPos(worldSpawnPos), _positionStorage{glm::vec3(0.0f)},
+            _colorStorage{glm::vec3(1.0f)}
     {
         Logger::Info("Created", "Renderer",__func__);
         InitGpuStorage();
@@ -25,8 +26,12 @@ namespace Engine
         _vboPos = MakeScope<VertexBuffer>(&_positionStorage[0], _positionStorage.size() * 3 * sizeof(float), GL_DYNAMIC_DRAW);
         _vao->DefineAttributes(2, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
 
-        //Set attribute divisors for per instance data
+        _vboColor = MakeScope<VertexBuffer>(&_colorStorage[0], _colorStorage.size() * 3 * sizeof(float), GL_DYNAMIC_DRAW);
+        _vao->DefineAttributes(3, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
+
+        //Set attribute divisors for instanced data
         _vao->AttributeDivisor(2, 1);
+        _vao->AttributeDivisor(3, 1);
 
         //Unbind everything
         _vao->Unbind();
@@ -34,11 +39,15 @@ namespace Engine
         _vboPos->Unbind();
     }
 
-    void CellRenderer::UpdateGpuStorage()
+    void CellRenderer::UploadGPUStorage()
     {
         _vboPos->Bind();
         _vboPos->Update(&_positionStorage[0], _positionStorage.size() * 3 * sizeof(float));
         _vboPos->Unbind();
+
+        _vboColor->Bind();
+        _vboColor->Update(&_colorStorage[0], _colorStorage.size() * 3 * sizeof(float));
+        _vboColor->Unbind();
     }
 
     // ----- Public -----
@@ -56,6 +65,7 @@ namespace Engine
             _vao->Bind();
             _vboVert->Bind();
             _vboPos->Bind();
+            _vboColor->Bind();
 
             //Set uniforms
             _shader->SetUniformMat4f("model", glm::mat4(1.0f));
@@ -66,12 +76,13 @@ namespace Engine
             _shader->SetUniformVec3f("lightColor", LightParams::color);
 
             //Upload updated vbo's to the gpu
-            UpdateGpuStorage();
+            UploadGPUStorage();
 
             //Render cells instanced
             GLCall(glDrawArraysInstanced(GL_TRIANGLES, 0, _verticeCount, cellCount))
 
             //Unbind vao and vbo's
+            _vboColor->Unbind();
             _vboPos->Unbind();
             _vboVert->Unbind();
             _vao->Unbind();
@@ -86,8 +97,9 @@ namespace Engine
         }
     }
 
-    void CellRenderer::UpdatePositionStorage(uint32 index, const glm::u32vec3& cellPos)
+    void CellRenderer::UpdateGPUStorage(uint32 index, const glm::u32vec3& cellPos, const glm::vec3& cellColor)
     {
         _positionStorage.at(index) = _worldSpawnPos + glm::vec3(cellPos);
+        _colorStorage.at(index) = cellColor;
     }
 }

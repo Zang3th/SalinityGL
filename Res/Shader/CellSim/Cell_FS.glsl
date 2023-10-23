@@ -1,5 +1,6 @@
 #version 450 core
 
+in vec3 color;
 in vec3 normals;
 in vec3 fragPos;
 
@@ -13,7 +14,6 @@ const float ambientStrength = 0.3;
 const float diffuseStrength = 0.6;
 const float specularStrength = 0.4;
 const float shininess = 2.0;
-const vec3  waterColor = vec3(0.2, 0.4, 0.9);
 
 vec3 calculateLight(vec3 textureColor)
 {
@@ -39,5 +39,5 @@ vec3 calculateLight(vec3 textureColor)
 
 void main()
 {
-    fragColor = vec4(calculateLight(waterColor), 1.0);
+    fragColor = vec4(calculateLight(color), 1.0);
 }

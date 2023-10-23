@@ -22,11 +22,13 @@ namespace Engine
             CellManager();
             void AddCellRenderer(const std::string& shader, const glm::vec3& worldSpawnPos);
             void AddCell(const CellParams& cellParams);
+            void AddCellWithoutRender(const CellParams& cellParams);
             void AddCellSpawner(const CellParams& cellParams);
             void DeleteCells();
             void DeleteSpawners();
             void CalculateCellPhysics();
             void ResolveCellSpawners();
+            void CreateCellWorld();
             void PrintDebug();
     };
 }

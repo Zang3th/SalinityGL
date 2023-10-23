@@ -19,6 +19,7 @@ namespace CS
             Engine::uint32 InitModules()   final;
             void           AddObjects();
             void           AddSprites();
+            void           AddCellWorld();
             void           HandleCellSpawn();
 
         public:

@@ -1,2 +1,5 @@
-X(None)
-X(Water)
+// Type,  mass,  color
+
+X(Air,   0.0f,   glm::vec3(0.0f, 0.0f, 0.0f))
+X(Solid, 100.0f, glm::vec3(0.5f, 0.5f, 0.5f))
+X(Water, 1.0f,   glm::vec3(0.2f, 0.4f, 0.9f))

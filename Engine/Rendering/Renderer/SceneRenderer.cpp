@@ -311,7 +311,6 @@ namespace Engine
         }
 
         _planeModel->AddTextureToSlot(depthTexture, 1);
-
     }
 
     void SceneRenderer::SetTerrainShader(const std::string& terrainShader)

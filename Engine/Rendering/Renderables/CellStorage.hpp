@@ -8,13 +8,15 @@ namespace Engine
 {
     struct Cell
     {
-        int64 id;
+        uint8 spreadFactor;
         CellType type;
+        uint32 id = UINT32_MAX;
+        bool movedDownLastTurn = false;
     };
 
     struct CellParams
     {
-        CellType type;
+        Cell cell;
         glm::u32vec3 pos;
     };
 
@@ -28,10 +30,10 @@ namespace Engine
             ~CellStorage() = default;
             void Init();
             Cell Get(const glm::u32vec3& cellPos);
+            Cell& GetModifiable(const glm::u32vec3& cellPos);
             void Set(const Cell& cell, const glm::u32vec3& cellPos);
             static uint32 GetIndexFrom3DPos(const glm::u32vec3& cellPos);
             static glm::vec3 Get3DPosFromIndex(uint32 index);
             static std::string Get3DPosAsString(const glm::u32vec3& cellPos);
-            static void GetPositionsToCheck(const glm::u32vec3& cellPos, int32 level, std::vector<glm::u32vec3>* posToCheck);
     };
 }

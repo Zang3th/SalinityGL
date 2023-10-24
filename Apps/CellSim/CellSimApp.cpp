@@ -89,10 +89,16 @@ namespace CS
 
     void CellSimApp::HandleCellSpawn()
     {
-        Engine::CellParams cellParams{Engine::CellSimParams::selectedCellType,
-                                      glm::u32vec3(Engine::CellSimParams::selectedCellCoords[0],
-                                                   Engine::CellSimParams::selectedCellCoords[1],
-                                                   Engine::CellSimParams::selectedCellCoords[2])};
+        Engine::CellParams cellParams
+        {
+            {
+                Engine::CellTypeSpreadFactor[Engine::CellSimParams::selectedCellType],
+                Engine::CellSimParams::selectedCellType
+            },
+            glm::u32vec3(Engine::CellSimParams::selectedCellCoords[0],
+                         Engine::CellSimParams::selectedCellCoords[1],
+                         Engine::CellSimParams::selectedCellCoords[2])
+        };
 
         if(Engine::CellSimParams::selectedCellAmount == 1)
         {
@@ -180,8 +186,8 @@ namespace CS
         {
             Engine::PROFILE_SCOPE("Calculate physics");
 
-            //Check if 5ms have elapsed
-            if(_timeElapsed >= 0.005)
+            //Check if 10ms have elapsed
+            if(_timeElapsed >= 0.01)
             {
                 //Reset time and increase tick counter
                 _timeElapsed = 0;

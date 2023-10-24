@@ -102,7 +102,7 @@ namespace Engine
     #   undef X
     };
 
-    inline static const float CellTypeMass[] =
+    inline static const uint8 CellTypeSpreadFactor[] =
     {
     #   define X(a, b, c) b,
     #   include "CellTypes.def"

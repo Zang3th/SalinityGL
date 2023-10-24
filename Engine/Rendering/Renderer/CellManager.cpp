@@ -4,17 +4,16 @@ namespace Engine
 {
     // ----- Private -----
 
-    void CellManager::MoveCell(const uint32 index, const glm::u32vec3& currCellPos, const glm::u32vec3& targetCellPos)
+    void CellManager::MoveCell(const uint32 index, const glm::u32vec3& cellPos, const glm::u32vec3& targetCellPos)
     {
         //Move cell (set values of the target cell to the values of the current cell)
-        _cellStorage.Set
-        (
-            {_cellStorage.Get(currCellPos).id, _cellStorage.Get(currCellPos).type},
-            targetCellPos
-        );
+        _cellStorage.Set(_cellStorage.Get(cellPos), targetCellPos);
+
+        //Modify movement state
+        _cellStorage.GetModifiable(targetCellPos).movedDownLastTurn = true;
 
         //Delete old cell
-        _cellStorage.Set({0, CellType::Air}, currCellPos);
+        _cellStorage.Set({CellTypeSpreadFactor[CellType::Air], CellType::Air}, cellPos);
 
         //Update the corresponding gpu buffers
         _cellRenderer->UpdateGPUStorage
@@ -28,47 +27,67 @@ namespace Engine
         _cellIndexStorage.at(index) = CellStorage::GetIndexFrom3DPos(targetCellPos);
     }
 
-    bool CellManager::CellBelowIsFree(const glm::u32vec3& cellPos)
+    void CellManager::FillFree4Neighbours(const glm::u32vec3& cellPos)
     {
-        //Check if we are still in bounds
-        if(cellPos.y-1 == UINT32_MAX)
-            return false;
+        // ############################################################ //
+        //                    | Front: (x+1, y, z) |                    //
+        // ----------------------------------------|------------------- //
+        //  Left: (x, y, z-1) |      cellPos       | Right: (x, y, z+1) //
+        // ----------------------------------------|------------------- //
+        //                    | Back: (x-1, y, z)  |                    //
+        // ############################################################ //
 
-        //Get coordinates from cell below (y-1)
-        glm::u32vec3 targetCellPos = glm::u32vec3(cellPos.x, cellPos.y-1, cellPos.z);
+        std::array<glm::u32vec3, 4> posToCheck
+        {
+            glm::u32vec3{cellPos.x+1, cellPos.y, cellPos.z}, //Front
+            glm::u32vec3{cellPos.x, cellPos.y, cellPos.z-1}, //Left
+            glm::u32vec3{cellPos.x, cellPos.y, cellPos.z+1}, //Right
+            glm::u32vec3{cellPos.x-1, cellPos.y, cellPos.z}  //Back
+        };
 
-        if(_cellStorage.Get(targetCellPos).type == CellType::Air)
-            return true;
-
-        return false;
-    }
-
-    bool CellManager::GetRandomNextFreeCell(const glm::u32vec3& currCellPos, const int32 level, glm::u32vec3* targetCellPos)
-    {
-        //Check if we are still in bounds
-        if(_cellStorage.Get(glm::u32vec3(currCellPos.x, currCellPos.y-1, currCellPos.z)).id == -1)
-            return false;
-
-        std::vector<glm::u32vec3> posToCheck;
-        posToCheck.reserve(8);
-
-        //Init vector with all positions that need to be checked
-        CellStorage::GetPositionsToCheck(currCellPos, level, &posToCheck);
-
-        //Shuffle all the entries
-        Random::Shuffle(posToCheck.begin(), posToCheck.end());
-
-        //Check vector for a free cell
+        //Check 4-Neighbours for free space
         for(auto pos : posToCheck)
         {
             if(_cellStorage.Get(pos).type == CellType::Air)
             {
-                *targetCellPos = pos;
-                return true;
+                AddCell({{0, _cellStorage.Get(cellPos).type}, pos});
             }
         }
+    }
 
-        return false;
+    void CellManager::DisplaceCellsBelow(const glm::u32vec3& cellPos)
+    {
+        //ToDo: Implement
+
+        Logger::Print("Displace cells below " + CellStorage::Get3DPosAsString(cellPos));
+    }
+
+    void CellManager::HandleWaterCell(const uint32 index, const glm::u32vec3& cellPos)
+    {
+        //Get coordinates from cell below (y-1)
+        glm::u32vec3 cellPosBelow = glm::u32vec3(cellPos.x, cellPos.y-1, cellPos.z);
+
+        //Check cell below for free space
+        if(_cellStorage.Get(cellPosBelow).type == CellType::Air)
+        {
+            MoveCell(index, cellPos, cellPosBelow);
+            return;
+        }
+
+        //Check if spread factor allows further distribution
+        if(_cellStorage.Get(cellPos).spreadFactor > 0)
+        {
+            FillFree4Neighbours(cellPos);
+        }
+
+        //Check if cell moved down last turn
+        if(_cellStorage.Get(cellPos).movedDownLastTurn)
+        {
+            //If so, displace cells below
+            DisplaceCellsBelow(cellPos);
+        }
+
+        _cellStorage.GetModifiable(cellPos).movedDownLastTurn = false;
     }
 
     // ----- Public -----
@@ -97,18 +116,22 @@ namespace Engine
         //Check if cell is empty
         if(_cellStorage.Get(cellParams.pos).type == CellType::Air)
         {
+            //Modify cell parameters
+            CellParams cellParamsCopy = cellParams;
+            cellParamsCopy.cell.id = cellCount;
+
             //Save cell in 3D array
-            _cellStorage.Set({cellCount, cellParams.type}, cellParams.pos);
+            _cellStorage.Set(cellParamsCopy.cell, cellParamsCopy.pos);
 
             //Save the index of the cell (how to directly access it in the 3d array)
-            _cellIndexStorage.at(cellCount) = CellStorage::GetIndexFrom3DPos(cellParams.pos);
+            _cellIndexStorage.at(cellCount) = CellStorage::GetIndexFrom3DPos(cellParamsCopy.pos);
 
             //Update the corresponding gpu buffers
             _cellRenderer->UpdateGPUStorage
             (
                 cellCount,
-                glm::vec3(cellParams.pos),
-                CellTypeColor[cellParams.type]
+                glm::vec3(cellParamsCopy.pos),
+                CellTypeColor[cellParamsCopy.cell.type]
             );
 
             CellSimParams::cellsAlive++;
@@ -118,7 +141,7 @@ namespace Engine
     void CellManager::AddCellWithoutRender(const CellParams& cellParams)
     {
         //Save cell in 3D array
-        _cellStorage.Set({-1, cellParams.type}, cellParams.pos);
+        _cellStorage.Set(cellParams.cell, cellParams.pos);
     }
 
     void CellManager::AddCellSpawner(const CellParams& cellParams)
@@ -129,6 +152,7 @@ namespace Engine
     void CellManager::DeleteCells()
     {
         _cellStorage.Init();
+        CreateCellWorld();
         CellSimParams::cellsAlive = 0;
     }
 
@@ -139,46 +163,19 @@ namespace Engine
 
     void CellManager::CalculateCellPhysics()
     {
-        //Cell target in which we move the current cell into
-        glm::u32vec3 targetCellPos;
-
         //Iterate over all cell indexes
         for(uint32 i = 0; i < CellSimParams::cellsAlive; i++)
         {
             //Get coordinates from current cell
             glm::u32vec3 cellPos = CellStorage::Get3DPosFromIndex(_cellIndexStorage.at(i));
 
-            //Check if cell below is free
-            if(CellBelowIsFree(cellPos))
+            //If current cell is water
+            if(_cellStorage.Get(cellPos).type == CellType::Water)
             {
-                targetCellPos = {cellPos.x, cellPos.y-1, cellPos.z};
-                MoveCell(i, cellPos, targetCellPos);
-            }
-            //Check all adjacent cells one level below for free space
-            else if(GetRandomNextFreeCell(cellPos, -1, &targetCellPos))
-            {
-                MoveCell(i, cellPos, targetCellPos);
-            }
-            //Check all adjacent cells at the same level for free space
-            else if(GetRandomNextFreeCell(cellPos, 0, &targetCellPos))
-            {
-                MoveCell(i, cellPos, targetCellPos);
-            }
-            else
-            {
-                //Do nothing (stay put)
+                //Solve water physics
+                HandleWaterCell(i, cellPos);
             }
         }
-
-        //Iterate over all cells
-
-            //If current cell is water
-
-                //Solve water physics
-
-            //Else
-
-                //Do nothing (stay put)
     }
 
     void CellManager::ResolveCellSpawners()
@@ -191,35 +188,38 @@ namespace Engine
 
     void CellManager::CreateCellWorld()
     {
+        //Create cell to spawn
+        Cell cell{CellTypeSpreadFactor[CellType::Solid], CellType::Solid};
+
         //Create ground
         for(uint32 x = 0; x < CellSimParams::CELL_FRAME_SIZE; x++)
             for(uint32 z = 0; z < CellSimParams::CELL_FRAME_SIZE; z++)
-                AddCellWithoutRender({CellType::Solid, glm::u32vec3(x, 0, z)});
+                AddCellWithoutRender({cell, glm::u32vec3(x, 0, z)});
 
         //Create back wall
         for(uint32 z = 0; z < CellSimParams::CELL_FRAME_SIZE; z++)
             for(uint32 y = 0; y < CellSimParams::CELL_FRAME_SIZE; y++)
-                AddCellWithoutRender({CellType::Solid, glm::u32vec3(CellSimParams::CELL_FRAME_SIZE - 1, y, z)});
+                AddCellWithoutRender({cell, glm::u32vec3(CellSimParams::CELL_FRAME_SIZE - 1, y, z)});
 
         //Create side wall left
         for(uint32 x = 0; x < CellSimParams::CELL_FRAME_SIZE; x++)
             for(uint32 y = 0; y < CellSimParams::CELL_FRAME_SIZE; y++)
-                AddCellWithoutRender({CellType::Solid, glm::u32vec3(x, y, 0)});
+                AddCellWithoutRender({cell, glm::u32vec3(x, y, 0)});
 
         //Create side wall right
         for(uint32 x = 0; x < CellSimParams::CELL_FRAME_SIZE; x++)
             for(uint32 y = 0; y < CellSimParams::CELL_FRAME_SIZE; y++)
-                AddCellWithoutRender({CellType::Solid, glm::u32vec3(x, y, CellSimParams::CELL_FRAME_SIZE - 1)});
+                AddCellWithoutRender({cell, glm::u32vec3(x, y, CellSimParams::CELL_FRAME_SIZE - 1)});
 
         //Create front wall
         for(uint32 z = 0; z < CellSimParams::CELL_FRAME_SIZE; z++)
             for(uint32 y = 0; y < CellSimParams::CELL_FRAME_SIZE; y++)
-                AddCellWithoutRender({CellType::Solid, glm::u32vec3(0, y, z)});
+                AddCellWithoutRender({cell, glm::u32vec3(0, y, z)});
 
         //Create ceiling
         for(uint32 x = 0; x < CellSimParams::CELL_FRAME_SIZE; x++)
             for(uint32 z = 0; z < CellSimParams::CELL_FRAME_SIZE; z++)
-                AddCellWithoutRender({CellType::Solid, glm::u32vec3(x, CellSimParams::CELL_FRAME_SIZE - 1, z)});
+                AddCellWithoutRender({cell, glm::u32vec3(x, CellSimParams::CELL_FRAME_SIZE - 1, z)});
     }
 
     void CellManager::PrintDebug()

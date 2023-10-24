@@ -14,9 +14,10 @@ namespace Engine
             std::array<uint32, CellSimParams::MAX_CELL_AMOUNT> _cellIndexStorage = {0};
             std::vector<CellParams>                            _cellSpawnerStorage;
 
-            void MoveCell(uint32 index, const glm::u32vec3& currCellPos, const glm::u32vec3& targetCellPos);
-            bool CellBelowIsFree(const glm::u32vec3& cellPos);
-            bool GetRandomNextFreeCell(const glm::u32vec3& currCellPos, int32 level, glm::u32vec3* targetCellPos);
+            void MoveCell(uint32 index, const glm::u32vec3& cellPos, const glm::u32vec3& targetCellPos);
+            void FillFree4Neighbours(const glm::u32vec3& cellPos);
+            void DisplaceCellsBelow(const glm::u32vec3& cellPos);
+            void HandleWaterCell(uint32 index, const glm::u32vec3& cellPos);
 
         public:
             CellManager();

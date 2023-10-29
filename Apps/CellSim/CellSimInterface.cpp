@@ -22,7 +22,6 @@ namespace CS
             if(ImGui::BeginMenu("Settings"))
             {
                 ImGui::MenuItem("Show overlay", "", &_showOverlay);
-                ImGui::MenuItem("Show debug sprites", "", &Engine::WindowParams::debugSprites);
                 ImGui::EndMenu();
                 Engine::CameraController3D::DeFocusWindow(Engine::Window::GetWindow());
             }
@@ -203,12 +202,23 @@ namespace CS
                     if(ImGui::BeginTabItem("Debug"))
                     {
                         // --- Print debug information
-                        ImGui::Text("\t\t");
-                        ImGui::SameLine();
-                        if(ImGui::Button("Print cell debug information"))
+                        if(ImGui::Button("Print debug information"))
                         {
                             Engine::CellSimParams::printDebug = true;
                         }
+
+                        // --- Checkbox to enable single stepping
+                        ImGui::Checkbox("Enable single stepping", &Engine::CellSimParams::enableSingleStepping);
+
+                        // --- Check if single stepping is enabled
+                        if(Engine::CellSimParams::enableSingleStepping)
+                        {
+                            if(ImGui::Button("Single Step"))
+                            {
+                                Engine::CellSimParams::performSingleStep = true;
+                            }
+                        }
+
                         ImGui::Separator();
 
                         ImGui::EndTabItem();

@@ -17,6 +17,7 @@ namespace Engine
 
         public:
             static float GetFloat();
+            static int32 GetInt32_Pseudo(int32 upperLimit = INT32_MAX);
 
             template<typename RandomIter>
             inline static void Shuffle(RandomIter first, RandomIter last)

@@ -27,39 +27,92 @@ namespace Engine
         _cellIndexStorage.at(index) = CellStorage::GetIndexFrom3DPos(targetCellPos);
     }
 
-    void CellManager::FillFree4Neighbours(const glm::u32vec3& cellPos)
+    void CellManager::DeleteCell(const uint32 index, const glm::u32vec3& cellPos)
     {
-        // ############################################################ //
-        //                    | Front: (x+1, y, z) |                    //
-        // ----------------------------------------|------------------- //
-        //  Left: (x, y, z-1) |      cellPos       | Right: (x, y, z+1) //
-        // ----------------------------------------|------------------- //
-        //                    | Back: (x-1, y, z)  |                    //
-        // ############################################################ //
+        //ToDo: Fix
+        //ToDo: Implement specific kill button in the UI
 
-        std::array<glm::u32vec3, 4> posToCheck
+        /*_cellStorage.Set({CellTypeSpreadFactor[CellType::Air], CellType::Air}, cellPos);
+
+        //Update the corresponding gpu buffers
+        _cellRenderer->UpdateGPUStorage
+        (
+            _cellStorage.Get(cellPos).id,
+            cellPos,
+            CellTypeColor[_cellStorage.Get(cellPos).type]
+        );
+
+        //Update index
+        _cellIndexStorage.at(index) = CellStorage::GetIndexFrom3DPos(cellPos);
+
+        CellSimParams::cellsAlive--;*/
+    }
+
+    void CellManager::Fill8Neighbours(const glm::u32vec3& cellPos, std::vector<glm::u32vec3>* occupiedPos)
+    {
+        // ############################################ //
+        //  (x+1, y, z-1) | (x+1, y, z) | (x+1, y, z+1) //
+        // ---------------|-------------|---------------//
+        //  (x, y, z-1)   |   cellPos   | (x, y, z+1)   //
+        // ---------------|-------------|-------------- //
+        //  (x-1, y, z-1) | (x-1, y, z) | (x-1, y, z+1) //
+        // ############################################ //
+
+
+        std::array<glm::u32vec3, 8> posToCheck
         {
-            glm::u32vec3{cellPos.x+1, cellPos.y, cellPos.z}, //Front
-            glm::u32vec3{cellPos.x, cellPos.y, cellPos.z-1}, //Left
-            glm::u32vec3{cellPos.x, cellPos.y, cellPos.z+1}, //Right
-            glm::u32vec3{cellPos.x-1, cellPos.y, cellPos.z}  //Back
+            glm::u32vec3{cellPos.x+1, cellPos.y, cellPos.z-1},
+            glm::u32vec3{cellPos.x+1, cellPos.y, cellPos.z},
+            glm::u32vec3{cellPos.x+1, cellPos.y, cellPos.z+1},
+            glm::u32vec3{cellPos.x, cellPos.y, cellPos.z-1},
+            glm::u32vec3{cellPos.x, cellPos.y, cellPos.z+1},
+            glm::u32vec3{cellPos.x-1, cellPos.y, cellPos.z-1},
+            glm::u32vec3{cellPos.x-1, cellPos.y, cellPos.z},
+            glm::u32vec3{cellPos.x-1, cellPos.y, cellPos.z+1}
         };
 
-        //Check 4-Neighbours for free space
+        //Check positions for free space and insert cell, else save occupied position
         for(auto pos : posToCheck)
         {
             if(_cellStorage.Get(pos).type == CellType::Air)
             {
                 AddCell({{0, _cellStorage.Get(cellPos).type}, pos});
             }
+            else
+            {
+                occupiedPos->push_back(pos);
+            }
         }
     }
 
-    void CellManager::DisplaceCellsBelow(const glm::u32vec3& cellPos)
+    void CellManager::MoveCellIntoDirection(const uint32 index, const glm::u32vec3& cellPos, const glm::u32vec3& originCellPos)
     {
-        //ToDo: Implement
+        //int32 moveFactor = Random::GetInt32_Pseudo(2);
+        int32 moveFactor = 1;
+        /*if(moveFactor == 0)
+        {
+            return;
+        }*/
 
-        Logger::Print("Displace cells below " + CellStorage::Get3DPosAsString(cellPos));
+        //Determine direction in which to move
+        glm::i64vec3 cellDiff = glm::i64vec3(cellPos) - glm::i64vec3(originCellPos);
+        cellDiff *= moveFactor;
+
+        //Determine the cell in which to move
+        glm::u32vec3 newCellPos = glm::i64vec3(cellPos) + cellDiff;
+
+        //Try to move cell into new position
+        if(_cellStorage.Get(newCellPos).type == CellType::Air)
+        {
+            MoveCell(index, cellPos, newCellPos);
+
+            //Refill old cell
+            AddCell({{0, CellType::Water}, cellPos});
+        }
+        else
+        {
+            _excessiveCells++;
+        }
     }
 
     void CellManager::HandleWaterCell(const uint32 index, const glm::u32vec3& cellPos)
@@ -67,27 +120,64 @@ namespace Engine
         //Get coordinates from cell below (y-1)
         glm::u32vec3 cellPosBelow = glm::u32vec3(cellPos.x, cellPos.y-1, cellPos.z);
 
-        //Check cell below for free space
+        glm::u32vec3 cellNeighboursToFill = cellPos;
+        bool deleteCell = false;
+
+        //Check for type of cell below
         if(_cellStorage.Get(cellPosBelow).type == CellType::Air)
         {
             MoveCell(index, cellPos, cellPosBelow);
             return;
         }
+        else if(_cellStorage.Get(cellPosBelow).type == CellType::Water)
+        {
+            //If it's water, enable cell displacement for the cell below
+            cellNeighboursToFill = cellPosBelow;
 
-        //Check if spread factor allows further distribution
+            deleteCell = true;
+        }
+
+        //Vector that gets filled with all positions that were already full
+        std::vector<glm::u32vec3> occupiedBeforehand;
+        occupiedBeforehand.reserve(8);
+        //ToDo: Refactor vector as class variable
+
+        //Check if spread factor allows for further distribution
         if(_cellStorage.Get(cellPos).spreadFactor > 0)
         {
-            FillFree4Neighbours(cellPos);
+            Fill8Neighbours(cellNeighboursToFill, &occupiedBeforehand);
+            _cellStorage.GetModifiable(cellPos).spreadFactor = 0;
         }
 
-        //Check if cell moved down last turn
-        if(_cellStorage.Get(cellPos).movedDownLastTurn)
+        //Check the amount of cells that couldn't be filled up
+        if(occupiedBeforehand.size() == 8)
         {
-            //If so, displace cells below
-            DisplaceCellsBelow(cellPos);
+            //Every position was full / nothing was filled up
+            //ToDo: Find out what to do now ...
+            return;
+        }
+        //Handle the non-fillable cells
+        else if(!occupiedBeforehand.empty())
+        {
+            for(auto pos : occupiedBeforehand)
+            {
+                if(_cellStorage.Get(pos).type == CellType::Water)
+                {
+                    MoveCellIntoDirection(index, pos, cellNeighboursToFill);
+                }
+            }
+            //ToDo: Clear vector
         }
 
+        //Clean up
         _cellStorage.GetModifiable(cellPos).movedDownLastTurn = false;
+
+        if(deleteCell)
+        {
+            //Delete cell and increment excessive cell counter
+            DeleteCell(index, cellPos);
+            _excessiveCells++;
+        }
     }
 
     // ----- Public -----
@@ -154,6 +244,7 @@ namespace Engine
         _cellStorage.Init();
         CreateCellWorld();
         CellSimParams::cellsAlive = 0;
+        _excessiveCells = 0;
     }
 
     void CellManager::DeleteSpawners()
@@ -225,20 +316,23 @@ namespace Engine
     void CellManager::PrintDebug()
     {
         Logger::LineBreak();
-        Logger::Print("Count | 3D-Index | (X, Y, Z)    | ID    | Type  |");
+        Logger::Print("Count | 3D-Index | (X, Y, Z)    | ID    | Type  | Spread | MoveLT |");
 
         for(uint32 i = 0; i < CellSimParams::cellsAlive; i++)
         {
             uint32 index = _cellIndexStorage.at(i);
             glm::u32vec3 cellPos = CellStorage::Get3DPosFromIndex(_cellIndexStorage.at(i));
-            uint32 id = _cellStorage.Get(cellPos).id;
-            CellType type = _cellStorage.Get(cellPos).type;
+            Cell cell = _cellStorage.Get(cellPos);
 
             Logger::Print(FileManager::PadString(std::to_string(i), 5) + " | "
                           + FileManager::PadString(std::to_string(index), 8) + " | "
                           + FileManager::PadString(CellStorage::Get3DPosAsString(cellPos), 12) + " | "
-                          + FileManager::PadString(std::to_string(id), 5) + " | "
-                          + FileManager::PadString(std::to_string(type), 5) + " | ");
+                          + FileManager::PadString(std::to_string(cell.id), 5) + " | "
+                          + FileManager::PadString(std::to_string(cell.type), 5) + " | "
+                          + FileManager::PadString(std::to_string(cell.spreadFactor), 6) + " | "
+                          + FileManager::PadString(std::to_string(cell.movedDownLastTurn), 6) + " | ");
         }
+
+        Logger::Print("Excessive cell counter: " + std::to_string(_excessiveCells));
     }
 }

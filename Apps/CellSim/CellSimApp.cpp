@@ -40,7 +40,6 @@ namespace CS
         //Create application specific renderers
         _sceneRenderer  = Engine::RenderManager::AddSceneRenderer();
         _sceneRenderer->SetModelShader("ModelShader");
-        _spriteRenderer = Engine::RenderManager::AddSpriteRenderer();
 
         //Create cell manager and add cell renderer
         _cellManager = Engine::MakeScope<Engine::CellManager>();
@@ -82,11 +81,6 @@ namespace CS
         _cellManager->CreateCellWorld();
     }
 
-    void CellSimApp::AddSprites()
-    {
-        //Nothing here (yet)
-    }
-
     void CellSimApp::HandleCellSpawn()
     {
         Engine::CellParams cellParams
@@ -122,7 +116,6 @@ namespace CS
         {
             appStartSuccess = true;
             AddObjects();
-            AddSprites();
             AddCellWorld();
         }
     }
@@ -181,29 +174,45 @@ namespace CS
                 _cellManager->PrintDebug();
                 Engine::CellSimParams::printDebug = false;
             }
+
+            //Check if physics should be calculated this turn
+            _calcPhysicsThisTurn = true;
+            if(Engine::CellSimParams::enableSingleStepping)
+            {
+                _calcPhysicsThisTurn = false;
+
+                if(Engine::CellSimParams::performSingleStep)
+                {
+                    _calcPhysicsThisTurn = true;
+                    Engine::CellSimParams::performSingleStep = false;
+                }
+            }
         }
 
         {
             Engine::PROFILE_SCOPE("Calculate physics");
 
-            //Check if 10ms have elapsed
-            if(_timeElapsed >= 0.01)
+            if(_calcPhysicsThisTurn)
             {
-                //Reset time and increase tick counter
-                _timeElapsed = 0;
-                _tickCounter++;
-
-                //Do physics
-                if(Engine::CellSimParams::cellsAlive > 0)
+                //Check if 10ms have elapsed
+                if(_timeElapsed >= 0.01)
                 {
-                    _cellManager->CalculateCellPhysics();
-                }
+                    //Reset time and increase tick counter
+                    _timeElapsed = 0;
+                    _tickCounter++;
 
-                //Add new cells for every existing spawner
-                if(_tickCounter > 5)
-                {
-                    _cellManager->ResolveCellSpawners();
-                    _tickCounter = 0;
+                    //Do physics
+                    if(Engine::CellSimParams::cellsAlive > 0)
+                    {
+                        _cellManager->CalculateCellPhysics();
+                    }
+
+                    //Add new cells for every existing spawner
+                    if(_tickCounter > 5)
+                    {
+                        _cellManager->ResolveCellSpawners();
+                        _tickCounter = 0;
+                    }
                 }
             }
         }
@@ -220,11 +229,6 @@ namespace CS
             Engine::PROFILE_SCOPE("Render scene");
 
             Engine::RenderManager::RenderScene();
-
-            if(Engine::WindowParams::debugSprites)
-            {
-                Engine::RenderManager::RenderSprites();
-            }
         }
 
         {

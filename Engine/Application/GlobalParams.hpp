@@ -129,5 +129,7 @@ namespace Engine
         inline static           bool     deleteCells           = false;
         inline static           bool     deleteSpawners        = false;
         inline static           bool     printDebug            = false;
+        inline static           bool     enableSingleStepping  = false;
+        inline static           bool     performSingleStep     = false;
     };
 }

@@ -125,10 +125,10 @@ namespace CS
                 if(ImGui::BeginTabBar("##Tabs", ImGuiTabBarFlags_None))
                 {
                     // --- Cell spawn menu
-                    if(ImGui::BeginTabItem("Spawn"))
+                    if(ImGui::BeginTabItem("Creation"))
                     {
                         // --- Cell selection menu
-                        std::string cellTypeString = std::string("Selected cell type: ") + Engine::CellTypeStrings[Engine::CellSimParams::selectedCellType];
+                        std::string cellTypeString = std::string("Cell type: ") + Engine::CellTypeStrings[Engine::CellSimParams::selectedCellType];
                         if(ImGui::BeginMenu(cellTypeString.c_str()))
                         {
                             if(ImGui::MenuItem("Water"))
@@ -187,13 +187,20 @@ namespace CS
                         }
 
                         // --- Spawn button
-                        ImGui::Text("\t\t\t\t\t");
+                        ImGui::Text("\t\t\t");
                         ImGui::SameLine();
                         if(ImGui::Button("Spawn"))
                         {
-                            Engine::CellSimParams::spawnNewCell = true;
+                            Engine::CellSimParams::spawnCell = true;
                         }
+                        // --- Kill button
                         ImGui::SameLine();
+                        ImGui::Text("\t\t\t");
+                        ImGui::SameLine();
+                        if(ImGui::Button("Kill"))
+                        {
+                            Engine::CellSimParams::killCell = true;
+                        }
 
                         ImGui::EndTabItem();
                     }

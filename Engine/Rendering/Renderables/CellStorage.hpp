@@ -11,7 +11,7 @@ namespace Engine
         uint8 spreadFactor;
         CellType type;
         uint32 id = UINT32_MAX;
-        bool movedDownLastTurn = false;
+        bool movedLastTurn = false;
     };
 
     struct CellParams

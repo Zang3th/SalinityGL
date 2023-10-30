@@ -104,6 +104,16 @@ namespace CS
         }
     }
 
+    void CellSimApp::HandleCellKill()
+    {
+        _cellManager->DeleteCell
+        (
+            glm::u32vec3(Engine::CellSimParams::selectedCellCoords[0],
+                         Engine::CellSimParams::selectedCellCoords[1],
+                         Engine::CellSimParams::selectedCellCoords[2])
+        );
+    }
+
     // ----- Public -----
 
     CellSimApp::CellSimApp()
@@ -148,10 +158,17 @@ namespace CS
             Engine::PROFILE_SCOPE("Manage cells");
 
             //Check for cell spawn
-            if(Engine::CellSimParams::spawnNewCell)
+            if(Engine::CellSimParams::spawnCell)
             {
                 HandleCellSpawn();
-                Engine::CellSimParams::spawnNewCell = false;
+                Engine::CellSimParams::spawnCell = false;
+            }
+
+            //Check for cell kill
+            if(Engine::CellSimParams::killCell)
+            {
+                HandleCellKill();
+                Engine::CellSimParams::killCell = false;
             }
 
             //Check for cell delete

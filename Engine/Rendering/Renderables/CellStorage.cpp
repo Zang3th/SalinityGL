@@ -38,7 +38,7 @@ namespace Engine
 
     uint32 CellStorage::GetIndexFrom3DPos(const glm::u32vec3& cellPos)
     {
-        return (cellPos.x * CellSimParams::CELL_FRAME_SIZE * CellSimParams::CELL_FRAME_SIZE )
+        return (cellPos.x * CellSimParams::CELL_FRAME_SIZE * CellSimParams::CELL_FRAME_SIZE)
              + (cellPos.y * CellSimParams::CELL_FRAME_SIZE ) + cellPos.z;
     }
 

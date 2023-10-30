@@ -20,6 +20,7 @@ namespace CS
             void           AddObjects();
             void           AddCellWorld();
             void           HandleCellSpawn();
+            void           HandleCellKill();
 
         public:
             CellSimApp();

@@ -10,7 +10,7 @@ namespace Engine
         _cellStorage.Set(_cellStorage.Get(cellPos), targetCellPos);
 
         //Modify movement state
-        _cellStorage.GetModifiable(targetCellPos).movedDownLastTurn = true;
+        _cellStorage.GetModifiable(targetCellPos).movedLastTurn = true;
 
         //Delete old cell
         _cellStorage.Set({CellTypeSpreadFactor[CellType::Air], CellType::Air}, cellPos);
@@ -27,28 +27,56 @@ namespace Engine
         _cellIndexStorage.at(index) = CellStorage::GetIndexFrom3DPos(targetCellPos);
     }
 
-    void CellManager::DeleteCell(const uint32 index, const glm::u32vec3& cellPos)
+    bool CellManager::FindFreeCellRecursive(const glm::u32vec3& cellPos, glm::u32vec3* freeCell, uint32* recursionDepth)
     {
-        //ToDo: Fix
-        //ToDo: Implement specific kill button in the UI
+        std::array<glm::u32vec3, 8> posToCheck = {};
+        uint32 posOffset = 1;
+        *recursionDepth++;
 
-        /*_cellStorage.Set({CellTypeSpreadFactor[CellType::Air], CellType::Air}, cellPos);
+        if(*recursionDepth >= CellSimParams::MAX_RECURSION_DEPTH)
+        {
+            return false;
+        }
 
-        //Update the corresponding gpu buffers
-        _cellRenderer->UpdateGPUStorage
-        (
-            _cellStorage.Get(cellPos).id,
-            cellPos,
-            CellTypeColor[_cellStorage.Get(cellPos).type]
-        );
+        while((cellPos.x + posOffset < CellSimParams::CELL_FRAME_SIZE) &&
+              (cellPos.x - posOffset != UINT32_MAX) &&
+              (cellPos.z + posOffset < CellSimParams::CELL_FRAME_SIZE) &&
+              (cellPos.z - posOffset != UINT32_MAX))
+        {
+            posToCheck =
+            {
+                glm::u32vec3{cellPos.x+posOffset, cellPos.y, cellPos.z-posOffset},
+                glm::u32vec3{cellPos.x+posOffset, cellPos.y, cellPos.z},
+                glm::u32vec3{cellPos.x+posOffset, cellPos.y, cellPos.z+posOffset},
+                glm::u32vec3{cellPos.x, cellPos.y, cellPos.z-posOffset},
+                glm::u32vec3{cellPos.x, cellPos.y, cellPos.z+posOffset},
+                glm::u32vec3{cellPos.x-posOffset, cellPos.y, cellPos.z-posOffset},
+                glm::u32vec3{cellPos.x-posOffset, cellPos.y, cellPos.z},
+                glm::u32vec3{cellPos.x-posOffset, cellPos.y, cellPos.z+posOffset}
+            };
 
-        //Update index
-        _cellIndexStorage.at(index) = CellStorage::GetIndexFrom3DPos(cellPos);
+            Random::Shuffle(posToCheck.begin(), posToCheck.end());
 
-        CellSimParams::cellsAlive--;*/
+            for(auto pos : posToCheck)
+            {
+                if(_cellStorage.Get(pos).type == CellType::Air)
+                {
+                    *freeCell = pos;
+                    return true;
+                }
+                else if(FindFreeCellRecursive(pos, freeCell, recursionDepth))
+                {
+                    return true;
+                }
+            }
+
+            posOffset++;
+        }
+
+        return false;
     }
 
-    void CellManager::Fill8Neighbours(const glm::u32vec3& cellPos, std::vector<glm::u32vec3>* occupiedPos)
+    void CellManager::Fill8Neighbours(const glm::u32vec3& cellPos)
     {
         // ############################################ //
         //  (x+1, y, z-1) | (x+1, y, z) | (x+1, y, z+1) //
@@ -80,7 +108,7 @@ namespace Engine
             }
             else
             {
-                occupiedPos->push_back(pos);
+                _occupiedCellsThisTurn.push_back(pos);
             }
         }
     }
@@ -119,9 +147,7 @@ namespace Engine
     {
         //Get coordinates from cell below (y-1)
         glm::u32vec3 cellPosBelow = glm::u32vec3(cellPos.x, cellPos.y-1, cellPos.z);
-
-        glm::u32vec3 cellNeighboursToFill = cellPos;
-        bool deleteCell = false;
+        static uint32 recursionDepth = 0;
 
         //Check for type of cell below
         if(_cellStorage.Get(cellPosBelow).type == CellType::Air)
@@ -131,53 +157,49 @@ namespace Engine
         }
         else if(_cellStorage.Get(cellPosBelow).type == CellType::Water)
         {
-            //If it's water, enable cell displacement for the cell below
-            cellNeighboursToFill = cellPosBelow;
+            glm::u32vec3 freeCell;
+            //ToDo: Find iterative solution
+            if(FindFreeCellRecursive(cellPosBelow, &freeCell, &recursionDepth))
+            {
+                MoveCell(index, cellPos, freeCell);
+            }
+            else
+            {
+                Logger::Warn("Failed", "Finding", "Free cell at: " + CellStorage::Get3DPosAsString(cellPos));
+            }
 
-            deleteCell = true;
+            return;
         }
 
-        //Vector that gets filled with all positions that were already full
-        std::vector<glm::u32vec3> occupiedBeforehand;
-        occupiedBeforehand.reserve(8);
-        //ToDo: Refactor vector as class variable
-
         //Check if spread factor allows for further distribution
-        if(_cellStorage.Get(cellPos).spreadFactor > 0)
+        if(_cellStorage.Get(cellPos).spreadFactor > 0 && _cellStorage.Get(cellPos).movedLastTurn)
         {
-            Fill8Neighbours(cellNeighboursToFill, &occupiedBeforehand);
+            Fill8Neighbours(cellPos);
             _cellStorage.GetModifiable(cellPos).spreadFactor = 0;
         }
 
         //Check the amount of cells that couldn't be filled up
-        if(occupiedBeforehand.size() == 8)
+        /*if(_occupiedCellsThisTurn.size() == 8)
         {
             //Every position was full / nothing was filled up
             //ToDo: Find out what to do now ...
             return;
         }
         //Handle the non-fillable cells
-        else if(!occupiedBeforehand.empty())
+        else if(!_occupiedCellsThisTurn.empty())
         {
-            for(auto pos : occupiedBeforehand)
+            for(auto pos : _occupiedCellsThisTurn)
             {
                 if(_cellStorage.Get(pos).type == CellType::Water)
                 {
-                    MoveCellIntoDirection(index, pos, cellNeighboursToFill);
+                    MoveCellIntoDirection(index, pos, cellPos);
                 }
             }
-            //ToDo: Clear vector
-        }
+            _occupiedCellsThisTurn.clear();
+        }*/
 
         //Clean up
-        _cellStorage.GetModifiable(cellPos).movedDownLastTurn = false;
-
-        if(deleteCell)
-        {
-            //Delete cell and increment excessive cell counter
-            DeleteCell(index, cellPos);
-            _excessiveCells++;
-        }
+        _cellStorage.GetModifiable(cellPos).movedLastTurn = false;
     }
 
     // ----- Public -----
@@ -185,6 +207,7 @@ namespace Engine
     CellManager::CellManager()
     {
         _cellSpawnerStorage.reserve(5);
+        _occupiedCellsThisTurn.reserve(8);
     }
 
     void CellManager::AddCellRenderer(const std::string& shader, const glm::vec3& worldSpawnPos)
@@ -237,6 +260,12 @@ namespace Engine
     void CellManager::AddCellSpawner(const CellParams& cellParams)
     {
         _cellSpawnerStorage.push_back(cellParams);
+    }
+
+    void CellManager::DeleteCell(const glm::u32vec3& cellPos)
+    {
+        _cellStorage.Set({CellTypeSpreadFactor[CellType::Air], CellType::Air}, cellPos);
+        CellSimParams::cellsAlive--;
     }
 
     void CellManager::DeleteCells()
@@ -330,9 +359,10 @@ namespace Engine
                           + FileManager::PadString(std::to_string(cell.id), 5) + " | "
                           + FileManager::PadString(std::to_string(cell.type), 5) + " | "
                           + FileManager::PadString(std::to_string(cell.spreadFactor), 6) + " | "
-                          + FileManager::PadString(std::to_string(cell.movedDownLastTurn), 6) + " | ");
+                          + FileManager::PadString(std::to_string(cell.movedLastTurn), 6) + " | ");
         }
 
+        Logger::Print("Cells alive: " + std::to_string(CellSimParams::cellsAlive));
         Logger::Print("Excessive cell counter: " + std::to_string(_excessiveCells));
     }
 }

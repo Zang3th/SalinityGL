@@ -14,12 +14,10 @@ namespace Engine
             CellStorage                                        _cellStorage;
             std::array<uint32, CellSimParams::MAX_CELL_AMOUNT> _cellIndexStorage = {0};
             std::vector<CellParams>                            _cellSpawnerStorage;
-            std::vector<glm::u32vec3>                          _occupiedCellsThisTurn;
 
             void MoveCell(uint32 index, const glm::u32vec3& cellPos, const glm::u32vec3& targetCellPos);
             bool FindFreeCellRecursive(const glm::u32vec3& cellPos, glm::u32vec3* freeCell, uint32* recursionDepth);
             void Fill8Neighbours(const glm::u32vec3& cellPos);
-            void MoveCellIntoDirection(uint32 index, const glm::u32vec3& cellPos, const glm::u32vec3& originCellPos);
             void HandleWaterCell(uint32 index, const glm::u32vec3& cellPos);
 
         public:

@@ -7,7 +7,7 @@
 
 ## Introduction
 
-SalinityGL is an OpenGL baselayer library for creating (3D) visualization applications. The goal is to create a library that is easy to use and lightweight. SalinityGL provides a thin OpenGL abstraction layer and some basic helper functions to support the process of building rendering applications.
+SalinityGL is an OpenGL baselayer library for creating (2D/3D) visualization applications. The goal is to create a library that is easy to use and lightweight. SalinityGL provides a thin OpenGL abstraction layer and some basic helper functions to support the process of building rendering applications.
 
 SalinityGL is written in C++17 with OpenGL 4.5. Currently, only Linux is supported. To get started, take a look at the [building and compiling](https://github.com/Zang3th/GameEngine/tree/master#building-and-compiling) section.
 
@@ -22,7 +22,8 @@ SalinityGL is licensed under the [MIT LICENSE](https://github.com/Zang3th/GameEn
     SalinityGL/
     ├── Apps/                       # Demo applications
     │   ├── GreenWorld/             # 3D nature scene
-    │   └── CellSim/                # 3D Cellular Automata (in development) ⌛
+    │   └── CellSim/                # 3D Cellular Automata System (on hold) ⌛
+    │   └── Liquefied/              # 2D/3D Eulerian Fluid Simulation (in development) 🔥
     ├── Engine/
     │   ├── Application/            # Application and interface stuff
     │   ├── Core/                   # Utilities and core engine functionalities
@@ -55,7 +56,7 @@ SalinityGL is licensed under the [MIT LICENSE](https://github.com/Zang3th/GameEn
   - Instanced rendering
     - Flexible 2D particle system
       - Smoke
-    - Cellular Automata System (in development) ⌛
+    - Cellular Automata System
 - File management
 - Profiling
 - Audio
@@ -69,11 +70,15 @@ Nature scene with water rendering, normal mapped objects, and a particle system 
 ![GreenWorld_far](Res/Screenshots/GreenWorld/Screenshot_GW_024_far.png)
 ![GreenWorld_close](Res/Screenshots/GreenWorld/Screenshot_GW_024_near.png)
 
-### CellSim (in development) ⌛
+### CellSim (on hold) ⌛
 
-3D Cellular Automata System. The objective is to build a basic fluid simulation. The system should be able to simulate and render >1M cells at a good framerate. More realistic fluid behaviour using Finite Element Analysis and performance improvements via multithreading are also planned.
+3D Cellular Automata System (very primitive). Serves as a test and benchmark application for now. The system should once be able to simulate and render >1M cells at a good framerate.
 
-![CellSim](Res/Screenshots/CellSim/Screenshot_CS_010.png)
+![CellSim](Res/Screenshots/CellSim/Screenshot_CS_011.png)
+
+### Liquefied (in development)
+
+2D/3D Eulerian Fluid Simulation
 
 ## Building and compiling
 
@@ -121,9 +126,8 @@ I always worked *on and off* on this project, but I try to make more regular rel
 
 ### Release preview
 
-- v0.2.0: Completion of the base foundation of the *CellSim* app
-- v0.2.1: Integration of more cell types. Improvements to the engine core
-- v0.2.2: Performance improvements and multithreading
+- v0.2.0: Completion of the base foundation of the *Liquefied* app
+- v0.2.1: Improvements to the *Liquefied* app and the engine core
 
 ### Backlog
 

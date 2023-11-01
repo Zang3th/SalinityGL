@@ -31,7 +31,7 @@ namespace Engine
     {
         std::array<glm::u32vec3, 8> posToCheck = {};
         uint32 posOffset = 1;
-        *recursionDepth++;
+        (*recursionDepth)++;
 
         if(*recursionDepth >= CellSimParams::MAX_RECURSION_DEPTH)
         {
@@ -106,40 +106,6 @@ namespace Engine
             {
                 AddCell({{0, _cellStorage.Get(cellPos).type}, pos});
             }
-            else
-            {
-                _occupiedCellsThisTurn.push_back(pos);
-            }
-        }
-    }
-
-    void CellManager::MoveCellIntoDirection(const uint32 index, const glm::u32vec3& cellPos, const glm::u32vec3& originCellPos)
-    {
-        //int32 moveFactor = Random::GetInt32_Pseudo(2);
-        int32 moveFactor = 1;
-        /*if(moveFactor == 0)
-        {
-            return;
-        }*/
-
-        //Determine direction in which to move
-        glm::i64vec3 cellDiff = glm::i64vec3(cellPos) - glm::i64vec3(originCellPos);
-        cellDiff *= moveFactor;
-
-        //Determine the cell in which to move
-        glm::u32vec3 newCellPos = glm::i64vec3(cellPos) + cellDiff;
-
-        //Try to move cell into new position
-        if(_cellStorage.Get(newCellPos).type == CellType::Air)
-        {
-            MoveCell(index, cellPos, newCellPos);
-
-            //Refill old cell
-            AddCell({{0, CellType::Water}, cellPos});
-        }
-        else
-        {
-            _excessiveCells++;
         }
     }
 
@@ -147,7 +113,7 @@ namespace Engine
     {
         //Get coordinates from cell below (y-1)
         glm::u32vec3 cellPosBelow = glm::u32vec3(cellPos.x, cellPos.y-1, cellPos.z);
-        static uint32 recursionDepth = 0;
+        uint32 recursionDepth = 0;
 
         //Check for type of cell below
         if(_cellStorage.Get(cellPosBelow).type == CellType::Air)
@@ -158,7 +124,9 @@ namespace Engine
         else if(_cellStorage.Get(cellPosBelow).type == CellType::Water)
         {
             glm::u32vec3 freeCell;
-            //ToDo: Find iterative solution
+
+            //WARNING: Recursion ahead ...
+            //Temporary solution to stress test the system
             if(FindFreeCellRecursive(cellPosBelow, &freeCell, &recursionDepth))
             {
                 MoveCell(index, cellPos, freeCell);
@@ -178,26 +146,6 @@ namespace Engine
             _cellStorage.GetModifiable(cellPos).spreadFactor = 0;
         }
 
-        //Check the amount of cells that couldn't be filled up
-        /*if(_occupiedCellsThisTurn.size() == 8)
-        {
-            //Every position was full / nothing was filled up
-            //ToDo: Find out what to do now ...
-            return;
-        }
-        //Handle the non-fillable cells
-        else if(!_occupiedCellsThisTurn.empty())
-        {
-            for(auto pos : _occupiedCellsThisTurn)
-            {
-                if(_cellStorage.Get(pos).type == CellType::Water)
-                {
-                    MoveCellIntoDirection(index, pos, cellPos);
-                }
-            }
-            _occupiedCellsThisTurn.clear();
-        }*/
-
         //Clean up
         _cellStorage.GetModifiable(cellPos).movedLastTurn = false;
     }
@@ -207,7 +155,6 @@ namespace Engine
     CellManager::CellManager()
     {
         _cellSpawnerStorage.reserve(5);
-        _occupiedCellsThisTurn.reserve(8);
     }
 
     void CellManager::AddCellRenderer(const std::string& shader, const glm::vec3& worldSpawnPos)
@@ -253,7 +200,6 @@ namespace Engine
 
     void CellManager::AddCellWithoutRender(const CellParams& cellParams)
     {
-        //Save cell in 3D array
         _cellStorage.Set(cellParams.cell, cellParams.pos);
     }
 
@@ -262,10 +208,17 @@ namespace Engine
         _cellSpawnerStorage.push_back(cellParams);
     }
 
+    //Only for test purposes!
+    //Currently buggy because it doesn't update the index buffer!
     void CellManager::DeleteCell(const glm::u32vec3& cellPos)
     {
-        _cellStorage.Set({CellTypeSpreadFactor[CellType::Air], CellType::Air}, cellPos);
-        CellSimParams::cellsAlive--;
+        //Either you implement a swap with last element + pop_back, or you eliminate this function all together
+        //Won't be need anyway for the final implementation
+        if(_cellStorage.Get(cellPos).type == CellType::Water)
+        {
+            _cellStorage.Set({CellTypeSpreadFactor[CellType::Air], CellType::Air}, cellPos);
+            CellSimParams::cellsAlive--;
+        }
     }
 
     void CellManager::DeleteCells()

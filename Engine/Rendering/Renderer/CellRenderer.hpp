@@ -5,11 +5,9 @@
 #include "GlobalParams.hpp"
 #include "glm.hpp"
 #include "Shader.hpp"
-#include "Camera3D.hpp"
 #include "VertexArray.hpp"
 #include "VertexBuffer.hpp"
 #include "SceneRenderer.hpp"
-#include "VerticeData.hpp"
 
 #include <array>
 

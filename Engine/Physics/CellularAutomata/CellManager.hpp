@@ -1,8 +1,9 @@
+#pragma once
+
 #include "CellStorage.hpp"
 #include "Types.hpp"
 #include "GlobalParams.hpp"
 #include "RenderManager.hpp"
-#include "Random.hpp"
 
 namespace Engine
 {

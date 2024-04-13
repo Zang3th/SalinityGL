@@ -1,15 +1,16 @@
+#pragma once
+
 #include "Types.hpp"
 #include "GlobalParams.hpp"
 
 #include <string>
-#include <vector>
 
 namespace Engine
 {
     struct Cell
     {
-        uint8 spreadFactor;
-        CellType type;
+        uint8 spreadFactor = 0;
+        CellType type = CellType::Air;
         uint32 id = UINT32_MAX;
         bool movedLastTurn = false;
     };

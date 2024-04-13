@@ -140,13 +140,13 @@ I always worked *on and off* on this project, but I try to make more regular rel
 
 | **Library**                                                          | **Version** | **Commit** | **Updated in Engine** | **Functionality**           |
 |--------------------------------------------------------------------- |-------------|------------|-----------------------|-----------------------------|
-| [GLFW](https://github.com/glfw/glfw)                                 | 3.3.8       | 7482de6    | 10.10.2023            | Window and input management |
-| [glad](https://github.com/Dav1dde/glad)                              | 2.0.4       | d08b1aa    | 10.10.2023            | OpenGL function loading     |
-| [imgui](https://github.com/ocornut/imgui)                            | 1.89.9      | c6e0284    | 20.09.2023            | GUI                         |
+| [GLFW](https://github.com/glfw/glfw)                                 | 3.4.0       | 7b6aead    | 13.04.2024            | Window and input management |
+| [glad](https://github.com/Dav1dde/glad)                              | 2.0.6       | 658f48e    | 13.04.2024            | OpenGL function loading     |
+| [imgui](https://github.com/ocornut/imgui)                            | 1.90.4      | 277ae93    | 13.04.2024            | GUI                         |
+| [GLM](https://github.com/g-truc/glm)                                 | 1.0.1       | 0af55cc    | 13.04.2024            | Mathematics                 |
 | [miniaudio](https://github.com/mackron/miniaudio)                    | 0.11.18     | 3898fff    | 20.09.2023            | Audio                       |
 | [stb_image](https://github.com/nothings/stb/blob/master/stb_image.h) | 2.28        | 3ecc60f    | 20.09.2023            | Image loading               |
 | [tinyobjloader](https://github.com/tinyobjloader/tinyobjloader)      | /           | 853f059    | 20.09.2023            | Wavefront obj loading       |
-| [GLM](https://github.com/g-truc/glm)                                 | 0.9.9.8     | bf71a83    | 23.07.2021            | Mathematics                 |
 | [Easylogging++](https://github.com/amrayn/easyloggingpp)             | 9.96.7      | 5181b40    | 19.07.2021            | Logging                     |
 
 ## Credits

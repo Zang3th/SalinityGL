@@ -11,7 +11,7 @@ SalinityGL is an OpenGL baselayer library for creating (2D/3D) visualization app
 
 SalinityGL is written in C++17 with OpenGL 4.5. Currently, only Linux is supported. To get started, take a look at the [building and compiling](https://github.com/Zang3th/GameEngine/tree/master#building-and-compiling) section.
 
-During development, several [demo applications](https://github.com/Zang3th/GameEngine/tree/master#demo-applications) were created to test the engine's capabilities. These apps are built and compiled separately from the engine core, but a global parameter file is maintained for the configuration of some engine-to-app settings.
+During development, several [demo applications](https://github.com/Zang3th/GameEngine/tree/master#demo-applications) were created to test the engine's capabilities. These apps are built and compiled separately from the engine core, but a global parameter file is maintained for the configuration of some *app-to-engine* settings.
 
 The development of this library also serves my educational purposes.
 
@@ -56,7 +56,7 @@ SalinityGL is licensed under the [MIT LICENSE](https://github.com/Zang3th/GameEn
   - Instanced rendering
     - Flexible 2D particle system
       - Smoke
-    - Cellular Automata System
+    - Cellular Automata System (very primitive)
 - File management
 - Profiling
 - Audio
@@ -72,7 +72,7 @@ Nature scene with water rendering, normal mapped objects, and a particle system 
 
 ### CellSim (on hold) ⌛
 
-3D Cellular Automata System (very primitive). Serves as a test and benchmark application for now. The system should once be able to simulate and render >1M cells at a good framerate.
+3D Cellular Automata System (experimental - very primitive). Serves as a test and benchmark application for now.
 
 ![CellSim](Res/Screenshots/CellSim/Screenshot_CS_011.png)
 
@@ -122,7 +122,7 @@ The engine and the demo applications are compiled separately. The engine is comp
 
 ## Roadmap
 
-I always worked *on and off* on this project, but I try to make more regular releases until the end of 2024.
+I always work *on and off* on this project, but I try to make more regular releases until the end of 2024.
 
 ### Release preview
 

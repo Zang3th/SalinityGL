@@ -213,7 +213,7 @@ namespace Engine
     void CellManager::DeleteCell(const glm::u32vec3& cellPos)
     {
         //Either you implement a swap with last element + pop_back, or you eliminate this function all together
-        //Won't be need anyway for the final implementation
+        //Won't be needed anyway for the final implementation
         if(_cellStorage.Get(cellPos).type == CellType::Water)
         {
             _cellStorage.Set({CellTypeSpreadFactor[CellType::Air], CellType::Air}, cellPos);

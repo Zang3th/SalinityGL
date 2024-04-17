@@ -23,6 +23,6 @@ namespace GW
         public:
             GreenWorldApp();
             ~GreenWorldApp() final;
-            void Update() final;
+            void Update()    final;
     };
 }

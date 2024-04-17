@@ -51,27 +51,35 @@ find_package(OpenGL REQUIRED)
 ### Source files ###
 file(GLOB_RECURSE SRC_GREENWORLD Apps/GreenWorld/*.cpp)
 file(GLOB_RECURSE SRC_CELLSIM    Apps/CellSim/*.cpp)
+file(GLOB_RECURSE SRC_LIQUEFIED  Apps/Liquefied/*.cpp)
 
 ### Compile to an executable ###
 add_executable(GreenWorld ${SRC_GREENWORLD})
 add_executable(CellSim    ${SRC_CELLSIM})
+add_executable(Liquefied  ${SRC_LIQUEFIED})
 
 ### Include directories ###
 target_include_directories(GreenWorld PUBLIC Apps/GreenWorld)
 target_include_directories(GreenWorld PUBLIC Engine)
 target_include_directories(CellSim    PUBLIC Apps/CellSim)
 target_include_directories(CellSim    PUBLIC Engine)
+target_include_directories(Liquefied  PUBLIC Apps/Liquefied)
+target_include_directories(Liquefied  PUBLIC Engine)
 
-### Link against static libraries ###
+### Link against engine ###
 target_link_libraries(GreenWorld PUBLIC SalinityGL)
 target_link_libraries(CellSim    PUBLIC SalinityGL)
+target_link_libraries(Liquefied  PUBLIC SalinityGL)
 
-### Link against dynamic libraries ###
+### Link against GLFW and OpenGL ###
 target_link_libraries(GreenWorld PUBLIC ${GLFW_PATH})
 target_link_libraries(GreenWorld PUBLIC OpenGL::GL)
 target_link_libraries(CellSim    PUBLIC ${GLFW_PATH})
 target_link_libraries(CellSim    PUBLIC OpenGL::GL)
+target_link_libraries(Liquefied  PUBLIC ${GLFW_PATH})
+target_link_libraries(Liquefied  PUBLIC OpenGL::GL)
 
 ### Application linker flags ###
 target_link_libraries(GreenWorld PUBLIC ${APPLICATION_LINKER_FLAGS})
 target_link_libraries(CellSim    PUBLIC ${APPLICATION_LINKER_FLAGS})
+target_link_libraries(Liquefied  PUBLIC ${APPLICATION_LINKER_FLAGS})

@@ -8,7 +8,7 @@ namespace Engine
         :   _verticeCount(36), _shader(shader), _worldSpawnPos(worldSpawnPos), _positionStorage{glm::vec3(0.0f)},
             _colorStorage{glm::vec3(1.0f)}
     {
-        Logger::Info("Created", "Renderer",__func__);
+        Logger::Info("Created", "Renderer", __func__);
         InitGpuStorage();
     }
 

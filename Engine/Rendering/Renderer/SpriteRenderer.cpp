@@ -5,9 +5,8 @@ namespace Engine
     // ----- Private -----
 
     SpriteRenderer::SpriteRenderer()
-        : _orthoProj(glm::ortho(0.0f, (float)WindowParams::WIDTH, 0.0f, (float)WindowParams::HEIGHT, -1.0f, 1.0f))
     {
-        Logger::Info("Created", "Renderer",__func__);
+        Logger::Info("Created", "Renderer", __func__);
     }
 
     // ----- Public -----
@@ -20,7 +19,7 @@ namespace Engine
         //Render sprites
         for(const auto& sprite : _spriteStorage)
         {
-            RenderStatistics::drawnVertices += sprite->Draw(_orthoProj);
+            RenderStatistics::drawnVertices += sprite->Draw();
             RenderStatistics::drawCalls++;
         }
 
@@ -32,8 +31,7 @@ namespace Engine
 
     void SpriteRenderer::AddSprite(const glm::vec2& size, const glm::vec2& pos, Texture* texture, Shader* shader)
     {
-        auto sprite = new Sprite(texture, shader, glm::vec3(1.0f));
-        sprite->ChangeSize(size);
+        auto sprite = new Sprite(texture, shader, glm::vec3(1.0f), size);
         sprite->ChangePosition(pos);
         _spriteStorage.push_back(sprite);
     }

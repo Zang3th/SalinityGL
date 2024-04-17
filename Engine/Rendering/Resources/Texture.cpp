@@ -46,7 +46,7 @@ namespace Engine
             }
         }
         else
-            Logger::Error("Failed", "Texture-Load.", filepath);
+            Logger::Error("Failed", "Texture-Load", filepath);
 
         stbi_image_free(localBuffer);
     }

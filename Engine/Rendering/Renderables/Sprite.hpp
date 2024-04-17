@@ -7,7 +7,7 @@
 #include "glm.hpp"
 #include "gtc/matrix_transform.hpp"
 #include "Types.hpp"
-#include "ErrorManager.hpp"
+#include "GlobalParams.hpp"
 
 namespace Engine
 {
@@ -16,6 +16,7 @@ namespace Engine
         private:
             Scope<VertexArray>  _vao;
             Scope<VertexBuffer> _vboVert;
+            glm::mat4           _orthoProj;
             glm::mat4           _model;
             glm::vec3           _color;
             Texture*            _texture;
@@ -29,9 +30,9 @@ namespace Engine
             void                SetModelMatrix();
 
         public:
-            Sprite(Texture* texture, Shader* shader, const glm::vec3& color);
+            Sprite(Texture* texture, Shader* shader, const glm::vec3& color, const glm::vec2& size);
 
-            [[nodiscard]] uint32 Draw(const glm::mat4& projMatrix) const;
+            [[nodiscard]] uint32 Draw() const;
 
             void ChangePosition(const glm::vec2& position);
             void ChangeRotation(float rotation);

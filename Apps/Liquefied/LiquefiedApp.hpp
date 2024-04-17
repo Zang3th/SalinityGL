@@ -8,6 +8,7 @@ namespace Liq
     class LiquefiedApp final : public Engine::App
     {
         private:
+            Engine::PixelRenderer*            _pixelRenderer = nullptr;
             Engine::Scope<LiquefiedInterface> _interface;
 
             void           LoadResources() final;

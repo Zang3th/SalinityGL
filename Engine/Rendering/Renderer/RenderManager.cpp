@@ -102,6 +102,14 @@ namespace Engine
         return _cellRenderer;
     }
 
+    PixelRenderer* RenderManager::AddPixelRenderer(const std::string& bgTexture, const std::string& shader)
+    {
+        _pixelRenderer = new PixelRenderer(bgTexture, shader);
+        _rendererStorage.push_back(_pixelRenderer);
+
+        return _pixelRenderer;
+    }
+
     void RenderManager::RenderScene()
     {
         _sceneRenderer->Flush(nullptr);
@@ -130,5 +138,10 @@ namespace Engine
     void RenderManager::RenderCells()
     {
         _cellRenderer->Flush((Renderer*)_sceneRenderer);
+    }
+
+    void RenderManager::RenderPixels()
+    {
+        _pixelRenderer->Flush(nullptr);
     }
 }

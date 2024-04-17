@@ -9,6 +9,7 @@
 #include "WaterRenderer.hpp"
 #include "ParticleRenderer.hpp"
 #include "CellRenderer.hpp"
+#include "PixelRenderer.hpp"
 
 #include <vector>
 
@@ -24,6 +25,7 @@ namespace Engine
             inline static WaterRenderer*         _waterRenderer    = nullptr;
             inline static ParticleRenderer*      _particleRenderer = nullptr;
             inline static CellRenderer*          _cellRenderer     = nullptr;
+            inline static PixelRenderer*         _pixelRenderer    = nullptr;
             inline static bool                   _initialized      = false;
 
         public:
@@ -44,6 +46,7 @@ namespace Engine
                 float respawnThreshold, const std::string& textureAtlas, const std::string& shader, const glm::vec3& position
             );
             static CellRenderer* AddCellRenderer(const std::string& shader, const glm::vec3& worldSpawnPos);
+            static PixelRenderer* AddPixelRenderer(const std::string& bgTexture, const std::string& shader);
 
             static void RenderScene();
             static void RenderShadows();
@@ -51,5 +54,6 @@ namespace Engine
             static void RenderWater();
             static void RenderParticles();
             static void RenderCells();
+            static void RenderPixels();
     };
 }

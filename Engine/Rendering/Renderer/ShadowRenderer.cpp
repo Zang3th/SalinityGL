@@ -22,7 +22,7 @@ namespace Engine
 
         _fbo->Unbind();
 
-        Logger::Info("Created", "Renderer",__func__);
+        Logger::Info("Created", "Renderer", __func__);
     }
 
     void ShadowRenderer::StartFrame()

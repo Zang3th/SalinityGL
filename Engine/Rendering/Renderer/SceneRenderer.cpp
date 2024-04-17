@@ -8,7 +8,7 @@ namespace Engine
         : _moveFactor(0.0f), _waveSpeed(0.0f), _perspProj(glm::perspective(glm::radians(45.0f), Window::GetAspectRatio(), RenderParams::nearPlane, RenderParams::farPlane)),
           _lightProj(0.0f), _terrainModel(nullptr), _waterModel(nullptr), _planeModel(nullptr), _terrainShader(nullptr), _modelShader(nullptr), _waterShader(nullptr)
     {
-        Logger::Info("Created", "Renderer",__func__);
+        Logger::Info("Created", "Renderer", __func__);
     }
 
     SceneRenderer::~SceneRenderer()

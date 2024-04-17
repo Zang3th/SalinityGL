@@ -2,27 +2,28 @@
 
 #include "Renderer.hpp"
 #include "glm.hpp"
+#include "Sprite.hpp"
 #include "Texture.hpp"
 #include "Shader.hpp"
 #include "GLRenderSettings.hpp"
-#include "Sprite.hpp"
 #include "GlobalParams.hpp"
 
 #include <vector>
 
 namespace Engine
 {
-    class SpriteRenderer final : public Renderer
+    class PixelRenderer final : public Renderer
     {
         friend class RenderManager;
 
         private:
-            std::vector<Sprite*> _spriteStorage;
+            Sprite _canvasSprite;
 
-            SpriteRenderer();
+            PixelRenderer(const std::string& bgTexture, const std::string& shader);
 
         public:
             void Flush(Renderer* renderer) final;
-            void AddSprite(const glm::vec2& size, const glm::vec2& pos, Texture* texture, Shader* shader);
+            void Set(uint32 x, uint32 y, const glm::vec3& color);
+            void Reset(uint32 x, uint32 y);
     };
 }

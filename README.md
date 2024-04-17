@@ -23,7 +23,7 @@ SalinityGL is licensed under the [MIT LICENSE](https://github.com/Zang3th/GameEn
     ├── Apps/                       # Demo applications
     │   ├── GreenWorld/             # 3D nature scene
     │   └── CellSim/                # 3D Cellular Automata System (on hold) ⌛
-    │   └── Liquefied/              # 2D/3D Eulerian Fluid Simulation (in development) 🔥
+    │   └── Liquefied/              # 2D Eulerian Fluid Simulation (in development) 🔥
     ├── Engine/
     │   ├── Application/            # Application and interface stuff
     │   ├── Core/                   # Utilities and core engine functionalities
@@ -78,7 +78,9 @@ Nature scene with water rendering, normal mapped objects, and a particle system 
 
 ### Liquefied (in development)
 
-2D/3D Eulerian Fluid Simulation
+2D Eulerian Fluid Simulation
+
+![Liquefied](Res/Screenshots/Liquefied/Screenshot_Liq_001.png)
 
 ## Building and compiling
 

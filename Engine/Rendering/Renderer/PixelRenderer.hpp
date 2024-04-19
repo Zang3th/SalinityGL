@@ -23,7 +23,7 @@ namespace Engine
 
         public:
             void Flush(Renderer* renderer) final;
-            void Set(uint32 x, uint32 y, const glm::vec3& color);
-            void Reset(uint32 x, uint32 y);
+            void Set(uint32 x, uint32 y, const glm::vec3& color) const;
+            void Reset(uint32 x, uint32 y) const;
     };
 }

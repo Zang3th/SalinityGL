@@ -38,5 +38,7 @@ namespace Engine
             void ChangeRotation(float rotation);
             void ChangeSize(const glm::vec2& size);
             void SetTexture(Texture* texture);
+
+            [[nodiscard]] Texture* GetTexture() const;
     };
 }

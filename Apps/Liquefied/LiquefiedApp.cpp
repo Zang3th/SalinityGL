@@ -10,7 +10,7 @@ namespace Liq
         Engine::ResourceManager::LoadShader("SpriteShader", "../Res/Shader/GreenWorld/Sprite_VS.glsl", "../Res/Shader/GreenWorld/Sprite_FS.glsl");
 
         //Texture
-        Engine::ResourceManager::LoadTextureFromFile("BG_Texture", "../Res/Assets/Textures/Liquefied/Dark_Squares.jpg");
+        Engine::ResourceManager::LoadTextureToBuffer("BG_Texture", "../Res/Assets/Textures/Liquefied/Dark_Squares.jpg");
     }
 
     Engine::uint32 LiquefiedApp::InitModules()
@@ -77,13 +77,28 @@ namespace Liq
             Engine::PROFILE_SCOPE("Render pixels");
 
             Engine::RenderManager::RenderPixels();
-        }
 
+            //Test of the pixel renderer
+            if(Engine::Window::GetFrameCounter() == 75)
+            {
+                _pixelRenderer->Set(0, 0, COLOR_WHITE);
+                _pixelRenderer->Set(1919, 0, COLOR_RED);
+                _pixelRenderer->Set(0, 1079, COLOR_BLUE);
+                _pixelRenderer->Set(1919, 1079, COLOR_GREEN);
+            }
+            else if(Engine::Window::GetFrameCounter() == 0)
+            {
+                _pixelRenderer->Reset(0, 0);
+                _pixelRenderer->Reset(1919, 0);
+                _pixelRenderer->Reset(0, 1079);
+                _pixelRenderer->Reset(1919, 1079);
+            }
+        }
 
         {
             Engine::PROFILE_SCOPE("Render UI");
 
-            _interface->AddElements();
+            //_interface->AddElements();
             _interface->Render();
         }
 

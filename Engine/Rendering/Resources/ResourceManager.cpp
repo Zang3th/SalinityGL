@@ -4,21 +4,28 @@ namespace Engine
 {
     // ----- Public -----
 
-    Texture* ResourceManager::LoadTexture(const std::string& name, const uint32 width, const uint32 height, GLint internalFormat, GLenum format, GLenum type)
+    Texture* ResourceManager::CreateTexture(const std::string& name, const uint32 width, const uint32 height, GLint internalFormat, GLenum format, GLenum type)
     {
-        auto texture = new Texture(width, height, internalFormat, format, type);
+        auto texture = new Texture((int32)width, (int32)height, internalFormat, format, type);
         _textureStorage[name] = texture;
         return texture;
     }
 
-    Texture* ResourceManager::LoadTextureFromFile(const std::string& name, const std::string& filepath)
+    Texture* ResourceManager::LoadTexture(const std::string& name, const std::string& filepath)
     {
-        auto texture = new Texture(filepath);
+        auto texture = new Texture(filepath, false);
         _textureStorage[name] = texture;
         return texture;
     }
 
-    Texture* ResourceManager::LoadTextureAtlasFromFile(const std::string& name, const std::string& filepath, uint32 numberOfRows)
+    Texture* ResourceManager::LoadTextureToBuffer(const std::string& name, const std::string& filepath)
+    {
+        auto texture = new Texture(filepath, 0, true);
+        _textureStorage[name] = texture;
+        return texture;
+    }
+
+    Texture* ResourceManager::LoadTextureAtlas(const std::string& name, const std::string& filepath, uint32 numberOfRows)
     {
         auto texture = new Texture(filepath, numberOfRows);
         _textureStorage[name] = texture;

@@ -72,7 +72,7 @@ namespace Engine
                 //Load diffuse texture
                 std::string textureFilepath = baseFilepath + "/" + materials[i].diffuse_texname;
                 std::string textureName = filename + "DiffuseTexture";
-                ResourceManager::LoadTextureFromFile(textureName, textureFilepath);
+                ResourceManager::LoadTexture(textureName, textureFilepath);
                 mesh.textures.push_back(ResourceManager::GetTexture(textureName));
                 mesh.gotDiffuseTex = 1;
             }
@@ -83,7 +83,7 @@ namespace Engine
                 //Load bump map
                 std::string textureFilepath = baseFilepath + "/" + materials[i].bump_texname;
                 std::string textureName = filename + "NormalTexture";
-                ResourceManager::LoadTextureFromFile(textureName, textureFilepath);
+                ResourceManager::LoadTexture(textureName, textureFilepath);
                 mesh.textures.push_back(ResourceManager::GetTexture(textureName));
                 mesh.gotNormalMap = 1;
             }

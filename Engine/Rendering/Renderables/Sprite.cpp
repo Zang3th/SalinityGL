@@ -126,4 +126,9 @@ namespace Engine
     {
         _texture = texture;
     }
+
+    Texture* Sprite::GetTexture() const
+    {
+        return _texture;
+    }
 }

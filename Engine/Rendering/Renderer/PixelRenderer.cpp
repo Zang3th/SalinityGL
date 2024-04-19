@@ -22,7 +22,7 @@ namespace Engine
         GLRenderSettings::DisableCulling();
 
         //Render sprite
-        RenderStatistics::drawnVertices +=_canvasSprite.Draw();
+        RenderStatistics::drawnVertices += _canvasSprite.Draw();
         RenderStatistics::drawCalls++;
 
         //Increase render pass counter
@@ -32,18 +32,13 @@ namespace Engine
     }
 
 
-    void Set(uint32 x, uint32 y, const glm::vec3& color)
+    void PixelRenderer::Set(uint32 x, uint32 y, const glm::vec3& color) const
     {
-
+        _canvasSprite.GetTexture()->ModifyTexture(x, y, color);
     }
 
-    void Reset(uint32 x, uint32 y)
+    void PixelRenderer::Reset(uint32 x, uint32 y) const
     {
-
-    }
-
-    void AddBGTexture(const std::string& bgTexFilepath)
-    {
-
+        _canvasSprite.GetTexture()->ResetTextureModification(x, y);
     }
 }

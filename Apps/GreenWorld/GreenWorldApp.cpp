@@ -17,11 +17,11 @@ namespace GW
         Engine::ResourceManager::LoadShader("SpriteShaderGreyscale", "../Res/Shader/GreenWorld/Sprite_VS.glsl", "../Res/Shader/GreenWorld/SpriteGreyscale_FS.glsl");
 
         //Textures
-        Engine::ResourceManager::LoadTextureAtlasFromFile("ParticleTextureAtlas", "../Res/Assets/Textures/GreenWorld/SmokeAtlas.png", 8);
-        Engine::ResourceManager::LoadTextureFromFile("TerrainGrassTexture", "../Res/Assets/Textures/GreenWorld/Grass.jpg");
-        Engine::ResourceManager::LoadTextureFromFile("TerrainColormap", "../Res/Assets/Textures/GreenWorld/Colormap128.png");
-        Engine::ResourceManager::LoadTextureFromFile("WaterDuDvMap", "../Res/Assets/Textures/GreenWorld/DuDvMap.png");
-        Engine::ResourceManager::LoadTextureFromFile("WaterNormalMap", "../Res/Assets/Textures/GreenWorld/WaterNormalMap.png");
+        Engine::ResourceManager::LoadTextureAtlas("ParticleTextureAtlas", "../Res/Assets/Textures/GreenWorld/SmokeAtlas.png", 8);
+        Engine::ResourceManager::LoadTexture("TerrainGrassTexture", "../Res/Assets/Textures/GreenWorld/Grass.jpg");
+        Engine::ResourceManager::LoadTexture("TerrainColormap", "../Res/Assets/Textures/GreenWorld/Colormap128.png");
+        Engine::ResourceManager::LoadTexture("WaterDuDvMap", "../Res/Assets/Textures/GreenWorld/DuDvMap.png");
+        Engine::ResourceManager::LoadTexture("WaterNormalMap", "../Res/Assets/Textures/GreenWorld/WaterNormalMap.png");
 
         //Heightmap
         Engine::ResourceManager::LoadHeightmap("TerrainHeightmap", "../Res/Assets/Textures/GreenWorld/Heightmap128.bmp");

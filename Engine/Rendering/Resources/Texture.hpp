@@ -2,6 +2,9 @@
 
 #include "stb_image.hpp"
 #include "ErrorManager.hpp"
+#include "glm.hpp"
+
+#include <cstring>
 
 namespace Engine
 {
@@ -11,15 +14,18 @@ namespace Engine
     class Texture
     {
         private:
-            uint32 _textureID, _numberOfRows;
+            int32          _width, _height, _nrChannels;
+            GLenum         _format;
+            uint32         _textureID, _numberOfRows;
+            bool           _saveToBuffer;
+            unsigned char *_imgBuffer, *_backupBuffer;
 
             void InitFromFile(const std::string& filepath);
-            void Init(uint32 width, uint32 height, GLint internalFormat, GLenum format, GLenum type);
+            void Create(uint32 width, uint32 height, GLint internalFormat, GLenum format, GLenum type);
 
         public:
-            explicit Texture(const std::string& filepath);
-            Texture(const std::string& filepath, uint32 numberOfRows);
-            Texture(uint32 width, uint32 height, GLint internalFormat, GLenum format, GLenum type);
+            explicit Texture(const std::string &filepath, uint32 numberOfRows = 0, bool saveToBuffer = false);
+            Texture(int32 width, int32 height, GLint internalFormat, GLenum format, GLenum type);
             ~Texture();
 
             void Bind() const;
@@ -32,6 +38,8 @@ namespace Engine
             void AddWrapRepeat() const;
             void ClampToEdge() const;
             void AddBorderColor() const;
+            void ModifyTexture(uint32 x, uint32 y, const glm::vec3& color);
+            void ResetTextureModification(uint32 x, uint32 y);
 
             [[nodiscard]] uint32 GetTextureID() const;
             [[nodiscard]] uint32 GetNumberOfRows() const;

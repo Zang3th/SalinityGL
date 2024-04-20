@@ -15,14 +15,14 @@ namespace GW
             Engine::Scope<GreenWorldInterface>      _interface;
             Engine::Scope<Engine::Audio>            _audio;
     
-            void           LoadResources() final;
-            Engine::uint32 InitModules()   final;
+            void           LoadResources() override;
+            Engine::uint32 InitModules()   override;
             void           AddObjects();
             void           AddSprites();
 
         public:
             GreenWorldApp();
-            ~GreenWorldApp() final;
-            void Update()    final;
+            ~GreenWorldApp() override;
+            void Update()    override;
     };
 }

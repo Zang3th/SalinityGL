@@ -11,12 +11,12 @@ namespace Liq
             Engine::PixelRenderer*            _pixelRenderer = nullptr;
             Engine::Scope<LiquefiedInterface> _interface;
 
-            void           LoadResources() final;
-            Engine::uint32 InitModules()   final;
+            void           LoadResources() override;
+            Engine::uint32 InitModules()   override;
 
         public:
             LiquefiedApp();
-            ~LiquefiedApp() final;
-            void Update()   final;
+            ~LiquefiedApp() override;
+            void Update()   override;
     };
 }

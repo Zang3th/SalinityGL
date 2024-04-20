@@ -15,8 +15,8 @@ namespace CS
             Engine::Scope<Engine::CellManager> _cellManager;
             Engine::Scope<CellSimInterface>    _interface;
 
-            void           LoadResources() final;
-            Engine::uint32 InitModules()   final;
+            void           LoadResources() override;
+            Engine::uint32 InitModules()   override;
             void           AddObjects();
             void           AddCellWorld();
             void           HandleCellSpawn();
@@ -24,7 +24,7 @@ namespace CS
 
         public:
             CellSimApp();
-            ~CellSimApp() final;
-            void Update() final;
+            ~CellSimApp() override;
+            void Update() override;
     };
 }

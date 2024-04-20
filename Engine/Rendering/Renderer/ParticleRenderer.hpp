@@ -41,7 +41,7 @@ namespace Engine
                 uint32 count, float size, float speed, float gravityCompliance, float lifeLength,
                 float respawnThreshold, Texture* textureAtlas, Shader* shader, const glm::vec3& position
             );
-            ~ParticleRenderer() final;
+            ~ParticleRenderer() override;
 
             void      InitGpuStorage();
             void      UpdateGpuStorage();
@@ -49,6 +49,6 @@ namespace Engine
             glm::mat4 GetModelViewMatrix(Particle* particle);
 
         public:
-            void Flush(Renderer* sceneRenderer) final;
+            void Flush(Renderer* sceneRenderer) override;
     };
 }

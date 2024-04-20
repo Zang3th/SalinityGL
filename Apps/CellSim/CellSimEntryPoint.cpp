@@ -6,11 +6,13 @@ int main()
     CS::CellSimApp cellSimApp;
 
     //Check for success
-    if(cellSimApp.appStartSuccess)
+    if(cellSimApp.GetInitSuccess())
     {
         //Start app
         while(cellSimApp.IsRunning())
+        {
             cellSimApp.Update();
+        }
     }
     else
     {

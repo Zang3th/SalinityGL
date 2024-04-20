@@ -1,10 +1,6 @@
 name: Build
 
-on:
-  push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+on: [push, pull_request]
 
 env:
   BUILD_TYPE: Debug
@@ -38,3 +34,7 @@ jobs:
       - name: Run CellSim
         working-directory: ${{github.workspace}}/build
         run: xvfb-run -a ./CellSim & sleep 20 ; kill $!
+
+      - name: Run Liquefied
+        working-directory: ${{github.workspace}}/build
+        run: xvfb-run -a ./Liquefied & sleep 20 ; kill $!

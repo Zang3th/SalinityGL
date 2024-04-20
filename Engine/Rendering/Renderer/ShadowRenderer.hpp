@@ -29,7 +29,7 @@ namespace Engine
             void EndFrame();
 
         public:
-            void Flush(Renderer* sceneRenderer) final;
+            void Flush(Renderer* sceneRenderer) override;
             [[nodiscard]] Texture* GetDepthTexture() const;
             [[nodiscard]] glm::mat4 GetLightProjection() const;
     };

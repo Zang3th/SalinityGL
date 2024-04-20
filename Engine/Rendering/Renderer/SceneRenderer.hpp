@@ -33,14 +33,14 @@ namespace Engine
             Shader             *_terrainShader, *_modelShader, *_waterShader;
 
             SceneRenderer();
-            ~SceneRenderer() final;
+            ~SceneRenderer() override;
 
             void FlushModel(Model* model, Shader* shader);
             void FlushWater();
             void UpdateMoveFactor();
 
         public:
-            void Flush(Renderer* renderer) final;
+            void Flush(Renderer* renderer) override;
             void FlushModels(Shader* shader);
             void FlushCubemap();
             void FlushTerrain();

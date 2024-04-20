@@ -7,10 +7,12 @@ namespace Engine
     // ----- Private -----
 
     PixelRenderer::PixelRenderer(const std::string& bgTexture, const std::string& shader)
-        : _canvasSprite(ResourceManager::GetTexture(bgTexture),
+        :   _width(ResourceManager::GetTexture(bgTexture)->GetWidth()),
+            _height(ResourceManager::GetTexture(bgTexture)->GetHeight()),
+            _canvasSprite(ResourceManager::GetTexture(bgTexture),
                         ResourceManager::GetShader(shader),
                         COLOR_WHITE,
-                        glm::vec2((float)WindowParams::WIDTH, (float)WindowParams::HEIGHT))
+                        glm::vec2(_width, _height))
     {
         Logger::Info("Created", "Renderer", __func__);
     }
@@ -20,6 +22,9 @@ namespace Engine
     void PixelRenderer::Flush(Renderer* renderer)
     {
         GLRenderSettings::DisableCulling();
+
+        //Commit texture changes
+        _canvasSprite.GetTexture()->CommitModifications();
 
         //Render sprite
         RenderStatistics::drawnVertices += _canvasSprite.Draw();
@@ -40,5 +45,27 @@ namespace Engine
     void PixelRenderer::Reset(uint32 x, uint32 y) const
     {
         _canvasSprite.GetTexture()->ResetTextureModification(x, y);
+    }
+
+    void PixelRenderer::SetScreen(const glm::vec3& color) const
+    {
+        for(uint32 x = 0; x < _width; x++)
+        {
+            for(uint32 y = 0; y < _height; y++)
+            {
+                Set(x, y, color);
+            }
+        }
+    }
+
+    void PixelRenderer::ClearScreen() const
+    {
+        for(uint32 x = 0; x < _width; x++)
+        {
+            for(uint32 y = 0; y < _height; y++)
+            {
+                Reset(x, y);
+            }
+        }
     }
 }

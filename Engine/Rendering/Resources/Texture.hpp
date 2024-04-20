@@ -40,7 +40,10 @@ namespace Engine
             void AddBorderColor() const;
             void ModifyTexture(uint32 x, uint32 y, const glm::vec3& color);
             void ResetTextureModification(uint32 x, uint32 y);
+            void CommitModifications() const;
 
+            [[nodiscard]] uint32  GetWidth() const;
+            [[nodiscard]] uint32  GetHeight() const;
             [[nodiscard]] uint32 GetTextureID() const;
             [[nodiscard]] uint32 GetNumberOfRows() const;
     };

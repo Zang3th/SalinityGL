@@ -22,7 +22,7 @@ namespace Engine
             SpriteRenderer();
 
         public:
-            void Flush(Renderer* renderer) final;
+            void Flush(Renderer* renderer) override;
             void AddSprite(const glm::vec2& size, const glm::vec2& pos, Texture* texture, Shader* shader);
     };
 }

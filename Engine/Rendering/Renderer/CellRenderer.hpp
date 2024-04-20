@@ -29,13 +29,13 @@ namespace Engine
             std::array<glm::vec3, CellSimParams::MAX_CELL_AMOUNT> _colorStorage;
 
             CellRenderer(Shader* shader, const glm::vec3& worldSpawnPos);
-            ~CellRenderer() final = default;
+            ~CellRenderer() override = default;
 
             void InitGpuStorage();
             void UploadGPUStorage();
 
         public:
-            void Flush(Renderer* renderer) final;
+            void Flush(Renderer* renderer) override;
             void UpdateGPUStorage(uint32 index, const glm::u32vec3& cellPos, const glm::vec3& cellColor);
     };
 }

@@ -6,11 +6,13 @@ int main()
     Liq::LiquefiedApp liquefiedApp;
 
     //Check for success
-    if(liquefiedApp.appStartSuccess)
+    if(liquefiedApp.GetInitSuccess())
     {
         //Start app
         while(liquefiedApp.IsRunning())
+        {
             liquefiedApp.Update();
+        }
     }
     else
     {

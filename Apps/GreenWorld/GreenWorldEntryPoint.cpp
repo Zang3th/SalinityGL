@@ -6,11 +6,13 @@ int main()
     GW::GreenWorldApp greenWorldApp;
 
     //Check for success
-    if(greenWorldApp.appStartSuccess)
+    if(greenWorldApp.GetInitSuccess())
     {
         //Start app
         while(greenWorldApp.IsRunning())
+        {
             greenWorldApp.Update();
+        }
     }
     else
     {

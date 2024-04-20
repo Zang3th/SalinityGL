@@ -175,9 +175,6 @@ namespace Engine
                 *(_imgBuffer + (y * _width * 3) + (x * 3) + 0) = (unsigned char)(color.x * 255);
                 *(_imgBuffer + (y * _width * 3) + (x * 3) + 1) = (unsigned char)(color.y * 255);
                 *(_imgBuffer + (y * _width * 3) + (x * 3) + 2) = (unsigned char)(color.z * 255);
-
-                Bind();
-                GLCall(glTexImage2D(GL_TEXTURE_2D, 0, _format, _width, _height, 0, _format, GL_UNSIGNED_BYTE, _imgBuffer));
             }
         }
         else
@@ -195,15 +192,29 @@ namespace Engine
                 *(_imgBuffer + (y * _width * 3) + (x * 3) + 0) = *(_backupBuffer + (y * _width * 3) + (x * 3) + 0);
                 *(_imgBuffer + (y * _width * 3) + (x * 3) + 1) = *(_backupBuffer + (y * _width * 3) + (x * 3) + 1);
                 *(_imgBuffer + (y * _width * 3) + (x * 3) + 2) = *(_backupBuffer + (y * _width * 3) + (x * 3) + 2);
-
-                Bind();
-                GLCall(glTexImage2D(GL_TEXTURE_2D, 0, _format, _width, _height, 0, _format, GL_UNSIGNED_BYTE, _imgBuffer));
             }
         }
         else
         {
             Logger::Error("Failed", "Modification", "Texture wasn't saved");
         }
+    }
+
+    void Texture::CommitModifications() const
+    {
+        Bind();
+        GLCall(glTexImage2D(GL_TEXTURE_2D, 0, _format, _width, _height, 0, _format, GL_UNSIGNED_BYTE, _imgBuffer));
+        Unbind();
+    }
+
+    uint32 Texture::GetWidth() const
+    {
+        return (uint32)_width;
+    }
+
+    uint32 Texture::GetHeight() const
+    {
+        return (uint32)_height;
     }
 
     uint32 Texture::GetTextureID() const

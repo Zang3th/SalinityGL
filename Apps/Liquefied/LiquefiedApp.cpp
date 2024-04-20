@@ -26,7 +26,7 @@ namespace Liq
         //Load shaders and textures
         LoadResources();
 
-        //Create PixelRenderer
+        //Create pixel renderer
         _pixelRenderer = Engine::RenderManager::AddPixelRenderer("BG_Texture", "SpriteShader");
 
         //Create UI
@@ -41,11 +41,11 @@ namespace Liq
     {
         if(InitModules() != EXIT_SUCCESS)
         {
-            appStartSuccess = false;
+            _initSuccess = false;
         }
         else
         {
-            appStartSuccess = true;
+            _initSuccess = true;
         }
     }
 
@@ -79,26 +79,20 @@ namespace Liq
             Engine::RenderManager::RenderPixels();
 
             //Test of the pixel renderer
-            if(Engine::Window::GetFrameCounter() == 75)
+            if(Engine::Window::GetFrameCounter() == 0)
             {
-                _pixelRenderer->Set(0, 0, COLOR_WHITE);
-                _pixelRenderer->Set(1919, 0, COLOR_RED);
-                _pixelRenderer->Set(0, 1079, COLOR_BLUE);
-                _pixelRenderer->Set(1919, 1079, COLOR_GREEN);
+                _pixelRenderer->SetScreen(COLOR_WHITE);
             }
-            else if(Engine::Window::GetFrameCounter() == 0)
+            else if(Engine::Window::GetFrameCounter() == 80)
             {
-                _pixelRenderer->Reset(0, 0);
-                _pixelRenderer->Reset(1919, 0);
-                _pixelRenderer->Reset(0, 1079);
-                _pixelRenderer->Reset(1919, 1079);
+                _pixelRenderer->ClearScreen();
             }
         }
 
         {
             Engine::PROFILE_SCOPE("Render UI");
 
-            //_interface->AddElements();
+            _interface->AddElements();
             _interface->Render();
         }
 

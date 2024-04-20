@@ -34,7 +34,7 @@ namespace Engine
             void RenderRefractionFrame(SceneRenderer* sceneRenderer);
 
         public:
-            void Flush(Renderer* sceneRenderer) final;
+            void Flush(Renderer* sceneRenderer) override;
             
             [[nodiscard]] Texture* GetReflectTexture()      const;
             [[nodiscard]] Texture* GetRefractTexture()      const;

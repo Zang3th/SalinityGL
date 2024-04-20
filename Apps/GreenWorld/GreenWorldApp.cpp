@@ -203,11 +203,11 @@ namespace GW
     {
         if(InitModules() != EXIT_SUCCESS)
         {
-            appStartSuccess = false;
+            _initSuccess = false;
         }
         else
         {
-            appStartSuccess = true;
+            _initSuccess = true;
             AddObjects();
             AddSprites();
         }

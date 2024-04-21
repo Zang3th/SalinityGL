@@ -11,11 +11,8 @@ namespace Engine
 
     struct WindowParams
     {
-        inline static constexpr int32 WIDTH              = 1920;
-        inline static constexpr int32 HEIGHT             = 1080;
-        inline static           bool  wireframeRendering = false;
-        inline static           bool  debugSprites       = false;
-        inline static           bool  resetCamera        = false;
+        inline static constexpr int32 WIDTH  = 1920;
+        inline static constexpr int32 HEIGHT = 1080;
 
         WindowParams() = delete;
     };
@@ -47,6 +44,16 @@ namespace Engine
         inline static glm::vec3 color    = glm::vec3(1.0f, 1.0f, 1.0f);
 
         LightParams() = delete;
+    };
+
+    struct UIParams
+    {
+        inline static bool showOverlay        = true;
+        inline static bool wireframeRendering = false;
+        inline static bool debugSprites       = false;
+        inline static bool resetCamera        = false;
+
+        UIParams() = delete;
     };
 
     struct RenderStatistics

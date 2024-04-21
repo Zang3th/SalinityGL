@@ -147,10 +147,10 @@ namespace CS
             Engine::CameraController3D::ProcessInput();
             _timeElapsed += Engine::Window::GetDeltaTime();
 
-            if(Engine::WindowParams::resetCamera)
+            if(Engine::UIParams::resetCamera)
             {
                 Engine::Camera3D::ResetPosition();
-                Engine::WindowParams::resetCamera = false;
+                Engine::UIParams::resetCamera = false;
             }
         }
 

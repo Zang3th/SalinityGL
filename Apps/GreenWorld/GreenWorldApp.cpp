@@ -257,7 +257,7 @@ namespace GW
             Engine::RenderManager::RenderScene();
             Engine::RenderManager::RenderParticles();
 
-            if(Engine::WindowParams::debugSprites)
+            if(Engine::UIParams::debugSprites)
             {
                 Engine::RenderManager::RenderSprites();
             }

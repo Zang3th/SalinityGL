@@ -133,7 +133,7 @@ namespace Engine
     void SceneRenderer::Flush(Renderer* renderer)
     {
         //Check for Wireframe-Mode
-        if(WindowParams::wireframeRendering)
+        if(UIParams::wireframeRendering)
             GLRenderSettings::EnableWireframe();
         else
             GLRenderSettings::DisableWireframe();

@@ -6,6 +6,8 @@ namespace Engine
 
     void Interface::SetDarkThemeColors()
     {
+        ImGui::StyleColorsDark();
+
         auto& colors = ImGui::GetStyle().Colors;
         colors[ImGuiCol_WindowBg] = ImVec4{0.1f, 0.105f, 0.11f, 1.0f};
 
@@ -61,6 +63,12 @@ namespace Engine
         ImGui::SetCursorPosX((windowWidth - textWidth) * 0.5f);
     }
 
+    void Interface::LoadCustomFont(const char* filepath, float size)
+    {
+        const ImGuiIO& io = ImGui::GetIO();
+        io.Fonts->AddFontFromFileTTF(filepath, size);
+    }
+
     bool Interface::RadioButton_u32(const char* label, uint32* v, uint32 v_button)
     {
         const bool pressed = ImGui::RadioButton(label, *v == v_button);
@@ -79,7 +87,6 @@ namespace Engine
 
     Interface::Interface()
     {
-        //Setup ImGui
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
         ImGui_ImplGlfw_InitForOpenGL(Window::GetWindow(), true);
@@ -91,6 +98,17 @@ namespace Engine
         ImGui_ImplOpenGL3_Shutdown();
         ImGui_ImplGlfw_Shutdown();
         ImGui::DestroyContext();
+    }
+
+    void Interface::CalcElementSizes()
+    {
+        const     ImGuiViewport* viewport     = ImGui::GetMainViewport();
+        const     ImVec2         workPos      = viewport->WorkPos;
+        constexpr auto           windowWidth  = (float)Engine::WindowParams::WIDTH;
+        constexpr auto           windowHeight = (float)Engine::WindowParams::HEIGHT;
+
+        _sidebarPos  = ImVec2(workPos.x + windowWidth, _menuBarHeight);
+        _sidebarSize = ImVec2(_sidebarWidth,windowHeight - _menuBarHeight);
     }
 
     void Interface::PrepareFrame()

@@ -79,14 +79,14 @@ namespace Liq
             Engine::RenderManager::RenderPixels();
 
             //Test of the pixel renderer
-            if(Engine::Window::GetFrameCounter() == 0)
+            /*if(Engine::Window::GetFrameCounter() == 0)
             {
                 _pixelRenderer->SetScreen(COLOR_WHITE);
             }
             else if(Engine::Window::GetFrameCounter() == 80)
             {
                 _pixelRenderer->ClearScreen();
-            }
+            }*/
         }
 
         {

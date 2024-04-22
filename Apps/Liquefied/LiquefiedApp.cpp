@@ -40,7 +40,7 @@ namespace Liq
 
     void LiquefiedApp::VisualizeSmoke()
     {
-        float* smokeField = _fluidSimulator->GetSmokeField();
+        //float* smokeField = _fluidSimulator->GetSmokeField();
 
         //Iterate over smoke field
 

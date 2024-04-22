@@ -1,11 +1,41 @@
 ############################### Project-Setup ###############################
 
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.20)
+
+set(SALINITYGL_ENGINE_VERSION "0.3.0")
+set(SALINITYGL_ENGINE_VERSION_SUFFIX "alpha")
+add_compile_definitions(SALINITYGL_ENGINE_VERSION="${SALINITYGL_ENGINE_VERSION}")
+add_compile_definitions(SALINITYGL_ENGINE_VERSION_SUFFIX="${SALINITYGL_ENGINE_VERSION_SUFFIX}")
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_BUILD_TYPE "Debug")
-set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wpedantic -Wno-unused-parameter --std=c++17 -g")
-project(SalinityGL)
+
+project(SalinityGL
+        VERSION     "${SALINITYGL_ENGINE_VERSION}"
+        LANGUAGES   CXX
+        DESCRIPTION "OpenGL baselayer library in C++"
+)
+
+add_compile_options(
+        -Waddress
+        -Wformat-nonliteral
+        -Wformat-security
+        -Wformat
+        -Winit-self
+        -Wmissing-include-dirs
+        -Wno-multichar
+        -Wno-parentheses
+        -Wno-type-limits
+        -Wno-unused-parameter
+        -Wunreachable-code
+        -Wwrite-strings
+        -Wpointer-arith
+        -Werror
+        -Wall
+        -Wextra
+        -Wpedantic
+        -g
+)
 
 ############################### Settings ####################################
 

@@ -92,7 +92,7 @@ The engine and the demo applications are compiled separately. The engine is comp
   - Tested with Ubuntu 16.04 - 22.04
 - C++17 compiler
   - Tested Clang and GCC
-- CMake 3.16 or newer
+- CMake 3.20 or newer
 - OpenGL 4.5 compatible graphics card and driver
 
 ### How to get started

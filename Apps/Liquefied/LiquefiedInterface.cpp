@@ -46,7 +46,7 @@ namespace Liq
 
     void LiquefiedInterface::AddBufferBar() const
     {
-        ImGui::SetNextWindowBgAlpha(0.9f);
+        ImGui::SetNextWindowBgAlpha(_windowAlphaValue);
         ImGui::SetNextWindowPos(_bufferBarPos, ImGuiCond_Always);
         ImGui::SetNextWindowSize(_bufferBarSize);
 

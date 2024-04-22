@@ -203,7 +203,7 @@ namespace Engine
     void Texture::CommitModifications() const
     {
         Bind();
-        GLCall(glTexImage2D(GL_TEXTURE_2D, 0, _format, _width, _height, 0, _format, GL_UNSIGNED_BYTE, _imgBuffer));
+        GLCall(glTexSubImage2D (GL_TEXTURE_2D, 0, 0, 0, _width, _height, GL_RGB, GL_UNSIGNED_BYTE, _imgBuffer));
         Unbind();
     }
 

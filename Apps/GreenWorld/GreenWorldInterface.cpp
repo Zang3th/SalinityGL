@@ -130,10 +130,10 @@ namespace GW
 
     void GreenWorldInterface::InitUI()
     {
+        _windowAlphaValue = 0.65;
         LoadCustomFont("../Res/Assets/Fonts/JetBrainsMono-Medium.ttf", 19);
         SetDarkThemeColors();
         CalcElementSizes();
-        _windowAlphaValue = 0.65;
     }
 
     void GreenWorldInterface::AddElements()

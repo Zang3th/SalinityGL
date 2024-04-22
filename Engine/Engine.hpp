@@ -26,4 +26,7 @@
 #include "SpriteRenderer.hpp"
 #include "WaterRenderer.hpp"
 #include "ParticleRenderer.hpp"
+
+// ----- Physics -----
 #include "CellManager.hpp"
+#include "FluidSimulator.hpp"

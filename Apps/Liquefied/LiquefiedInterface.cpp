@@ -13,12 +13,6 @@ namespace Liq
                 ImGui::MenuItem("Show overlay", "", &Engine::UIParams::showOverlay);
                 ImGui::EndMenu();
             }
-
-            if(ImGui::BeginMenu("Rendering"))
-            {
-                ImGui::MenuItem("Wireframe-Mode", "", &Engine::UIParams::wireframeRendering);
-                ImGui::EndMenu();
-            }
         }
         ImGui::EndMainMenuBar();
     }
@@ -50,6 +44,19 @@ namespace Liq
         ImGui::End();
     }
 
+    void LiquefiedInterface::AddBufferBar() const
+    {
+        ImGui::SetNextWindowBgAlpha(0.9f);
+        ImGui::SetNextWindowPos(_bufferBarPos, ImGuiCond_Always);
+        ImGui::SetNextWindowSize(_bufferBarSize);
+
+        if(ImGui::Begin("Bufferbar", nullptr, _windowFlags))
+        {
+            // ...
+        }
+        ImGui::End();
+    }
+
     // ----- Public -----
 
     LiquefiedInterface::LiquefiedInterface()
@@ -67,7 +74,7 @@ namespace Liq
 
     void LiquefiedInterface::AddElements()
     {
-        ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 1.0f);
 
         //Discard old plotting data every 120 frames
         if(Engine::Window::GetFrameCounter() > 120)
@@ -76,6 +83,7 @@ namespace Liq
         }
 
         AddMenuBar();
+        AddBufferBar();
 
         if(Engine::UIParams::showOverlay)
         {

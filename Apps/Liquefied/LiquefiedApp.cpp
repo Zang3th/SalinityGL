@@ -10,7 +10,7 @@ namespace Liq
         Engine::ResourceManager::LoadShader("SpriteShader", "../Res/Shader/GreenWorld/Sprite_VS.glsl", "../Res/Shader/GreenWorld/Sprite_FS.glsl");
 
         //Texture
-        Engine::ResourceManager::LoadTextureToBuffer("BG_Texture", "../Res/Assets/Textures/Liquefied/Dark_Squares.jpg");
+        Engine::ResourceManager::LoadTextureToBuffer("BG_Texture", "../Res/Assets/Textures/Liquefied/Dark_Squares_1500.jpg");
     }
 
     Engine::uint32 LiquefiedApp::InitModules()
@@ -32,7 +32,21 @@ namespace Liq
         //Create UI
         _interface = Engine::MakeScope<LiquefiedInterface>();
 
+        //Create fluid simulator
+        _fluidSimulator = Engine::MakeScope<Engine::FluidSimulator>();
+
         return EXIT_SUCCESS;
+    }
+
+    void LiquefiedApp::VisualizeSmoke()
+    {
+        float* smokeField = _fluidSimulator->GetSmokeField();
+
+        //Iterate over smoke field
+
+        //Set color at pixel(x,y) to the value of the vector field at (x,y)
+
+        //Using scientific color scheme
     }
 
     // ----- Public -----
@@ -71,6 +85,13 @@ namespace Liq
 
             Engine::Window::CalcFrametime();
             Engine::RenderManager::PrepareFrame();
+        }
+
+        {
+            Engine::PROFILE_SCOPE("Simulate liquid");
+
+            _fluidSimulator->TimeStep();
+            VisualizeSmoke();
         }
 
         {

@@ -84,12 +84,6 @@ namespace Engine
         }
     };
 
-    #define COLOR_WHITE glm::vec3(1.0f, 1.0f, 1.0f)
-    #define COLOR_BLACK glm::vec3(1.0f, 1.0f, 1.0f)
-    #define COLOR_RED   glm::vec3(1.0f, 0.0f, 0.0f)
-    #define COLOR_GREEN glm::vec3(0.0f, 1.0f, 0.0f)
-    #define COLOR_BLUE  glm::vec3(0.0f, 0.0f, 1.0f)
-
     // #######################################################################################################
     // ############################################### GreenWorld ############################################
     // #######################################################################################################
@@ -152,5 +146,10 @@ namespace Engine
     // ############################################### Liquefied #############################################
     // #######################################################################################################
 
-    //Nothing here
+    struct LiquiefiedParams
+    {
+        inline static constexpr uint32 SIMULATION_WIDTH  = 1500;
+        inline static constexpr uint32 SIMULATION_HEIGHT = 1000;
+        inline static constexpr uint32 LIQUID_NUM_CELLS  = SIMULATION_WIDTH * SIMULATION_HEIGHT;
+    };
 }

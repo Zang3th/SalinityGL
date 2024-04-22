@@ -1,6 +1,7 @@
 #pragma once
 
 #include "glm.hpp"
+#include "Types.hpp"
 
 #include <cmath>
 

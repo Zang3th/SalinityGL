@@ -10,9 +10,9 @@ namespace Engine
         :   _width(ResourceManager::GetTexture(bgTexture)->GetWidth()),
             _height(ResourceManager::GetTexture(bgTexture)->GetHeight()),
             _canvasSprite(ResourceManager::GetTexture(bgTexture),
-                        ResourceManager::GetShader(shader),
-                        COLOR_WHITE,
-                        glm::vec2(_width, _height))
+                          ResourceManager::GetShader(shader),
+                          COLOR_WHITE,
+                          glm::vec2(_width, _height))
     {
         Logger::Info("Created", "Renderer", __func__);
     }

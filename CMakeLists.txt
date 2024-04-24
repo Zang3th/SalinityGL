@@ -27,6 +27,7 @@ add_compile_options(
         -Wno-parentheses
         -Wno-type-limits
         -Wno-unused-parameter
+        -Wno-unused-variable
         -Wunreachable-code
         -Wwrite-strings
         -Wpointer-arith

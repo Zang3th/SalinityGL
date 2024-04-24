@@ -19,7 +19,6 @@ namespace Engine
 
     struct RenderParams
     {
-        inline static constexpr float  GRAVITY   = -20.0f;
         inline static           float  nearPlane = 1.0f;
         inline static           float  farPlane  = 512.0f;
         inline static           uint32 planeSize = 128;
@@ -54,6 +53,13 @@ namespace Engine
         inline static bool resetCamera        = false;
 
         UIParams() = delete;
+    };
+
+    struct PhysicsParams
+    {
+        inline static constexpr float  GRAVITY   = -9.81f;
+
+        PhysicsParams() = delete;
     };
 
     struct RenderStatistics
@@ -148,8 +154,10 @@ namespace Engine
 
     struct LiquiefiedParams
     {
-        inline static constexpr uint32 SIMULATION_WIDTH  = 1500;
-        inline static constexpr uint32 SIMULATION_HEIGHT = 1000;
+        inline static constexpr uint32 SIMULATION_WIDTH  = 200;
+        inline static constexpr uint32 SIMULATION_HEIGHT = 100;
         inline static constexpr uint32 LIQUID_NUM_CELLS  = SIMULATION_WIDTH * SIMULATION_HEIGHT;
+        inline static constexpr uint32 GAUSS_SEIDEL_ITERATIONS = 20;
+        inline static constexpr float  GAUSS_SEIDEL_OVERRELAXATION = 1.9f;
     };
 }

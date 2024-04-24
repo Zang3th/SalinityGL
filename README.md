@@ -48,6 +48,7 @@ SalinityGL is licensed under the [MIT LICENSE](https://github.com/Zang3th/GameEn
     - Loading of OBJ-Models
     - Dynamic mesh creation (planes, terrains)
     - Cubemaps/Skyboxes
+  - Pixel-Renderer
   - Lighting
     - Blinn-Phong
     - Shadow rendering
@@ -80,7 +81,7 @@ Nature scene with water rendering, normal mapped objects, and a particle system 
 
 2D Eulerian Fluid Simulation
 
-![Liquefied](Res/Screenshots/Liquefied/Screenshot_Liq_001.png)
+![Liquefied](Res/Screenshots/Liquefied/Screenshot_Liq_002.png)
 
 ## Building and compiling
 

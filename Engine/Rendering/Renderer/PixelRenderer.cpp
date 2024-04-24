@@ -6,13 +6,19 @@ namespace Engine
 {
     // ----- Private -----
 
-    PixelRenderer::PixelRenderer(const std::string& bgTexture, const std::string& shader)
-        :   _width(ResourceManager::GetTexture(bgTexture)->GetWidth()),
-            _height(ResourceManager::GetTexture(bgTexture)->GetHeight()),
+    PixelRenderer::PixelRenderer
+    (
+        const uint32 width,
+        const uint32 height,
+        const uint32 pxSize,
+        const std::string& bgTexture,
+        const std::string& shader
+    )
+        :   _width(width), _height(height), _pxSize(pxSize),
             _canvasSprite(ResourceManager::GetTexture(bgTexture),
                           ResourceManager::GetShader(shader),
                           COLOR_WHITE,
-                          glm::vec2(_width, _height))
+                          glm::vec2(_width * _pxSize, _height * _pxSize))
     {
         Logger::Info("Created", "Renderer", __func__);
     }
@@ -36,36 +42,51 @@ namespace Engine
         GLRenderSettings::EnableCulling();
     }
 
-
-    void PixelRenderer::Set(uint32 x, uint32 y, const glm::vec3& color) const
+    void PixelRenderer::Set(const uint32 x, const uint32 y, const glm::vec3& color) const
     {
-        _canvasSprite.GetTexture()->ModifyTexture(x, y, color);
+        const uint32 x_end = x * _pxSize;
+        const uint32 y_end = y * _pxSize;
+        uint32 x_start = 0;
+        uint32 y_start = 0;
+
+        if(x_start > _pxSize)
+            x_start = x_end - _pxSize;
+
+        if(y_start > _pxSize)
+            y_start = y_end - _pxSize;
+
+        SetArea(x_start, x_end, y_start, y_end, color);
     }
 
-    void PixelRenderer::Reset(uint32 x, uint32 y) const
+    void PixelRenderer::SetArea(const uint32 x_start, const uint32 x_end, const uint32 y_start, const uint32 y_end, const glm::vec3& color) const
     {
-        _canvasSprite.GetTexture()->ResetTextureModification(x, y);
+        for(uint32 x = x_start; x < x_end; x++)
+        {
+            for(uint32 y = y_start; y < y_end; y++)
+            {
+                _canvasSprite.GetTexture()->ModifyTexture(x, y, color);
+            }
+        }
+    }
+
+    void PixelRenderer::ResetArea(const uint32 x_start, const uint32 x_end, const uint32 y_start, const uint32 y_end) const
+    {
+        for(uint32 x = x_start; x < x_end; x++)
+        {
+            for(uint32 y = y_start; y < y_end; y++)
+            {
+                _canvasSprite.GetTexture()->ResetTextureModification(x, y);
+            }
+        }
     }
 
     void PixelRenderer::SetScreen(const glm::vec3& color) const
     {
-        for(uint32 x = 0; x < _width; x++)
-        {
-            for(uint32 y = 0; y < _height; y++)
-            {
-                Set(x, y, color);
-            }
-        }
+        SetArea(0, _width * _pxSize, 0, _height * _pxSize, color);
     }
 
     void PixelRenderer::ClearScreen() const
     {
-        for(uint32 x = 0; x < _width; x++)
-        {
-            for(uint32 y = 0; y < _height; y++)
-            {
-                Reset(x, y);
-            }
-        }
+        ResetArea(0, _width * _pxSize, 0, _height * _pxSize);
     }
 }

@@ -5,11 +5,9 @@
 
 namespace Engine
 {
-    #define num_X LiquiefiedParams::SIMULATION_WIDTH
-    #define num_Y LiquiefiedParams::SIMULATION_HEIGHT
-    #define gravity PhysicsParams::GRAVITY
-    #define iterations LiquiefiedParams::GAUSS_SEIDEL_ITERATIONS
-    #define overrelaxation LiquiefiedParams::GAUSS_SEIDEL_OVERRELAXATION
+    #define GRAVITY PhysicsParams::GRAVITY
+    #define ITER LiquiefiedParams::GAUSS_SEIDEL_ITERATIONS
+    #define OVERRELAX LiquiefiedParams::GAUSS_SEIDEL_OVERRELAXATION
 
     struct StaggeredGrid
     {
@@ -27,10 +25,13 @@ namespace Engine
             float _smoke[LiquiefiedParams::LIQUID_NUM_CELLS] = {0.0f};
 
         public:
-            inline float& u_At(uint32 x, uint32 y) { return _u[x * num_Y + y]; }
-            inline float& v_At(uint32 x, uint32 y) { return _u[x * num_Y + y]; }
-            inline float& s_At(uint32 x, uint32 y) { return _u[x * num_Y + y]; }
-            inline float& smoke_At(uint32 x, uint32 y) { return _u[x * num_Y + y]; }
+            const uint32 width = LiquiefiedParams::SIMULATION_WIDTH;
+            const uint32 height = LiquiefiedParams::SIMULATION_HEIGHT;
+
+            inline float& u_At(uint32 x, uint32 y) { return _u[x * height + y]; }
+            inline float& v_At(uint32 x, uint32 y) { return _u[x * height + y]; }
+            inline float& s_At(uint32 x, uint32 y) { return _u[x * height + y]; }
+            inline float& smoke_At(uint32 x, uint32 y) { return _u[x * height + y]; }
     };
 
     class FluidSimulator

@@ -27,7 +27,14 @@ namespace Liq
         LoadResources();
 
         //Create pixel renderer
-        _pixelRenderer = Engine::RenderManager::AddPixelRenderer("BG_Texture", "SpriteShader");
+        _pixelRenderer = Engine::RenderManager::AddPixelRenderer
+        (
+            Engine::LiquiefiedParams::SIMULATION_WIDTH,
+            Engine::LiquiefiedParams::SIMULATION_HEIGHT,
+            10,
+            "BG_Texture",
+            "SpriteShader"
+        );
 
         //Create UI
         _interface = Engine::MakeScope<LiquefiedInterface>();
@@ -38,15 +45,27 @@ namespace Liq
         return EXIT_SUCCESS;
     }
 
-    void LiquefiedApp::VisualizeSmoke()
+    void LiquefiedApp::VisualizeSmoke() const
     {
-        //float* smokeField = _fluidSimulator->GetSmokeField();
+        Engine::StaggeredGrid* grid = _fluidSimulator->GetGrid();
 
-        //Iterate over smoke field
+        for(Engine::uint32 x = 0; x < grid->width; x++)
+        {
+            for(Engine::uint32 y = 0; y < grid->height; y++)
+            {
+                const float val = grid->smoke_At(x, y);
+                glm::vec3 color = {val, val, val};
 
-        //Set color at pixel(x,y) to the value of the vector field at (x,y)
+                if(Engine::LiquiefiedParams::scientificColorScheme)
+                {
+                    color = Engine::Utility::GetScienticColor(val, 0.0f, 1.0f);
+                }
 
-        //Using scientific color scheme
+                //Way to slow...
+                //ToDo: Build SpriteInstancer
+                //_pixelRenderer->Set(x, y, color);
+            }
+        }
     }
 
     // ----- Public -----
@@ -77,7 +96,7 @@ namespace Liq
 
             Engine::Window::PollEvents();
             Engine::Window::ProcessEvents();
-            _interface->PrepareFrame();
+            _timeElapsed += Engine::Window::GetDeltaTime();
         }
 
         {
@@ -85,19 +104,28 @@ namespace Liq
 
             Engine::Window::CalcFrametime();
             Engine::RenderManager::PrepareFrame();
+            _interface->PrepareFrame();
         }
 
         {
             Engine::PROFILE_SCOPE("Simulate liquid");
 
-            _fluidSimulator->TimeStep();
-            VisualizeSmoke();
+            //Check if 10ms have elapsed
+            if(_timeElapsed >= 0.01)
+            {
+                //Reset time
+                _timeElapsed = 0;
+
+                //Run simulation timestep and visualize result
+                _fluidSimulator->TimeStep();
+            }
         }
 
         {
             Engine::PROFILE_SCOPE("Render pixels");
 
             Engine::RenderManager::RenderPixels();
+            VisualizeSmoke();
 
             //Test of the pixel renderer
             /*if(Engine::Window::GetFrameCounter() == 0)

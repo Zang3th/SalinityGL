@@ -10,8 +10,8 @@ namespace Engine
         const float diff = max - min;
         value = diff == 0.0f ? 0.5f : (value - min) / diff;
         const float divider = 0.25f;
-        const uint8 number  = (uint8)floorf(value / divider);
-        const float pos     = (value - number * divider) / divider;
+        const uint32 number  = (uint8)floorf(value / divider);
+        const float pos     = (value - (float)number * divider) / divider;
 
         glm::vec3 retVec{0.0f};
         switch(number)

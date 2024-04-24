@@ -7,14 +7,14 @@ namespace Engine
     /* Applies forces to the liquid - just gravity in this case. */
     void FluidSimulator::AddForces(const float dt)
     {
-        for(uint32 x = 0; x < num_X; x++)
+        for(uint32 x = 0; x < _grid.width; x++)
         {
-            for(uint32 y = 0; y < num_Y; y++)
+            for(uint32 y = 0; y < _grid.height; y++)
             {
                 //Check for border cell
                 if(_grid.s_At(x, y) != 0.0f)
                 {
-                    _grid.v_At(x, y) += gravity * dt;
+                    _grid.v_At(x, y) += GRAVITY * dt;
                 }
             }
         }
@@ -25,11 +25,11 @@ namespace Engine
     void FluidSimulator::Project(const float dt)
     {
         //Simple solution using Gauss-Seidel
-        for(uint32 it = 0; it < iterations; it++)
+        for(uint32 it = 0; it < ITER; it++)
         {
-            for(uint32 x = 1; x < num_X-1; x++)
+            for(uint32 x = 1; x < _grid.width-1; x++)
             {
-                for(uint32 y = 1; y < num_Y-1; y++)
+                for(uint32 y = 1; y < _grid.height-1; y++)
                 {
                     //Skip border cells
                     if(_grid.s_At(x, y) == 0)
@@ -42,7 +42,7 @@ namespace Engine
                                        _grid.v_At(x, y+1) - _grid.v_At(x, y);
 
                     //Apply overrelaxation to speed up convergence
-                    divergence *= overrelaxation;
+                    divergence *= OVERRELAX;
 
                     //Get the amount of border cells in the area
                     float rightNeighbor = _grid.s_At(x+1, y);
@@ -79,13 +79,13 @@ namespace Engine
     void FluidSimulator::Init()
     {
         //Initialize border cells
-        for(uint32 x = 0; x < num_X; x++)
+        for(uint32 x = 0; x < _grid.width; x++)
         {
-            for(uint32 y = 0; y < num_Y; y++)
+            for(uint32 y = 0; y < _grid.height; y++)
             {
                 float cellValue = 1.0f; //Fluid cell
 
-                if((x == 0) || (y == 0) || (x == num_X-1) || (y == num_Y-1))
+                if((x == 0) || (y == 0) || (x == _grid.width-1) || (y == _grid.height-1))
                 {
                     cellValue = 0.0f; //Solid cell
                 }

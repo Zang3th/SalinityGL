@@ -8,6 +8,7 @@
 #include "Profiler.hpp"
 #include "Audio.hpp"
 #include "App.hpp"
+#include "Utility.hpp"
 
 // ----- Resources and renderables -----
 #include "ResourceManager.hpp"

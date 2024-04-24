@@ -102,9 +102,13 @@ namespace Engine
         return _cellRenderer;
     }
 
-    PixelRenderer* RenderManager::AddPixelRenderer(const std::string& bgTexture, const std::string& shader)
+    PixelRenderer* RenderManager::AddPixelRenderer
+    (
+        const uint32 width, const uint32 height, const uint32 pxSize,
+        const std::string& bgTexture, const std::string& shader
+    )
     {
-        _pixelRenderer = new PixelRenderer(bgTexture, shader);
+        _pixelRenderer = new PixelRenderer(width, height, pxSize, bgTexture, shader);
         _rendererStorage.push_back(_pixelRenderer);
 
         return _pixelRenderer;

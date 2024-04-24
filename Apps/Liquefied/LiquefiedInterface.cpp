@@ -4,19 +4,6 @@ namespace Liq
 {
     // ----- Private -----
 
-    void LiquefiedInterface::AddMenuBar() const
-    {
-        if(ImGui::BeginMainMenuBar())
-        {
-            if(ImGui::BeginMenu("Settings"))
-            {
-                ImGui::MenuItem("Show overlay", "", &Engine::UIParams::showOverlay);
-                ImGui::EndMenu();
-            }
-        }
-        ImGui::EndMainMenuBar();
-    }
-
     void LiquefiedInterface::AddSideBar() const
     {
         ImGui::SetNextWindowBgAlpha(_windowAlphaValue);
@@ -52,7 +39,9 @@ namespace Liq
 
         if(ImGui::Begin("Bufferbar", nullptr, _windowFlags))
         {
-            // ...
+             ImGui::SetCursorPosX(25.0f);
+             ImGui::SetCursorPosY(25.0f);
+             ImGui::Checkbox("Scientific Colors", &Engine::LiquiefiedParams::scientificColorScheme);
         }
         ImGui::End();
     }
@@ -67,6 +56,8 @@ namespace Liq
 
     void LiquefiedInterface::InitUI()
     {
+        _menuBarHeight = 0.0f; //Deactivates menu bar for this application
+        _windowAlphaValue = 1.0f;
         LoadCustomFont("../Res/Assets/Fonts/JetBrainsMono-Medium.ttf", 19);
         SetDarkThemeColors();
         CalcElementSizes();
@@ -74,7 +65,7 @@ namespace Liq
 
     void LiquefiedInterface::AddElements()
     {
-        ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 1.0f);
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
 
         //Discard old plotting data every 120 frames
         if(Engine::Window::GetFrameCounter() > 120)
@@ -82,13 +73,8 @@ namespace Liq
             ImGui::PlotVarFlushOldEntries();
         }
 
-        AddMenuBar();
         AddBufferBar();
-
-        if(Engine::UIParams::showOverlay)
-        {
-            AddSideBar();
-        }
+        AddSideBar();
 
         ImGui::PopStyleVar();
     }

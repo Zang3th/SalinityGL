@@ -44,6 +44,9 @@ namespace Liq
             ImGui::Checkbox("Wireframe Rendering", &Engine::UIParams::wireframeRendering);
             ImGui::SetCursorPosY(25.0f);
             ImGui::SetCursorPosX(250.0f);
+            ImGui::Checkbox("Visualize Smoke", &Engine::LiquiefiedParams::visualizeSmoke);
+            ImGui::SetCursorPosY(25.0f);
+            ImGui::SetCursorPosX(440.0f);
             ImGui::Checkbox("Scientific Colors", &Engine::LiquiefiedParams::scientificColorScheme);
         }
         ImGui::End();

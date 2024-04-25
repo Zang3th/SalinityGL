@@ -78,18 +78,12 @@ namespace Engine
 
     void FluidSimulator::Init()
     {
-        //Initialize border cells
+        //Initialize all cells to fluid cells
         for(uint32 x = 0; x < _grid.width; x++)
         {
             for(uint32 y = 0; y < _grid.height; y++)
             {
-                float cellValue = 1.0f; //Fluid cell
-
-                if((x == 0) || (y == 0) || (x == _grid.width-1) || (y == _grid.height-1))
-                {
-                    cellValue = 0.0f; //Solid cell
-                }
-
+                float cellValue = 1.0f;
                 _grid.s_At(x, y) = cellValue;
             }
         }

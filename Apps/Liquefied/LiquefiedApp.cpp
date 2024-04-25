@@ -10,6 +10,27 @@ namespace Liq
         Engine::ResourceManager::LoadShader("GridShader", "../Res/Shader/Liquefied/Grid_VS.glsl", "../Res/Shader/Liquefied/Grid_FS.glsl");
     }
 
+    void LiquefiedApp::AddBorderCells() const
+    {
+        Engine::StaggeredGrid* grid = _fluidSimulator->GetGrid();
+        const float cellValue = 0.0f;
+
+        for(Engine::uint32 x = 0; x < grid->width; x++)
+        {
+            for(Engine::uint32 y = 0; y < grid->height; y++)
+            {
+                if((x == 0) || (y == 0) || (x == grid->width-1) || (y == grid->height-1))
+                {
+                    //Add solid cell to simulation grid
+                    grid->s_At(x, y) = cellValue;
+
+                    //Add cell to renderer
+                    _gridRenderer->Set(x, y, glm::vec3(1.0f, 1.0f, 1.0f));
+                }
+            }
+        }
+    }
+
     Engine::uint32 LiquefiedApp::InitModules()
     {
         //Initialize engine components
@@ -38,6 +59,10 @@ namespace Liq
         //Create fluid simulator
         _fluidSimulator = Engine::MakeScope<Engine::FluidSimulator>();
 
+        //Add border cells to simulation and renderer
+        AddBorderCells();
+        _gridRenderer->SetConfigAsDefault();
+
         return EXIT_SUCCESS;
     }
 
@@ -45,9 +70,9 @@ namespace Liq
     {
         Engine::StaggeredGrid* grid = _fluidSimulator->GetGrid();
 
-        for(Engine::uint32 x = 0; x < grid->width; x++)
+        for(Engine::uint32 x = 1; x < grid->width-1; x++)
         {
-            for(Engine::uint32 y = 0; y < grid->height; y++)
+            for(Engine::uint32 y = 1; y < grid->height-1; y++)
             {
                 const float val = grid->smoke_At(x, y);
                 glm::vec3 color = {val, val, val};
@@ -57,7 +82,7 @@ namespace Liq
                     color = Engine::Utility::GetScienticColor(val, 0.0f, 1.0f);
                 }
 
-                //ToDo: Add GridRenderer-Set(...)
+                _gridRenderer->Set(x, y, color);
             }
         }
     }
@@ -116,10 +141,19 @@ namespace Liq
         }
 
         {
-            Engine::PROFILE_SCOPE("Render pixels");
+            Engine::PROFILE_SCOPE("Visualize grid");
+
+            if(Engine::LiquiefiedParams::visualizeSmoke)
+            {
+                VisualizeSmoke();
+                _gridRenderer->UpdateGpuStorage();
+            }
+            else
+            {
+                _gridRenderer->UploadDefaultConfig();
+            }
 
             _gridRenderer->Flush(nullptr);
-            //VisualizeSmoke();
         }
 
         {

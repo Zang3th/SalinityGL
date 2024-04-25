@@ -17,23 +17,27 @@ namespace Engine
     private:
         uint32    _gridWidth, _gridHeight, _quadSize, _quadAmountTotal;
         glm::vec3 _defaultColor;
+        float     _defaultGradientFactor;
         Shader*   _shader;
 
         Scope<VertexArray>  _vao;
         Scope<VertexBuffer> _vboVert, _vboColor;
         glm::mat4           _orthoProj, _model;
 
-        std::vector<glm::vec3> _colorStorage;
+        // R    G    B    GF
+        // GF := Gradient factor := how much the background gradient adds to the final color
+        std::vector<glm::vec4> _colorStorage;
+        std::vector<glm::vec4> _backupStorage;
 
         void InitGpuStorage();
-        void UpdateGpuStorage();
 
     public:
         void Flush(Renderer* renderer) override;
-        void Set(uint32 x, uint32 y, const glm::vec3& color) const;
-        void Reset(uint32 x, uint32 y) const;
-        void SetScreen(const glm::vec3& color) const;
-        void ClearScreen() const;
+        void UpdateGpuStorage() const;
+        void Set(uint32 x, uint32 y, const glm::vec3& color);
+        void Reset(uint32 x, uint32 y);
+        void SetConfigAsDefault();
+        void UploadDefaultConfig() const;
 
         GridRenderer(uint32 width, uint32 height, uint32 quadSize, const std::string& shader);
     };

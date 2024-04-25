@@ -160,5 +160,6 @@ namespace Engine
         inline static constexpr uint32 GAUSS_SEIDEL_ITERATIONS = 20;
         inline static constexpr float  GAUSS_SEIDEL_OVERRELAXATION = 1.9f;
         inline static           bool   scientificColorScheme = false;
+        inline static           bool   visualizeSmoke = false;
     };
 }

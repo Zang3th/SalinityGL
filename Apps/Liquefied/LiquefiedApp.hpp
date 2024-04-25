@@ -13,8 +13,9 @@ namespace Liq
             Engine::Scope<LiquefiedInterface>     _interface;
             Engine::Scope<Engine::FluidSimulator> _fluidSimulator;
 
-            void           LoadResources() override;
-            Engine::uint32 InitModules()   override;
+            void           LoadResources()  override;
+            void           AddBorderCells() const;
+            Engine::uint32 InitModules()    override;
             void           VisualizeSmoke() const;
 
         public:

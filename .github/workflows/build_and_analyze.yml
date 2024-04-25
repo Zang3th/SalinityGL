@@ -20,7 +20,7 @@ jobs:
 
       - name: Build debug config
         run: |
-          cmake -B ${{github.workspace}}/Build_Debug -D CMAKE_BUILD_TYPE=Debug -D CMAKE_CXX_FLAGS="-g" -D CMAKE_EXPORT_COMPILE_COMMANDS=On
+          cmake -B ${{github.workspace}}/Build_Debug -D CMAKE_BUILD_TYPE=Debug -D CMAKE_CXX_FLAGS="-g"
           cmake --build ${{github.workspace}}/Build_Debug -j
 
       - name: Run GreenWorld_Debug
@@ -68,9 +68,14 @@ jobs:
           sudo apt install pvs-studio
           pvs-studio-analyzer credentials ${{secrets.PVS_STUDIO_CREDENTIALS}}
 
+      - name: Build debug config
+        run: |
+          cmake -B ${{github.workspace}}/Build_Debug_PVS -D CMAKE_BUILD_TYPE=Debug -D CMAKE_CXX_FLAGS="-g" -D CMAKE_EXPORT_COMPILE_COMMANDS=On
+          cmake --build ${{github.workspace}}/Build_Debug -j    
+
       - name: Analyze debug config
         run: |
-          pvs-studio-analyzer analyze -f ${{github.workspace}}/Build_Debug/compile_commands.json -j -e Vendor/
+          pvs-studio-analyzer analyze -f ${{github.workspace}}/Build_Debug_PVS/compile_commands.json -j -e Vendor/
 
       - name: Convert report
         run: plog-converter -t sarif -o pvs-report.sarif PVS-Studio.log

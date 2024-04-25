@@ -71,7 +71,7 @@ jobs:
       - name: Build debug config
         run: |
           cmake -B ${{github.workspace}}/Build_Debug_PVS -D CMAKE_BUILD_TYPE=Debug -D CMAKE_CXX_FLAGS="-g" -D CMAKE_EXPORT_COMPILE_COMMANDS=On
-          cmake --build ${{github.workspace}}/Build_Debug -j    
+          cmake --build ${{github.workspace}}/Build_Debug_PVS -j    
 
       - name: Analyze debug config
         run: |

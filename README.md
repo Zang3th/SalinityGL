@@ -101,15 +101,25 @@ The engine and the demo applications are compiled separately. The engine is comp
 
 - Install the external dependencies (if needed)
 
-      apt install cmake pkg-config
-      apt install libglu1-mesa-dev mesa-common-dev
+      apt-get install cmake pkg-config
+      apt-get install libglu1-mesa-dev mesa-common-dev
 
-- Clone/download the repository or a particular release and build it
+- Clone/download the repository or a particular release
 
       git clone https://github.com/Zang3th/SalinityGL
-      mkdir Build
-      cd Build
-      cmake ..
+
+- Debug configuration
+
+      mkdir Build_Debug
+      cd Build_Debug
+      cmake .. -D CMAKE_BUILD_TYPE=Debug -D CMAKE_CXX_FLAGS="-g"
+      make -j
+
+- Release configuration
+
+      mkdir Build_Release
+      cd Build_Release
+      cmake .. -D CMAKE_BUILD_TYPE=Release -D CMAKE_CXX_FLAGS="-O3 -Wno-unused-but-set-variable -Wno-unused-result"
       make -j
 
 - Run the demo applications

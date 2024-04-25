@@ -1,0 +1,82 @@
+name: Build and Static Analysis
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Fetch updates
+        run: sudo apt-get update && sudo apt-get upgrade
+
+      - name: Install OpenGL
+        run: sudo apt-get install libglu1-mesa-dev mesa-common-dev
+
+      - name: Install X virtual framebuffer
+        run: sudo apt-get install xvfb
+
+      - name: Build debug config
+        run: |
+          cmake -B ${{github.workspace}}/Build_Debug -D CMAKE_BUILD_TYPE=Debug -D CMAKE_CXX_FLAGS="-g" -D CMAKE_EXPORT_COMPILE_COMMANDS=On
+          cmake --build ${{github.workspace}}/Build_Debug -j
+
+      - name: Run GreenWorld_Debug
+        working-directory: ${{github.workspace}}/Build_Debug
+        run: xvfb-run -a ./GreenWorld & sleep 20 ; kill $!
+
+      - name: Run CellSim_Debug
+        working-directory: ${{github.workspace}}/Build_Debug
+        run: xvfb-run -a ./CellSim & sleep 20 ; kill $!
+
+      - name: Run Liquefied_Debug
+        working-directory: ${{github.workspace}}/Build_Debug
+        run: xvfb-run -a ./Liquefied & sleep 20 ; kill $!
+
+      - name: Build release config
+        run: |
+          cmake -B ${{github.workspace}}/Build_Release -D CMAKE_BUILD_TYPE=Release -D CMAKE_CXX_FLAGS="-O3 -Wno-unused-but-set-variable -Wno-unused-result"
+          cmake --build ${{github.workspace}}/Build_Release -j
+
+      - name: Run GreenWorld_Release
+        working-directory: ${{github.workspace}}/Build_Release
+        run: xvfb-run -a ./GreenWorld & sleep 20 ; kill $!
+
+      - name: Run CellSim_Release
+        working-directory: ${{github.workspace}}/Build_Release
+        run: xvfb-run -a ./CellSim & sleep 20 ; kill $!
+
+      - name: Run Liquefied_Release
+        working-directory: ${{github.workspace}}/Build_Release
+        run: xvfb-run -a ./Liquefied & sleep 20 ; kill $!
+
+  static_analysis:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install pvs tools
+        run: |
+          wget -q -O - https://files.pvs-studio.com/etc/pubkey.txt \
+            | sudo apt-key add -
+          sudo wget -O /etc/apt/sources.list.d/viva64.list \
+            https://files.pvs-studio.com/etc/viva64.list
+          sudo apt update && sudo apt upgrade
+          sudo apt install pvs-studio
+          pvs-studio-analyzer credentials ${{secrets.PVS_STUDIO_CREDENTIALS}}
+
+      - name: Analyze debug config
+        run: |
+          pvs-studio-analyzer analyze -f ${{github.workspace}}/Build_Debug/compile_commands.json -j -e Vendor/
+
+      - name: Convert report
+        run: plog-converter -t sarif -o pvs-report.sarif PVS-Studio.log
+
+      - name: Publish report
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: pvs-report.sarif
+          category: PVS-Studio

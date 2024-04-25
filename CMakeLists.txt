@@ -8,7 +8,6 @@ add_compile_definitions(SALINITYGL_ENGINE_VERSION="${SALINITYGL_ENGINE_VERSION}"
 add_compile_definitions(SALINITYGL_ENGINE_VERSION_SUFFIX="${SALINITYGL_ENGINE_VERSION_SUFFIX}")
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
-set(CMAKE_BUILD_TYPE "Debug")
 
 project(SalinityGL
         VERSION     "${SALINITYGL_ENGINE_VERSION}"
@@ -35,7 +34,6 @@ add_compile_options(
         -Wall
         -Wextra
         -Wpedantic
-        -g
 )
 
 ############################### Settings ####################################

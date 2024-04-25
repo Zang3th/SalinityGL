@@ -31,7 +31,7 @@ namespace Engine
         public:
             float _windowAlphaValue = 0.5f;
             float _menuBarHeight    = 25.0f;
-            float _sidebarWidth     = 415.0f;
+            float _sidebarWidth     = 420.0f;
 
             Interface();
             virtual ~Interface();

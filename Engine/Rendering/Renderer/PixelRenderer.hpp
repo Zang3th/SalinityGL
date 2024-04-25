@@ -7,8 +7,7 @@
 #include "Shader.hpp"
 #include "GLRenderSettings.hpp"
 #include "GlobalParams.hpp"
-
-#include <vector>
+#include "ResourceManager.hpp"
 
 namespace Engine
 {

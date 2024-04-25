@@ -7,10 +7,7 @@ namespace Liq
     void LiquefiedApp::LoadResources()
     {
         //Shader
-        Engine::ResourceManager::LoadShader("SpriteShader", "../Res/Shader/GreenWorld/Sprite_VS.glsl", "../Res/Shader/GreenWorld/Sprite_FS.glsl");
-
-        //Texture
-        Engine::ResourceManager::LoadTextureToBuffer("BG_Texture", "../Res/Assets/Textures/Liquefied/Dark_Squares_1500.jpg");
+        Engine::ResourceManager::LoadShader("GridShader", "../Res/Shader/Liquefied/Grid_VS.glsl", "../Res/Shader/Liquefied/Grid_FS.glsl");
     }
 
     Engine::uint32 LiquefiedApp::InitModules()
@@ -21,19 +18,18 @@ namespace Liq
         {
             return EXIT_FAILURE;
         }
-        Engine::RenderManager::Init();
+        Engine::RenderManager::Init2D();
 
         //Load shaders and textures
         LoadResources();
 
-        //Create pixel renderer
-        _pixelRenderer = Engine::RenderManager::AddPixelRenderer
+        //Create grid renderer
+        _gridRenderer = Engine::RenderManager::AddGridRenderer
         (
             Engine::LiquiefiedParams::SIMULATION_WIDTH,
             Engine::LiquiefiedParams::SIMULATION_HEIGHT,
             10,
-            "BG_Texture",
-            "SpriteShader"
+            "GridShader"
         );
 
         //Create UI
@@ -61,9 +57,7 @@ namespace Liq
                     color = Engine::Utility::GetScienticColor(val, 0.0f, 1.0f);
                 }
 
-                //Way to slow...
-                //ToDo: Build SpriteInstancer
-                //_pixelRenderer->Set(x, y, color);
+                //ToDo: Add GridRenderer-Set(...)
             }
         }
     }
@@ -124,18 +118,8 @@ namespace Liq
         {
             Engine::PROFILE_SCOPE("Render pixels");
 
-            Engine::RenderManager::RenderPixels();
-            VisualizeSmoke();
-
-            //Test of the pixel renderer
-            /*if(Engine::Window::GetFrameCounter() == 0)
-            {
-                _pixelRenderer->SetScreen(COLOR_WHITE);
-            }
-            else if(Engine::Window::GetFrameCounter() == 80)
-            {
-                _pixelRenderer->ClearScreen();
-            }*/
+            _gridRenderer->Flush(nullptr);
+            //VisualizeSmoke();
         }
 
         {

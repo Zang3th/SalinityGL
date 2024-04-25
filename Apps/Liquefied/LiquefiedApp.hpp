@@ -9,7 +9,7 @@ namespace Liq
     {
         private:
             double                                _timeElapsed   = 0.0;
-            Engine::PixelRenderer*                _pixelRenderer = nullptr;
+            Engine::GridRenderer*                 _gridRenderer  = nullptr;
             Engine::Scope<LiquefiedInterface>     _interface;
             Engine::Scope<Engine::FluidSimulator> _fluidSimulator;
 

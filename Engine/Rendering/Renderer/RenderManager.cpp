@@ -4,7 +4,14 @@ namespace Engine
 {
     // ----- Public -----
 
-    void RenderManager::Init()
+    void RenderManager::Init2D()
+    {
+        _rendererStorage.clear();
+        _rendererStorage.reserve(5);
+        _initialized = true;
+    }
+
+    void RenderManager::Init3D()
     {
         _rendererStorage.clear();
         _rendererStorage.reserve(10);
@@ -114,6 +121,14 @@ namespace Engine
         return _pixelRenderer;
     }
 
+    GridRenderer* RenderManager::AddGridRenderer(uint32 width, uint32 height, uint32 quadSize, const std::string& shader)
+    {
+        _gridRenderer = new GridRenderer(width, height, quadSize, shader);
+        _rendererStorage.push_back(_gridRenderer);
+
+        return _gridRenderer;
+    }
+
     void RenderManager::RenderScene()
     {
         _sceneRenderer->Flush(nullptr);
@@ -147,5 +162,10 @@ namespace Engine
     void RenderManager::RenderPixels()
     {
         _pixelRenderer->Flush(nullptr);
+    }
+
+    void RenderManager::RenderGrid()
+    {
+        _gridRenderer->Flush(nullptr);
     }
 }

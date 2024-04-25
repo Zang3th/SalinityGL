@@ -46,7 +46,7 @@ namespace Engine
             void      InitGpuStorage();
             void      UpdateGpuStorage();
             void      GenerateParticles();
-            glm::mat4 GetModelViewMatrix(Particle* particle);
+            glm::mat4 GetModelViewMatrix(const Particle* particle);
 
         public:
             void Flush(Renderer* sceneRenderer) override;

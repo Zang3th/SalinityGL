@@ -42,7 +42,7 @@ namespace GW
         }
         Engine::Camera3D::Init();
         Engine::CameraController3D::Init();
-        Engine::RenderManager::Init();
+        Engine::RenderManager::Init3D();
 
         //Load shaders and textures
         LoadResources();

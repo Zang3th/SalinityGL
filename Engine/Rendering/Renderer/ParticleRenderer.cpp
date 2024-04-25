@@ -26,8 +26,8 @@ namespace Engine
 
     void ParticleRenderer::InitGpuStorage()
     {
-        //Create data
-        static const float vertices[] =
+        //Create vertice data
+        static constexpr float vertices[] =
         {
             -0.5f,  0.5f,
             -0.5f, -0.5f,
@@ -112,7 +112,7 @@ namespace Engine
         }
     }
 
-    glm::mat4 ParticleRenderer::GetModelViewMatrix(Particle* particle)
+    glm::mat4 ParticleRenderer::GetModelViewMatrix(const Particle* particle)
     {
         //Create model matrix
         glm::mat4 model(1.0f);

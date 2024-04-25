@@ -39,9 +39,12 @@ namespace Liq
 
         if(ImGui::Begin("Bufferbar", nullptr, _windowFlags))
         {
-             ImGui::SetCursorPosX(25.0f);
-             ImGui::SetCursorPosY(25.0f);
-             ImGui::Checkbox("Scientific Colors", &Engine::LiquiefiedParams::scientificColorScheme);
+            ImGui::SetCursorPosX(25.0f);
+            ImGui::SetCursorPosY(25.0f);
+            ImGui::Checkbox("Wireframe Rendering", &Engine::UIParams::wireframeRendering);
+            ImGui::SetCursorPosY(25.0f);
+            ImGui::SetCursorPosX(250.0f);
+            ImGui::Checkbox("Scientific Colors", &Engine::LiquiefiedParams::scientificColorScheme);
         }
         ImGui::End();
     }

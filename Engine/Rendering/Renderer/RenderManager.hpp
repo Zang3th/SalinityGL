@@ -10,6 +10,7 @@
 #include "ParticleRenderer.hpp"
 #include "CellRenderer.hpp"
 #include "PixelRenderer.hpp"
+#include "GridRenderer.hpp"
 
 #include <vector>
 
@@ -26,12 +27,14 @@ namespace Engine
             inline static ParticleRenderer*      _particleRenderer = nullptr;
             inline static CellRenderer*          _cellRenderer     = nullptr;
             inline static PixelRenderer*         _pixelRenderer    = nullptr;
+            inline static GridRenderer*          _gridRenderer     = nullptr;
             inline static bool                   _initialized      = false;
 
         public:
             RenderManager() = delete;
 
-            static void Init();
+            static void Init2D();
+            static void Init3D();
             static void CleanUp();
             static void PrepareFrame();
             static bool GetInitStatus();
@@ -51,6 +54,7 @@ namespace Engine
                 uint32 width, uint32 height, uint32 pxSize,
                 const std::string& bgTexture, const std::string& shader
             );
+            static GridRenderer* AddGridRenderer(uint32 width, uint32 height, uint32 quadSize, const std::string& shader);
 
             static void RenderScene();
             static void RenderShadows();
@@ -59,5 +63,6 @@ namespace Engine
             static void RenderParticles();
             static void RenderCells();
             static void RenderPixels();
+            static void RenderGrid();
     };
 }

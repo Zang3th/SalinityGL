@@ -1,7 +1,5 @@
 #include "PixelRenderer.hpp"
 
-#include <ResourceManager.hpp>
-
 namespace Engine
 {
     // ----- Private -----
@@ -27,8 +25,6 @@ namespace Engine
 
     void PixelRenderer::Flush(Renderer* renderer)
     {
-        GLRenderSettings::DisableCulling();
-
         //Commit texture changes
         _canvasSprite.GetTexture()->CommitModifications();
 
@@ -38,8 +34,6 @@ namespace Engine
 
         //Increase render pass counter
         RenderStatistics::spritePasses++;
-
-        GLRenderSettings::EnableCulling();
     }
 
     void PixelRenderer::Set(const uint32 x, const uint32 y, const glm::vec3& color) const

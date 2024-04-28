@@ -129,9 +129,12 @@ namespace Liq
         {
             Engine::PROFILE_SCOPE("Simulate liquid");
 
-            //Check if 10ms have elapsed
-            if(_timeElapsed >= 0.01)
+            //Check if 4ms have elapsed
+            if(_timeElapsed >= 0.004)
             {
+                //Add a horizontal turbine (initial velocity)
+                _fluidSimulator->AddHorizonalTurbine(1, 50, 50.0f);
+
                 //Reset time
                 _timeElapsed = 0;
 

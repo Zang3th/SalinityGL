@@ -124,7 +124,7 @@ namespace Engine
 
     void SceneRenderer::UpdateMoveFactor()
     {
-        _moveFactor += _waveSpeed * (float)Window::GetDeltaTime();
+        _moveFactor += _waveSpeed * (float)Window::GetDeltaTime_sec();
         _moveFactor = (float)fmodf(_moveFactor, 1.0f);
     }
 

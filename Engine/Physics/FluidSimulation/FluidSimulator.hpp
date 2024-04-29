@@ -74,6 +74,7 @@ namespace Engine
             FluidSimulator();
             ~FluidSimulator() = default;
             void TimeStep();
+            void Reset();
             void AddHorizonalTurbine(uint32 x, uint32 y, float power);
             StaggeredGrid* GetGrid();
     };

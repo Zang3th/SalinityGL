@@ -15,7 +15,7 @@ namespace Engine
         private:
             inline static GLFWwindow* _window        = nullptr;
             inline static std::string _windowName    = std::string();
-            inline static double      _deltaTime     = double();
+            inline static double      _deltaTime_sec = double();
             inline static double      _lastFrame     = double();
             inline static double      _dtAccumulated = double();
             inline static double      _fpsAvg        = double();
@@ -32,7 +32,8 @@ namespace Engine
             static void SwapBuffers();
 
             [[nodiscard]] static bool        IsRunning();
-            [[nodiscard]] static double      GetDeltaTime();
+            [[nodiscard]] static double      GetDeltaTime_sec();
+            [[nodiscard]] static double      GetDeltaTime_msec();
             [[nodiscard]] static double      GetFps();
             [[nodiscard]] static uint32      GetFrameCounter();
             [[nodiscard]] static GLFWwindow* GetWindow();

@@ -24,5 +24,8 @@ namespace GW
             GreenWorldApp();
             ~GreenWorldApp() override;
             void Update()    override;
+
+            //Not needed in this app because we only use a general 3D camera controller to handle input.
+            void ProcessInput() override {}
     };
 }

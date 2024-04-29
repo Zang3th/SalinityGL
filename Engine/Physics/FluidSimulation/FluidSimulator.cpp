@@ -162,11 +162,16 @@ namespace Engine
 
     void FluidSimulator::TimeStep()
     {
-        float dt = (float)Window::GetDeltaTime();
+        float dt = (float)Window::GetDeltaTime_sec();
         AddForces(dt);
         Project(dt);
         AdvectVelocity(dt);
         AdvectSmoke(dt);
+    }
+
+    void FluidSimulator::Reset()
+    {
+        Init();
     }
 
     void FluidSimulator::AddHorizonalTurbine(const uint32 x, const uint32 y, const float power)

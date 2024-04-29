@@ -166,7 +166,7 @@ namespace Engine
             //Get current particle
             Particle* particle = _particleStorage[i];
 
-            if(!particle->Update((float) Window::GetDeltaTime()) || (particle->GetPosition().y >= _respawnTreshold))
+            if(!particle->Update((float) Window::GetDeltaTime_sec()) || (particle->GetPosition().y >= _respawnTreshold))
             {
                 particle->Respawn();
             }

@@ -79,13 +79,13 @@ namespace Engine
     void Window::CalcFrametime()
     {
         //Calculate frametime
-        double currentFrame = glfwGetTime();
-        _deltaTime = currentFrame - _lastFrame;
+        const double currentFrame = glfwGetTime();
+        _deltaTime_sec = currentFrame - _lastFrame;
         _lastFrame = currentFrame;
 
         //Accumulate to average the fps
         _frameCounter++;
-        _dtAccumulated += _deltaTime;
+        _dtAccumulated += _deltaTime_sec;
 
         if(_frameCounter > 160)
         {
@@ -126,9 +126,14 @@ namespace Engine
         return _isRunning;
     }
 
-    double Window::GetDeltaTime()
+    double Window::GetDeltaTime_sec()
     {
-        return _deltaTime;
+        return _deltaTime_sec;
+    }
+
+    double Window::GetDeltaTime_msec()
+    {
+        return _deltaTime_sec * 1000.0f;
     }
 
     double Window::GetFps()

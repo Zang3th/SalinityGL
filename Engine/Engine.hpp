@@ -9,6 +9,7 @@
 #include "Audio.hpp"
 #include "App.hpp"
 #include "Utility.hpp"
+#include "Timer.hpp"
 
 // ----- Resources and renderables -----
 #include "ResourceManager.hpp"

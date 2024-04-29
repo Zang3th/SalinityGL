@@ -53,24 +53,24 @@ namespace Engine
     {
         if(_windowInFocus)
         {
-            auto dt = (float) Window::GetDeltaTime();
+            auto dt = (float) Window::GetDeltaTime_sec();
 
-            if (glfwGetKey(Window::GetWindow(), GLFW_KEY_W) == GLFW_PRESS)
+            if(glfwGetKey(Window::GetWindow(), GLFW_KEY_W) == GLFW_PRESS)
                 Camera3D::ProcessKeyboard(Camera3D::FORWARD, dt);
 
-            if (glfwGetKey(Window::GetWindow(), GLFW_KEY_S) == GLFW_PRESS)
+            if(glfwGetKey(Window::GetWindow(), GLFW_KEY_S) == GLFW_PRESS)
                 Camera3D::ProcessKeyboard(Camera3D::BACKWARD, dt);
 
-            if (glfwGetKey(Window::GetWindow(), GLFW_KEY_D) == GLFW_PRESS)
+            if(glfwGetKey(Window::GetWindow(), GLFW_KEY_D) == GLFW_PRESS)
                 Camera3D::ProcessKeyboard(Camera3D::RIGHT, dt);
 
-            if (glfwGetKey(Window::GetWindow(), GLFW_KEY_A) == GLFW_PRESS)
+            if(glfwGetKey(Window::GetWindow(), GLFW_KEY_A) == GLFW_PRESS)
                 Camera3D::ProcessKeyboard(Camera3D::LEFT, dt);
 
-            if (glfwGetKey(Window::GetWindow(), GLFW_KEY_SPACE) == GLFW_PRESS)
+            if(glfwGetKey(Window::GetWindow(), GLFW_KEY_SPACE) == GLFW_PRESS)
                 Camera3D::ProcessKeyboard(Camera3D::UP, dt);
 
-            if (glfwGetKey(Window::GetWindow(), GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
+            if(glfwGetKey(Window::GetWindow(), GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
                 Camera3D::ProcessKeyboard(Camera3D::DOWN, dt);
         }
     }

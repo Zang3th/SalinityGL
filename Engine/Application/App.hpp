@@ -14,8 +14,9 @@ namespace Engine
             virtual uint32 InitModules() = 0;
 
         public:
-            virtual ~App()        = 0;
-            virtual void Update() = 0;
+            virtual ~App()               = 0;
+            virtual void Update()        = 0;
+            virtual void ProcessInput()  = 0;
 
             [[nodiscard]] bool GetInitSuccess() const;
             [[nodiscard]] bool IsRunning() const;

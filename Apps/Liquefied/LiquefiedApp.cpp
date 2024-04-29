@@ -13,7 +13,6 @@ namespace Liq
     void LiquefiedApp::AddBorderCells() const
     {
         Engine::StaggeredGrid* grid = _fluidSimulator->GetGrid();
-        const float cellValue = 0.0f;
 
         for(Engine::uint32 x = 0; x < grid->width; x++)
         {
@@ -22,7 +21,7 @@ namespace Liq
                 if((x == 0) || (y == 0) || (x == grid->width-1) || (y == grid->height-1))
                 {
                     //Add solid cell to simulation grid
-                    grid->s_At(x, y) = cellValue;
+                    grid->s_At(x, y) = 0.0f;
 
                     //Add cell to renderer
                     _gridRenderer->Set(x, y, glm::vec3(1.0f, 1.0f, 1.0f));
@@ -59,11 +58,22 @@ namespace Liq
         //Create fluid simulator
         _fluidSimulator = Engine::MakeScope<Engine::FluidSimulator>();
 
+        //Create timer
+        _physicsTimer = Engine::MakeScope<Engine::Timer>(4);   //4ms
+        _inputTimer   = Engine::MakeScope<Engine::Timer>(100); //100ms
+
         //Add border cells to simulation and renderer
         AddBorderCells();
         _gridRenderer->SetConfigAsDefault();
 
         return EXIT_SUCCESS;
+    }
+
+    void LiquefiedApp::UpdateTimer() const
+    {
+        const double dt_msec = Engine::Window::GetDeltaTime_msec();
+        _physicsTimer->Update(dt_msec);
+        _inputTimer->Update(dt_msec);
     }
 
     void LiquefiedApp::VisualizeSmoke() const
@@ -115,7 +125,13 @@ namespace Liq
 
             Engine::Window::PollEvents();
             Engine::Window::ProcessEvents();
-            _timeElapsed += Engine::Window::GetDeltaTime();
+            UpdateTimer();
+
+            //Handle input only if timer elapsed
+            if(_inputTimer->CheckElapsedAndReset())
+            {
+                ProcessInput();
+            }
         }
 
         {
@@ -129,17 +145,24 @@ namespace Liq
         {
             Engine::PROFILE_SCOPE("Simulate liquid");
 
-            //Check if 4ms have elapsed
-            if(_timeElapsed >= 0.004)
+            if(Engine::LiquiefiedParams::resetSimulation)
             {
-                //Add a horizontal turbine (initial velocity)
-                _fluidSimulator->AddHorizonalTurbine(1, 50, 50.0f);
+                _fluidSimulator->Reset();
+                AddBorderCells();
+                Engine::LiquiefiedParams::resetSimulation = false;
+            }
 
-                //Reset time
-                _timeElapsed = 0;
+            if(!Engine::LiquiefiedParams::pauseSimulation)
+            {
+                //Check if timer elapsed
+                if(_physicsTimer->CheckElapsedAndReset())
+                {
+                    //Add a horizontal turbine (initial velocity)
+                    _fluidSimulator->AddHorizonalTurbine(1, 50, 50.0f);
 
-                //Run simulation timestep and visualize result
-                _fluidSimulator->TimeStep();
+                    //Run simulation timestep and visualize result
+                    _fluidSimulator->TimeStep();
+                }
             }
         }
 
@@ -171,5 +194,23 @@ namespace Liq
 
             Engine::Window::SwapBuffers();
         }
+    }
+
+    void LiquefiedApp::ProcessInput()
+    {
+        if(glfwGetKey(Engine::Window::GetWindow(), GLFW_KEY_W) == GLFW_PRESS)
+            Engine::UIParams::wireframeRendering = !Engine::UIParams::wireframeRendering;
+
+        else if(glfwGetKey(Engine::Window::GetWindow(), GLFW_KEY_SPACE) == GLFW_PRESS)
+            Engine::LiquiefiedParams::pauseSimulation = !Engine::LiquiefiedParams::pauseSimulation;
+
+        else if(glfwGetKey(Engine::Window::GetWindow(), GLFW_KEY_S) == GLFW_PRESS)
+            Engine::LiquiefiedParams::visualizeSmoke = !Engine::LiquiefiedParams::visualizeSmoke;
+
+        else if(glfwGetKey(Engine::Window::GetWindow(), GLFW_KEY_C) == GLFW_PRESS)
+            Engine::LiquiefiedParams::scientificColorScheme = !Engine::LiquiefiedParams::scientificColorScheme;
+
+        else if(glfwGetKey(Engine::Window::GetWindow(), GLFW_KEY_R) == GLFW_PRESS)
+            Engine::LiquiefiedParams::resetSimulation = true;
     }
 }

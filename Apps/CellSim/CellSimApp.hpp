@@ -8,7 +8,7 @@ namespace CS
     class CellSimApp final : public Engine::App
     {
         private:
-            double                             _timeElapsed         = 0.0;
+            Engine::Scope<Engine::Timer>       _physicsTimer;
             Engine::uint8                      _tickCounter         = 0;
             bool                               _calcPhysicsThisTurn = true;
             Engine::SceneRenderer*             _sceneRenderer       = nullptr;
@@ -26,5 +26,8 @@ namespace CS
             CellSimApp();
             ~CellSimApp() override;
             void Update() override;
+
+            //Not needed in this app because we only use a general 3D camera controller to handle input.
+            void ProcessInput() override {}
     };
 }

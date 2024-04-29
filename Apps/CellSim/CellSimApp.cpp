@@ -48,6 +48,9 @@ namespace CS
         //Create UI
         _interface = Engine::MakeScope<CellSimInterface>();
 
+        //Create timer
+        _physicsTimer = Engine::MakeScope<Engine::Timer>(10); //10ms
+
         return EXIT_SUCCESS;
     }
 
@@ -145,7 +148,7 @@ namespace CS
             Engine::Window::PollEvents();
             Engine::Window::ProcessEvents();
             Engine::CameraController3D::ProcessInput();
-            _timeElapsed += Engine::Window::GetDeltaTime();
+            _physicsTimer->Update(Engine::Window::GetDeltaTime_msec());
 
             if(Engine::UIParams::resetCamera)
             {
@@ -212,10 +215,9 @@ namespace CS
             if(_calcPhysicsThisTurn)
             {
                 //Check if 10ms have elapsed
-                if(_timeElapsed >= 0.01)
+                if(_physicsTimer->CheckElapsedAndReset())
                 {
-                    //Reset time and increase tick counter
-                    _timeElapsed = 0;
+                    //Increase tick counter
                     _tickCounter++;
 
                     //Do physics

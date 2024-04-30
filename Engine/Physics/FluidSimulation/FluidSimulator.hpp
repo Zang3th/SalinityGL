@@ -55,6 +55,16 @@ namespace Engine
             }
 
             inline void UpdateGridSmoke(){ std::memcpy(&_smoke[0], &_smoke_temp[0], LiquiefiedParams::LIQUID_NUM_CELLS); }
+
+            inline float u_Avg_At(const uint32 x, const uint32 y)
+            {
+                return (u_At(x,y) + u_At(x+1,y) + u_At(x,y-1) + u_At(x+1,y-1)) * 0.25f;
+            }
+
+            inline float v_Avg_At(const uint32 x, const uint32 y)
+            {
+                return (v_At(x,y) + v_At(x-1,y) + v_At(x,y+1) + v_At(x-1,y+1)) * 0.25f;
+            }
     };
 
     class FluidSimulator

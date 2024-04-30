@@ -152,6 +152,13 @@ namespace Engine
     // ############################################### Liquefied #############################################
     // #######################################################################################################
 
+    enum Integrator
+    {
+        ForwardEuler   = 0,
+        BackwardEuler  = 1,
+        SemiLagrangian = 2
+    };
+
     struct LiquiefiedParams
     {
         inline static constexpr uint32 SIMULATION_WIDTH            = 150;
@@ -164,5 +171,6 @@ namespace Engine
         inline static           bool   scientificColorScheme       = false;
         inline static           bool   pauseSimulation             = true;
         inline static           bool   resetSimulation             = false;
+        inline static           Integrator integratorChoice        = Integrator::ForwardEuler;
     };
 }

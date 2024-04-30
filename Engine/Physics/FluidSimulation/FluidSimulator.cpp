@@ -101,11 +101,11 @@ namespace Engine
                 }
 
                 //u-component (horizontal advection)
-                _grid.u_temp_At(x, y) = ForwardEuler(dt, _grid.deltaX, _grid.u_At(x, y), _grid.u_At(x, y), _grid.u_At(x+1, y), _grid.u_At(x-1, y));
+                _grid.u_temp_At(x, y) = ForwardEuler(dt, _grid.deltaX, _grid.u_Avg_At(x, y), _grid.u_At(x, y), _grid.u_At(x+1, y), _grid.u_At(x-1, y));
                 Monitor::MinMaxAvg("u-component", _grid.u_temp_At(x, y));
 
                 //v-component (vertical advection)
-                _grid.v_temp_At(x, y) = ForwardEuler(dt, _grid.deltaY, _grid.v_At(x, y), _grid.v_At(x, y), _grid.v_At(x, y+1), _grid.v_At(x, y-1));
+                _grid.v_temp_At(x, y) = ForwardEuler(dt, _grid.deltaY, _grid.v_Avg_At(x, y), _grid.v_At(x, y), _grid.v_At(x, y+1), _grid.v_At(x, y-1));
                 Monitor::MinMaxAvg("v-component", _grid.v_temp_At(x, y));
             }
         }
@@ -128,10 +128,10 @@ namespace Engine
                 }
 
                 //u-component (horizontal advection)
-                const float u_result = ForwardEuler(dt, _grid.deltaX, _grid.u_At(x, y), _grid.smoke_At(x, y), _grid.smoke_At(x+1, y), _grid.smoke_At(x-1, y));
+                const float u_result = ForwardEuler(dt, _grid.deltaX, _grid.u_Avg_At(x, y), _grid.smoke_At(x, y), _grid.smoke_At(x+1, y), _grid.smoke_At(x-1, y));
 
                 //v-component (vertical advection)
-                const float v_result = ForwardEuler(dt, _grid.deltaY, _grid.v_At(x, y), _grid.smoke_At(x, y),_grid.smoke_At(x, y+1), _grid.smoke_At(x, y-1));
+                const float v_result = ForwardEuler(dt, _grid.deltaY, _grid.v_Avg_At(x, y), _grid.smoke_At(x, y),_grid.smoke_At(x, y+1), _grid.smoke_At(x, y-1));
 
                 _grid.smoke_temp_At(x, y) = (u_result + v_result) / 2.0f;
             }

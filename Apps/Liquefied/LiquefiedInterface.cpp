@@ -46,6 +46,23 @@ namespace Liq
                 ImGui::NewLine();
             }
             ImGui::Separator();
+
+            // --- Simulation settings
+            ImGui::NewLine();
+            ImGui::Separator();
+            CenterText("Simulation settings");
+            ImGui::Separator();
+            ImGui::NewLine();
+            ImGui::RadioButton("Forward Euler", (int*)&Engine::LiquiefiedParams::integratorChoice, Engine::Integrator::ForwardEuler);
+            ImGui::RadioButton("Backward Euler", (int*)&Engine::LiquiefiedParams::integratorChoice, Engine::Integrator::BackwardEuler);
+            ImGui::RadioButton("Semi Lagrangian", (int*)&Engine::LiquiefiedParams::integratorChoice, Engine::Integrator::SemiLagrangian);
+            ImGui::NewLine();
+            ImGui::Text("Turbine power: ");
+            ImGui::SameLine();
+            ImGui::PushItemWidth(150.0f);
+            Input_u32("##Input1", &Engine::LiquiefiedParams::turbinePower, 10, 100, ImGuiInputTextFlags_CharsDecimal);
+            ImGui::NewLine();
+            ImGui::Separator();
         }
         ImGui::End();
     }
@@ -67,29 +84,22 @@ namespace Liq
 
             ImGui::SetCursorPosY(10.0f);
             ImGui::SetCursorPosX(275.0f);
-            ImGui::Checkbox("Visualize Smoke   (S) |", &Engine::LiquiefiedParams::visualizeSmoke);
-            ImGui::SetCursorPosY(45.0f);
-            ImGui::SetCursorPosX(275.0f);
-            ImGui::Checkbox("Scientific Colors (C) |", &Engine::LiquiefiedParams::scientificColorScheme);
-
-            ImGui::SetCursorPosY(10.0f);
-            ImGui::SetCursorPosX(515.0f);
             if(ImGui::Button("Reset Simulation (R)"))
             {
                 Engine::LiquiefiedParams::resetSimulation = true;
             }
             ImGui::SameLine();
-            ImGui::Text("        |");
-            ImGui::SetCursorPosY(45.0f);
-            ImGui::SetCursorPosX(515.0f);
-            ImGui::Text("Turbine power:\t");
-            ImGui::SameLine();
-            ImGui::SetCursorPosY(45.0f);
-            ImGui::SetCursorPosX(640.0f);
-            ImGui::PushItemWidth(125.0f);
-            Input_u32("##Input1", &Engine::LiquiefiedParams::turbinePower, 10, 100, ImGuiInputTextFlags_CharsDecimal);
-            ImGui::SameLine();
             ImGui::Text("|");
+            ImGui::SetCursorPosY(45.0f);
+            ImGui::SetCursorPosX(275.0f);
+            ImGui::Text("                      |");
+
+            ImGui::SetCursorPosY(10.0f);
+            ImGui::SetCursorPosX(485.0f);
+            ImGui::Checkbox("Visualize Smoke   (S) |", &Engine::LiquiefiedParams::visualizeSmoke);
+            ImGui::SetCursorPosY(45.0f);
+            ImGui::SetCursorPosX(485.0f);
+            ImGui::Checkbox("Scientific Colors (C) |", &Engine::LiquiefiedParams::scientificColorScheme);
         }
         ImGui::End();
     }

@@ -26,9 +26,24 @@ namespace Liq
             // --- Profiling/Timing-Results
             ImGui::NewLine();
             ImGui::Separator();
-            for(auto const& entry : Engine::Profiler::_results)
+            for(auto const& entry : Engine::Profiler::results)
             {
                 ImGui::Text("%.3fms - %s", entry.second, entry.first);
+            }
+            ImGui::Separator();
+
+            // --- Numerical value monitoring
+            ImGui::NewLine();
+            ImGui::Separator();
+            CenterText("Numerical value monitoring");
+            ImGui::Separator();
+            ImGui::NewLine();
+            for(auto const& entry : Engine::Monitor::values)
+            {
+                ImGui::Text("\t%s (min): %5.3f", entry.first, entry.second.min);
+                ImGui::Text("\t%s (max): %5.3f", entry.first, entry.second.max);
+                ImGui::Text("\t%s (val): %5.3f", entry.first, entry.second.val);
+                ImGui::NewLine();
             }
             ImGui::Separator();
         }
@@ -63,6 +78,18 @@ namespace Liq
             {
                 Engine::LiquiefiedParams::resetSimulation = true;
             }
+            ImGui::SameLine();
+            ImGui::Text("        |");
+            ImGui::SetCursorPosY(45.0f);
+            ImGui::SetCursorPosX(515.0f);
+            ImGui::Text("Turbine power:\t");
+            ImGui::SameLine();
+            ImGui::SetCursorPosY(45.0f);
+            ImGui::SetCursorPosX(640.0f);
+            ImGui::PushItemWidth(125.0f);
+            Input_u32("##Input1", &Engine::LiquiefiedParams::turbinePower, 10, 100, ImGuiInputTextFlags_CharsDecimal);
+            ImGui::SameLine();
+            ImGui::Text("|");
         }
         ImGui::End();
     }

@@ -2,7 +2,6 @@
 
 #include <chrono>
 #include <map>
-#include <string>
 
 namespace Engine
 {
@@ -17,6 +16,7 @@ namespace Engine
         public:
             explicit Profiler(const char* name);
             ~Profiler();
-            inline static std::map<const char*, float> _results = std::map<const char*, float>();
+
+            inline static std::map<const char*, float> results = std::map<const char*, float>();
     };
 }

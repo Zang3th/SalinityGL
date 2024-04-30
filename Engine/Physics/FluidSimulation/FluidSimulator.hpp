@@ -2,6 +2,7 @@
 
 #include "Window.hpp"
 #include "GlobalParams.hpp"
+#include "Monitor.hpp"
 
 #include <cstring>
 

@@ -64,7 +64,7 @@ namespace GW
             // --- Profiling/Timing-Results
             ImGui::NewLine();
             ImGui::Separator();
-            for(auto const& entry : Engine::Profiler::_results)
+            for(auto const& entry : Engine::Profiler::results)
             {
                 ImGui::Text("%.3fms - %s", entry.second, entry.first);
             }

@@ -64,7 +64,7 @@ namespace CS
 
                 // --- Profiling/Timing-Results
                 ImGui::Separator();
-                for(auto const& entry : Engine::Profiler::_results)
+                for(auto const& entry : Engine::Profiler::results)
                 {
                     ImGui::Text("%.3fms - %s", entry.second, entry.first);
                 }

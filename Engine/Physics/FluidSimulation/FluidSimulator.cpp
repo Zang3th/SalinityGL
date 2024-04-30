@@ -53,17 +53,19 @@ namespace Engine
                     float divergence = _grid.u_At(x+1, y) - _grid.u_At(x, y) +
                                        _grid.v_At(x, y+1) - _grid.v_At(x, y);
 
+                    Monitor::MinMaxAvg("Divergence", divergence);
+
                     //Apply overrelaxation to speed up convergence
                     divergence *= OVERRELAX;
 
                     //Get the amount of border cells in the area
-                    float rightNeighbor = _grid.s_At(x+1, y);
-                    float leftNeighbor  = _grid.s_At(x-1, y);
-                    float upperNeigbor  = _grid.s_At(x, y+1);
-                    float lowerNeighbor = _grid.s_At(x, y-1);
+                    const float rightNeighbor = _grid.s_At(x+1, y);
+                    const float leftNeighbor  = _grid.s_At(x-1, y);
+                    const float upperNeigbor  = _grid.s_At(x, y+1);
+                    const float lowerNeighbor = _grid.s_At(x, y-1);
 
                     // Sum them up to later divide the divergence by the correct amount
-                    float s_sum = rightNeighbor + leftNeighbor + upperNeigbor + lowerNeighbor;
+                    const float s_sum = rightNeighbor + leftNeighbor + upperNeigbor + lowerNeighbor;
 
                     //Push all velocities out by the same amout to force incompressibility
                     _grid.u_At(x, y)   += divergence * (leftNeighbor / s_sum);
@@ -100,9 +102,11 @@ namespace Engine
 
                 //u-component (horizontal advection)
                 _grid.u_temp_At(x, y) = ForwardEuler(dt, _grid.deltaX, _grid.u_At(x, y), _grid.u_At(x, y), _grid.u_At(x+1, y), _grid.u_At(x-1, y));
+                Monitor::MinMaxAvg("u-component", _grid.u_temp_At(x, y));
 
                 //v-component (vertical advection)
                 _grid.v_temp_At(x, y) = ForwardEuler(dt, _grid.deltaY, _grid.v_At(x, y), _grid.v_At(x, y), _grid.v_At(x, y+1), _grid.v_At(x, y-1));
+                Monitor::MinMaxAvg("v-component", _grid.v_temp_At(x, y));
             }
         }
 
@@ -172,6 +176,7 @@ namespace Engine
     void FluidSimulator::Reset()
     {
         Init();
+        Monitor::Reset();
     }
 
     void FluidSimulator::AddHorizonalTurbine(const uint32 x, const uint32 y, const float power)

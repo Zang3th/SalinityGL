@@ -158,7 +158,11 @@ namespace Liq
                 if(_physicsTimer->CheckElapsedAndReset())
                 {
                     //Add a horizontal turbine (initial velocity)
-                    _fluidSimulator->AddHorizonalTurbine(1, 50, 50.0f);
+                    _fluidSimulator->AddHorizonalTurbine(1, 48, (float)Engine::LiquiefiedParams::turbinePower);
+                    _fluidSimulator->AddHorizonalTurbine(1, 49, (float)Engine::LiquiefiedParams::turbinePower);
+                    _fluidSimulator->AddHorizonalTurbine(1, 50, (float)Engine::LiquiefiedParams::turbinePower);
+                    _fluidSimulator->AddHorizonalTurbine(1, 51, (float)Engine::LiquiefiedParams::turbinePower);
+                    _fluidSimulator->AddHorizonalTurbine(1, 52, (float)Engine::LiquiefiedParams::turbinePower);
 
                     //Run simulation timestep and visualize result
                     _fluidSimulator->TimeStep();

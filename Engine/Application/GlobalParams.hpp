@@ -159,6 +159,7 @@ namespace Engine
         inline static constexpr uint32 LIQUID_NUM_CELLS            = SIMULATION_WIDTH * SIMULATION_HEIGHT;
         inline static constexpr uint32 GAUSS_SEIDEL_ITERATIONS     = 20;
         inline static constexpr float  GAUSS_SEIDEL_OVERRELAXATION = 1.9f;
+        inline static           uint32 turbinePower                = 50;
         inline static           bool   visualizeSmoke              = true;
         inline static           bool   scientificColorScheme       = false;
         inline static           bool   pauseSimulation             = true;

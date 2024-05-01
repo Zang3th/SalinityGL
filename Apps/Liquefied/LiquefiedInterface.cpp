@@ -38,11 +38,11 @@ namespace Liq
             CenterText("Numerical value monitoring");
             ImGui::Separator();
             ImGui::NewLine();
-            for(auto const& entry : Engine::Monitor::values)
+            for(auto const& entry : Engine::Monitoring::values)
             {
-                ImGui::Text("\t%s (min): %5.3f", entry.first, entry.second.min);
-                ImGui::Text("\t%s (max): %5.3f", entry.first, entry.second.max);
-                ImGui::Text("\t%s (val): %5.3f", entry.first, entry.second.val);
+                ImGui::Text("\t%s (min): %5.3f at (%d, %d)", entry.first, entry.second.min, entry.second.x, entry.second.y);
+                ImGui::Text("\t%s (max): %5.3f at (%d, %d)", entry.first, entry.second.max, entry.second.x, entry.second.y);
+                ImGui::Text("\t%s (val): %5.3f at (%d, %d)", entry.first, entry.second.val, entry.second.x, entry.second.y);
                 ImGui::NewLine();
             }
             ImGui::Separator();

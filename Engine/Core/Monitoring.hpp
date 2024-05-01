@@ -6,12 +6,12 @@
 
 namespace Engine
 {
-    class Monitor
+    class Monitoring
     {
         public:
-            Monitor() = delete;
+            Monitoring() = delete;
 
-            static void MinMaxAvg(const char* name, float value);
+            static void MinMaxAvgAt(const char* name, float value, uint32 x, uint32 y);
             static void Reset();
 
             inline static std::map<const char*, MinMaxAvg_t> values = std::map<const char*, MinMaxAvg_t>();

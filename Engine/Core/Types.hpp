@@ -45,5 +45,7 @@ namespace Engine
         float  min;
         float  max;
         float  val;
+        uint32 x;
+        uint32 y;
     } MinMaxAvg_t;
 }

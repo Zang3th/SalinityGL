@@ -10,7 +10,7 @@
 #include "App.hpp"
 #include "Utility.hpp"
 #include "Timer.hpp"
-#include "Monitor.hpp"
+#include "Monitoring.hpp"
 
 // ----- Resources and renderables -----
 #include "ResourceManager.hpp"

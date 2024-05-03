@@ -120,7 +120,10 @@ namespace Liq
 
             ImGui::SetCursorPosY(10.0f);
             ImGui::SetCursorPosX(725.0f);
-            ImGui::Checkbox("Show debug window (D) |", &Engine::LiquiefiedParams::showDebugWindow);
+            ImGui::Checkbox("Activate Debugging (A) |", &Engine::LiquiefiedParams::activateDebugging);
+            ImGui::SetCursorPosY(45.0f);
+            ImGui::SetCursorPosX(725.0f);
+            ImGui::Checkbox("Show Debug Window (D)  |", &Engine::LiquiefiedParams::showDebugWindow);
         }
         ImGui::End();
     }

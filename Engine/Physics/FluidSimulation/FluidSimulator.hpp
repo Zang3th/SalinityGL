@@ -4,6 +4,7 @@
 #include "GlobalParams.hpp"
 #include "Monitoring.hpp"
 #include "StaggeredGrid.hpp"
+#include "Profiler.hpp"
 
 namespace Engine
 {

@@ -101,7 +101,12 @@ namespace Engine
 
                     //Apply overrelaxation to speed up convergence
                     pressure *= OVERRELAX;
-                    Monitoring::Log("Pressure", pressure, x, y);
+                    if(LiquiefiedParams::activateDebugging)
+                    {
+                        //ToDo: The monitoring reduces the framerate thus falsifying the results.
+                        //ToDo: Add framerate independent monitoring.
+                        Monitoring::Log("Pressure", pressure, x, y);
+                    }
 
                     //Push all velocities out by the same amout to force incompressibility
                     _grid.u_At(x, y)   += pressure * leftNeighbor;
@@ -109,8 +114,12 @@ namespace Engine
                     _grid.v_At(x, y)   += pressure * lowerNeighbor;
                     _grid.v_At(x, y+1) -= pressure * upperNeigbor;
 
-                    //Get the amount of fluid that is entering or leaving the cell
-                    divergence = _grid.u_At(x+1, y) - _grid.u_At(x, y) + _grid.v_At(x, y+1) - _grid.v_At(x, y);
+                    //Monitor the divergence to make sure that the fluid is incompressible
+                    if(LiquiefiedParams::activateDebugging && LiquiefiedParams::showDebugWindow)
+                    {
+                        divergence = _grid.u_At(x+1, y) - _grid.u_At(x, y) + _grid.v_At(x, y+1) - _grid.v_At(x, y);
+                        Monitoring::LogToBuffer("Divergence", divergence, x, y);
+                    }
                 }
             }
         }
@@ -124,12 +133,6 @@ namespace Engine
         {
             for(uint32 y = 1; y < _grid.height-1; y++)
             {
-                //ToDo: Add more extensive debugging capabilities, like a window to scroll through all the values at runtime.
-
-                //Monitor the divergence to make sure that the fluid is incompressible
-                const float divergence = _grid.u_At(x+1, y) - _grid.u_At(x, y) + _grid.v_At(x, y+1) - _grid.v_At(x, y);
-                Monitoring::LogToBuffer("Divergence", divergence, x, y);
-
                 //Skip border cells
                 if(_grid.s_At(x, y) == 0)
                 {
@@ -216,14 +219,37 @@ namespace Engine
 
     void FluidSimulator::TimeStep()
     {
+        PROFILE_SCOPE("TimeStep");
+
         float dt = (float)Window::GetDeltaTime_sec();
-        AddForces(dt);
-        //CorrectForces(); //Not necessary
-        //Diffuse          //?
-        Project(dt);
-        AdvectVelocity(dt);
-        AdvectSmoke(dt);
-        //Project(dt);
+        {
+            PROFILE_SCOPE("AddForces");
+            AddForces(dt);
+        }
+        {
+            PROFILE_SCOPE("CorrectForces");
+            //CorrectForces(); //Not necessary
+        }
+        {
+            PROFILE_SCOPE("Diffuse");
+            //Diffuse()        //?
+        }
+        {
+            PROFILE_SCOPE("Project");
+            Project(dt);
+        }
+        {
+            PROFILE_SCOPE("AdvectVelocity");
+            //AdvectVelocity(dt);
+        }
+        {
+            PROFILE_SCOPE("AdvectSmoke");
+            //AdvectSmoke(dt);
+        }
+        {
+            PROFILE_SCOPE("Project");
+            //Project(dt);
+        }
     }
 
     void FluidSimulator::Reset()

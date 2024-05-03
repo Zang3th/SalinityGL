@@ -164,14 +164,15 @@ namespace Engine
         inline static constexpr uint32 SIMULATION_WIDTH            = 150;
         inline static constexpr uint32 SIMULATION_HEIGHT           = 100;
         inline static constexpr uint32 LIQUID_NUM_CELLS            = SIMULATION_WIDTH * SIMULATION_HEIGHT;
-        inline static constexpr uint32 GAUSS_SEIDEL_ITERATIONS     = 25;
-        inline static constexpr float  GAUSS_SEIDEL_OVERRELAXATION = 1.95f;
+        inline static constexpr uint32 GAUSS_SEIDEL_ITERATIONS     = 20;
+        inline static constexpr float  GAUSS_SEIDEL_OVERRELAXATION = 1.9f;
         inline static           uint32 turbinePower                = 1;
         inline static           bool   visualizeSmoke              = true;
         inline static           bool   scientificColorScheme       = false;
         inline static           bool   pauseSimulation             = true;
         inline static           bool   resetSimulation             = false;
-        inline static           bool   showDebugWindow             = true;
+        inline static           bool   activateDebugging           = false;
+        inline static           bool   showDebugWindow             = false;
         inline static           Integrator integratorChoice        = Integrator::ForwardEuler;
     };
 }

@@ -143,8 +143,6 @@ namespace Liq
         }
 
         {
-            Engine::PROFILE_SCOPE("Simulate liquid");
-
             if(Engine::LiquiefiedParams::resetSimulation)
             {
                 _fluidSimulator->Reset();
@@ -216,6 +214,9 @@ namespace Liq
 
         else if(glfwGetKey(Engine::Window::GetWindow(), GLFW_KEY_R) == GLFW_PRESS)
             Engine::LiquiefiedParams::resetSimulation = true;
+
+        else if(glfwGetKey(Engine::Window::GetWindow(), GLFW_KEY_A) == GLFW_PRESS)
+            Engine::LiquiefiedParams::activateDebugging = !Engine::LiquiefiedParams::activateDebugging;
 
         else if(glfwGetKey(Engine::Window::GetWindow(), GLFW_KEY_D) == GLFW_PRESS)
             Engine::LiquiefiedParams::showDebugWindow = !Engine::LiquiefiedParams::showDebugWindow;

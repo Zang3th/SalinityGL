@@ -7,8 +7,13 @@ namespace Liq
     class LiquefiedInterface final : public Engine::Interface
     {
         private:
-            ImVec2 _bufferBarSize = ImVec2((float)Engine::WindowParams::WIDTH - _sidebarWidth, 80.0f);
-            ImVec2 _bufferBarPos  = ImVec2(0.0f, 0.0f);
+            float  _bufferBarHeight  = 80.0f;
+            ImVec2 _bufferBarSize    = ImVec2((float)Engine::WindowParams::WIDTH - _sidebarWidth, _bufferBarHeight);
+            ImVec2 _bufferBarPos     = ImVec2(0.0f, 0.0f);
+            float  _debugWindowAlpha = 0.6f;
+            float  _debugWindowWidth = 250.0f;
+            ImVec2 _debugWindowPos   = ImVec2((float)Engine::WindowParams::WIDTH - _sidebarWidth, _bufferBarHeight);
+            ImVec2 _debugWindowSize  = ImVec2(_debugWindowWidth,(float)Engine::WindowParams::HEIGHT);
 
             void AddSideBar() const;
             void AddBufferBar() const;

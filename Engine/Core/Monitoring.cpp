@@ -4,37 +4,43 @@ namespace Engine
 {
     // ----- Public -----
 
-    void Monitoring::MinMaxAvgAt(const char* name, const float value, const uint32 x, const uint32 y)
+    void Monitoring::LogToBuffer(const char* name, const float val, const uint32 x, const uint32 y)
     {
-        //Add new value if it's not already getting monitored
-        if(values.find(name) == values.end())
+        //Add to normal monitoring
+        buffer[_index] = {val, x, y};
+        _index = (_index + 1) % LiquiefiedParams::LIQUID_NUM_CELLS;
+
+        Log(name, val, x, y);
+    }
+
+    void Monitoring::Log(const char* name, const float val, const uint32 x, const uint32 y)
+    {
+        std::string s_max = std::string(name).append("_max");
+        std::string s_min = std::string(name).append("_min");
+
+        //Check for new entry
+        if(loggedValues.find(s_max) == loggedValues.end() &&
+           loggedValues.find(s_min) == loggedValues.end())
         {
-            values[name] = {value, value, value, x, y};
+            loggedValues.emplace(std::pair<std::string, LogFloatXY_t>(s_max, {val, x, y}));
+            loggedValues.emplace(std::pair<std::string, LogFloatXY_t>(s_min, {val, x, y}));
             return;
         }
 
-        //Get current struct
-        MinMaxAvg_t valueStruct = values[name];
+        //Else check min and max
+        if(val > loggedValues[s_max].val)
+            loggedValues.at(s_max) = {val, x, y};
 
-        //Add min if it's less than current min
-        if(valueStruct.min > value)
-            valueStruct.min = value;
-        //Add max if it's more than current max
-        else if(valueStruct.max < value)
-            valueStruct.max = value;
-
-        //Add value and position
-        valueStruct.val = value;
-        valueStruct.x   = x;
-        valueStruct.y   = y;
-
-        //Assign new values
-        values[name] = valueStruct;
+        if(val < loggedValues[s_min].val)
+            loggedValues.at(s_min) = {val, x, y};
     }
 
     void Monitoring::Reset()
     {
-        for(auto& val : values)
-            val.second = {0.0f, 0.0f, 0.0f, UINT32_MAX, UINT32_MAX};
+        _index = 0;
+        std::memset(&buffer[0], 0, LiquiefiedParams::LIQUID_NUM_CELLS);
+        _max = FLT_MIN;
+        _min = FLT_MAX;
+        loggedValues.clear();
     }
 }

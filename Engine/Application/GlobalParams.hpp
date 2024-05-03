@@ -171,6 +171,7 @@ namespace Engine
         inline static           bool   scientificColorScheme       = false;
         inline static           bool   pauseSimulation             = true;
         inline static           bool   resetSimulation             = false;
+        inline static           bool   showDebugWindow             = true;
         inline static           Integrator integratorChoice        = Integrator::ForwardEuler;
     };
 }

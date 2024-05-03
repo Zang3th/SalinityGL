@@ -32,21 +32,6 @@ namespace Liq
             }
             ImGui::Separator();
 
-            // --- Numerical value monitoring
-            ImGui::NewLine();
-            ImGui::Separator();
-            CenterText("Numerical value monitoring");
-            ImGui::Separator();
-            ImGui::NewLine();
-            for(auto const& entry : Engine::Monitoring::values)
-            {
-                ImGui::Text("\t%s (min): %5.3f at (%d, %d)", entry.first, entry.second.min, entry.second.x, entry.second.y);
-                ImGui::Text("\t%s (max): %5.3f at (%d, %d)", entry.first, entry.second.max, entry.second.x, entry.second.y);
-                ImGui::Text("\t%s (val): %5.3f at (%d, %d)", entry.first, entry.second.val, entry.second.x, entry.second.y);
-                ImGui::NewLine();
-            }
-            ImGui::Separator();
-
             // --- Simulation settings
             ImGui::NewLine();
             ImGui::Separator();
@@ -63,8 +48,40 @@ namespace Liq
             Input_u32("##Input1", &Engine::LiquiefiedParams::turbinePower, 10, 100, ImGuiInputTextFlags_CharsDecimal);
             ImGui::NewLine();
             ImGui::Separator();
+
+            // --- Numerical value monitoring
+            ImGui::NewLine();
+            ImGui::Separator();
+            CenterText("Numerical value monitoring");
+            ImGui::Separator();
+            ImGui::NewLine();
+            for(const auto& entry : Engine::Monitoring::loggedValues)
+            {
+                ImGui::Text("  %14s: %+5.5f at (%3d, %3d)", entry.first.c_str(), entry.second.val, entry.second.x, entry.second.y);
+            }
+            ImGui::NewLine();
+            ImGui::Separator();
         }
         ImGui::End();
+
+        if(Engine::LiquiefiedParams::showDebugWindow)
+        {
+            ImGui::SetNextWindowBgAlpha(_debugWindowAlpha);
+            ImGui::SetNextWindowPos(_debugWindowPos, ImGuiCond_Always, _overlayPivot);
+            ImGui::SetNextWindowSize(_debugWindowSize);
+
+            if(ImGui::Begin("DebugWindow", nullptr, _windowFlags | ImGuiWindowFlags_AlwaysVerticalScrollbar))
+            {
+                CenterText("Divergence");
+                ImGui::Separator();
+
+                for(const auto& entry : Engine::Monitoring::buffer)
+                {
+                    ImGui::Text("(%3d, %3d): %+5.5f", entry.x, entry.y, entry.val);
+                }
+            }
+            ImGui::End();
+        }
     }
 
     void LiquefiedInterface::AddBufferBar() const
@@ -100,6 +117,10 @@ namespace Liq
             ImGui::SetCursorPosY(45.0f);
             ImGui::SetCursorPosX(485.0f);
             ImGui::Checkbox("Scientific Colors (C) |", &Engine::LiquiefiedParams::scientificColorScheme);
+
+            ImGui::SetCursorPosY(10.0f);
+            ImGui::SetCursorPosX(725.0f);
+            ImGui::Checkbox("Show debug window (D) |", &Engine::LiquiefiedParams::showDebugWindow);
         }
         ImGui::End();
     }

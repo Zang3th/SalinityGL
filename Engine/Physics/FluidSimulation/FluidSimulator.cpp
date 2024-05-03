@@ -98,10 +98,10 @@ namespace Engine
 
                     //Calculate pressure
                     float pressure = divergence / s_sum;
-                    Monitoring::MinMaxAvgAt("Pressure", pressure, x, y);
 
                     //Apply overrelaxation to speed up convergence
                     pressure *= OVERRELAX;
+                    Monitoring::Log("Pressure", pressure, x, y);
 
                     //Push all velocities out by the same amout to force incompressibility
                     _grid.u_At(x, y)   += pressure * leftNeighbor;
@@ -128,8 +128,7 @@ namespace Engine
 
                 //Monitor the divergence to make sure that the fluid is incompressible
                 const float divergence = _grid.u_At(x+1, y) - _grid.u_At(x, y) + _grid.v_At(x, y+1) - _grid.v_At(x, y);
-                Monitoring::MinMaxAvgAt("Div", divergence, x, y);
-                Logger::Print("Divergence: " + std::to_string(divergence) + " at (" + std::to_string(x) + ", " + std::to_string(y) + ")");
+                Monitoring::LogToBuffer("Divergence", divergence, x, y);
 
                 //Skip border cells
                 if(_grid.s_At(x, y) == 0)
@@ -219,10 +218,12 @@ namespace Engine
     {
         float dt = (float)Window::GetDeltaTime_sec();
         AddForces(dt);
-        CorrectForces();
+        //CorrectForces(); //Not necessary
+        //Diffuse          //?
         Project(dt);
         AdvectVelocity(dt);
         AdvectSmoke(dt);
+        //Project(dt);
     }
 
     void FluidSimulator::Reset()

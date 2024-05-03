@@ -9,11 +9,11 @@ namespace Engine
     struct StaggeredGrid
     {
         private:
-            //Horizontal u-component is sampled at the centers of the vertical cell faces.
+            //Horizontal velocity (u-component) is sampled at the centers of the vertical cell faces.
             float _u[LiquiefiedParams::LIQUID_NUM_CELLS]      = {0.0f};
             float _u_temp[LiquiefiedParams::LIQUID_NUM_CELLS] = {0.0f};
 
-            //Vertical is sampled at the centers of the horizontal cell faces.
+            //Vertical velocity (v-component) is sampled at the centers of the horizontal cell faces.
             float _v[LiquiefiedParams::LIQUID_NUM_CELLS]      = {0.0f};
             float _v_temp[LiquiefiedParams::LIQUID_NUM_CELLS] = {0.0f};
 
@@ -27,6 +27,8 @@ namespace Engine
         public:
             const uint32 width  = LiquiefiedParams::SIMULATION_WIDTH;
             const uint32 height = LiquiefiedParams::SIMULATION_HEIGHT;
+
+            //ToDo: float* u = &_u[0];
 
             //Spatial discretization
             const float dx = 1.0f;

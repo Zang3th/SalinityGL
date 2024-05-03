@@ -40,12 +40,10 @@ namespace Engine
     #define COLOR_GREEN glm::vec3(0.0f, 1.0f, 0.0f)
     #define COLOR_BLUE  glm::vec3(0.0f, 0.0f, 1.0f)
 
-    typedef struct MinMaxAvg
+    typedef struct LogFloatXY
     {
-        float  min;
-        float  max;
         float  val;
         uint32 x;
         uint32 y;
-    } MinMaxAvg_t;
+    } LogFloatXY_t;
 }

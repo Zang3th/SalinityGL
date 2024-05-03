@@ -216,5 +216,8 @@ namespace Liq
 
         else if(glfwGetKey(Engine::Window::GetWindow(), GLFW_KEY_R) == GLFW_PRESS)
             Engine::LiquiefiedParams::resetSimulation = true;
+
+        else if(glfwGetKey(Engine::Window::GetWindow(), GLFW_KEY_D) == GLFW_PRESS)
+            Engine::LiquiefiedParams::showDebugWindow = !Engine::LiquiefiedParams::showDebugWindow;
     }
 }

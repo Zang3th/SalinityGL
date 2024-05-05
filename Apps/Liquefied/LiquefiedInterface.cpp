@@ -50,38 +50,27 @@ namespace Liq
             ImGui::Separator();
 
             // --- Numerical value monitoring
-            ImGui::NewLine();
-            ImGui::Separator();
-            CenterText("Numerical value monitoring");
-            ImGui::Separator();
-            ImGui::NewLine();
-            for(const auto& entry : Engine::Monitoring::loggedValues)
+            if(Engine::LiquiefiedParams::activateDebugging)
             {
-                ImGui::Text("  %14s: %+5.5f at (%3d, %3d)", entry.first.c_str(), entry.second.val, entry.second.x, entry.second.y);
+                ImGui::NewLine();
+                ImGui::Separator();
+                CenterText("Numerical value monitoring");
+                ImGui::Separator();
+                ImGui::NewLine();
+                ImGui::Text("Pressure   (min): %+5.5f at (%3d, %3d)", Engine::LiquefiedDebug::minPressure.val,
+                            Engine::LiquefiedDebug::minPressure.x, Engine::LiquefiedDebug::minPressure.y);
+                ImGui::Text("Pressure   (max): %+5.5f at (%3d, %3d)", Engine::LiquefiedDebug::maxPressure.val,
+                            Engine::LiquefiedDebug::maxPressure.x, Engine::LiquefiedDebug::maxPressure.y);
+                ImGui::Text("Divergence (min): %+5.5f at (%3d, %3d)", Engine::LiquefiedDebug::minDivergence.val,
+                            Engine::LiquefiedDebug::minDivergence.x, Engine::LiquefiedDebug::minDivergence.y);
+                ImGui::Text("Divergence (max): %+5.5f at (%3d, %3d)", Engine::LiquefiedDebug::maxDivergence.val,
+                            Engine::LiquefiedDebug::maxDivergence.x, Engine::LiquefiedDebug::maxDivergence.y);
+                ImGui::NewLine();
+                ImGui::Separator();
             }
-            ImGui::NewLine();
-            ImGui::Separator();
+
         }
         ImGui::End();
-
-        if(Engine::LiquiefiedParams::showDebugWindow)
-        {
-            ImGui::SetNextWindowBgAlpha(_debugWindowAlpha);
-            ImGui::SetNextWindowPos(_debugWindowPos, ImGuiCond_Always, _overlayPivot);
-            ImGui::SetNextWindowSize(_debugWindowSize);
-
-            if(ImGui::Begin("DebugWindow", nullptr, _windowFlags | ImGuiWindowFlags_AlwaysVerticalScrollbar))
-            {
-                CenterText("Divergence");
-                ImGui::Separator();
-
-                for(const auto& entry : Engine::Monitoring::buffer)
-                {
-                    ImGui::Text("(%3d, %3d): %+5.5f", entry.x, entry.y, entry.val);
-                }
-            }
-            ImGui::End();
-        }
     }
 
     void LiquefiedInterface::AddBufferBar() const
@@ -121,9 +110,6 @@ namespace Liq
             ImGui::SetCursorPosY(10.0f);
             ImGui::SetCursorPosX(725.0f);
             ImGui::Checkbox("Activate Debugging (A) |", &Engine::LiquiefiedParams::activateDebugging);
-            ImGui::SetCursorPosY(45.0f);
-            ImGui::SetCursorPosX(725.0f);
-            ImGui::Checkbox("Show Debug Window (D)  |", &Engine::LiquiefiedParams::showDebugWindow);
         }
         ImGui::End();
     }

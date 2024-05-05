@@ -62,9 +62,6 @@ namespace Engine
      * velocity field divergence-free and also enforces solid wall boundary conditions. */
     void FluidSimulator::Project(const float dt)
     {
-        //ToDo: Project() is currently bugged. It does not correctly enforce solid wall boundary conditions.
-        //ToDo: Fix it. Divergence bugged at (148, 98).
-
         //Simple solution using Gauss-Seidel
         for(uint32 it = 0; it < ITER; it++)
         {
@@ -101,12 +98,6 @@ namespace Engine
 
                     //Apply overrelaxation to speed up convergence
                     pressure *= OVERRELAX;
-                    if(LiquiefiedParams::activateDebugging)
-                    {
-                        //ToDo: The monitoring reduces the framerate thus falsifying the results.
-                        //ToDo: Add framerate independent monitoring.
-                        Monitoring::Log("Pressure", pressure, x, y);
-                    }
 
                     //Push all velocities out by the same amout to force incompressibility
                     _grid.u_At(x, y)   += pressure * leftNeighbor;
@@ -114,11 +105,23 @@ namespace Engine
                     _grid.v_At(x, y)   += pressure * lowerNeighbor;
                     _grid.v_At(x, y+1) -= pressure * upperNeigbor;
 
-                    //Monitor the divergence to make sure that the fluid is incompressible
-                    if(LiquiefiedParams::activateDebugging && LiquiefiedParams::showDebugWindow)
+                    //Monitor the pressure and the divergence to make sure that the fluid is incompressible
+                    if(LiquiefiedParams::activateDebugging)
                     {
                         divergence = _grid.u_At(x+1, y) - _grid.u_At(x, y) + _grid.v_At(x, y+1) - _grid.v_At(x, y);
-                        Monitoring::LogToBuffer("Divergence", divergence, x, y);
+
+                        if(pressure < LiquefiedDebug::minPressure.val)
+                            LiquefiedDebug::minPressure = {pressure, x, y};
+
+                        if(pressure > LiquefiedDebug::maxPressure.val)
+                            LiquefiedDebug::maxPressure = {pressure, x, y};
+
+                        if(divergence < LiquefiedDebug::minDivergence.val)
+                            LiquefiedDebug::minDivergence = {divergence, x, y};
+
+                        if(divergence > LiquefiedDebug::maxDivergence.val)
+                            LiquefiedDebug::maxDivergence = {divergence, x, y};
+
                     }
                 }
             }
@@ -141,16 +144,13 @@ namespace Engine
 
                 if(LiquiefiedParams::integratorChoice == Integrator::ForwardEuler)
                 {
-                    //ToDo: Fix Project() first, after that look at the unstability of Forward-Euler.
+                    //ToDo: Look at the unstability of Forward-Euler.
 
-                    /*const float newU = ForwardEuler(dt, _grid.u_Avg_At(x, y), _grid.u_At(x, y), _grid.u_At(x+1, y), _grid.u_At(x-1, y));
+                    const float newU = ForwardEuler(dt, _grid.u_Avg_At(x, y), _grid.u_At(x, y), _grid.u_At(x+1, y), _grid.u_At(x-1, y));
                     const float newV = ForwardEuler(dt, _grid.v_Avg_At(x, y), _grid.v_At(x, y), _grid.v_At(x, y+1), _grid.v_At(x, y-1));
 
-                    Monitoring::MinMaxAvgAt("u-component", newU, x, y);
-                    Monitoring::MinMaxAvgAt("v-component", newV, x, y);
-
                     _grid.u_temp_At(x, y) = newU; //u-component (horizontal advection)
-                    _grid.v_temp_At(x, y) = newV; //v-component (vertical advection)*/
+                    _grid.v_temp_At(x, y) = newV; //v-component (vertical advection)
                 }
                 else if(LiquiefiedParams::integratorChoice == Integrator::BackwardEuler)
                 {
@@ -255,7 +255,10 @@ namespace Engine
     void FluidSimulator::Reset()
     {
         Init();
-        Monitoring::Reset();
+        LiquefiedDebug::minPressure   = {FLT_MAX, 0, 0};
+        LiquefiedDebug::maxPressure   = {FLT_MIN, 0, 0};
+        LiquefiedDebug::minDivergence = {FLT_MAX, 0, 0};
+        LiquefiedDebug::maxDivergence = {FLT_MIN, 0, 0};
     }
 
     void FluidSimulator::AddHorizonalTurbine(const uint32 x, const uint32 y, const float power)

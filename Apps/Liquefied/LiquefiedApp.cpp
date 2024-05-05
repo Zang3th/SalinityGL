@@ -59,7 +59,7 @@ namespace Liq
         _fluidSimulator = Engine::MakeScope<Engine::FluidSimulator>();
 
         //Create timer
-        _physicsTimer = Engine::MakeScope<Engine::Timer>(4);   //4ms
+        _physicsTimer = Engine::MakeScope<Engine::Timer>(10);  //4ms
         _inputTimer   = Engine::MakeScope<Engine::Timer>(100); //100ms
 
         //Add border cells to simulation and renderer
@@ -156,11 +156,11 @@ namespace Liq
                 if(_physicsTimer->CheckElapsedAndReset())
                 {
                     //Add a horizontal turbine (initial velocity)
-                    _fluidSimulator->AddHorizonalTurbine(1, 48, 0.1f);
-                    _fluidSimulator->AddHorizonalTurbine(1, 49, 0.1f);
-                    _fluidSimulator->AddHorizonalTurbine(1, 50, 0.1f);
-                    _fluidSimulator->AddHorizonalTurbine(1, 51, 0.1f);
-                    _fluidSimulator->AddHorizonalTurbine(1, 52, 0.1f);
+                    /*_fluidSimulator->AddHorizonalTurbine(1, 48, (float)Engine::LiquiefiedParams::turbinePower);
+                    _fluidSimulator->AddHorizonalTurbine(1, 49, (float)Engine::LiquiefiedParams::turbinePower);
+                    _fluidSimulator->AddHorizonalTurbine(1, 50, (float)Engine::LiquiefiedParams::turbinePower);
+                    _fluidSimulator->AddHorizonalTurbine(1, 51, (float)Engine::LiquiefiedParams::turbinePower);
+                    _fluidSimulator->AddHorizonalTurbine(1, 52, (float)Engine::LiquiefiedParams::turbinePower);*/
 
                     //Run simulation timestep and visualize result
                     _fluidSimulator->TimeStep();
@@ -217,8 +217,5 @@ namespace Liq
 
         else if(glfwGetKey(Engine::Window::GetWindow(), GLFW_KEY_A) == GLFW_PRESS)
             Engine::LiquiefiedParams::activateDebugging = !Engine::LiquiefiedParams::activateDebugging;
-
-        else if(glfwGetKey(Engine::Window::GetWindow(), GLFW_KEY_D) == GLFW_PRESS)
-            Engine::LiquiefiedParams::showDebugWindow = !Engine::LiquiefiedParams::showDebugWindow;
     }
 }

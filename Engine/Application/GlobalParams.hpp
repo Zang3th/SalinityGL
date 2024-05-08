@@ -199,7 +199,7 @@ namespace Engine
             maxUAdvect    = {FLT_MIN, 0, 0};
             minVAdvect    = {FLT_MAX, 0, 0};
             maxVAdvect    = {FLT_MIN, 0, 0};
-            cflCondition    = 0.0f;
+            cflCondition  = 0.0f;
         }
     };
 }

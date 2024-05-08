@@ -45,7 +45,7 @@ namespace Liq
             ImGui::Text("Turbine power: ");
             ImGui::SameLine();
             ImGui::PushItemWidth(150.0f);
-            Input_u32("##Input1", &Engine::LiquiefiedParams::turbinePower, 10, 100, ImGuiInputTextFlags_CharsDecimal);
+            Input_u32("##Input1", &Engine::LiquiefiedParams::turbinePower, 100, 1000, ImGuiInputTextFlags_CharsDecimal);
             ImGui::NewLine();
             ImGui::Separator();
 
@@ -57,14 +57,22 @@ namespace Liq
                 CenterText("Numerical value monitoring");
                 ImGui::Separator();
                 ImGui::NewLine();
-                ImGui::Text("Pressure   (min): %+5.5f at (%3d, %3d)", Engine::LiquefiedDebug::minPressure.val,
+                ImGui::Text("Pressure    (min): %+5.5f at (%3d, %3d)", Engine::LiquefiedDebug::minPressure.val,
                             Engine::LiquefiedDebug::minPressure.x, Engine::LiquefiedDebug::minPressure.y);
-                ImGui::Text("Pressure   (max): %+5.5f at (%3d, %3d)", Engine::LiquefiedDebug::maxPressure.val,
+                ImGui::Text("Pressure    (max): %+5.5f at (%3d, %3d)", Engine::LiquefiedDebug::maxPressure.val,
                             Engine::LiquefiedDebug::maxPressure.x, Engine::LiquefiedDebug::maxPressure.y);
-                ImGui::Text("Divergence (min): %+5.5f at (%3d, %3d)", Engine::LiquefiedDebug::minDivergence.val,
+                ImGui::Text("Divergence  (min): %+5.5f at (%3d, %3d)", Engine::LiquefiedDebug::minDivergence.val,
                             Engine::LiquefiedDebug::minDivergence.x, Engine::LiquefiedDebug::minDivergence.y);
-                ImGui::Text("Divergence (max): %+5.5f at (%3d, %3d)", Engine::LiquefiedDebug::maxDivergence.val,
+                ImGui::Text("Divergence  (max): %+5.5f at (%3d, %3d)", Engine::LiquefiedDebug::maxDivergence.val,
                             Engine::LiquefiedDebug::maxDivergence.x, Engine::LiquefiedDebug::maxDivergence.y);
+                ImGui::Text("u-Advection (min): %+5.5f at (%3d, %3d)", Engine::LiquefiedDebug::minUAdvect.val,
+                            Engine::LiquefiedDebug::minUAdvect.x, Engine::LiquefiedDebug::minUAdvect.y);
+                ImGui::Text("u-Advection (max): %+5.5f at (%3d, %3d)", Engine::LiquefiedDebug::maxUAdvect.val,
+                            Engine::LiquefiedDebug::maxUAdvect.x, Engine::LiquefiedDebug::maxUAdvect.y);
+                ImGui::Text("v-Advection (min): %+5.5f at (%3d, %3d)", Engine::LiquefiedDebug::minVAdvect.val,
+                            Engine::LiquefiedDebug::minVAdvect.x, Engine::LiquefiedDebug::minVAdvect.y);
+                ImGui::Text("v-Advection (max): %+5.5f at (%3d, %3d)", Engine::LiquefiedDebug::maxVAdvect.val,
+                            Engine::LiquefiedDebug::maxVAdvect.x, Engine::LiquefiedDebug::maxVAdvect.y);
                 ImGui::NewLine();
                 ImGui::Separator();
             }

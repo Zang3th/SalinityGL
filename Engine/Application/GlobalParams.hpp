@@ -166,7 +166,7 @@ namespace Engine
         inline static constexpr uint32     LIQUID_NUM_CELLS            = SIMULATION_WIDTH * SIMULATION_HEIGHT;
         inline static constexpr uint32     GAUSS_SEIDEL_ITERATIONS     = 20;
         inline static constexpr float      GAUSS_SEIDEL_OVERRELAXATION = 1.9f;
-        inline static           uint32     turbinePower                = 10;
+        inline static           uint32     turbinePower                = 10000;
         inline static           bool       visualizeSmoke              = true;
         inline static           bool       scientificColorScheme       = false;
         inline static           bool       pauseSimulation             = true;
@@ -181,5 +181,23 @@ namespace Engine
         inline static LogFloatXY maxPressure   = {FLT_MIN, 0, 0};
         inline static LogFloatXY minDivergence = {FLT_MAX, 0, 0};
         inline static LogFloatXY maxDivergence = {FLT_MIN, 0, 0};
+        inline static LogFloatXY minUAdvect    = {FLT_MAX, 0, 0};
+        inline static LogFloatXY maxUAdvect    = {FLT_MIN, 0, 0};
+        inline static LogFloatXY minVAdvect    = {FLT_MAX, 0, 0};
+        inline static LogFloatXY maxVAdvect    = {FLT_MIN, 0, 0};
+
+        LiquefiedDebug() = delete;
+
+        static void Reset()
+        {
+            minPressure   = {FLT_MAX, 0, 0};
+            maxPressure   = {FLT_MIN, 0, 0};
+            minDivergence = {FLT_MAX, 0, 0};
+            maxDivergence = {FLT_MIN, 0, 0};
+            minUAdvect    = {FLT_MAX, 0, 0};
+            maxUAdvect    = {FLT_MIN, 0, 0};
+            minVAdvect    = {FLT_MAX, 0, 0};
+            maxVAdvect    = {FLT_MIN, 0, 0};
+        }
     };
 }

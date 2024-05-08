@@ -12,16 +12,16 @@ namespace Liq
 
     void LiquefiedApp::AddBorderCells() const
     {
-        Engine::StaggeredGrid* grid = _fluidSimulator->GetGrid();
-
-        for(Engine::uint32 x = 0; x < grid->width; x++)
+        for(Engine::uint32 x = 0; x < Engine::LiquiefiedParams::SIMULATION_WIDTH; x++)
         {
-            for(Engine::uint32 y = 0; y < grid->height; y++)
+            for(Engine::uint32 y = 0; y < Engine::LiquiefiedParams::SIMULATION_HEIGHT; y++)
             {
-                if((x == 0) || (y == 0) || (x == grid->width-1) || (y == grid->height-1))
+                if((x == 0) || (y == 0) ||
+                   (x == Engine::LiquiefiedParams::SIMULATION_WIDTH-1) ||
+                   (y == Engine::LiquiefiedParams::SIMULATION_HEIGHT-1))
                 {
                     //Add solid cell to simulation grid
-                    grid->s_At(x, y) = 0.0f;
+                    _fluidSimulator->AddBorderCell(x, y);
 
                     //Add cell to renderer
                     _gridRenderer->Set(x, y, glm::vec3(1.0f, 1.0f, 1.0f));
@@ -59,7 +59,7 @@ namespace Liq
         _fluidSimulator = Engine::MakeScope<Engine::FluidSimulator>();
 
         //Create timer
-        _physicsTimer = Engine::MakeScope<Engine::Timer>(10);  //4ms
+        _physicsTimer = Engine::MakeScope<Engine::Timer>(8);   //8ms
         _inputTimer   = Engine::MakeScope<Engine::Timer>(100); //100ms
 
         //Add border cells to simulation and renderer
@@ -78,13 +78,11 @@ namespace Liq
 
     void LiquefiedApp::VisualizeSmoke() const
     {
-        Engine::StaggeredGrid* grid = _fluidSimulator->GetGrid();
-
-        for(Engine::uint32 x = 1; x < grid->width-1; x++)
+        for(Engine::uint32 x = 1; x < Engine::LiquiefiedParams::SIMULATION_WIDTH-1; x++)
         {
-            for(Engine::uint32 y = 1; y < grid->height-1; y++)
+            for(Engine::uint32 y = 1; y < Engine::LiquiefiedParams::SIMULATION_HEIGHT-1; y++)
             {
-                const float val = grid->smoke_At(x, y);
+                const float val = _fluidSimulator->GetDensity(x, y);
                 glm::vec3 color = {val, val, val};
 
                 if(Engine::LiquiefiedParams::scientificColorScheme)
@@ -155,15 +153,13 @@ namespace Liq
                 //Check if timer elapsed
                 if(_physicsTimer->CheckElapsedAndReset())
                 {
+                    const float dt = (float)Engine::Window::GetDeltaTime_sec();
+
                     //Add a horizontal turbine (initial velocity)
-                    /*_fluidSimulator->AddHorizonalTurbine(1, 48, (float)Engine::LiquiefiedParams::turbinePower);
-                    _fluidSimulator->AddHorizonalTurbine(1, 49, (float)Engine::LiquiefiedParams::turbinePower);
-                    _fluidSimulator->AddHorizonalTurbine(1, 50, (float)Engine::LiquiefiedParams::turbinePower);
-                    _fluidSimulator->AddHorizonalTurbine(1, 51, (float)Engine::LiquiefiedParams::turbinePower);
-                    _fluidSimulator->AddHorizonalTurbine(1, 52, (float)Engine::LiquiefiedParams::turbinePower);*/
+                   _fluidSimulator->AddHorizonalTurbine(1, 50, (float)Engine::LiquiefiedParams::turbinePower, dt);
 
                     //Run simulation timestep and visualize result
-                    _fluidSimulator->TimeStep();
+                    _fluidSimulator->TimeStep(dt);
                 }
             }
         }

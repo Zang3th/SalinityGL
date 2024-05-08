@@ -82,7 +82,7 @@ Nature scene with water rendering, normal mapped objects, and a particle system 
 
 2D Eulerian Fluid Simulation on the CPU.
 
-![Liquefied](Res/Screenshots/Liquefied/Screenshot_Liq_005.png)
+![Liquefied](Res/Screenshots/Liquefied/Screenshot_Liq_006.png)
 
 ## Building and compiling
 
@@ -141,7 +141,8 @@ I always work *on and off* on this project, but I try to make more regular relea
 ### Release preview
 
 - v0.2.0: Completion of the base foundation of the *Liquefied* app
-- v0.2.1: Improvements to the *Liquefied* app and the engine core
+- v0.2.1: Multithreading and visual improvements to the *Liquefied* app
+- v0.2.2: Compute Shader implementation of the *Liquefied* app
 
 ### Backlog
 

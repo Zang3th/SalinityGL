@@ -185,6 +185,7 @@ namespace Engine
         inline static LogFloatXY maxUAdvect    = {FLT_MIN, 0, 0};
         inline static LogFloatXY minVAdvect    = {FLT_MAX, 0, 0};
         inline static LogFloatXY maxVAdvect    = {FLT_MIN, 0, 0};
+        inline static float      cflCondition  = 0.0f;
 
         LiquefiedDebug() = delete;
 
@@ -198,6 +199,7 @@ namespace Engine
             maxUAdvect    = {FLT_MIN, 0, 0};
             minVAdvect    = {FLT_MAX, 0, 0};
             maxVAdvect    = {FLT_MIN, 0, 0};
+            cflCondition    = 0.0f;
         }
     };
 }

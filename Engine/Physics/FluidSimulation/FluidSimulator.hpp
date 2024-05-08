@@ -21,9 +21,10 @@ namespace Engine
             void Project(float dt) const;
             void AdvectVelocity(float dt);
             void AdvectSmoke(float dt);
-            [[nodiscard]] float ForwardEuler(float dt, float u, float q, float q_right, float q_left) const;
+            [[nodiscard]] float ForwardEuler(float dt, float u, float q, float q_next, float q_prev) const;
             [[nodiscard]] float BackwardEuler() const;
             [[nodiscard]] float SemiLagrangian() const;
+            [[nodiscard]] float NewtonRaphson() const;
 
         public:
             FluidSimulator();

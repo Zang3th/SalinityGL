@@ -190,22 +190,103 @@ namespace Engine
         SWAP(_grid.d, _grid.d_tmp);
     }
 
-    float FluidSimulator::ForwardEuler(const float dt, const float u, const float q, const float q_right, const float q_left) const
+    float FluidSimulator::ForwardEuler(const float dt, const float u, const float q, const float q_next, const float q_prev) const
     {
-        /* The update step looks something like this:               *
-         * q[i] = q[i] - dt * u[i] * (q[i+1] - q[i-1]) / (2 * dx);  *
-         *   - q       := The quantity we want to advect.           *
-         *   - q_right := q[i+1] - The right/upper neighbor.        *
-         *   - q_left  := q[i-1] - The left/lower neighbor .        *
-         *   - dt      := The timestep size.                        *
-         *   - u       := The velocity (horizonal or vertical).     *
-         *   - dx      := The cell size (1 in our simple case).     */
+        /*      The update rule for Forward-Euler looks like this:                  *
+         *                                                                          *
+         *                        x1 = x0 + dt * f(x0)                              *
+         *                                                                          *
+         *      - x1    := Approximated value at the next timestep.                 *
+         *      - x0    := Value at the current timestep.                           *
+         *      - dt    := The timestep size.                                       *
+         *      - f(x0) := Derivative of f at the point x0 with respect to time.    *
+         *                                                                          *
+         *      We will use a central spatial derivative approximation:             *
+         *                                                                          *
+         *              f(x0) = (f(x0+h) - f(x0-h)) / (2 * h)                       *
+         *                                                                          *
+         *                      Our formula then becomes:                           *
+         *                                                                          *
+         *               x1 = x0 + dt * f(x0+h) - f(x0-h) / 2 * h                   *
+         *                                                                          *
+         *      Since we're working on a grid, we need to discretize it:            *
+         *                                                                          *
+         *      q1[i] = q0[i] + dt * (q0[i+1] - q0[i-1]) / (2 * dx)                 *
+         *                                                                          *
+         *      - q      := The quantity we want to advect.                         *
+         *      - q1[i]  := Value at the next timestep.                             *
+         *      - q0[i]  := Value at the current timestep.                          *
+         *      - q_next := q0[i+1] := The right or upper neighbor.                 *
+         *      - q_left := q0[i-1] := The left or lower neighbor.                  *
+         *      - dx     := The cell size.                                          *
+         *                                                                          *
+         *      Because we use Forward-Euler for Advection (Movement along the      *
+         *      velocity field) we need to multiply with u (the velocity).          *
+         *      Furthermore subtracting from q0 instead of adding yields better     *
+         *      stability in this case. Our final formula then becomes:             *
+         *                                                                          *
+         *      q1[i] = q0[i] - dt * u[i] * (q0[i+1] - q0[i-1]) / (2 * dx)          */
 
-        return q - (dt * u * ((q_right - q_left) / (2 * _grid.dx)));
+        const float dx = _grid.dx;
+        float velocity = q - dt * u * ((q_next - q_prev) / (2 * dx));
+
+        if(LiquiefiedParams::activateDebugging)
+        {
+            //Check numerical stability via CFL condition (Courant–Friedrichs–Lewy condition)
+            const float cfl = (velocity * dt) / dx;
+
+            //Forward-Euler has gotten unstable - return 0
+            if(LiquefiedDebug::cflCondition >= 1.0f)
+                velocity = 0.0f;
+
+            //Save value for debugging purposes
+            if(cfl > LiquefiedDebug::cflCondition)
+                LiquefiedDebug::cflCondition = cfl;
+        }
+
+        return velocity;
     }
 
     float FluidSimulator::BackwardEuler() const
     {
+       /*       The update rule for Backward-Euler looks like this:                 *
+        *                                                                           *
+        *                        x1 = x0 + dt * f(x1)                               *
+        *       - x1    := Approximated value at the next timestep.                 *
+        *       - x0    := Value at the current timestep.                           *
+        *       - dt    := The timestep size.                                       *
+        *       - f(x1) := Derivative of f at the point x1 with respect to time.    *
+        *                                                                           *
+        *       f(x1) makes this method implicit because we dont know x1 at the     *
+        *       current moment in time, we were trying to solve for x1!             *
+        *       So how do we go on about this?!                                     *
+        *                                                                           *
+        *       To solve for x1, we need to employ numerical methods.               *
+        *       For linear problems, direct algebraic manipulation may suffice.     *
+        *       For nonlinear problems, iterative methods are commonly used.        *
+        *                                                                           *
+        *       We will use the Newton-Raphson method.                              *
+        *       This involves guessing an initial value for x1, computing the       *
+        *       derivative of f with respect to x1, and iteratively refining the    *
+        *       estimate of x1 until the change becomes negligibly small.           *
+        *                                                                           *
+        *                               Algorithmic steps:                          *
+        *                                                                           *
+        *       1. Calculate a satisfying approximation for f(x1) with              *
+        *          the Newton-Raphson method.                                       *
+        *       2. Insert f(x1) back into the Backward-Euler update rule to         *
+        *          calculate the value for the next timestep.                       *
+        *                                                                           *
+        *       With the cost of this additional computational effort comes         *
+        *       the advantage of way higher stability and robustness than with      *
+        *       Forward-Euler.                                                      *
+        *                                                                           *
+        *                               Notes:                                      *
+        *                                                                           *
+        *       - We will use a central derivative approximation just like before.  *
+        *       - We will discretize the equations according to our grid just       *
+        *         like before.                                                      */
+
         //ToDo: Implement
 
         return 0;
@@ -213,6 +294,20 @@ namespace Engine
 
     float FluidSimulator::SemiLagrangian() const
     {
+        //ToDo: Implement
+
+        return 0;
+    }
+
+
+    float FluidSimulator::NewtonRaphson() const
+    {
+        /*                               Algorithmic steps:                         *
+         *                                                                          *
+         *      1. Get an initial guess for x1 => like x1 = x0.                     *
+         *      2. ToDo: ...                                                        *
+         *                                                                          */
+
         //ToDo: Implement
 
         return 0;
@@ -230,19 +325,19 @@ namespace Engine
         PROFILE_SCOPE("TimeStep");
 
         {
-            PROFILE_SCOPE("AddForces");
+            PROFILE_SCOPE("#AddForces");
             AddForces(dt);
         }
         {
-            PROFILE_SCOPE("Project");
+            PROFILE_SCOPE("#Project");
             Project(dt);
         }
         {
-            PROFILE_SCOPE("AdvectVelocity");
+            PROFILE_SCOPE("#AdvectVelocity");
             AdvectVelocity(dt);
         }
         {
-            PROFILE_SCOPE("AdvectSmoke");
+            PROFILE_SCOPE("#AdvectSmoke");
             AdvectSmoke(dt);
         }
     }

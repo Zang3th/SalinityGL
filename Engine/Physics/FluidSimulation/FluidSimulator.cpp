@@ -322,12 +322,13 @@ namespace Engine
 
         float velocity = x0 - dt * u * f_x1;
 
+        //ToDo: Check if that condition is even legit for Backward-Euler
         if(LiquiefiedParams::activateDebugging)
         {
             //Check numerical stability via CFL condition (Courant–Friedrichs–Lewy condition)
             const float cfl = (velocity * dt) / (float)dx;
 
-            //Forward-Euler has gotten unstable - return 0
+            //Backward-Euler has gotten unstable - return 0
             if(LiquefiedDebug::cflCondition >= 1.0f)
                 velocity = 0.0f;
 

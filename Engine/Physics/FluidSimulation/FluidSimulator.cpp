@@ -132,7 +132,11 @@ namespace Engine
                 }
                 else if(LiquiefiedParams::integratorChoice == Integrator::BackwardEuler)
                 {
-
+                    // ...
+                }
+                else if(LiquiefiedParams::integratorChoice == Integrator::SemiLagrangian)
+                {
+                    // ...
                 }
 
                 //Monitor the applied horizontal and vertical advection
@@ -181,7 +185,11 @@ namespace Engine
                 }
                 else if(LiquiefiedParams::integratorChoice == Integrator::BackwardEuler)
                 {
-
+                    // ...
+                }
+                else if(LiquiefiedParams::integratorChoice == Integrator::SemiLagrangian)
+                {
+                    // ...
                 }
             }
         }
@@ -227,13 +235,13 @@ namespace Engine
          *                                                                          *
          *      q1[i] = q0[i] - dt * u[i] * (q0[i+1] - q0[i-1]) / (2 * dx)          */
 
-        const float dx = _grid.dx;
-        float velocity = q - dt * u * ((q_next - q_prev) / (2 * dx));
+        const uint32 dx = _grid.dx;
+        float velocity = q - dt * u * ((q_next - q_prev) / (float)(2 * dx));
 
         if(LiquiefiedParams::activateDebugging)
         {
             //Check numerical stability via CFL condition (Courant–Friedrichs–Lewy condition)
-            const float cfl = (velocity * dt) / dx;
+            const float cfl = (velocity * dt) / (float)dx;
 
             //Forward-Euler has gotten unstable - return 0
             if(LiquefiedDebug::cflCondition >= 1.0f)
@@ -247,17 +255,18 @@ namespace Engine
         return velocity;
     }
 
-    float FluidSimulator::BackwardEuler() const
+    float FluidSimulator::BackwardEuler(const float dt, const float u, const float* q_values, const uint32 q_startX, const uint32 q_startY) const
     {
        /*       The update rule for Backward-Euler looks like this:                 *
         *                                                                           *
-        *                        x1 = x0 + dt * f(x1)                               *
+        *       (1.)                 x1 = x0 + dt * f(x1)                           *
+        *                                                                           *
         *       - x1    := Approximated value at the next timestep.                 *
         *       - x0    := Value at the current timestep.                           *
         *       - dt    := The timestep size.                                       *
         *       - f(x1) := Derivative of f at the point x1 with respect to time.    *
         *                                                                           *
-        *       f(x1) makes this method implicit because we dont know x1 at the     *
+        *       f(x1) makes this method implicit because we do not know x1 at the   *
         *       current moment in time, we were trying to solve for x1!             *
         *       So how do we go on about this?!                                     *
         *                                                                           *
@@ -265,10 +274,27 @@ namespace Engine
         *       For linear problems, direct algebraic manipulation may suffice.     *
         *       For nonlinear problems, iterative methods are commonly used.        *
         *                                                                           *
-        *       We will use the Newton-Raphson method.                              *
-        *       This involves guessing an initial value for x1, computing the       *
-        *       derivative of f with respect to x1, and iteratively refining the    *
-        *       estimate of x1 until the change becomes negligibly small.           *
+        *       Let's start by discretizing Backward-Euler:                         *
+        *                                                                           *
+        *       (2.)                q1[i] = q0[i] + dt * f(q1[i])                   *
+        *                                                                           *
+        *       We can formulate Backward-Euler as a root finding problem:          *
+        *                                                                           *
+        *       (3.)            F = q1[i] - q0[i] - dt * f(q1[i]) = 0               *
+        *                                                                           *
+        *       For an equation like this we can use the Newton-Raphson method.     *
+        *       The update rule for Newton-Raphson looks like this:                 *
+        *                                                                           *
+        *       (4.)            x_new = x_old - f(x_old) / f'(x_old)                *
+        *                                                                           *
+        *       - x_new     := Approximated value for the next iteration.           *
+        *       - x_old     := Value at the current iteration.                      *
+        *       - f(x_old)  := Value of f at the point x_old.                       *
+        *       - f'(x_old) := Derivative of f at the point x_old.                  *
+        *                                                                           *
+        *       This involves guessing an initial value for x_new (like x0),        *
+        *       computing the derivative of f with respect to x_old, and            *
+        *       iteratively refining x_new until the change becomes very small.     *
         *                                                                           *
         *                               Algorithmic steps:                          *
         *                                                                           *
@@ -281,15 +307,36 @@ namespace Engine
         *       the advantage of way higher stability and robustness than with      *
         *       Forward-Euler.                                                      *
         *                                                                           *
-        *                               Notes:                                      *
-        *                                                                           *
-        *       - We will use a central derivative approximation just like before.  *
-        *       - We will discretize the equations according to our grid just       *
-        *         like before.                                                      */
+        *       Using a nonlinear solver for each step of Backward-Euler:           *
+        *       Source: Cornell University - CS3220 Lecture Notes                   *
+        *       https://www.cs.cornell.edu/~bindel/class/cs3220-s12/lectures.html   */
 
-        //ToDo: Implement
+        //ToDo: Explain the discretized version of the formula
 
-        return 0;
+        const uint32 dx  = _grid.dx;
+        const uint32 x1  = NewtonRaphson(q_values, q_startX, q_startY, 5);
+        const float f_x1 = (q_values[x1+dx] - q_values[x1-dx]) / (float)(2 * dx);
+        const float x0   = q_values[AT(q_startX, q_startY)];
+
+        //ToDo: Explain every step of the algorithm
+
+        float velocity = x0 - dt * u * f_x1;
+
+        if(LiquiefiedParams::activateDebugging)
+        {
+            //Check numerical stability via CFL condition (Courant–Friedrichs–Lewy condition)
+            const float cfl = (velocity * dt) / (float)dx;
+
+            //Forward-Euler has gotten unstable - return 0
+            if(LiquefiedDebug::cflCondition >= 1.0f)
+                velocity = 0.0f;
+
+            //Save value for debugging purposes
+            if(cfl > LiquefiedDebug::cflCondition)
+                LiquefiedDebug::cflCondition = cfl;
+        }
+
+        return velocity;
     }
 
     float FluidSimulator::SemiLagrangian() const
@@ -300,17 +347,37 @@ namespace Engine
     }
 
 
-    float FluidSimulator::NewtonRaphson() const
+    uint32 FluidSimulator::NewtonRaphson(const float* values, const uint32 startX, const uint32 startY, const uint32 maxIteration) const
     {
-        /*                               Algorithmic steps:                         *
+        /*      The update rule for Newton-Raphson looks like this:                 *
          *                                                                          *
-         *      1. Get an initial guess for x1 => like x1 = x0.                     *
-         *      2. ToDo: ...                                                        *
-         *                                                                          */
+         *                          x1 = x0 - f(x0) / f'(x0)                        *
+         *                                                                          *
+         *      - x1     := Approximated x-value for the next iteration.            *
+         *      - x0     := x-value at the current iteration.                       *
+         *      - f(x0)  := Value of f at the point x0.                             *
+         *      - f'(x0) := Derivative of f at the point x0.                        *
+         *                                                                          *
+         *      We will use a central derivative approximation just like before.    */
 
-        //ToDo: Implement
+        const uint32 dx = _grid.dx;
+        float f_x0 = 0.0f, f_x1 = 0.0f;
+        uint32 x1 = 0, x0 = AT(startX, startY);
 
-        return 0;
+        for(uint32 iter = 0; iter < maxIteration; iter++)
+        {
+            f_x0 = values[x0];
+            f_x1 = (values[x0+dx] - values[x0-dx]) / (float)(2 * dx);
+            x1   = x0 - (uint32)(f_x0 / f_x1);
+
+            //Check convergence, break if value didn't change
+            if(x1 == x0)
+                break;
+
+            x0 = x1;
+        }
+
+        return x1;
     }
 
     // ----- Public -----

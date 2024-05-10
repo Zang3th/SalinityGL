@@ -39,7 +39,7 @@ namespace Engine
             float* d_tmp = &_d_tmp[0];
 
             //Spatial discretization
-            const float dx = 1.0f;
+            const uint32 dx = 1;
 
             [[nodiscard]] inline float u_Avg(const uint32 x, const uint32 y) const
             {

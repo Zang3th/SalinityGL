@@ -22,7 +22,8 @@ namespace Engine
             void AdvectVelocity(float dt);
             void AdvectSmoke(float dt);
             [[nodiscard]] float ForwardEuler(float dt, float u, float q, float q_next, float q_prev) const;
-            [[nodiscard]] float BackwardEuler(float dt, float u, const float* q_values, uint32 q_startX, uint32 q_startY) const;
+            [[nodiscard]] float ModifiedForwardEuler(float dt, float vel, const float* q_values, uint32 q_startX, uint32 q_startY) const;
+            [[nodiscard]] float BackwardEuler(float dt, float vel, const float* q_values, uint32 q_startX, uint32 q_startY) const;
             [[nodiscard]] float SemiLagrangian() const;
             [[nodiscard]] uint32 NewtonRaphson(const float* values, uint32 startX, uint32 startY, uint32 maxIteration) const;
 

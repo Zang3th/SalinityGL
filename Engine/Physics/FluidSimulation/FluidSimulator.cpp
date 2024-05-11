@@ -132,7 +132,11 @@ namespace Engine
                 }
                 else if(LiquiefiedParams::integratorChoice == Integrator::BackwardEuler)
                 {
-                    // ...
+                    uAdvect = ModifiedForwardEuler(dt, _grid.u_Avg(x, y), _grid.u, x, y);
+                    vAdvect = ModifiedForwardEuler(dt, _grid.v_Avg(x, y), _grid.v, x, y);
+
+                    _grid.u_tmp[AT(x, y)] = uAdvect; //u-component (horizontal advection)
+                    _grid.v_tmp[AT(x, y)] = vAdvect; //v-component (vertical advection)
                 }
                 else if(LiquiefiedParams::integratorChoice == Integrator::SemiLagrangian)
                 {
@@ -166,6 +170,8 @@ namespace Engine
      * and advect it like the velocity field.                                      */
     void FluidSimulator::AdvectSmoke(const float dt)
     {
+        float uAdvect = 0.0f, vAdvect = 0.0f;
+
         for(uint32 x = 1; x < _grid.width-1; x++)
         {
             for(uint32 y = 1; y < _grid.height-1; y++)
@@ -178,18 +184,40 @@ namespace Engine
 
                 if(LiquiefiedParams::integratorChoice == Integrator::ForwardEuler)
                 {
-                    const float uResult = ForwardEuler(dt, _grid.u_Avg(x, y), _grid.d[AT(x, y)], _grid.d[AT(x+1, y)], _grid.d[AT(x-1, y)]);
-                    const float vResult = ForwardEuler(dt, _grid.v_Avg(x, y), _grid.d[AT(x, y)], _grid.d[AT(x, y+1)], _grid.d[AT(x, y-1)]);
+                    uAdvect = ForwardEuler(dt, _grid.u_Avg(x, y), _grid.d[AT(x, y)], _grid.d[AT(x+1, y)], _grid.d[AT(x-1, y)]);
+                    vAdvect = ForwardEuler(dt, _grid.v_Avg(x, y), _grid.d[AT(x, y)], _grid.d[AT(x, y+1)], _grid.d[AT(x, y-1)]);
 
-                    _grid.d_tmp[AT(x, y)] = (uResult + vResult) / 2.0f;
+                    _grid.d_tmp[AT(x, y)] = (uAdvect + vAdvect) / 2.0f;
                 }
                 else if(LiquiefiedParams::integratorChoice == Integrator::BackwardEuler)
                 {
-                    // ...
+                    uAdvect = ModifiedForwardEuler(dt, _grid.u_Avg(x, y), _grid.d, x, y);
+                    vAdvect = ModifiedForwardEuler(dt, _grid.v_Avg(x, y), _grid.d, x, y);
+
+                    _grid.d_tmp[AT(x, y)] = (uAdvect + vAdvect) / 2.0f;
                 }
                 else if(LiquiefiedParams::integratorChoice == Integrator::SemiLagrangian)
                 {
-                    // ...
+                    //if (this.s[i*n + j] != 0.0) {
+                    //    var u = (this.u[i*n + j] + this.u[(i+1)*n + j]) * 0.5;
+                    //    var v = (this.v[i*n + j] + this.v[i*n + j+1]) * 0.5;
+                    //    var x = i*h + h2 - dt*u;
+                    //    var y = j*h + h2 - dt*v;
+
+                    //    this.newM[i*n + j] = this.sampleField(x,y, S_FIELD);
+                    //}
+
+                    uint32 h = (uint32)(1.0f / LiquiefiedParams::SIMULATION_HEIGHT);
+                    uint32 h2 = 0.5f * LiquiefiedParams::SIMULATION_HEIGHT;
+
+                    uAdvect = _grid.u[AT(x,y)] + _grid.u[AT(x+1,y)] * 0.5f;
+                    vAdvect = _grid.v[AT(x,y)] + _grid.v[AT(x,y+1)] * 0.5f;
+                    float idx = x * h + h2 - dt * uAdvect;
+                    float idy = y * h + h2 - dt * vAdvect;
+
+                    //ToDo: Fix
+
+                    //_grid.d_tmp[AT(x, y)] = SemiLagrangian(x, y);
                 }
             }
         }
@@ -243,19 +271,53 @@ namespace Engine
             //Check numerical stability via CFL condition (Courant–Friedrichs–Lewy condition)
             const float cfl = (velocity * dt) / (float)dx;
 
-            //Forward-Euler has gotten unstable - return 0
-            if(LiquefiedDebug::cflCondition >= 1.0f)
-                velocity = 0.0f;
-
             //Save value for debugging purposes
             if(cfl > LiquefiedDebug::cflCondition)
                 LiquefiedDebug::cflCondition = cfl;
+
+            //Forward-Euler has gotten unstable - return 0
+            if(LiquefiedDebug::cflCondition >= 1.0f)
+                velocity = 0.0f;
         }
 
         return velocity;
     }
 
-    float FluidSimulator::BackwardEuler(const float dt, const float u, const float* q_values, const uint32 q_startX, const uint32 q_startY) const
+    float FluidSimulator::ModifiedForwardEuler(float dt, float vel, const float* q_values, uint32 q_startX, uint32 q_startY) const
+    {
+        const uint32 dx     = _grid.dx;
+        const float  h_half = dt / 2;
+
+        uint32 idx_left  = AT(q_startX + dx, q_startY);
+        uint32 idx_right = AT(q_startX - dx, q_startY);
+        float k1 = (q_values[idx_left] - q_values[idx_right]) / (float)(2 * dx);
+
+        uint32 x_left  = q_startX + dx + (uint32)(h_half * k1);
+        uint32 x_right = q_startX - dx - (uint32)(h_half * k1);
+        idx_left  = AT(x_left, q_startY);
+        idx_right = AT(x_right, q_startY);
+        const float k2 = (q_values[idx_left] - q_values[idx_right]) / (float)(2 * dx) + h_half;
+
+        float result = q_values[AT(q_startX, q_startY)] - dt * vel * k2;
+
+        if(LiquiefiedParams::activateDebugging)
+        {
+            //Check numerical stability via CFL condition (Courant–Friedrichs–Lewy condition)
+            const float cfl = (result * dt) / (float)dx;
+
+            //Save value for debugging purposes
+            if(cfl > LiquefiedDebug::cflCondition)
+                LiquefiedDebug::cflCondition = cfl;
+
+            //Forward-Euler has gotten unstable - return 0
+            if(LiquefiedDebug::cflCondition >= 1.0f)
+                result = 0.0f;
+        }
+
+        return result;
+    }
+
+    float FluidSimulator::BackwardEuler(const float dt, const float vel, const float* q_values, const uint32 q_startX, const uint32 q_startY) const
     {
        /*       The update rule for Backward-Euler looks like this:                 *
         *                                                                           *
@@ -311,42 +373,29 @@ namespace Engine
         *       Source: Cornell University - CS3220 Lecture Notes                   *
         *       https://www.cs.cornell.edu/~bindel/class/cs3220-s12/lectures.html   */
 
-        //ToDo: Explain the discretized version of the formula
-
         const uint32 dx  = _grid.dx;
         const uint32 x1  = NewtonRaphson(q_values, q_startX, q_startY, 5);
         const float f_x1 = (q_values[x1+dx] - q_values[x1-dx]) / (float)(2 * dx);
         const float x0   = q_values[AT(q_startX, q_startY)];
 
-        //ToDo: Explain every step of the algorithm
+        float velocity = x0 - dt * vel * f_x1;
 
-        float velocity = x0 - dt * u * f_x1;
-
-        //ToDo: Check if that condition is even legit for Backward-Euler
         if(LiquiefiedParams::activateDebugging)
         {
             //Check numerical stability via CFL condition (Courant–Friedrichs–Lewy condition)
             const float cfl = (velocity * dt) / (float)dx;
 
-            //Backward-Euler has gotten unstable - return 0
-            if(LiquefiedDebug::cflCondition >= 1.0f)
-                velocity = 0.0f;
-
             //Save value for debugging purposes
             if(cfl > LiquefiedDebug::cflCondition)
                 LiquefiedDebug::cflCondition = cfl;
+
+            //Backward-Euler has gotten unstable - return 0
+            if(LiquefiedDebug::cflCondition >= 1.0f)
+                velocity = 0.0f;
         }
 
         return velocity;
     }
-
-    float FluidSimulator::SemiLagrangian() const
-    {
-        //ToDo: Implement
-
-        return 0;
-    }
-
 
     uint32 FluidSimulator::NewtonRaphson(const float* values, const uint32 startX, const uint32 startY, const uint32 maxIteration) const
     {
@@ -381,6 +430,22 @@ namespace Engine
         return x1;
     }
 
+    float FluidSimulator::SemiLagrangian() const
+    {
+        uint32 h = (uint32)(1.0f / LiquiefiedParams::SIMULATION_HEIGHT);
+        uint32 h1 = LiquiefiedParams::SIMULATION_HEIGHT;
+        uint32 h2 = 0.5f * LiquiefiedParams::SIMULATION_HEIGHT;
+        uint32 numX = LiquiefiedParams::SIMULATION_WIDTH;
+        uint32 numY = LiquiefiedParams::SIMULATION_HEIGHT;
+
+        /*uint32 x = std::max(std::min(x, (numX * h)), h);
+        uint32 y = std::max(std::min(y, (numY * h)), h);*/
+
+        //ToDo: Implement
+
+        return 0;
+    }
+
     // ----- Public -----
 
     FluidSimulator::FluidSimulator()
@@ -399,6 +464,10 @@ namespace Engine
         {
             PROFILE_SCOPE("#Project");
             Project(dt);
+        }
+        {
+            PROFILE_SCOPE("#Extrapolate");
+            //Extrapolate();
         }
         {
             PROFILE_SCOPE("#AdvectVelocity");

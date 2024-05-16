@@ -39,9 +39,9 @@ namespace Engine
 
     /* Projection calculates and applies the right amount of pressure to make the       *
      * velocity field divergence-free and also enforces solid wall boundary conditions. */
-    void FluidSimulator::Project(const float dt) const
+    void FluidSimulator::Project() const
     {
-        //Simple solution using Gauss-Seidel
+        //Solve iteratively using Gauss-Seidel
         for(uint32 it = 0; it < ITER; it++)
         {
             for(uint32 x = 1; x < _grid.width-1; x++)
@@ -127,28 +127,32 @@ namespace Engine
     {
         float uAdvect = 0.0f, vAdvect = 0.0f;
 
-        /* Iterate over grid and update all velocities according to the chosen numerical integrator. */
+        //Iterate over grid and update all velocities according to the chosen numerical integrator
         for(uint32 x = 1; x < _grid.width-1; x++)
         {
             for(uint32 y = 1; y < _grid.height-1; y++)
             {
-                /* Skip border cells. */
+                //Skip border cells
                 if(_grid.b[AT(x, y)] == 0 || _grid.b[AT(x-1, y)] == 0 || _grid.b[AT(x, y-1)] == 0 || _grid.b[AT(x+1, y)] == 0 || _grid.b[AT(x, y+1)] == 0)
                 {
                     continue;
                 }
 
-                /* Calculate u- and v-velocity depending on the chosen integrator. */
+                //Calculate u- and v-velocity depending on the chosen integrator
                 if(LiquiefiedParams::integratorChoice == Integrator::ForwardEuler)
                 {
                     uAdvect = ForwardEuler(dt, _grid.u_Avg(x, y), _grid.u[AT(x, y)], _grid.u[AT(x+1, y)], _grid.u[AT(x-1, y)]);
                     vAdvect = ForwardEuler(dt, _grid.v_Avg(x, y), _grid.v[AT(x, y)], _grid.v[AT(x, y+1)], _grid.v[AT(x, y-1)]);
                 }
-                else if(LiquiefiedParams::integratorChoice == Integrator::ModifiedForwardEuler)
+                else if(LiquiefiedParams::integratorChoice == Integrator::BackwardEuler)
                 {
                     //...
                 }
                 else if(LiquiefiedParams::integratorChoice == Integrator::RungeKutta2)
+                {
+                    //...
+                }
+                else if(LiquiefiedParams::integratorChoice == Integrator::RungeKutta3)
                 {
                     //...
                 }
@@ -235,11 +239,15 @@ namespace Engine
                     density = std::abs((uAdvect + vAdvect) * 0.5f);
                     density = std::min(density, 1.0f);
                 }
-                else if(LiquiefiedParams::integratorChoice == Integrator::ModifiedForwardEuler)
+                else if(LiquiefiedParams::integratorChoice == Integrator::BackwardEuler)
                 {
                     //...
                 }
                 else if(LiquiefiedParams::integratorChoice == Integrator::RungeKutta2)
+                {
+                    //...
+                }
+                else if(LiquiefiedParams::integratorChoice == Integrator::RungeKutta3)
                 {
                     //...
                 }
@@ -273,7 +281,7 @@ namespace Engine
     }
 
     /* Returns false if integrator got unstable. */
-    bool FluidSimulator::CheckCFLStability(float dt, float value) const
+    bool FluidSimulator::CheckCFLStability(const float dt, const float value) const
     {
         //Check numerical stability via CFL condition (Courant–Friedrichs–Lewy condition)
         const float cfl = (value * dt) / (float)_grid.dx;
@@ -334,12 +342,7 @@ namespace Engine
         return velocity;
     }
 
-    float FluidSimulator::ModifiedForwardEuler() const
-    {
-        return 0;
-    }
-
-    float FluidSimulator::BackwardEuler(const float dt, const float vel, const float* q_values, const uint32 q_startX, const uint32 q_startY) const
+    float FluidSimulator::BackwardEuler() const
     {
        /*       The update rule for Backward-Euler looks like this:                 *
         *                                                                           *
@@ -358,35 +361,6 @@ namespace Engine
         *       For linear problems, direct algebraic manipulation may suffice.     *
         *       For nonlinear problems, iterative methods are commonly used.        *
         *                                                                           *
-        *       Let's start by discretizing Backward-Euler:                         *
-        *                                                                           *
-        *       (2.)                q1[i] = q0[i] + dt * f(q1[i])                   *
-        *                                                                           *
-        *       We can formulate Backward-Euler as a root finding problem:          *
-        *                                                                           *
-        *       (3.)            F = q1[i] - q0[i] - dt * f(q1[i]) = 0               *
-        *                                                                           *
-        *       For an equation like this we can use the Newton-Raphson method.     *
-        *       The update rule for Newton-Raphson looks like this:                 *
-        *                                                                           *
-        *       (4.)            x_new = x_old - f(x_old) / f'(x_old)                *
-        *                                                                           *
-        *       - x_new     := Approximated value for the next iteration.           *
-        *       - x_old     := Value at the current iteration.                      *
-        *       - f(x_old)  := Value of f at the point x_old.                       *
-        *       - f'(x_old) := Derivative of f at the point x_old.                  *
-        *                                                                           *
-        *       This involves guessing an initial value for x_new (like x0),        *
-        *       computing the derivative of f with respect to x_old, and            *
-        *       iteratively refining x_new until the change becomes very small.     *
-        *                                                                           *
-        *                               Algorithmic steps:                          *
-        *                                                                           *
-        *       1. Calculate a satisfying approximation for f(x1) with              *
-        *          the Newton-Raphson method.                                       *
-        *       2. Insert f(x1) back into the Backward-Euler update rule to         *
-        *          calculate the value for the next timestep.                       *
-        *                                                                           *
         *       With the cost of this additional computational effort comes         *
         *       the advantage of way higher stability and robustness than with      *
         *       Forward-Euler.                                                      *
@@ -395,47 +369,17 @@ namespace Engine
         *       Source: Cornell University - CS3220 Lecture Notes                   *
         *       https://www.cs.cornell.edu/~bindel/class/cs3220-s12/lectures.html   */
 
-        const uint32 dx  = _grid.dx;
-        const uint32 x1  = NewtonRaphson(q_values, q_startX, q_startY, 5);
-        const float f_x1 = (q_values[x1+dx] - q_values[x1-dx]) / (float)(2 * dx);
-        const float x0   = q_values[AT(q_startX, q_startY)];
-
-        const float velocity = x0 - dt * vel * f_x1;
-
-        return velocity;
+        return 0.0f;
     }
 
-    uint32 FluidSimulator::NewtonRaphson(const float* values, const uint32 startX, const uint32 startY, const uint32 maxIteration) const
+    float FluidSimulator::RungeKutta2() const
     {
-        /*      The update rule for Newton-Raphson looks like this:                 *
-         *                                                                          *
-         *                          x1 = x0 - f(x0) / f'(x0)                        *
-         *                                                                          *
-         *      - x1     := Approximated x-value for the next iteration.            *
-         *      - x0     := x-value at the current iteration.                       *
-         *      - f(x0)  := Value of f at the point x0.                             *
-         *      - f'(x0) := Derivative of f at the point x0.                        *
-         *                                                                          *
-         *      We will use a central derivative approximation just like before.    */
+        return 0.0f;
+    }
 
-        const uint32 dx = _grid.dx;
-        float f_x0 = 0.0f, f_x1 = 0.0f;
-        uint32 x1 = 0, x0 = AT(startX, startY);
-
-        for(uint32 iter = 0; iter < maxIteration; iter++)
-        {
-            f_x0 = values[x0];
-            f_x1 = (values[x0+dx] - values[x0-dx]) / (float)(2 * dx);
-            x1   = x0 - (uint32)(f_x0 / f_x1);
-
-            //Check convergence, break if value didn't change
-            if(x1 == x0)
-                break;
-
-            x0 = x1;
-        }
-
-        return x1;
+    float FluidSimulator::RungeKutta3() const
+    {
+        return 0.0f;
     }
 
     // ----- Public -----
@@ -455,7 +399,7 @@ namespace Engine
         }
         {
             PROFILE_SCOPE("#Project");
-            Project(dt);
+            Project();
         }
         {
             PROFILE_SCOPE("#Extrapolate");

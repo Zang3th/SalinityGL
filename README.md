@@ -28,6 +28,7 @@ SalinityGL is licensed under the [MIT LICENSE](https://github.com/Zang3th/GameEn
     │   ├── Application/            # Application and interface stuff
     │   ├── Core/                   # Utilities and core engine functionalities
     │   ├── Debug/                  # Logging and error handling
+        ├── Phyics/                 # Code for cellular automata and fluid simulation
     │   ├── Rendering/              # GL stuff, buffers, renderer ...
     │   └── Engine.hpp              # Main header for include in the applications
     ├── Res/                        # Assets, sounds and screenshots
@@ -147,8 +148,8 @@ I always work *on and off* on this project, but I try to make more regular relea
 
 ### Backlog
 
-- Grass simulation
-- Some raytracing project
+- 3D fluid simulation
+- Some kind of raytracing project
 
 ## External libraries
 

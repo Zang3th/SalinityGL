@@ -59,8 +59,8 @@ namespace Liq
         _fluidSimulator = Engine::MakeScope<Engine::FluidSimulator>();
 
         //Create timer
-        _physicsTimer = Engine::MakeScope<Engine::Timer>(8);   //8ms
-        _inputTimer   = Engine::MakeScope<Engine::Timer>(100); //100ms
+        _physicsTimer = Engine::MakeScope<Engine::Timer>(16);   //16ms
+        _inputTimer   = Engine::MakeScope<Engine::Timer>(100);  //100ms
 
         //Add border cells to simulation and renderer
         AddBorderCells();

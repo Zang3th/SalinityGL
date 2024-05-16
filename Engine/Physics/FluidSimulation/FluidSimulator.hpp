@@ -18,15 +18,15 @@ namespace Engine
 
             void Init() const;
             void AddForces(float dt) const;
-            void Project(float dt) const;
+            void Project() const;
             void Extrapolate() const;
             void AdvectVelocity(float dt);
             void AdvectSmoke(float dt);
             [[nodiscard]] bool CheckCFLStability(float dt, float value) const;
             [[nodiscard]] float ForwardEuler(float dt, float u, float q, float q_next, float q_prev) const;
-            [[nodiscard]] float ModifiedForwardEuler() const;
-            [[nodiscard]] float BackwardEuler(float dt, float vel, const float* q_values, uint32 q_startX, uint32 q_startY) const;
-            [[nodiscard]] uint32 NewtonRaphson(const float* values, uint32 startX, uint32 startY, uint32 maxIteration) const;
+            [[nodiscard]] float BackwardEuler() const;
+            [[nodiscard]] float RungeKutta2() const;
+            [[nodiscard]] float RungeKutta3() const;
 
         public:
             FluidSimulator();

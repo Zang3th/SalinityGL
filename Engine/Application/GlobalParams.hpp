@@ -155,9 +155,10 @@ namespace Engine
     enum Integrator
     {
         ForwardEuler         = 0,
-        ModifiedForwardEuler = 1,
+        BackwardEuler        = 1,
         RungeKutta2          = 2,
-        SemiLagrangian       = 3,
+        RungeKutta3          = 3,
+        SemiLagrangian       = 4,
     };
 
     enum Visualization

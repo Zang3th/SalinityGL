@@ -47,8 +47,9 @@ namespace Liq
                 {
                     ImGui::NewLine();
                     ImGui::RadioButton("Forward Euler", (int*)&Engine::LiquiefiedParams::integratorChoice, Engine::Integrator::ForwardEuler);
-                    ImGui::RadioButton("Modified Forward Euler", (int*)&Engine::LiquiefiedParams::integratorChoice, Engine::Integrator::ModifiedForwardEuler);
+                    ImGui::RadioButton("Backward Euler", (int*)&Engine::LiquiefiedParams::integratorChoice, Engine::Integrator::BackwardEuler);
                     ImGui::RadioButton("Runge Kutta 2", (int*)&Engine::LiquiefiedParams::integratorChoice, Engine::Integrator::RungeKutta2);
+                    ImGui::RadioButton("Runge Kutta 3", (int*)&Engine::LiquiefiedParams::integratorChoice, Engine::Integrator::RungeKutta3);
                     ImGui::RadioButton("Semi Lagrangian", (int*)&Engine::LiquiefiedParams::integratorChoice, Engine::Integrator::SemiLagrangian);
                     ImGui::EndTabItem();
                 }

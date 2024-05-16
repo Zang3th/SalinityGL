@@ -16,6 +16,7 @@ namespace Liq
             ImVec2 _debugWindowSize  = ImVec2(_debugWindowWidth,(float)Engine::WindowParams::HEIGHT);
 
             void AddSideBar() const;
+            void AddVerticalBarDivider(float xpos) const;
             void AddBufferBar() const;
 
         public:

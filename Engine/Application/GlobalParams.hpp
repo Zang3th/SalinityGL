@@ -154,25 +154,33 @@ namespace Engine
 
     enum Integrator
     {
-        ForwardEuler   = 0,
-        BackwardEuler  = 1,
-        SemiLagrangian = 2
+        ForwardEuler         = 0,
+        ModifiedForwardEuler = 1,
+        RungeKutta2          = 2,
+        SemiLagrangian       = 3,
+    };
+
+    enum Visualization
+    {
+        Nothing   = 0,
+        Greyscale = 1,
+        BlackBody = 2,
+        ParaView  = 3
     };
 
     struct LiquiefiedParams
     {
-        inline static constexpr uint32     SIMULATION_WIDTH            = 150;
-        inline static constexpr uint32     SIMULATION_HEIGHT           = 100;
-        inline static constexpr uint32     LIQUID_NUM_CELLS            = SIMULATION_WIDTH * SIMULATION_HEIGHT;
-        inline static constexpr uint32     GAUSS_SEIDEL_ITERATIONS     = 500;
-        inline static constexpr float      GAUSS_SEIDEL_OVERRELAXATION = 1.9f;
-        inline static           uint32     turbinePower                = 2;
-        inline static           bool       visualizeSmoke              = true;
-        inline static           bool       scientificColorScheme       = false;
-        inline static           bool       pauseSimulation             = true;
-        inline static           bool       resetSimulation             = false;
-        inline static           bool       activateDebugging           = false;
-        inline static           Integrator integratorChoice            = Integrator::ForwardEuler;
+        inline static constexpr uint32        SIMULATION_WIDTH            = 150;
+        inline static constexpr uint32        SIMULATION_HEIGHT           = 100;
+        inline static constexpr uint32        LIQUID_NUM_CELLS            = SIMULATION_WIDTH * SIMULATION_HEIGHT;
+        inline static constexpr uint32        GAUSS_SEIDEL_ITERATIONS     = 20;
+        inline static constexpr float         GAUSS_SEIDEL_OVERRELAXATION = 1.9f;
+        inline static           uint32        turbinePower                = 50;
+        inline static           bool          pauseSimulation             = true;
+        inline static           bool          resetSimulation             = false;
+        inline static           bool          activateDebugging           = false;
+        inline static           Integrator    integratorChoice            = Integrator::SemiLagrangian;
+        inline static           Visualization visualizationChoice         = Visualization::Greyscale;
     };
 
     struct LiquefiedDebug

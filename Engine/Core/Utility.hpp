@@ -1,7 +1,7 @@
 #pragma once
 
 #include "glm.hpp"
-#include "Types.hpp"
+#include "ColorLUT.hpp"
 
 #include <cmath>
 
@@ -11,6 +11,8 @@ namespace Engine
     {
         public:
             Utility() = delete;
-            static glm::vec3 GetScienticColor(float value, float min, float max);
+            static glm::vec3 GetColor_Scientic(float value, float min, float max);
+            static glm::vec3 GetColor_BlackBody(float scalar);
+            static glm::vec3 GetColor_ParaView(float scalar);
     };
 }

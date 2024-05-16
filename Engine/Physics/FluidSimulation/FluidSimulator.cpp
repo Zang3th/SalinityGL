@@ -15,7 +15,7 @@ namespace Engine
                 _grid.v    [AT(x, y)] = 0.0f;
                 _grid.v_tmp[AT(x, y)] = 0.0f;
                 _grid.b    [AT(x, y)] = 1.0f; //1.0 for fluid cells and 0.0 for border cells
-                _grid.d    [AT(x, y)] = 1.0f; //Density value
+                _grid.d    [AT(x, y)] = 1.0f;
                 _grid.d_tmp[AT(x, y)] = 0.0f;
             }
         }
@@ -106,10 +106,9 @@ namespace Engine
         }
     }
 
-    void FluidSimulator::Extrapolate()
+    /* Sets the values of the outmost cells to the values of neighbouring cells. */
+    void FluidSimulator::Extrapolate() const
     {
-        //Setze die Werte der äußersten Zellen auf die ihrer Nachbarn
-
         for(uint32 x = 0; x < _grid.width; x++)
         {
             _grid.u[AT(x, 0)] = _grid.u[AT(x, 1)];
@@ -133,73 +132,63 @@ namespace Engine
         {
             for(uint32 y = 1; y < _grid.height-1; y++)
             {
-                //Skip border cells
+                /* Skip border cells. */
                 if(_grid.b[AT(x, y)] == 0 || _grid.b[AT(x-1, y)] == 0 || _grid.b[AT(x, y-1)] == 0 || _grid.b[AT(x+1, y)] == 0 || _grid.b[AT(x, y+1)] == 0)
                 {
                     continue;
                 }
 
+                /* Calculate u- and v-velocity depending on the chosen integrator. */
                 if(LiquiefiedParams::integratorChoice == Integrator::ForwardEuler)
                 {
                     uAdvect = ForwardEuler(dt, _grid.u_Avg(x, y), _grid.u[AT(x, y)], _grid.u[AT(x+1, y)], _grid.u[AT(x-1, y)]);
                     vAdvect = ForwardEuler(dt, _grid.v_Avg(x, y), _grid.v[AT(x, y)], _grid.v[AT(x, y+1)], _grid.v[AT(x, y-1)]);
-
-                    _grid.u_tmp[AT(x, y)] = uAdvect; //u-component (horizontal advection)
-                    _grid.v_tmp[AT(x, y)] = vAdvect; //v-component (vertical advection)
                 }
-                else if(LiquiefiedParams::integratorChoice == Integrator::BackwardEuler)
+                else if(LiquiefiedParams::integratorChoice == Integrator::ModifiedForwardEuler)
                 {
-                    uAdvect = ModifiedForwardEuler(dt, _grid.u_Avg(x, y), _grid.u, x, y);
-                    vAdvect = ModifiedForwardEuler(dt, _grid.v_Avg(x, y), _grid.v, x, y);
-
-                    _grid.u_tmp[AT(x, y)] = uAdvect; //u-component (horizontal advection)
-                    _grid.v_tmp[AT(x, y)] = vAdvect; //v-component (vertical advection)
+                    //...
+                }
+                else if(LiquiefiedParams::integratorChoice == Integrator::RungeKutta2)
+                {
+                    //...
                 }
                 else if(LiquiefiedParams::integratorChoice == Integrator::SemiLagrangian)
                 {
-                    // --- Set constants
+                    const float h  = _grid.h;
+                    const float h2 = _grid.h2;
 
-                    /*int32 numX = 150;  // LiquiefiedParams::SIMULATION_WIDTH;
-                    int32 numY = 100;  // LiquiefiedParams::SIMULATION_HEIGHT;
-
-
-
-                    float dx = h2;
-                    float dy = h2;
-
-                    // --- Calculate new x and y based on velocities
-
-                    uAdvect = _grid.u[AT(x,y)] + _grid.u[AT(x+1,y)] * 0.5f;
-                    vAdvect = _grid.v[AT(x,y)] + _grid.v[AT(x,y+1)] * 0.5f;
-                    float idx = (float)x * h + h2 - dt * uAdvect;
-                    float idy = (float)y * h + h2 - dt * vAdvect;
-
-                    float x_new = std::max(std::min(idx, ((float)numX * h)), h);
-                    float y_new = std::max(std::min(idy, ((float)numY * h)), h);
-
-                    _grid.d_tmp[AT(x, y)] = SemiLagrangian(x_new, y_new, dx, dy, _grid.d);*/
-
-                    float h = 0.01f;   // (uint32)(1.0f / LiquiefiedParams::SIMULATION_HEIGHT);
-                    float h2 = 0.005f; // 0.5f * h;
-
+                    //Calculate u- and v-Advection for u-component
                     float u = _grid.u[AT(x, y)];
                     float v = _grid.v_Avg(x, y);
-                    float ux = (float)x * h - dt * u;
-                    float uy = (float)y * h + h2 - dt * v;
 
+                    //Calculate approximated previous position for u-component
+                    const float ux_prev = (float)x * h - dt * u;
+                    const float uy_prev = (float)y * h + h2 - dt * v;
+
+                    //Calculate u- and v-Advection for v-component
                     u = _grid.u_Avg(x, y);
                     v = _grid.v[AT(x, y)];
-                    float vx = (float)x * h + h2 - dt * u;
-                    float vy = (float)y * h - dt * v;
 
-                    uAdvect = SemiLagrangian(ux, uy, 0.0f, h2, _grid.u);
-                    vAdvect = SemiLagrangian(vx, vy, h2, 0.0f, _grid.v);
+                    //Calculate approximated previous position for v-component
+                    const float vx_prev = (float)x * h + h2 - dt * u;
+                    const float vy_prev = (float)y * h - dt * v;
 
-                    _grid.u_tmp[AT(x, y)] = uAdvect; //u-component (horizontal advection)
-                    _grid.v_tmp[AT(x, y)] = vAdvect; //v-component (vertical advection)
+                    uAdvect = _grid.SampleInterpolated(ux_prev, uy_prev, 0.0f, h2, _grid.u);
+                    vAdvect = _grid.SampleInterpolated(vx_prev, vy_prev, h2, 0.0f, _grid.v);
                 }
 
-                //Monitor the applied horizontal and vertical advection
+                //Check for stability
+                if(!CheckCFLStability(dt, uAdvect))
+                    uAdvect = 0.0f;
+
+                if(!CheckCFLStability(dt, vAdvect))
+                    vAdvect = 0.0f;
+
+                //Assign new velocities
+                _grid.u_tmp[AT(x, y)] = uAdvect; //u-component (horizontal advection)
+                _grid.v_tmp[AT(x, y)] = vAdvect; //v-component (vertical advection)
+
+                //Monitor values
                 if(LiquiefiedParams::activateDebugging)
                 {
                     if(uAdvect < LiquefiedDebug::minUAdvect.val)
@@ -226,7 +215,7 @@ namespace Engine
      * and advect it like the velocity field.                                      */
     void FluidSimulator::AdvectSmoke(const float dt)
     {
-        float uAdvect = 0.0f, vAdvect = 0.0f;
+        float uAdvect = 0.0f, vAdvect = 0.0f, density = 0.0f;
 
         for(uint32 x = 1; x < _grid.width-1; x++)
         {
@@ -243,51 +232,63 @@ namespace Engine
                     uAdvect = ForwardEuler(dt, _grid.u_Avg(x, y), _grid.d[AT(x, y)], _grid.d[AT(x+1, y)], _grid.d[AT(x-1, y)]);
                     vAdvect = ForwardEuler(dt, _grid.v_Avg(x, y), _grid.d[AT(x, y)], _grid.d[AT(x, y+1)], _grid.d[AT(x, y-1)]);
 
-                    _grid.d_tmp[AT(x, y)] = (uAdvect + vAdvect) / 2.0f;
+                    density = std::abs((uAdvect + vAdvect) * 0.5f);
+                    density = std::min(density, 1.0f);
                 }
-                else if(LiquiefiedParams::integratorChoice == Integrator::BackwardEuler)
+                else if(LiquiefiedParams::integratorChoice == Integrator::ModifiedForwardEuler)
                 {
-                    uAdvect = ModifiedForwardEuler(dt, _grid.u_Avg(x, y), _grid.d, x, y);
-                    vAdvect = ModifiedForwardEuler(dt, _grid.v_Avg(x, y), _grid.d, x, y);
-
-                    _grid.d_tmp[AT(x, y)] = (uAdvect + vAdvect) / 2.0f;
+                    //...
+                }
+                else if(LiquiefiedParams::integratorChoice == Integrator::RungeKutta2)
+                {
+                    //...
                 }
                 else if(LiquiefiedParams::integratorChoice == Integrator::SemiLagrangian)
                 {
-                    //if (this.s[i*n + j] != 0.0) {
-                    //    var u = (this.u[i*n + j] + this.u[(i+1)*n + j]) * 0.5;
-                    //    var v = (this.v[i*n + j] + this.v[i*n + j+1]) * 0.5;
-                    //    var x = i*h + h2 - dt*u;
-                    //    var y = j*h + h2 - dt*v;
+                    const float h  = _grid.h;
+                    const float h2 = _grid.h2;
 
-                    //    this.newM[i*n + j] = this.sampleField(x,y, S_FIELD);
-                    //}
-
-                    // --- Set constants
-
-                    int32 numX = 150;  // LiquiefiedParams::SIMULATION_WIDTH;
-                    int32 numY = 100;  // LiquiefiedParams::SIMULATION_HEIGHT;
-
-                    float h = 0.01f;   // (uint32)(1.0f / LiquiefiedParams::SIMULATION_HEIGHT);
-                    float h2 = 0.005f; // 0.5f * h;
-
-                    float dx = h2;
-                    float dy = h2;
-
-                    // --- Calculate new x and y based on velocities
-
+                    //Calculate u- and v-Advection
                     uAdvect = (_grid.u[AT(x,y)] + _grid.u[AT(x+1,y)]) * 0.5f;
                     vAdvect = (_grid.v[AT(x,y)] + _grid.v[AT(x,y+1)]) * 0.5f;
-                    float ux = (float)x * h + h2 - dt * uAdvect;
-                    float vy = (float)y * h + h2 - dt * vAdvect;
 
-                    _grid.d_tmp[AT(x, y)] = SemiLagrangian(ux, vy, dx, dy, _grid.d);
+                    //Calculate approximated previous position
+                    const float x_prev = (float)x * h + h2 - dt * uAdvect;
+                    const float y_prev = (float)y * h + h2 - dt * vAdvect;
+
+                    density = _grid.SampleInterpolated(x_prev, y_prev, h2, h2, _grid.d);
                 }
+
+                //Check for stability
+                if(!CheckCFLStability(dt, density))
+                    density = 0.0f;
+
+                //Assign new density
+                _grid.d_tmp[AT(x, y)] = density;
             }
         }
 
         //Swap buffer
         SWAP(_grid.d, _grid.d_tmp);
+    }
+
+    /* Returns false if integrator got unstable. */
+    bool FluidSimulator::CheckCFLStability(float dt, float value) const
+    {
+        //Check numerical stability via CFL condition (Courant–Friedrichs–Lewy condition)
+        const float cfl = (value * dt) / (float)_grid.dx;
+
+        if(LiquiefiedParams::activateDebugging)
+        {
+            //Save value for debugging purposes
+            if(cfl > LiquefiedDebug::cflCondition)
+                LiquefiedDebug::cflCondition = cfl;
+        }
+
+        if(cfl >= 1.0f)
+            return false;
+
+        return true;
     }
 
     float FluidSimulator::ForwardEuler(const float dt, const float u, const float q, const float q_next, const float q_prev) const
@@ -328,57 +329,14 @@ namespace Engine
          *      q1[i] = q0[i] - dt * u[i] * (q0[i+1] - q0[i-1]) / (2 * dx)          */
 
         const uint32 dx = _grid.dx;
-        float velocity = q - dt * u * ((q_next - q_prev) / (float)(2 * dx));
-
-        if(LiquiefiedParams::activateDebugging)
-        {
-            //Check numerical stability via CFL condition (Courant–Friedrichs–Lewy condition)
-            const float cfl = (velocity * dt) / (float)dx;
-
-            //Save value for debugging purposes
-            if(cfl > LiquefiedDebug::cflCondition)
-                LiquefiedDebug::cflCondition = cfl;
-
-            //Forward-Euler has gotten unstable - return 0
-            if(LiquefiedDebug::cflCondition >= 1.0f)
-                velocity = 0.0f;
-        }
+        const float velocity = q - dt * u * ((q_next - q_prev) / (float)(2 * dx));
 
         return velocity;
     }
 
-    float FluidSimulator::ModifiedForwardEuler(float dt, float vel, const float* q_values, uint32 q_startX, uint32 q_startY) const
+    float FluidSimulator::ModifiedForwardEuler() const
     {
-        const uint32 dx     = _grid.dx;
-        const float  h_half = dt / 2;
-
-        uint32 idx_left  = AT(q_startX + dx, q_startY);
-        uint32 idx_right = AT(q_startX - dx, q_startY);
-        float k1 = (q_values[idx_left] - q_values[idx_right]) / (float)(2 * dx);
-
-        uint32 x_left  = q_startX + dx + (uint32)(h_half * k1);
-        uint32 x_right = q_startX - dx - (uint32)(h_half * k1);
-        idx_left  = AT(x_left, q_startY);
-        idx_right = AT(x_right, q_startY);
-        const float k2 = (q_values[idx_left] - q_values[idx_right]) / (float)(2 * dx) + h_half;
-
-        float result = q_values[AT(q_startX, q_startY)] - dt * vel * k2;
-
-        if(LiquiefiedParams::activateDebugging)
-        {
-            //Check numerical stability via CFL condition (Courant–Friedrichs–Lewy condition)
-            const float cfl = (result * dt) / (float)dx;
-
-            //Save value for debugging purposes
-            if(cfl > LiquefiedDebug::cflCondition)
-                LiquefiedDebug::cflCondition = cfl;
-
-            //Forward-Euler has gotten unstable - return 0
-            if(LiquefiedDebug::cflCondition >= 1.0f)
-                result = 0.0f;
-        }
-
-        return result;
+        return 0;
     }
 
     float FluidSimulator::BackwardEuler(const float dt, const float vel, const float* q_values, const uint32 q_startX, const uint32 q_startY) const
@@ -442,21 +400,7 @@ namespace Engine
         const float f_x1 = (q_values[x1+dx] - q_values[x1-dx]) / (float)(2 * dx);
         const float x0   = q_values[AT(q_startX, q_startY)];
 
-        float velocity = x0 - dt * vel * f_x1;
-
-        if(LiquiefiedParams::activateDebugging)
-        {
-            //Check numerical stability via CFL condition (Courant–Friedrichs–Lewy condition)
-            const float cfl = (velocity * dt) / (float)dx;
-
-            //Save value for debugging purposes
-            if(cfl > LiquefiedDebug::cflCondition)
-                LiquefiedDebug::cflCondition = cfl;
-
-            //Backward-Euler has gotten unstable - return 0
-            if(LiquefiedDebug::cflCondition >= 1.0f)
-                velocity = 0.0f;
-        }
+        const float velocity = x0 - dt * vel * f_x1;
 
         return velocity;
     }
@@ -494,43 +438,6 @@ namespace Engine
         return x1;
     }
 
-    float FluidSimulator::SemiLagrangian(const float x, const float y, const float dx, const float dy, const float* f) const
-    {
-        // --- Set constants
-
-        int32 numX = 150;  // LiquiefiedParams::SIMULATION_WIDTH;
-        int32 numY = 100;  // LiquiefiedParams::SIMULATION_HEIGHT;
-
-        float h = 0.01f;   // (uint32)(1.0f / LiquiefiedParams::SIMULATION_HEIGHT);
-
-        // --- Calculate new x and new y
-
-        float x_new = std::max(std::min(x, ((float)numX * h)), h);
-        float y_new = std::max(std::min(y, ((float)numY * h)), h);
-
-        // --- Sample field
-
-        int32 x0 = (int32)std::min(std::floor((x_new-dx)*(float)numY), (float)numX-1);
-        x0 = std::max(x0, 0);
-        int32 x1 = std::min(x0+1, numX-1);
-        float tx = ((x_new-dx) - (float)x0*h) * (float)numY;
-
-        int32 y0 = (int32)std::min(std::floor((y_new-dy)*(float)numY), (float)numY-1);
-        y0 = std::max(y0, 0);
-        int32 y1 = std::min(y0+1, numY-1);
-        float ty = ((y_new-dy) - (float)y0*h) * (float)numY;
-
-        float sx = 1.0f - tx;
-        float sy = 1.0f - ty;
-
-        float val = sx*sy * f[AT(x0, y0)] +
-                    tx*sy * f[AT(x1, y1)] +
-                    tx*ty * f[AT(x1, y1)] +
-                    sx*ty * f[AT(x0, y1)];
-
-        return val;
-    }
-
     // ----- Public -----
 
     FluidSimulator::FluidSimulator()
@@ -552,7 +459,7 @@ namespace Engine
         }
         {
             PROFILE_SCOPE("#Extrapolate");
-            //Extrapolate();
+            Extrapolate();
         }
         {
             PROFILE_SCOPE("#AdvectVelocity");

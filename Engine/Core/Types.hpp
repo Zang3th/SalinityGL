@@ -46,4 +46,12 @@ namespace Engine
         uint32 x;
         uint32 y;
     } LogFloatXY_t;
+
+    typedef struct ColorEntry
+    {
+        float scalar;
+        float r;
+        float g;
+        float b;
+    } ColorEntry_t;
 }

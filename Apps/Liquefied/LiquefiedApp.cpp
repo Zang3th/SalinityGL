@@ -78,16 +78,25 @@ namespace Liq
 
     void LiquefiedApp::VisualizeSmoke() const
     {
+        glm::vec3 color{0.0f};
+
         for(Engine::uint32 x = 1; x < Engine::LiquiefiedParams::SIMULATION_WIDTH-1; x++)
         {
             for(Engine::uint32 y = 1; y < Engine::LiquiefiedParams::SIMULATION_HEIGHT-1; y++)
             {
                 const float val = _fluidSimulator->GetDensity(x, y);
-                glm::vec3 color = {val, val, val};
 
-                if(Engine::LiquiefiedParams::scientificColorScheme)
+                if(Engine::LiquiefiedParams::visualizationChoice == Engine::Visualization::Greyscale)
                 {
-                    color = Engine::Utility::GetScienticColor(val, 0.0f, 1.0f);
+                    color = {val, val, val};
+                }
+                else if(Engine::LiquiefiedParams::visualizationChoice == Engine::Visualization::BlackBody)
+                {
+                    color = Engine::Utility::GetColor_BlackBody(val);
+                }
+                else if(Engine::LiquiefiedParams::visualizationChoice == Engine::Visualization::ParaView)
+                {
+                    color = Engine::Utility::GetColor_ParaView(val);
                 }
 
                 _gridRenderer->Set(x, y, color);
@@ -167,7 +176,7 @@ namespace Liq
         {
             Engine::PROFILE_SCOPE("Visualize grid");
 
-            if(Engine::LiquiefiedParams::visualizeSmoke)
+            if(Engine::LiquiefiedParams::visualizationChoice != Engine::Visualization::Nothing)
             {
                 VisualizeSmoke();
                 _gridRenderer->UpdateGpuStorage();
@@ -201,12 +210,6 @@ namespace Liq
 
         else if(glfwGetKey(Engine::Window::GetWindow(), GLFW_KEY_SPACE) == GLFW_PRESS)
             Engine::LiquiefiedParams::pauseSimulation = !Engine::LiquiefiedParams::pauseSimulation;
-
-        else if(glfwGetKey(Engine::Window::GetWindow(), GLFW_KEY_S) == GLFW_PRESS)
-            Engine::LiquiefiedParams::visualizeSmoke = !Engine::LiquiefiedParams::visualizeSmoke;
-
-        else if(glfwGetKey(Engine::Window::GetWindow(), GLFW_KEY_C) == GLFW_PRESS)
-            Engine::LiquiefiedParams::scientificColorScheme = !Engine::LiquiefiedParams::scientificColorScheme;
 
         else if(glfwGetKey(Engine::Window::GetWindow(), GLFW_KEY_R) == GLFW_PRESS)
             Engine::LiquiefiedParams::resetSimulation = true;

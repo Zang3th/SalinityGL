@@ -106,6 +106,23 @@ namespace Engine
         }
     }
 
+    void FluidSimulator::Extrapolate()
+    {
+        //Setze die Werte der äußersten Zellen auf die ihrer Nachbarn
+
+        for(uint32 x = 0; x < _grid.width; x++)
+        {
+            _grid.u[AT(x, 0)] = _grid.u[AT(x, 1)];
+            _grid.u[AT(x, _grid.height-1)] = _grid.u[AT(x, _grid.height-2)];
+        }
+
+        for(uint32 y = 0; y < _grid.height; y++)
+        {
+            _grid.v[AT(0, y)] = _grid.v[AT(1, y)];
+            _grid.v[AT(_grid.width-1, y)] = _grid.v[AT(_grid.width-2, y)];
+        }
+    }
+
     /* Advection moves the quantity, or molecules, or particles, along the velocity field. */
     void FluidSimulator::AdvectVelocity(const float dt)
     {
@@ -117,7 +134,7 @@ namespace Engine
             for(uint32 y = 1; y < _grid.height-1; y++)
             {
                 //Skip border cells
-                if(_grid.b[AT(x, y)] == 0)
+                if(_grid.b[AT(x, y)] == 0 || _grid.b[AT(x-1, y)] == 0 || _grid.b[AT(x, y-1)] == 0 || _grid.b[AT(x+1, y)] == 0 || _grid.b[AT(x, y+1)] == 0)
                 {
                     continue;
                 }
@@ -140,7 +157,46 @@ namespace Engine
                 }
                 else if(LiquiefiedParams::integratorChoice == Integrator::SemiLagrangian)
                 {
-                    // ...
+                    // --- Set constants
+
+                    /*int32 numX = 150;  // LiquiefiedParams::SIMULATION_WIDTH;
+                    int32 numY = 100;  // LiquiefiedParams::SIMULATION_HEIGHT;
+
+
+
+                    float dx = h2;
+                    float dy = h2;
+
+                    // --- Calculate new x and y based on velocities
+
+                    uAdvect = _grid.u[AT(x,y)] + _grid.u[AT(x+1,y)] * 0.5f;
+                    vAdvect = _grid.v[AT(x,y)] + _grid.v[AT(x,y+1)] * 0.5f;
+                    float idx = (float)x * h + h2 - dt * uAdvect;
+                    float idy = (float)y * h + h2 - dt * vAdvect;
+
+                    float x_new = std::max(std::min(idx, ((float)numX * h)), h);
+                    float y_new = std::max(std::min(idy, ((float)numY * h)), h);
+
+                    _grid.d_tmp[AT(x, y)] = SemiLagrangian(x_new, y_new, dx, dy, _grid.d);*/
+
+                    float h = 0.01f;   // (uint32)(1.0f / LiquiefiedParams::SIMULATION_HEIGHT);
+                    float h2 = 0.005f; // 0.5f * h;
+
+                    float u = _grid.u[AT(x, y)];
+                    float v = _grid.v_Avg(x, y);
+                    float ux = (float)x * h - dt * u;
+                    float uy = (float)y * h + h2 - dt * v;
+
+                    u = _grid.u_Avg(x, y);
+                    v = _grid.v[AT(x, y)];
+                    float vx = (float)x * h + h2 - dt * u;
+                    float vy = (float)y * h - dt * v;
+
+                    uAdvect = SemiLagrangian(ux, uy, 0.0f, h2, _grid.u);
+                    vAdvect = SemiLagrangian(vx, vy, h2, 0.0f, _grid.v);
+
+                    _grid.u_tmp[AT(x, y)] = uAdvect; //u-component (horizontal advection)
+                    _grid.v_tmp[AT(x, y)] = vAdvect; //v-component (vertical advection)
                 }
 
                 //Monitor the applied horizontal and vertical advection
@@ -207,17 +263,25 @@ namespace Engine
                     //    this.newM[i*n + j] = this.sampleField(x,y, S_FIELD);
                     //}
 
-                    uint32 h = (uint32)(1.0f / LiquiefiedParams::SIMULATION_HEIGHT);
-                    uint32 h2 = 0.5f * LiquiefiedParams::SIMULATION_HEIGHT;
+                    // --- Set constants
 
-                    uAdvect = _grid.u[AT(x,y)] + _grid.u[AT(x+1,y)] * 0.5f;
-                    vAdvect = _grid.v[AT(x,y)] + _grid.v[AT(x,y+1)] * 0.5f;
-                    float idx = x * h + h2 - dt * uAdvect;
-                    float idy = y * h + h2 - dt * vAdvect;
+                    int32 numX = 150;  // LiquiefiedParams::SIMULATION_WIDTH;
+                    int32 numY = 100;  // LiquiefiedParams::SIMULATION_HEIGHT;
 
-                    //ToDo: Fix
+                    float h = 0.01f;   // (uint32)(1.0f / LiquiefiedParams::SIMULATION_HEIGHT);
+                    float h2 = 0.005f; // 0.5f * h;
 
-                    //_grid.d_tmp[AT(x, y)] = SemiLagrangian(x, y);
+                    float dx = h2;
+                    float dy = h2;
+
+                    // --- Calculate new x and y based on velocities
+
+                    uAdvect = (_grid.u[AT(x,y)] + _grid.u[AT(x+1,y)]) * 0.5f;
+                    vAdvect = (_grid.v[AT(x,y)] + _grid.v[AT(x,y+1)]) * 0.5f;
+                    float ux = (float)x * h + h2 - dt * uAdvect;
+                    float vy = (float)y * h + h2 - dt * vAdvect;
+
+                    _grid.d_tmp[AT(x, y)] = SemiLagrangian(ux, vy, dx, dy, _grid.d);
                 }
             }
         }
@@ -430,20 +494,41 @@ namespace Engine
         return x1;
     }
 
-    float FluidSimulator::SemiLagrangian() const
+    float FluidSimulator::SemiLagrangian(const float x, const float y, const float dx, const float dy, const float* f) const
     {
-        uint32 h = (uint32)(1.0f / LiquiefiedParams::SIMULATION_HEIGHT);
-        uint32 h1 = LiquiefiedParams::SIMULATION_HEIGHT;
-        uint32 h2 = 0.5f * LiquiefiedParams::SIMULATION_HEIGHT;
-        uint32 numX = LiquiefiedParams::SIMULATION_WIDTH;
-        uint32 numY = LiquiefiedParams::SIMULATION_HEIGHT;
+        // --- Set constants
 
-        /*uint32 x = std::max(std::min(x, (numX * h)), h);
-        uint32 y = std::max(std::min(y, (numY * h)), h);*/
+        int32 numX = 150;  // LiquiefiedParams::SIMULATION_WIDTH;
+        int32 numY = 100;  // LiquiefiedParams::SIMULATION_HEIGHT;
 
-        //ToDo: Implement
+        float h = 0.01f;   // (uint32)(1.0f / LiquiefiedParams::SIMULATION_HEIGHT);
 
-        return 0;
+        // --- Calculate new x and new y
+
+        float x_new = std::max(std::min(x, ((float)numX * h)), h);
+        float y_new = std::max(std::min(y, ((float)numY * h)), h);
+
+        // --- Sample field
+
+        int32 x0 = (int32)std::min(std::floor((x_new-dx)*(float)numY), (float)numX-1);
+        x0 = std::max(x0, 0);
+        int32 x1 = std::min(x0+1, numX-1);
+        float tx = ((x_new-dx) - (float)x0*h) * (float)numY;
+
+        int32 y0 = (int32)std::min(std::floor((y_new-dy)*(float)numY), (float)numY-1);
+        y0 = std::max(y0, 0);
+        int32 y1 = std::min(y0+1, numY-1);
+        float ty = ((y_new-dy) - (float)y0*h) * (float)numY;
+
+        float sx = 1.0f - tx;
+        float sy = 1.0f - ty;
+
+        float val = sx*sy * f[AT(x0, y0)] +
+                    tx*sy * f[AT(x1, y1)] +
+                    tx*ty * f[AT(x1, y1)] +
+                    sx*ty * f[AT(x0, y1)];
+
+        return val;
     }
 
     // ----- Public -----

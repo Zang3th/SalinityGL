@@ -26,7 +26,8 @@ namespace Engine
             static void CenterCursor(const char* characterAmount);
             static void LoadCustomFont(const char* filepath, float size);
             static bool RadioButton_u32(const char* label, uint32* v, uint32 v_button);
-            static bool Input_u32(const char* label, uint32* v, uint32 step, uint32 step_fast, ImGuiInputTextFlags flags);
+            static bool Input_i32(const char* label, int32* value, int32 step, int32 step_fast);
+            static bool Input_u32(const char* label, int32* value, int32 step, int32 step_fast);
 
         public:
             float _windowAlphaValue = 0.5f;

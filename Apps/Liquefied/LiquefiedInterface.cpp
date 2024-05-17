@@ -50,7 +50,6 @@ namespace Liq
                     ImGui::RadioButton("Backward Euler", (int*)&Engine::LiquiefiedParams::integratorChoice, Engine::Integrator::BackwardEuler);
                     ImGui::RadioButton("Runge Kutta 2", (int*)&Engine::LiquiefiedParams::integratorChoice, Engine::Integrator::RungeKutta2);
                     ImGui::RadioButton("Runge Kutta 3", (int*)&Engine::LiquiefiedParams::integratorChoice, Engine::Integrator::RungeKutta3);
-                    ImGui::RadioButton("Semi Lagrangian", (int*)&Engine::LiquiefiedParams::integratorChoice, Engine::Integrator::SemiLagrangian);
                     ImGui::EndTabItem();
                 }
 
@@ -70,7 +69,7 @@ namespace Liq
                     ImGui::Text("Turbine power: ");
                     ImGui::SameLine();
                     ImGui::PushItemWidth(150.0f);
-                    Input_u32("##Input1", &Engine::LiquiefiedParams::turbinePower, 10, 100, ImGuiInputTextFlags_CharsDecimal);
+                    Input_u32("##Input1", &Engine::LiquiefiedParams::turbinePower, 10, 100);
                     ImGui::EndTabItem();
                 }
 

@@ -167,7 +167,7 @@ namespace Liq
                     //Add a horizontal turbine (initial velocity)
                    _fluidSimulator->AddHorizonalTurbine(1, 50, (float)Engine::LiquiefiedParams::turbinePower, dt);
 
-                    //Run simulation timestep and visualize result
+                    //Run simulation timestep
                     _fluidSimulator->TimeStep(dt);
                 }
             }

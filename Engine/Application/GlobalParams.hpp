@@ -158,7 +158,6 @@ namespace Engine
         BackwardEuler        = 1,
         RungeKutta2          = 2,
         RungeKutta3          = 3,
-        SemiLagrangian       = 4,
     };
 
     enum Visualization
@@ -176,11 +175,11 @@ namespace Engine
         inline static constexpr uint32        LIQUID_NUM_CELLS            = SIMULATION_WIDTH * SIMULATION_HEIGHT;
         inline static constexpr uint32        GAUSS_SEIDEL_ITERATIONS     = 20;
         inline static constexpr float         GAUSS_SEIDEL_OVERRELAXATION = 1.9f;
-        inline static           uint32        turbinePower                = 50;
+        inline static           int32         turbinePower                = 50;
         inline static           bool          pauseSimulation             = true;
         inline static           bool          resetSimulation             = false;
         inline static           bool          activateDebugging           = false;
-        inline static           Integrator    integratorChoice            = Integrator::SemiLagrangian;
+        inline static           Integrator    integratorChoice            = Integrator::ForwardEuler;
         inline static           Visualization visualizationChoice         = Visualization::Greyscale;
     };
 

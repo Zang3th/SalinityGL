@@ -28,9 +28,8 @@ namespace Engine
         public:
             const uint32 width  = LiquiefiedParams::SIMULATION_WIDTH;
             const uint32 height = LiquiefiedParams::SIMULATION_HEIGHT;
-            const float  h      = 1.0f / (float)height;
+            const float  h      = 1.0f / (float)height; //Cell height
             const float  h2     = h * 0.5f;
-            const uint32 dx     = 1;
 
             //Public accessors
             float* u     = &_u[0];

@@ -77,10 +77,16 @@ namespace Engine
         return pressed;
     }
 
-    bool Interface::Input_u32(const char* label, uint32* v, uint32 step, uint32 step_fast, ImGuiInputTextFlags flags)
+    bool Interface::Input_i32(const char* label, int32* value, const int32 step, const int32 step_fast)
     {
-        const char* format = (flags & ImGuiInputTextFlags_CharsHexadecimal) ? "%08X" : "%d";
-        return ImGui::InputScalar(label, ImGuiDataType_S32, (void*)v, (void*)(step > 0 ? &step : nullptr), (void*)(step_fast > 0 ? &step_fast : nullptr), format, flags);
+        return ImGui::InputInt(label, value, step, step_fast, ImGuiInputTextFlags_CharsDecimal);}
+
+    bool Interface::Input_u32(const char* label, int32* value, int32 step, int32 step_fast)
+    {
+        if(*value < 0)
+            *value = 0;
+
+        return Input_i32(label, value, step, step_fast);
     }
 
     // ----- Public -----

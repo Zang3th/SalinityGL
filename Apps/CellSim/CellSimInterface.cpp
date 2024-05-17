@@ -125,13 +125,13 @@ namespace CS
 
                         ImGui::Text("X Coordinate:\t");
                         ImGui::SameLine();
-                        Input_u32("##Input1", &Engine::CellSimParams::selectedCellCoords[0], 1, 10, ImGuiInputTextFlags_CharsDecimal);
+                        Input_u32("##Input1", (int*)&Engine::CellSimParams::selectedCellCoords[0], 1, 10);
                         ImGui::Text("Y Coordinate:\t");
                         ImGui::SameLine();
-                        Input_u32("##Input2", &Engine::CellSimParams::selectedCellCoords[1], 1, 10, ImGuiInputTextFlags_CharsDecimal);
+                        Input_u32("##Input2", (int*)&Engine::CellSimParams::selectedCellCoords[1], 1, 10);
                         ImGui::Text("Z Coordinate:\t");
                         ImGui::SameLine();
-                        Input_u32("##Input3", &Engine::CellSimParams::selectedCellCoords[2], 1, 10, ImGuiInputTextFlags_CharsDecimal);
+                        Input_u32("##Input3", (int*)&Engine::CellSimParams::selectedCellCoords[2], 1, 10);
 
                         ImGui::PopItemWidth();
                         CheckCellBoundaries();

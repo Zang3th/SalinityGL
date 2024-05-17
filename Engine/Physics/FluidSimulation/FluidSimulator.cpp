@@ -122,10 +122,15 @@ namespace Engine
         }
     }
 
-    /* Advection moves the quantity, or molecules, or particles, along the velocity field. */
+    /* Advection moves the quantity, or molecules, or particles, along the velocity field.      *
+     * This function uses a semi-lagrangian approach while offering multiple numerical          *
+     * integrators for calculating the previous x- and y-positions of a hypothetical particle   *
+     * that is moving through the grid.                                                         */
     void FluidSimulator::AdvectVelocity(const float dt)
     {
-        float uAdvect = 0.0f, vAdvect = 0.0f;
+        const float h  = _grid.h;
+        const float h2 = _grid.h2;
+        float uAdvect  = 0.0f, vAdvect = 0.0f, ux_prev = 0.0f, uy_prev = 0.0f, vx_prev = 0.0f, vy_prev = 0.0f;
 
         //Iterate over grid and update all velocities according to the chosen numerical integrator
         for(uint32 x = 1; x < _grid.width-1; x++)
@@ -138,11 +143,25 @@ namespace Engine
                     continue;
                 }
 
-                //Calculate u- and v-velocity depending on the chosen integrator
+                // --- Calculate previous x- and y-positions depending on the chosen integrator
+
                 if(LiquiefiedParams::integratorChoice == Integrator::ForwardEuler)
                 {
-                    uAdvect = ForwardEuler(dt, _grid.u_Avg(x, y), _grid.u[AT(x, y)], _grid.u[AT(x+1, y)], _grid.u[AT(x-1, y)]);
-                    vAdvect = ForwardEuler(dt, _grid.v_Avg(x, y), _grid.v[AT(x, y)], _grid.v[AT(x, y+1)], _grid.v[AT(x, y-1)]);
+                    //Calculate u- and v-Advection for u-component
+                    float u = _grid.u[AT(x, y)];
+                    float v = _grid.v_Avg(x, y);
+
+                    //Calculate approximated previous position for u-component
+                    ForwardEuler(dt, (float)x, h, 0.0f, u, &ux_prev);
+                    ForwardEuler(dt, (float) y, h, h2, v, &uy_prev);
+
+                    //Calculate u- and v-Advection for v-component
+                    u = _grid.u_Avg(x, y);
+                    v = _grid.v[AT(x, y)];
+
+                    //Calculate approximated previous position for v-component
+                    ForwardEuler(dt, (float)x, h, h2, u, &vx_prev);
+                    ForwardEuler(dt, (float)y, h, 0.0f, v, &vy_prev);
                 }
                 else if(LiquiefiedParams::integratorChoice == Integrator::BackwardEuler)
                 {
@@ -156,45 +175,22 @@ namespace Engine
                 {
                     //...
                 }
-                else if(LiquiefiedParams::integratorChoice == Integrator::SemiLagrangian)
-                {
-                    const float h  = _grid.h;
-                    const float h2 = _grid.h2;
 
-                    //Calculate u- and v-Advection for u-component
-                    float u = _grid.u[AT(x, y)];
-                    float v = _grid.v_Avg(x, y);
-
-                    //Calculate approximated previous position for u-component
-                    const float ux_prev = (float)x * h - dt * u;
-                    const float uy_prev = (float)y * h + h2 - dt * v;
-
-                    //Calculate u- and v-Advection for v-component
-                    u = _grid.u_Avg(x, y);
-                    v = _grid.v[AT(x, y)];
-
-                    //Calculate approximated previous position for v-component
-                    const float vx_prev = (float)x * h + h2 - dt * u;
-                    const float vy_prev = (float)y * h - dt * v;
-
-                    uAdvect = _grid.SampleInterpolated(ux_prev, uy_prev, 0.0f, h2, _grid.u);
-                    vAdvect = _grid.SampleInterpolated(vx_prev, vy_prev, h2, 0.0f, _grid.v);
-                }
-
-                //Check for stability
-                if(!CheckCFLStability(dt, uAdvect))
-                    uAdvect = 0.0f;
-
-                if(!CheckCFLStability(dt, vAdvect))
-                    vAdvect = 0.0f;
+                //Sample grid on calculated previous positions
+                uAdvect = _grid.SampleInterpolated(ux_prev, uy_prev, 0.0f, h2, _grid.u);
+                vAdvect = _grid.SampleInterpolated(vx_prev, vy_prev, h2, 0.0f, _grid.v);
 
                 //Assign new velocities
                 _grid.u_tmp[AT(x, y)] = uAdvect; //u-component (horizontal advection)
                 _grid.v_tmp[AT(x, y)] = vAdvect; //v-component (vertical advection)
 
-                //Monitor values
                 if(LiquiefiedParams::activateDebugging)
                 {
+                    //Monitor stability
+                    MonitorCFLStability(dt, uAdvect);
+                    MonitorCFLStability(dt, vAdvect);
+
+                    //Monitor velocities
                     if(uAdvect < LiquefiedDebug::minUAdvect.val)
                         LiquefiedDebug::minUAdvect = {uAdvect, x, y};
 
@@ -219,7 +215,9 @@ namespace Engine
      * and advect it like the velocity field.                                      */
     void FluidSimulator::AdvectSmoke(const float dt)
     {
-        float uAdvect = 0.0f, vAdvect = 0.0f, density = 0.0f;
+        const float h  = _grid.h;
+        const float h2 = _grid.h2;
+        float uAdvect  = 0.0f, vAdvect = 0.0f, x_prev = 0.0f, y_prev = 0.0f;
 
         for(uint32 x = 1; x < _grid.width-1; x++)
         {
@@ -231,13 +229,17 @@ namespace Engine
                     continue;
                 }
 
+                // --- Calculate previous x- and y-positions depending on the chosen integrator
+
                 if(LiquiefiedParams::integratorChoice == Integrator::ForwardEuler)
                 {
-                    uAdvect = ForwardEuler(dt, _grid.u_Avg(x, y), _grid.d[AT(x, y)], _grid.d[AT(x+1, y)], _grid.d[AT(x-1, y)]);
-                    vAdvect = ForwardEuler(dt, _grid.v_Avg(x, y), _grid.d[AT(x, y)], _grid.d[AT(x, y+1)], _grid.d[AT(x, y-1)]);
+                    //Calculate u- and v-Advection
+                    uAdvect = (_grid.u[AT(x,y)] + _grid.u[AT(x+1,y)]) * 0.5f;
+                    vAdvect = (_grid.v[AT(x,y)] + _grid.v[AT(x,y+1)]) * 0.5f;
 
-                    density = std::abs((uAdvect + vAdvect) * 0.5f);
-                    density = std::min(density, 1.0f);
+                    //Calculate approximated previous position
+                    ForwardEuler(dt, (float)x, h, h2, uAdvect, &x_prev);
+                    ForwardEuler(dt, (float)y, h, h2, vAdvect, &y_prev);
                 }
                 else if(LiquiefiedParams::integratorChoice == Integrator::BackwardEuler)
                 {
@@ -251,28 +253,9 @@ namespace Engine
                 {
                     //...
                 }
-                else if(LiquiefiedParams::integratorChoice == Integrator::SemiLagrangian)
-                {
-                    const float h  = _grid.h;
-                    const float h2 = _grid.h2;
-
-                    //Calculate u- and v-Advection
-                    uAdvect = (_grid.u[AT(x,y)] + _grid.u[AT(x+1,y)]) * 0.5f;
-                    vAdvect = (_grid.v[AT(x,y)] + _grid.v[AT(x,y+1)]) * 0.5f;
-
-                    //Calculate approximated previous position
-                    const float x_prev = (float)x * h + h2 - dt * uAdvect;
-                    const float y_prev = (float)y * h + h2 - dt * vAdvect;
-
-                    density = _grid.SampleInterpolated(x_prev, y_prev, h2, h2, _grid.d);
-                }
-
-                //Check for stability
-                if(!CheckCFLStability(dt, density))
-                    density = 0.0f;
 
                 //Assign new density
-                _grid.d_tmp[AT(x, y)] = density;
+                _grid.d_tmp[AT(x, y)] = _grid.SampleInterpolated(x_prev, y_prev, h2, h2, _grid.d);
             }
         }
 
@@ -280,66 +263,41 @@ namespace Engine
         SWAP(_grid.d, _grid.d_tmp);
     }
 
-    /* Returns false if integrator got unstable. */
-    bool FluidSimulator::CheckCFLStability(const float dt, const float value) const
+    /* Monitors if the numerical integrator got unstable (value >= 1). */
+    void FluidSimulator::MonitorCFLStability(const float dt, const float value) const
     {
-        //Check numerical stability via CFL condition (Courant–Friedrichs–Lewy condition)
-        const float cfl = (value * dt) / (float)_grid.dx;
+        //Calculate numerical stability via CFL condition (Courant–Friedrichs–Lewy condition)
+        const float cfl = (value * dt) / (float)_grid.h;
 
-        if(LiquiefiedParams::activateDebugging)
-        {
-            //Save value for debugging purposes
-            if(cfl > LiquefiedDebug::cflCondition)
-                LiquefiedDebug::cflCondition = cfl;
-        }
-
-        if(cfl >= 1.0f)
-            return false;
-
-        return true;
+        //Save value for debugging purposes
+        if(cfl > LiquefiedDebug::cflCondition)
+            LiquefiedDebug::cflCondition = cfl;
     }
 
-    float FluidSimulator::ForwardEuler(const float dt, const float u, const float q, const float q_next, const float q_prev) const
+    void FluidSimulator::ForwardEuler(const float dt, const float pos, const float h, const float h2, const float vel, float* prev_pos)
     {
-        /*      The update rule for Forward-Euler looks like this:                  *
-         *                                                                          *
-         *                        x1 = x0 + dt * f(x0)                              *
-         *                                                                          *
-         *      - x1    := Approximated value at the next timestep.                 *
-         *      - x0    := Value at the current timestep.                           *
-         *      - dt    := The timestep size.                                       *
-         *      - f(x0) := Derivative of f at the point x0 with respect to time.    *
-         *                                                                          *
-         *      We will use a central spatial derivative approximation:             *
-         *                                                                          *
-         *              f(x0) = (f(x0+h) - f(x0-h)) / (2 * h)                       *
-         *                                                                          *
-         *                      Our formula then becomes:                           *
-         *                                                                          *
-         *               x1 = x0 + dt * f(x0+h) - f(x0-h) / 2 * h                   *
-         *                                                                          *
-         *      Since we're working on a grid, we need to discretize it:            *
-         *                                                                          *
-         *      q1[i] = q0[i] + dt * (q0[i+1] - q0[i-1]) / (2 * dx)                 *
-         *                                                                          *
-         *      - q      := The quantity we want to advect.                         *
-         *      - q1[i]  := Value at the next timestep.                             *
-         *      - q0[i]  := Value at the current timestep.                          *
-         *      - q_next := q0[i+1] := The right or upper neighbor.                 *
-         *      - q_left := q0[i-1] := The left or lower neighbor.                  *
-         *      - dx     := The cell size.                                          *
-         *                                                                          *
-         *      Because we use Forward-Euler for Advection (Movement along the      *
-         *      velocity field) we need to multiply with u (the velocity).          *
-         *      Furthermore subtracting from q0 instead of adding yields better     *
-         *      stability in this case. Our final formula then becomes:             *
-         *                                                                          *
-         *      q1[i] = q0[i] - dt * u[i] * (q0[i+1] - q0[i-1]) / (2 * dx)          */
+        /*      The update rule for Forward-Euler looks like this:                      *
+        *                                                                               *
+        *                        x1 = x0 - dt * f(x0)                                   *
+        *                                                                               *
+        *      - x1    := Approximated value at the next timestep.                      *
+        *      - x0    := Value at the current timestep.                                *
+        *      - dt    := The timestep size.                                            *
+        *      - f(x0) := Derivative of f at the point x0 with respect to time,         *
+        *                 which in this case is the velocity.                           *
+        *                                                                               *
+        *      Since we're working on a grid, we need to discretize it:                 *
+        *                                                                               *
+        *      - h     := The size of a grid cell in the corresponding dimension.       *
+        *      - h2    := Half the size of a grid cell (used to find the midpoint).     *
+        *                                                                               *
+        *      The use of h and h2 helps adjust for the cell's center or edges.         *
+        *      h2 is sometimes set to 0 when we are calculating the previous            *
+        *      position at the edge of a cell, rather than the center.                  *
+        *                                                                               *
+        *      These are special cases because we are working on a staggered grid.      */
 
-        const uint32 dx = _grid.dx;
-        const float velocity = q - dt * u * ((q_next - q_prev) / (float)(2 * dx));
-
-        return velocity;
+        *prev_pos = pos * h + h2 - dt * vel;
     }
 
     float FluidSimulator::BackwardEuler() const

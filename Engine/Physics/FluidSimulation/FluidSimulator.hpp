@@ -22,8 +22,8 @@ namespace Engine
             void Extrapolate() const;
             void AdvectVelocity(float dt);
             void AdvectSmoke(float dt);
-            [[nodiscard]] bool CheckCFLStability(float dt, float value) const;
-            [[nodiscard]] float ForwardEuler(float dt, float u, float q, float q_next, float q_prev) const;
+            void MonitorCFLStability(float dt, float value) const;
+            void ForwardEuler(float dt, float pos, float h, float h2, float vel, float* prev_pos);
             [[nodiscard]] float BackwardEuler() const;
             [[nodiscard]] float RungeKutta2() const;
             [[nodiscard]] float RungeKutta3() const;

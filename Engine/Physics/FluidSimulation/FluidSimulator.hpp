@@ -25,7 +25,8 @@ namespace Engine
             void MonitorCFLStability(float dt, float value) const;
             void ForwardEuler(float dt, float pos, float h, float h2, float vel, float* prev_pos);
             [[nodiscard]] float BackwardEuler() const;
-            [[nodiscard]] float RungeKutta2() const;
+            void RungeKutta2(float dt,  float pos, float h,  float h2,
+                             float vel, float dx,  float dy, float* prev_pos) const;
             [[nodiscard]] float RungeKutta3() const;
 
         public:

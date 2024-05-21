@@ -153,7 +153,7 @@ namespace Engine
 
                     //Calculate approximated previous position for u-component
                     ForwardEuler(dt, (float)x, h, 0.0f, u, &ux_prev);
-                    ForwardEuler(dt, (float) y, h, h2, v, &uy_prev);
+                    ForwardEuler(dt, (float)y, h, h2, v, &uy_prev);
 
                     //Calculate u- and v-Advection for v-component
                     u = _grid.u_Avg(x, y);
@@ -169,7 +169,47 @@ namespace Engine
                 }
                 else if(LiquiefiedParams::integratorChoice == Integrator::RungeKutta2)
                 {
-                    //...
+                    //Calculate u- and v-Advection for u-component
+                    float u = _grid.u[AT(x, y)];
+                    float v = _grid.v_Avg(x, y);
+
+                    //Calculate approximated previous position for u-component
+                    {
+                        //Compute intermediate positions for k2 (corresponds to Forward-Euler with half the step size)
+                        ForwardEuler(dt * 0.5f, (float)x, h, 0.0f, u, &ux_prev);
+                        ForwardEuler(dt * 0.5f, (float)y, h, h2, v, &uy_prev);
+                        ForwardEuler(dt * 0.5f, (float)x, h, h2, u, &vx_prev);
+                        ForwardEuler(dt * 0.5f, (float)y, h, 0.0f, v, &vy_prev);
+
+                        //Second stage: k2 (Sample grid at intermediate positions)
+                        const float k2_u = _grid.SampleInterpolated(ux_prev, uy_prev, 0.0f, h2, _grid.u);
+                        const float k2_v = _grid.SampleInterpolated(vx_prev, vy_prev, h2, 0.0f, _grid.v);
+
+                        //Compute the final positions (corresponds to Forward-Euler with k2 as the input velocity)
+                        ForwardEuler(dt, (float)x, h, 0.0f, k2_u, &ux_prev);
+                        ForwardEuler(dt, (float)y, h, h2, k2_v, &uy_prev);
+                    }
+
+                    //Calculate u- and v-Advection for v-component
+                    u = _grid.u_Avg(x, y);
+                    v = _grid.v[AT(x, y)];
+
+                    //Calculate approximated previous position for v-component
+                    {
+                        //Compute intermediate positions for k2 (corresponds to Forward-Euler with half the step size)
+                        ForwardEuler(dt * 0.5f, (float)x, h, 0.0f, u, &ux_prev);
+                        ForwardEuler(dt * 0.5f, (float)y, h, h2, v, &uy_prev);
+                        ForwardEuler(dt * 0.5f, (float)x, h, h2, u, &vx_prev);
+                        ForwardEuler(dt * 0.5f, (float)y, h, 0.0f, v, &vy_prev);
+
+                        //Second stage: k2 (Sample grid at intermediate positions)
+                        const float k2_u = _grid.SampleInterpolated(ux_prev, uy_prev, 0.0f, h2, _grid.u);
+                        const float k2_v = _grid.SampleInterpolated(vx_prev, vy_prev, h2, 0.0f, _grid.v);
+
+                        //Compute the final positions (corresponds to Forward-Euler with k2 as the input velocity)
+                        ForwardEuler(dt, (float)x, h, h2, k2_u, &vx_prev);
+                        ForwardEuler(dt, (float)y, h, 0.0f, k2_v, &vy_prev);
+                    }
                 }
                 else if(LiquiefiedParams::integratorChoice == Integrator::RungeKutta3)
                 {
@@ -229,15 +269,14 @@ namespace Engine
                     continue;
                 }
 
-                // --- Calculate previous x- and y-positions depending on the chosen integrator
+                //Get u-and v-Advection
+                uAdvect = (_grid.u[AT(x,y)] + _grid.u[AT(x+1,y)]) * 0.5f;
+                vAdvect = (_grid.v[AT(x,y)] + _grid.v[AT(x,y+1)]) * 0.5f;
+
+                // --- Calculate approximated previous x- and y-positions depending on the chosen integrator
 
                 if(LiquiefiedParams::integratorChoice == Integrator::ForwardEuler)
                 {
-                    //Calculate u- and v-Advection
-                    uAdvect = (_grid.u[AT(x,y)] + _grid.u[AT(x+1,y)]) * 0.5f;
-                    vAdvect = (_grid.v[AT(x,y)] + _grid.v[AT(x,y+1)]) * 0.5f;
-
-                    //Calculate approximated previous position
                     ForwardEuler(dt, (float)x, h, h2, uAdvect, &x_prev);
                     ForwardEuler(dt, (float)y, h, h2, vAdvect, &y_prev);
                 }
@@ -247,7 +286,17 @@ namespace Engine
                 }
                 else if(LiquiefiedParams::integratorChoice == Integrator::RungeKutta2)
                 {
-                    //...
+                    //Compute intermediate positions for k2 (corresponds to Forward-Euler with half the step size)
+                    ForwardEuler(dt * 0.5f, (float)x, h, h2, uAdvect, &x_prev);
+                    ForwardEuler(dt * 0.5f, (float)y, h, h2, vAdvect, &y_prev);
+
+                    //Second stage: k2 (Sample grid at intermediate positions)
+                    const float k2_u = _grid.SampleInterpolated(x_prev, y_prev, 0.0f, h2, _grid.u);
+                    const float k2_v = _grid.SampleInterpolated(x_prev, y_prev, h2, 0.0f, _grid.v);
+
+                    //Compute the final positions (corresponds to Forward-Euler with k2 as the input velocity)
+                    ForwardEuler(dt, (float)x, h, h2, k2_u, &x_prev);
+                    ForwardEuler(dt, (float)y, h, h2, k2_v, &y_prev);
                 }
                 else if(LiquiefiedParams::integratorChoice == Integrator::RungeKutta3)
                 {
@@ -274,7 +323,9 @@ namespace Engine
             LiquefiedDebug::cflCondition = cfl;
     }
 
-    void FluidSimulator::ForwardEuler(const float dt, const float pos, const float h, const float h2, const float vel, float* prev_pos)
+    void FluidSimulator::ForwardEuler(const float dt,  const float pos,
+                                      const float h,   const float h2,
+                                      const float vel, float* prev_pos)
     {
         /*      The update rule for Forward-Euler looks like this:                      *
         *                                                                               *
@@ -302,37 +353,59 @@ namespace Engine
 
     float FluidSimulator::BackwardEuler() const
     {
-       /*       The update rule for Backward-Euler looks like this:                 *
-        *                                                                           *
-        *       (1.)                 x1 = x0 + dt * f(x1)                           *
-        *                                                                           *
-        *       - x1    := Approximated value at the next timestep.                 *
-        *       - x0    := Value at the current timestep.                           *
-        *       - dt    := The timestep size.                                       *
-        *       - f(x1) := Derivative of f at the point x1 with respect to time.    *
-        *                                                                           *
-        *       f(x1) makes this method implicit because we do not know x1 at the   *
-        *       current moment in time, we were trying to solve for x1!             *
-        *       So how do we go on about this?!                                     *
-        *                                                                           *
-        *       To solve for x1, we need to employ numerical methods.               *
-        *       For linear problems, direct algebraic manipulation may suffice.     *
-        *       For nonlinear problems, iterative methods are commonly used.        *
-        *                                                                           *
-        *       With the cost of this additional computational effort comes         *
-        *       the advantage of way higher stability and robustness than with      *
-        *       Forward-Euler.                                                      *
-        *                                                                           *
-        *       Using a nonlinear solver for each step of Backward-Euler:           *
-        *       Source: Cornell University - CS3220 Lecture Notes                   *
-        *       https://www.cs.cornell.edu/~bindel/class/cs3220-s12/lectures.html   */
+       /*       The update rule for Backward-Euler looks like this:                     *
+        *                                                                               *
+        *                            x1 = x0 - dt * f(x1)                               *
+        *                                                                               *
+        *       - x1    := Approximated value at the next timestep.                     *
+        *       - x0    := Value at the current timestep.                               *
+        *       - dt    := The timestep size.                                           *
+        *       - f(x1) := Derivative of f at the point x1 with respect to time.        *
+        *                                                                               *
+        *       f(x1) makes this method implicit because we do not know x1 at the       *
+        *       current moment in time, we were trying to solve for x1!                 *
+        *       So how do we go on about this?!                                         *
+        *                                                                               *
+        *       To solve for x1, we need to employ numerical methods.                   *
+        *       For linear problems, direct algebraic manipulation may suffice.         *
+        *       For nonlinear problems, iterative methods are commonly used.            *
+        *                                                                               *
+        *       With the cost of this additional computational effort comes             *
+        *       the advantage of way higher stability and robustness than with          *
+        *       Forward-Euler.                                                          *
+        *                                                                               *
+        *       Using a nonlinear solver for each step of Backward-Euler:               *
+        *       Source: Cornell University - CS3220 Lecture Notes                       *
+        *       https://www.cs.cornell.edu/~bindel/class/cs3220-s12/lectures.html       */
 
         return 0.0f;
     }
 
-    float FluidSimulator::RungeKutta2() const
+    void FluidSimulator::RungeKutta2(const float dt,  const float pos, const float h,  const float h2,
+                                     const float vel, const float dx,  const float dy, float* prev_pos) const
     {
-        return 0.0f;
+        /*      We wrote the update rule for Forward-Euler above like this:             *
+        *                                                                               *
+        *                        x1 = x0 - dt * f(x0)                                   *
+        *                                                                               *
+        *       Another way of writing it is given by the formula:                      *
+        *                                                                               *
+        *                       y_n+1 = y_n - h * f(t_n, y_n)                           *
+        *                                                                               *
+        *       - y_n+1       := Approximated value at the next step.                   *
+        *       - y_n         := Value at the current step.                             *
+        *       - h           := The step size.                                         *
+        *       - f(t_n, y_n) := y'(t) := Derivative of y as a function of t and y.     *
+        *                                                                               *
+        *       Runge-Kutta 2 (also known as modified Forward-Euler or midpoint         *
+        *       method) is an explicit second-order method with two stages.             *
+        *       It is given by the formula:                                             *
+        *                                                                               *
+        *                       k1    = f(t_n, y_n)                                     *
+        *                       k2    = f(t_n - h/2, y_n - h/2 * k1)                    *
+        *                       y_n+1 = y_n - h * k2                                    */
+
+        //ToDo: Implement
     }
 
     float FluidSimulator::RungeKutta3() const

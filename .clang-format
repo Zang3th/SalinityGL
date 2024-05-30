@@ -1,0 +1,43 @@
+# General settings
+BasedOnStyle: Google
+Language: Cpp
+BreakBeforeBraces: Allman
+
+# Indenting
+IndentWidth: 4
+TabWidth: 4
+IndentAccessModifiers: true
+UseTab: Never
+IndentCaseLabels: true
+NamespaceIndentation: All
+IndentPPDirectives: AfterHash
+
+AllowShortFunctionsOnASingleLine: Empty
+ColumnLimit: 100
+BinPackArguments: false
+BinPackParameters: false
+SpacesInAngles: false
+SpaceBeforeParens: Never
+SpaceAfterCStyleCast: false
+DerivePointerAlignment: false
+PointerAlignment: Left
+SpaceAfterTemplateKeyword: true
+SortIncludes: false
+BreakBeforeBinaryOperators: All
+BreakBeforeTernaryOperators: true
+
+# Alignment
+AlignTrailingComments: true
+AlignAfterOpenBracket: Align
+AlignArrayOfStructures: Right
+AlignConsecutiveAssignments:
+  Enabled: true
+  AcrossEmptyLines: false
+  AcrossComments: false
+  AlignCompound: true
+AlignConsecutiveDeclarations:
+  Enabled: true
+  AcrossEmptyLines: false
+  AcrossComments: false
+  AlignCompound: true
+AlignOperands: AlignAfterOperator

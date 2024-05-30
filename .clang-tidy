@@ -1,0 +1,23 @@
+Checks: "*,
+        -abseil-*,
+        -google-*,
+        -llvm*,
+        -cppcoreguidelines-*,
+        -perfomance-*,
+        -readability-identifier-length,
+        -hicpp-uppercase-literal-suffix,
+        -readability-uppercase-literal-suffix,
+        -readability-function-cognitive-complexity,
+        -readability-magic-numbers,
+        -readability-convert-member-functions-to-static,
+        -bugprone-easily-swappable-parameters,
+        -modernize-use-trailing-return-type,
+        -hicpp-special-member-functions,
+        -fuchsia-default-arguments-calls,
+        -readability-simplify-boolean-expr,
+        -hicpp-use-auto,
+        -modernize-use-auto,
+"
+WarningsAsErrors: ''
+HeaderFilterRegex: ''
+FormatStyle:     none

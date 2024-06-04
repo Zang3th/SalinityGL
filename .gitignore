@@ -7,3 +7,4 @@ BuildRelease.sh
 /.PVS-Studio
 .i
 .cfg
+myeasylog.log

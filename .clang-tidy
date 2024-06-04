@@ -17,6 +17,7 @@ Checks: "*,
         -readability-simplify-boolean-expr,
         -hicpp-use-auto,
         -modernize-use-auto,
+        -cert-err58-cpp,
 "
 WarningsAsErrors: ''
 HeaderFilterRegex: ''

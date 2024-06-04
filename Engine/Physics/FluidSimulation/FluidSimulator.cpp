@@ -351,7 +351,7 @@ namespace Engine
         *prev_pos = pos * h + h2 - dt * vel;
     }
 
-    float FluidSimulator::BackwardEuler() const
+    void FluidSimulator::BackwardEuler() const
     {
        /*       The update rule for Backward-Euler looks like this:                     *
         *                                                                               *
@@ -377,8 +377,6 @@ namespace Engine
         *       Using a nonlinear solver for each step of Backward-Euler:               *
         *       Source: Cornell University - CS3220 Lecture Notes                       *
         *       https://www.cs.cornell.edu/~bindel/class/cs3220-s12/lectures.html       */
-
-        return 0.0f;
     }
 
     void FluidSimulator::RungeKutta2(const float dt,  const float pos, const float h,  const float h2,
@@ -408,9 +406,9 @@ namespace Engine
         //ToDo: Implement
     }
 
-    float FluidSimulator::RungeKutta3() const
+    void FluidSimulator::RungeKutta3() const
     {
-        return 0.0f;
+    
     }
 
     // ----- Public -----

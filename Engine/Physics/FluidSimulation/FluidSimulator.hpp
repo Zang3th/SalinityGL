@@ -24,10 +24,10 @@ namespace Engine
             void AdvectSmoke(float dt);
             void MonitorCFLStability(float dt, float value) const;
             void ForwardEuler(float dt, float pos, float h, float h2, float vel, float* prev_pos);
-            [[nodiscard]] float BackwardEuler() const;
+            void BackwardEuler() const;
             void RungeKutta2(float dt,  float pos, float h,  float h2,
                              float vel, float dx,  float dy, float* prev_pos) const;
-            [[nodiscard]] float RungeKutta3() const;
+            void RungeKutta3() const;
 
         public:
             FluidSimulator();
@@ -36,6 +36,7 @@ namespace Engine
             void Reset() const;
             void AddBorderCell(uint32 x, uint32 y) const;
             void AddHorizonalTurbine(uint32 x, uint32 y, float power, float dt) const;
+
             [[nodiscard]] float GetDensity(uint32 x, uint32 y) const;
     };
 }

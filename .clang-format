@@ -13,7 +13,7 @@ NamespaceIndentation: All
 IndentPPDirectives: AfterHash
 
 AllowShortFunctionsOnASingleLine: Empty
-ColumnLimit: 100
+ColumnLimit: 120
 BinPackArguments: false
 BinPackParameters: false
 SpacesInAngles: false

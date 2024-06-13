@@ -2,8 +2,8 @@
 /Build_Release
 /.idea
 StaticAnalysis.sh
-BuildDebug.sh
-BuildRelease.sh
+DebugBuildScript.sh
+ReleaseBuildScript.sh
 /.PVS-Studio
 .i
 .cfg

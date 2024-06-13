@@ -22,7 +22,7 @@ SpaceAfterCStyleCast: false
 DerivePointerAlignment: false
 PointerAlignment: Left
 SpaceAfterTemplateKeyword: true
-SortIncludes: false
+SortIncludes: true
 BreakBeforeBinaryOperators: All
 BreakBeforeTernaryOperators: true
 

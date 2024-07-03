@@ -1,7 +1,7 @@
 # SalinityGL
 
 [![Build](https://github.com/Zanget3u/GameEngine/actions/workflows/build.yml/badge.svg)](https://github.com/Zanget3u/GameEngine/actions/workflows/build.yml)
-[![Static analysis](https://github.com/Zang3th/GameEngine/actions/workflows/static_analysis.yml/badge.svg)](https://github.com/Zang3th/GameEngine/actions/workflows/static_analysis.yml)
+[![Static Analysis](https://github.com/Zang3th/SalinityGL/actions/workflows/analyze.yml/badge.svg)](https://github.com/Zang3th/SalinityGL/actions/workflows/analyze.yml)
 ![OS](https://img.shields.io/badge/OS-Linux-blue)
 ![Release](https://img.shields.io/badge/Release-v0.1.1-blue)
 

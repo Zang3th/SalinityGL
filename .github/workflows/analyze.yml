@@ -16,8 +16,8 @@ jobs:
           sudo wget -O /etc/apt/sources.list.d/viva64.list \
             https://files.pvs-studio.com/etc/viva64.list
           sudo apt-get update && sudo apt-get upgrade
-          sudo apt-get install libglu1-mesa-dev mesa-common-dev
-          sudo apt-get install pvs-studio
+          sudo apt-get install -y libglu1-mesa-dev mesa-common-dev
+          sudo apt-get install -y pvs-studio
           pvs-studio-analyzer credentials ${{secrets.PVS_STUDIO_CREDENTIALS}}
 
       - name: Build debug config

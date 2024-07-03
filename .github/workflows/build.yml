@@ -1,0 +1,53 @@
+name: Build
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Fetch updates
+        run: sudo apt-get update && sudo apt-get upgrade
+
+      - name: Install OpenGL
+        run: sudo apt-get install libglu1-mesa-dev mesa-common-dev
+
+      - name: Install X virtual framebuffer
+        run: sudo apt-get install xvfb
+
+      - name: Build debug config
+        run: |
+          cmake -B ${{github.workspace}}/Debug_Build -D CMAKE_BUILD_TYPE=Debug -D CMAKE_CXX_FLAGS="-g"
+          cmake --build ${{github.workspace}}/Debug_Build -j
+
+      - name: Run GreenWorld_Debug
+        working-directory: ${{github.workspace}}/Debug_Build
+        run: xvfb-run -a ./GreenWorld & sleep 20 ; kill $!
+
+      - name: Run CellSim_Debug
+        working-directory: ${{github.workspace}}/Debug_Build
+        run: xvfb-run -a ./CellSim & sleep 20 ; kill $!
+
+      - name: Run Liquefied_Debug
+        working-directory: ${{github.workspace}}/Debug_Build
+        run: xvfb-run -a ./Liquefied & sleep 20 ; kill $!
+
+      - name: Build release config
+        run: |
+          cmake -B ${{github.workspace}}/Release_Build -D CMAKE_BUILD_TYPE=Release -D CMAKE_CXX_FLAGS="-O3 -Wno-unused-but-set-variable -Wno-unused-result"
+          cmake --build ${{github.workspace}}/Release_Build -j
+
+      - name: Run GreenWorld_Release
+        working-directory: ${{github.workspace}}/Release_Build
+        run: xvfb-run -a ./GreenWorld & sleep 20 ; kill $!
+
+      - name: Run CellSim_Release
+        working-directory: ${{github.workspace}}/Release_Build
+        run: xvfb-run -a ./CellSim & sleep 20 ; kill $!
+
+      - name: Run Liquefied_Release
+        working-directory: ${{github.workspace}}/Release_Build
+        run: xvfb-run -a ./Liquefied & sleep 20 ; kill $!

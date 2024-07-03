@@ -21,7 +21,7 @@ namespace Liq
 
         public:
             LiquefiedInterface();
-            void InitUI()      override;
+            void Init()        override;
             void AddElements() override;
     };
 }

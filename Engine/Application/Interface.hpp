@@ -36,7 +36,7 @@ namespace Engine
 
             Interface();
             virtual ~Interface();
-            virtual void InitUI()      = 0;
+            virtual void Init()        = 0;
             virtual void AddElements() = 0;
             virtual void CalcElementSizes();
             static  void PrepareFrame();

@@ -13,7 +13,7 @@ namespace CS
 
         public:
             CellSimInterface();
-            void InitUI()      override;
+            void Init()        override;
             void AddElements() override;
     };
 }

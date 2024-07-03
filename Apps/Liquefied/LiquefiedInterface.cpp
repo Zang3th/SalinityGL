@@ -162,13 +162,9 @@ namespace Liq
 
     // ----- Public -----
 
-    LiquefiedInterface::LiquefiedInterface()
-    {
-        InitUI();
-    }
+    LiquefiedInterface::LiquefiedInterface() = default;
 
-
-    void LiquefiedInterface::InitUI()
+    void LiquefiedInterface::Init()
     {
         _menuBarHeight = 0.0f; //Deactivates menu bar for this application
         _windowAlphaValue = 1.0f;

@@ -30,13 +30,13 @@ namespace Liq
         }
     }
 
-    Engine::uint32 LiquefiedApp::InitModules()
+    bool LiquefiedApp::Init()
     {
         //Initialize engine components
         Engine::Logger::Init();
         if(Engine::Window::Init("Liquefied") != EXIT_SUCCESS)
         {
-            return EXIT_FAILURE;
+            return false;
         }
         Engine::RenderManager::Init2D();
 
@@ -54,6 +54,7 @@ namespace Liq
 
         //Create UI
         _interface = Engine::MakeScope<LiquefiedInterface>();
+        _interface->Init();
 
         //Create fluid simulator
         _fluidSimulator = Engine::MakeScope<Engine::FluidSimulator>();
@@ -66,7 +67,7 @@ namespace Liq
         AddBorderCells();
         _gridRenderer->SetConfigAsDefault();
 
-        return EXIT_SUCCESS;
+        return true;
     }
 
     void LiquefiedApp::UpdateTimer() const
@@ -106,17 +107,7 @@ namespace Liq
 
     // ----- Public -----
 
-    LiquefiedApp::LiquefiedApp()
-    {
-        if(InitModules() != EXIT_SUCCESS)
-        {
-            _initSuccess = false;
-        }
-        else
-        {
-            _initSuccess = true;
-        }
-    }
+    LiquefiedApp::LiquefiedApp() = default;
 
     LiquefiedApp::~LiquefiedApp()
     {

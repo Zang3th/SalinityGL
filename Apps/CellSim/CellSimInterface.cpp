@@ -228,12 +228,9 @@ namespace CS
 
     // ----- Public -----
 
-    CellSimInterface::CellSimInterface()
-    {
-        InitUI();
-    }
+    CellSimInterface::CellSimInterface() = default;
 
-    void CellSimInterface::InitUI()
+    void CellSimInterface::Init()
     {
         LoadCustomFont("../Res/Assets/Fonts/JetBrainsMono-Medium.ttf", 19);
         SetDarkThemeColors();

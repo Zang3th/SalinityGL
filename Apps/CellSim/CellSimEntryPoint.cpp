@@ -5,19 +5,17 @@ int main()
     //Create app
     CS::CellSimApp cellSimApp;
 
-    //Check for success
-    if(cellSimApp.GetInitSuccess())
+    //Init and check for success
+    if(cellSimApp.Init())
     {
         //Start app
         while(cellSimApp.IsRunning())
         {
             cellSimApp.Update();
         }
-    }
-    else
-    {
-        return EXIT_FAILURE;
+
+        return 0;
     }
 
-    return EXIT_SUCCESS;
+    return -1;
 }

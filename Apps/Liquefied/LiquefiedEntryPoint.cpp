@@ -5,19 +5,17 @@ int main()
     //Create app
     Liq::LiquefiedApp liquefiedApp;
 
-    //Check for success
-    if(liquefiedApp.GetInitSuccess())
+    //Init and check for success
+    if(liquefiedApp.Init())
     {
         //Start app
         while(liquefiedApp.IsRunning())
         {
             liquefiedApp.Update();
         }
-    }
-    else
-    {
-        return EXIT_FAILURE;
+
+        return 0;
     }
 
-    return EXIT_SUCCESS;
+    return -1;
 }

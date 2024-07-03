@@ -123,12 +123,9 @@ namespace GW
 
     // ----- Public -----
 
-    GreenWorldInterface::GreenWorldInterface()
-    {
-        InitUI();
-    }
+    GreenWorldInterface::GreenWorldInterface() = default;
 
-    void GreenWorldInterface::InitUI()
+    void GreenWorldInterface::Init()
     {
         _windowAlphaValue = 0.65;
         LoadCustomFont("../Res/Assets/Fonts/JetBrainsMono-Medium.ttf", 19);

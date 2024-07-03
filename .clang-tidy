@@ -18,6 +18,8 @@ Checks: "*,
         -hicpp-use-auto,
         -modernize-use-auto,
         -cert-err58-cpp,
+        -hicpp-vararg,
+        -modernize-loop-convert,
 "
 WarningsAsErrors: ''
 HeaderFilterRegex: ''

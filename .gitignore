@@ -1,9 +1,6 @@
-/Build_Debug
-/Build_Release
+/Debug_Build
+/Release_Build
 /.idea
-StaticAnalysis.sh
-DebugBuildScript.sh
-ReleaseBuildScript.sh
 /.PVS-Studio
 .i
 .cfg

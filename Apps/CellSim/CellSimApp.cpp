@@ -13,7 +13,7 @@ namespace CS
         Engine::ResourceManager::LoadShader("CellShader", "../Res/Shader/CellSim/Cell_VS.glsl", "../Res/Shader/CellSim/Cell_FS.glsl");
     }
 
-    Engine::uint32 CellSimApp::InitModules()
+    bool CellSimApp::Init()
     {
         //Configure some global application parameters
         Engine::RenderParams::farPlane      = 1024.0f;
@@ -28,7 +28,7 @@ namespace CS
         Engine::Logger::Init();
         if(Engine::Window::Init("CellSim") != EXIT_SUCCESS)
         {
-            return EXIT_FAILURE;
+            return false;
         }
         Engine::Camera3D::Init();
         Engine::CameraController3D::Init();
@@ -47,11 +47,15 @@ namespace CS
 
         //Create UI
         _interface = Engine::MakeScope<CellSimInterface>();
+        _interface->Init();
 
         //Create timer
         _physicsTimer = Engine::MakeScope<Engine::Timer>(10); //10ms
 
-        return EXIT_SUCCESS;
+        AddObjects();
+        AddCellWorld();
+
+        return true;
     }
 
     void CellSimApp::AddObjects()
@@ -119,19 +123,7 @@ namespace CS
 
     // ----- Public -----
 
-    CellSimApp::CellSimApp()
-    {
-        if(InitModules() != EXIT_SUCCESS)
-        {
-            _initSuccess = false;
-        }
-        else
-        {
-            _initSuccess = true;
-            AddObjects();
-            AddCellWorld();
-        }
-    }
+    CellSimApp::CellSimApp() = default;
 
     CellSimApp::~CellSimApp()
     {

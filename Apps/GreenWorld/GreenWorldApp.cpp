@@ -27,7 +27,7 @@ namespace GW
         Engine::ResourceManager::LoadHeightmap("TerrainHeightmap", "../Res/Assets/Textures/GreenWorld/Heightmap128.bmp");
     }
 
-    Engine::uint32 GreenWorldApp::InitModules()
+    bool GreenWorldApp::Init()
     {
         Engine::CameraParams::startPitch = -24.0f;
         Engine::CameraParams::startPos   = glm::vec3(-75.0f, 74.0f, 70.0f);
@@ -38,7 +38,7 @@ namespace GW
         Engine::Logger::Init();
         if(Engine::Window::Init("GreenWorld") != EXIT_SUCCESS)
         {
-            return EXIT_FAILURE;
+            return false;
         }
         Engine::Camera3D::Init();
         Engine::CameraController3D::Init();
@@ -70,6 +70,7 @@ namespace GW
 
         //Create UI
         _interface = Engine::MakeScope<GreenWorldInterface>();
+        _interface->Init();
 
         //Init audio system
         _audio = Engine::MakeScope<Engine::Audio>();
@@ -79,7 +80,10 @@ namespace GW
             _audio->PlaySound3D("../Res/Assets/Audio/GreenWorld/Sounds/River.wav", true, 4.0f, glm::vec3(39.0f, 14.0f, 56.0f), 0.5f);
         }
 
-        return EXIT_SUCCESS;
+        AddObjects();
+        AddSprites();
+    
+        return true;
     }
 
     void GreenWorldApp::AddObjects()
@@ -199,19 +203,7 @@ namespace GW
 
     // ----- Public -----
 
-    GreenWorldApp::GreenWorldApp()
-    {
-        if(InitModules() != EXIT_SUCCESS)
-        {
-            _initSuccess = false;
-        }
-        else
-        {
-            _initSuccess = true;
-            AddObjects();
-            AddSprites();
-        }
-    }
+    GreenWorldApp::GreenWorldApp() = default;
 
     GreenWorldApp::~GreenWorldApp()
     {

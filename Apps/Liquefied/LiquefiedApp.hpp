@@ -13,16 +13,16 @@ namespace Liq
             Engine::Scope<Engine::FluidSimulator> _fluidSimulator;
             Engine::Scope<Engine::Timer>          _physicsTimer, _inputTimer;
 
-            void           LoadResources()  override;
-            void           AddBorderCells() const;
-            Engine::uint32 InitModules()    override;
-            void           UpdateTimer()    const;
-            void           VisualizeSmoke() const;
+            void LoadResources()  override;
+            void AddBorderCells() const;
+            void UpdateTimer()    const;
+            void VisualizeSmoke() const;
 
         public:
             LiquefiedApp();
-            ~LiquefiedApp()     override;
-            void Update()       override;
-            void ProcessInput() override;
+            ~LiquefiedApp()           override;
+            void Update()             override;
+            void ProcessInput()       override;
+            [[nodiscard]] bool Init() override;
     };
 }

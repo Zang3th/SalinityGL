@@ -15,12 +15,11 @@ namespace CS
             Engine::Scope<Engine::CellManager> _cellManager;
             Engine::Scope<CellSimInterface>    _interface;
 
-            void           LoadResources() override;
-            Engine::uint32 InitModules()   override;
-            void           AddObjects();
-            void           AddCellWorld();
-            void           HandleCellSpawn();
-            void           HandleCellKill();
+            void LoadResources() override;
+            void AddObjects();
+            void AddCellWorld();
+            void HandleCellSpawn();
+            void HandleCellKill();
 
         public:
             CellSimApp();
@@ -29,5 +28,7 @@ namespace CS
 
             //Not needed in this app because we only use a general 3D camera controller to handle input.
             void ProcessInput() override {}
+
+            [[nodiscard]] bool Init() override;
     };
 }

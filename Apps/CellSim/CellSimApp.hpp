@@ -12,6 +12,7 @@ namespace CS
             Engine::uint8                      _tickCounter         = 0;
             bool                               _calcPhysicsThisTurn = true;
             Engine::SceneRenderer*             _sceneRenderer       = nullptr;
+            Engine::CellRenderer*              _cellRenderer        = nullptr;
             Engine::Scope<Engine::CellManager> _cellManager;
             Engine::Scope<CellSimInterface>    _interface;
 

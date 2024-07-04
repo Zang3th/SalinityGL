@@ -4,28 +4,6 @@ namespace Engine
 {
     // ----- Private -----
 
-    ParticleRenderer::ParticleRenderer
-    (
-        uint32 count, float size, float speed, float gravityCompliance, float lifeLength,
-        float respawnThreshold, Texture* textureAtlas, Shader* shader, const glm::vec3& position
-    )
-        :   _count(count), _numberOfRows(textureAtlas->GetNumberOfRows()), _verticeCount(4), _size(size),
-            _speed(speed), _gravityCompliance(gravityCompliance), _lifeLength(lifeLength),
-            _respawnTreshold(respawnThreshold), _textureAtlas(textureAtlas), _shader(shader), _position(position)
-    {
-        Logger::Info("Created", "Renderer", __func__);
-        GenerateParticles();
-        InitGpuStorage();
-    }
-
-    ParticleRenderer::~ParticleRenderer()
-    {
-        for(auto const& p : _particleStorage)
-        { 
-            delete p; 
-        }
-    }
-
     void ParticleRenderer::InitGpuStorage()
     {
         //Create vertice data
@@ -140,6 +118,29 @@ namespace Engine
     }
 
     // ----- Public -----
+
+    ParticleRenderer::ParticleRenderer
+    (
+        uint32 count, float size, float speed, float gravityCompliance, float lifeLength,
+        float respawnThreshold, const std::string& textureAtlas, const std::string& shader, const glm::vec3& position
+    )
+        :   _textureAtlas(ResourceManager::GetTexture(textureAtlas)), _shader(ResourceManager::GetShader(shader)),
+            _count(count), _numberOfRows(_textureAtlas->GetNumberOfRows()), _verticeCount(4), _size(size),
+            _speed(speed), _gravityCompliance(gravityCompliance), _lifeLength(lifeLength),
+            _respawnTreshold(respawnThreshold), _position(position)
+    {
+        Logger::Info("Created", "Renderer", __func__);
+        GenerateParticles();
+        InitGpuStorage();
+    }
+
+    ParticleRenderer::~ParticleRenderer()
+    {
+        for(auto const& p : _particleStorage)
+        { 
+            delete p; 
+        }
+    }
 
     void ParticleRenderer::Flush(Renderer* sceneRenderer)
     {

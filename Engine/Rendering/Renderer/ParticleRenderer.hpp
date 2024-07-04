@@ -17,16 +17,14 @@ namespace Engine
 {
     class ParticleRenderer final : public Renderer
     {
-        friend class RenderManager;
-
         private:
             Scope<VertexArray>      _vao;
             Scope<VertexBuffer>     _vboVert, _vboModel, _vboTex, _vboBlend;
 
-            uint32                  _count, _numberOfRows, _verticeCount;
-            float                   _size, _speed, _gravityCompliance, _lifeLength, _respawnTreshold;
             Texture*                _textureAtlas;
             Shader*                 _shader;
+            uint32                  _count, _numberOfRows, _verticeCount;
+            float                   _size, _speed, _gravityCompliance, _lifeLength, _respawnTreshold;
             glm::vec3               _position;
 
             std::vector<Particle*>  _particleStorage;
@@ -34,19 +32,19 @@ namespace Engine
             std::vector<glm::vec4>  _texOffsetStorage;
             std::vector<float>      _blendFactorStorage;
 
-            ParticleRenderer
-            (
-                uint32 count, float size, float speed, float gravityCompliance, float lifeLength,
-                float respawnThreshold, Texture* textureAtlas, Shader* shader, const glm::vec3& position
-            );
-            ~ParticleRenderer() override;
-
             void      InitGpuStorage();
             void      UpdateGpuStorage();
             void      GenerateParticles();
             glm::mat4 GetModelViewMatrix(const Particle* particle);
 
         public:
+            ParticleRenderer
+            (
+                uint32 count, float size, float speed, float gravityCompliance, float lifeLength,
+                float respawnThreshold, const std::string& textureAtlas, const std::string& shader, const glm::vec3& position
+            );
+            ~ParticleRenderer() override;
+
             void Flush(Renderer* sceneRenderer) override;
     };
 }

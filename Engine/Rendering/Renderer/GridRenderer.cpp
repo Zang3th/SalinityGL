@@ -4,23 +4,6 @@ namespace Engine
 {
     // ----- Private -----
 
-    GridRenderer::GridRenderer
-    (
-        const uint32 width,
-        const uint32 height,
-        const uint32 quadSize,
-        const std::string& shader
-    )
-        :   _gridWidth(width), _gridHeight(height), _quadSize(quadSize), _quadAmountTotal(_gridWidth * _gridHeight),
-            _defaultColor(glm::vec3(0.1f, 0.1f, 0.1f)), _defaultGradientFactor(0.000025f), _shader(ResourceManager::GetShader(shader)),
-            _orthoProj(glm::ortho(0.0f, (float)WindowParams::WIDTH, 0.0f, (float)WindowParams::HEIGHT, -1.0f, 1.0f)),
-            _model(glm::scale(glm::mat4(1.0f), glm::vec3(glm::vec2((float)_quadSize), 0.0f)))
-    {
-        Logger::Info("Created", "Renderer", __func__);
-        _colorStorage.reserve(_quadAmountTotal);
-        InitGpuStorage();
-    }
-
     void GridRenderer::InitGpuStorage()
     {
         //Create vertice data
@@ -61,6 +44,23 @@ namespace Engine
     }
 
     // ----- Public -----
+
+    GridRenderer::GridRenderer
+    (
+        const uint32 width,
+        const uint32 height,
+        const uint32 quadSize,
+        const std::string& shader
+    )
+        :   _gridWidth(width), _gridHeight(height), _quadSize(quadSize), _quadAmountTotal(_gridWidth * _gridHeight),
+            _defaultColor(glm::vec3(0.1f, 0.1f, 0.1f)), _defaultGradientFactor(0.000025f), _shader(ResourceManager::GetShader(shader)),
+            _orthoProj(glm::ortho(0.0f, (float)WindowParams::WIDTH, 0.0f, (float)WindowParams::HEIGHT, -1.0f, 1.0f)),
+            _model(glm::scale(glm::mat4(1.0f), glm::vec3(glm::vec2((float)_quadSize), 0.0f)))
+    {
+        Logger::Info("Created", "Renderer", __func__);
+        _colorStorage.reserve(_quadAmountTotal);
+        InitGpuStorage();
+    }
 
     void GridRenderer::Flush(Renderer* renderer)
     {

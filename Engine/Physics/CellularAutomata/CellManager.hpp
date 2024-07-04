@@ -3,7 +3,8 @@
 #include "CellStorage.hpp"
 #include "Types.hpp"
 #include "GlobalParams.hpp"
-#include "RenderManager.hpp"
+#include "CellRenderer.hpp"
+#include "Random.hpp"
 
 namespace Engine
 {
@@ -22,7 +23,7 @@ namespace Engine
             void HandleWaterCell(uint32 index, const glm::u32vec3& cellPos);
 
         public:
-            CellManager();
+            explicit CellManager(CellRenderer* cellRenderer);
             void AddCellRenderer(const std::string& shader, const glm::vec3& worldSpawnPos);
             void AddCell(const CellParams& cellParams);
             void AddCellWithoutRender(const CellParams& cellParams);

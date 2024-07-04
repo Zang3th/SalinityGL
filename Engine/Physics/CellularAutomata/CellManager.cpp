@@ -152,21 +152,10 @@ namespace Engine
 
     // ----- Public -----
 
-    CellManager::CellManager()
+    CellManager::CellManager(CellRenderer* cellRenderer)
+        : _cellRenderer(cellRenderer)
     {
         _cellSpawnerStorage.reserve(5);
-    }
-
-    void CellManager::AddCellRenderer(const std::string& shader, const glm::vec3& worldSpawnPos)
-    {
-        if(RenderManager::GetInitStatus())
-        {
-            _cellRenderer = Engine::RenderManager::AddCellRenderer(shader, worldSpawnPos);
-        }
-        else
-        {
-            Logger::Error("Failed", "CellRenderer", "RenderManager wasn't initialized!");
-        }
     }
 
     void CellManager::AddCell(const CellParams& cellParams)

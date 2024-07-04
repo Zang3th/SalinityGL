@@ -44,13 +44,14 @@ namespace Liq
         LoadResources();
 
         //Create grid renderer
-        _gridRenderer = Engine::RenderManager::AddGridRenderer
+        _gridRenderer = new Engine::GridRenderer
         (
             Engine::LiquiefiedParams::SIMULATION_WIDTH,
             Engine::LiquiefiedParams::SIMULATION_HEIGHT,
             10,
             "GridShader"
         );
+        Engine::RenderManager::Submit(_gridRenderer);
 
         //Create UI
         _interface = Engine::MakeScope<LiquefiedInterface>();

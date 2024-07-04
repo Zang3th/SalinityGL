@@ -4,14 +4,6 @@ namespace Engine
 {
     // ----- Private -----
 
-    CellRenderer::CellRenderer(Shader* shader, const glm::vec3& worldSpawnPos)
-        :   _verticeCount(36), _shader(shader), _worldSpawnPos(worldSpawnPos), _positionStorage{glm::vec3(0.0f)},
-            _colorStorage{glm::vec3(1.0f)}
-    {
-        Logger::Info("Created", "Renderer", __func__);
-        InitGpuStorage();
-    }
-
     void CellRenderer::InitGpuStorage()
     {
         //Create and bind vao
@@ -51,6 +43,14 @@ namespace Engine
     }
 
     // ----- Public -----
+
+    CellRenderer::CellRenderer(const std::string& shader, const glm::vec3& worldSpawnPos)
+        :   _verticeCount(36), _shader(ResourceManager::GetShader(shader)), _worldSpawnPos(worldSpawnPos), _positionStorage{glm::vec3(0.0f)},
+            _colorStorage{glm::vec3(1.0f)}
+    {
+        Logger::Info("Created", "Renderer", __func__);
+        InitGpuStorage();
+    }
 
     void CellRenderer::Flush(Renderer* sceneRenderer)
     {

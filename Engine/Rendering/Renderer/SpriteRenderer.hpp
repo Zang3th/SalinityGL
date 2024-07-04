@@ -14,14 +14,11 @@ namespace Engine
 {
     class SpriteRenderer final : public Renderer
     {
-        friend class RenderManager;
-
         private:
             std::vector<Sprite*> _spriteStorage;
 
-            SpriteRenderer();
-
         public:
+            SpriteRenderer();
             void Flush(Renderer* renderer) override;
             void AddSprite(const glm::vec2& size, const glm::vec2& pos, Texture* texture, Shader* shader);
     };

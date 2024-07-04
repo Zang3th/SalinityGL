@@ -4,10 +4,22 @@ namespace Engine
 {
     // ----- Private -----
 
-    ShadowRenderer::ShadowRenderer(uint32 width, uint32 height, const glm::mat4& orthoProj, Shader* shader)
+    void ShadowRenderer::StartFrame()
+    {
+        _fbo->Bind(_shadowWidth, _shadowHeight);
+    }
+
+    void ShadowRenderer::EndFrame()
+    {
+        _fbo->Unbind();
+    }
+
+    // ----- Public -----
+
+    ShadowRenderer::ShadowRenderer(uint32 width, uint32 height, const glm::mat4& orthoProj, const std::string& shader)
         :   _lightView(glm::lookAt(LightParams::position, LightParams::target, glm::vec3(0.0f, 1.0f, 0.0f))),
             _lightProjection(orthoProj * _lightView),
-            _shadowWidth(width), _shadowHeight(height), _shadowShader(shader)
+            _shadowWidth(width), _shadowHeight(height), _shadowShader(ResourceManager::GetShader(shader))
     {
         //Create and configure framebuffer
         _fbo = MakeScope<FrameBuffer>();
@@ -24,18 +36,6 @@ namespace Engine
 
         Logger::Info("Created", "Renderer", __func__);
     }
-
-    void ShadowRenderer::StartFrame()
-    {
-        _fbo->Bind(_shadowWidth, _shadowHeight);
-    }
-
-    void ShadowRenderer::EndFrame()
-    {
-        _fbo->Unbind();
-    }
-
-    // ----- Public -----
 
     void ShadowRenderer::Flush(Renderer* sceneRenderer)
     {

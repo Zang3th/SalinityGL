@@ -48,14 +48,23 @@ namespace GW
         LoadResources();
 
         //Create application specific renderers
-        _sceneRenderer  = Engine::RenderManager::AddSceneRenderer();
+        _sceneRenderer = new Engine::SceneRenderer();
         _sceneRenderer->SetTerrainShader("TerrainShader");
         _sceneRenderer->SetModelShader("ModelShader");
         _sceneRenderer->SetWaterShader("WaterShader");
-        _shadowRenderer = Engine::RenderManager::AddShadowRenderer(8192, glm::ortho(-90.0f, 90.0f, -90.0f, 90.0f, 110.0f, 210.0f), "ShadowCreateShader");
-        _waterRenderer  = Engine::RenderManager::AddWaterRenderer();
-        _spriteRenderer = Engine::RenderManager::AddSpriteRenderer();
-        Engine::RenderManager::AddParticleRenderer
+        Engine::RenderManager::Submit(_sceneRenderer);
+
+        _shadowRenderer = new Engine::ShadowRenderer(8192, 8192, glm::ortho(-90.0f, 90.0f, -90.0f, 90.0f, 110.0f, 210.0f), "ShadowCreateShader");
+        _sceneRenderer->AddLightProjection(_shadowRenderer->GetLightProjection());
+        Engine::RenderManager::Submit(_shadowRenderer);
+    
+        _waterRenderer  = new Engine::WaterRenderer();
+        Engine::RenderManager::Submit(_waterRenderer);
+
+        _spriteRenderer = new Engine::SpriteRenderer();
+        Engine::RenderManager::Submit(_spriteRenderer);
+
+        _particleRenderer = new Engine::ParticleRenderer
         (
             200,
             5.0f,
@@ -67,6 +76,7 @@ namespace GW
             "ParticleShader",
             glm::vec3(87.0f, 34.0f, 92.5f)
         );
+        Engine::RenderManager::Submit(_particleRenderer);
 
         //Create UI
         _interface = Engine::MakeScope<GreenWorldInterface>();
@@ -234,24 +244,24 @@ namespace GW
         {
             Engine::PROFILE_SCOPE("Render shadows");
 
-            Engine::RenderManager::RenderShadows();
+            _shadowRenderer->Flush((Engine::Renderer*)_sceneRenderer);
         }
 
         {
             Engine::PROFILE_SCOPE("Render water");
 
-            Engine::RenderManager::RenderWater();
+            _waterRenderer->Flush((Engine::Renderer*)_sceneRenderer);
         }
 
         {
             Engine::PROFILE_SCOPE("Render scene");
 
-            Engine::RenderManager::RenderScene();
-            Engine::RenderManager::RenderParticles();
+            _sceneRenderer->Flush(nullptr);
+            _particleRenderer->Flush((Engine::Renderer*)_sceneRenderer);
 
             if(Engine::UIParams::debugSprites)
             {
-                Engine::RenderManager::RenderSprites();
+                _spriteRenderer->Flush(nullptr);
             }
         }
 

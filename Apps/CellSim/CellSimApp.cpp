@@ -38,12 +38,15 @@ namespace CS
         LoadResources();
 
         //Create application specific renderers
-        _sceneRenderer  = Engine::RenderManager::AddSceneRenderer();
+        _sceneRenderer = new Engine::SceneRenderer();
         _sceneRenderer->SetModelShader("ModelShader");
+        Engine::RenderManager::Submit(_sceneRenderer);
+
+        _cellRenderer = new Engine::CellRenderer("CellShader", glm::vec3(-30.0f, 0.5f, -30.0f));
+        Engine::RenderManager::Submit(_cellRenderer);
 
         //Create cell manager and add cell renderer
-        _cellManager = Engine::MakeScope<Engine::CellManager>();
-        _cellManager->AddCellRenderer("CellShader", glm::vec3(-30.0f, 0.5f, -30.0f));
+        _cellManager = Engine::MakeScope<Engine::CellManager>(_cellRenderer);
 
         //Create UI
         _interface = Engine::MakeScope<CellSimInterface>();
@@ -239,13 +242,13 @@ namespace CS
         {
             Engine::PROFILE_SCOPE("Render scene");
 
-            Engine::RenderManager::RenderScene();
+            _sceneRenderer->Flush(nullptr);
         }
 
         {
             Engine::PROFILE_SCOPE("Render cells");
 
-            Engine::RenderManager::RenderCells();
+            _cellRenderer->Flush((Engine::Renderer*)_sceneRenderer);
         }
 
         {

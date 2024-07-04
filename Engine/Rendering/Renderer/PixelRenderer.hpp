@@ -13,12 +13,11 @@ namespace Engine
 {
     class PixelRenderer final : public Renderer
     {
-        friend class RenderManager;
-
         private:
             uint32 _width, _height, _pxSize;
             Sprite _canvasSprite;
 
+        public:
             PixelRenderer
             (
                       uint32 width,
@@ -28,7 +27,6 @@ namespace Engine
                 const std::string& shader
             );
 
-        public:
             void Flush(Renderer* renderer) override;
             void Set(uint32 x, uint32 y, const glm::vec3& color) const;
             void SetArea(uint32 x_start, uint32 x_end, uint32 y_start, uint32 y_end, const glm::vec3& color) const;

@@ -15,8 +15,6 @@ namespace Engine
 {
     class CellRenderer final : public Renderer
     {
-        friend class RenderManager;
-
         private:
             Scope<VertexArray>  _vao;
             Scope<VertexBuffer> _vboVert, _vboPos, _vboColor;
@@ -28,14 +26,14 @@ namespace Engine
             std::array<glm::vec3, CellSimParams::MAX_CELL_AMOUNT> _positionStorage;
             std::array<glm::vec3, CellSimParams::MAX_CELL_AMOUNT> _colorStorage;
 
-            CellRenderer(Shader* shader, const glm::vec3& worldSpawnPos);
-            ~CellRenderer() override = default;
-
             void InitGpuStorage();
             void UploadGPUStorage();
 
         public:
-            void Flush(Renderer* renderer) override;
+            CellRenderer(const std::string& shader, const glm::vec3& worldSpawnPos);
+            ~CellRenderer() override = default;
+
+            void Flush(Renderer* sceneRenderer) override;
             void UpdateGPUStorage(uint32 index, const glm::u32vec3& cellPos, const glm::vec3& cellColor);
     };
 }

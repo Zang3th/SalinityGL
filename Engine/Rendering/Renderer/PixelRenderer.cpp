@@ -2,7 +2,7 @@
 
 namespace Engine
 {
-    // ----- Private -----
+    // ----- Public -----
 
     PixelRenderer::PixelRenderer
     (
@@ -20,8 +20,6 @@ namespace Engine
     {
         Logger::Info("Created", "Renderer", __func__);
     }
-
-    // ----- Public -----
 
     void PixelRenderer::Flush(Renderer* renderer)
     {

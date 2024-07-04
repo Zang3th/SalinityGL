@@ -21,8 +21,6 @@ namespace Engine
 {
     class SceneRenderer final : public Renderer
     {
-        friend class RenderManager;
-
         private:
             float     _moveFactor, _waveSpeed;
             glm::mat4 _perspProj, _lightProj;
@@ -32,14 +30,14 @@ namespace Engine
             Model              *_terrainModel, *_waterModel, *_planeModel;
             Shader             *_terrainShader, *_modelShader, *_waterShader;
 
-            SceneRenderer();
-            ~SceneRenderer() override;
-
             void FlushModel(Model* model, Shader* shader);
             void FlushWater();
             void UpdateMoveFactor();
 
         public:
+            SceneRenderer();
+            ~SceneRenderer() override;
+
             void Flush(Renderer* renderer) override;
             void FlushModels(Shader* shader);
             void FlushCubemap();

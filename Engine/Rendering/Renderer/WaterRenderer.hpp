@@ -10,8 +10,6 @@ namespace Engine
 {
     class WaterRenderer final : public Renderer
     {
-        friend class RenderManager;
-
         private:
             Scope<FrameBuffer>  _reflectFBO, _refractFBO;
             const uint32        _reflectionWidth  = 1024;
@@ -21,8 +19,6 @@ namespace Engine
             const float         _waterHeight      = 0.5f;
             const glm::vec4     _reflectionClipPlane = glm::vec4(0.0f, 1.0f, 0.0f, -_waterHeight);
             const glm::vec4     _refractionClipPlane = glm::vec4(0.0f, -1.0f, 0.0f, _waterHeight);
-
-            WaterRenderer();
 
             void InitReflectionFBO();
             void InitRefractionFBO();
@@ -34,6 +30,8 @@ namespace Engine
             void RenderRefractionFrame(SceneRenderer* sceneRenderer);
 
         public:
+            WaterRenderer();
+
             void Flush(Renderer* sceneRenderer) override;
             
             [[nodiscard]] Texture* GetReflectTexture()      const;

@@ -8,10 +8,11 @@ namespace GW
     class GreenWorldApp final : public Engine::App
     {
         private:
-            Engine::SceneRenderer*             _sceneRenderer  = nullptr;
-            Engine::ShadowRenderer*            _shadowRenderer = nullptr;
-            Engine::WaterRenderer*             _waterRenderer  = nullptr;
-            Engine::SpriteRenderer*            _spriteRenderer = nullptr;
+            Engine::SceneRenderer*             _sceneRenderer    = nullptr;
+            Engine::ShadowRenderer*            _shadowRenderer   = nullptr;
+            Engine::WaterRenderer*             _waterRenderer    = nullptr;
+            Engine::ParticleRenderer*          _particleRenderer = nullptr;
+            Engine::SpriteRenderer*            _spriteRenderer   = nullptr;
             Engine::Scope<GreenWorldInterface> _interface;
             Engine::Scope<Engine::Audio>       _audio;
     

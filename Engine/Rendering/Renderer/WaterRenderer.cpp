@@ -4,13 +4,6 @@ namespace Engine
 {
     // ----- Private -----
 
-    WaterRenderer::WaterRenderer()
-    {
-        Logger::Info("Created", "Renderer", __func__);
-        InitReflectionFBO();
-        InitRefractionFBO();
-    }
-
     void WaterRenderer::InitReflectionFBO()
     {
         //Create and configure framebuffer
@@ -112,6 +105,13 @@ namespace Engine
     }
 
     // ----- Public -----
+
+    WaterRenderer::WaterRenderer()
+    {
+        Logger::Info("Created", "Renderer", __func__);
+        InitReflectionFBO();
+        InitRefractionFBO();
+    }
 
     void WaterRenderer::Flush(Renderer* sceneRenderer)
     {

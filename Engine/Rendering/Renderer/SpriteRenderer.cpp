@@ -2,14 +2,12 @@
 
 namespace Engine
 {
-    // ----- Private -----
+    // ----- Public -----
 
     SpriteRenderer::SpriteRenderer()
     {
         Logger::Info("Created", "Renderer", __func__);
     }
-
-    // ----- Public -----
 
     void SpriteRenderer::Flush(Renderer* renderer)
     {

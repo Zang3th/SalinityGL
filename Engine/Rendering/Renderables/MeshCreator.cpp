@@ -115,7 +115,9 @@ namespace Engine
                 auto zPos = (float)j;
 
                 if(heightmap)
-                    yPos = (float)heightmap->GetValueAt(i, j);
+                { 
+                    yPos = (float)heightmap->GetValueAt(i, j); 
+                }
 
                 mesh->vertices.emplace_back(xPos * tileSize, yPos, zPos * tileSize);
                 mesh->texCoords.emplace_back(zPos, xPos); //Flip texture coordinates

@@ -248,7 +248,7 @@ namespace Engine
         //Create models out of meshes and store these
         for(const auto& mesh : meshes)
         {
-            auto objModel = new Model(&mesh);
+            auto *objModel = new Model(&mesh);
 
             objModel->AddTextureToSlot(depthTexture, 1);
             objModel->ChangeSize(size);

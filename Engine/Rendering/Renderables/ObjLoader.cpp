@@ -9,11 +9,14 @@ namespace Engine
         tinyobj::attrib_t attrib;
         std::vector<tinyobj::shape_t> shapes;
         std::vector<tinyobj::material_t> materials;
-        std::string warn, err;
+        std::string warn;
+        std::string err;
         std::string objFullFilepath = baseFilepath + "/" + filename + ".obj";
 
         if(!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, objFullFilepath.c_str(), baseFilepath.c_str()))
-            Logger::Error("Failed", "OBJ-Loading", objFullFilepath);
+        { 
+            Logger::Error("Failed", "OBJ-Loading", objFullFilepath); 
+        }
         else
         {
             std::string objInfo0 = "(Shapes: "    + std::to_string(shapes.size())          + ", Materials: " + std::to_string(materials.size())  + ")";
@@ -26,9 +29,13 @@ namespace Engine
 
         //Additional error checking to catch edge cases
         if(!warn.empty())
-            Logger::Warn("Warning", "tinyobj", warn);
+        { 
+            Logger::Warn("Warning", "tinyobj", warn); 
+        }
         if(!err.empty())
-            Logger::Error("Error", "tinyobj", err);
+        { 
+            Logger::Error("Error", "tinyobj", err); 
+        }
 
         //Iterate over all shapes
         for(uint32 i = 0; i < shapes.size(); i++)

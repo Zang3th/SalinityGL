@@ -18,6 +18,9 @@
 
 #ifndef EASYLOGGINGPP_H
 #define EASYLOGGINGPP_H
+// Custom defines
+#define ELPP_NO_LOG_TO_FILE
+#define ELPP_NO_DEFAULT_LOG_FILE
 // Compilers and C++0x/C++11 Evaluation
 #if __cplusplus >= 201103L
 #  define ELPP_CXX11 1

@@ -105,7 +105,9 @@ namespace Engine
     {
         //Check if uniform is in cache, otherwise cache it and return the location
         if (_uniformLocationCache.find(name) != _uniformLocationCache.end())
-                return _uniformLocationCache[name];
+        {
+            return _uniformLocationCache[name]; 
+        }
 
         GLCall(int32 location = glGetUniformLocation(_shaderID, name.c_str()))
         _uniformLocationCache[name] = location;

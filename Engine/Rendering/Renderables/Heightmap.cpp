@@ -50,27 +50,35 @@ namespace Engine
             }
         }
         else
-            Logger::Error("Failed", "Heightmap-Load.", filepath);
+        { 
+            Logger::Error("Failed", "Heightmap-Load.", filepath); 
+        }
 
         stbi_image_free(localBuffer);
     }
 
     float Heightmap::GetValueAt(const uint32 x, const uint32 z) const
     {
+        float value = 0.0f;
+
         //Return value at given position with some special treatment for the edges
-
         if(x < RenderParams::planeSize && z < RenderParams::planeSize)
-            return _heightmap.at(RenderParams::planeSize * x + z);
-
+        { 
+            value = _heightmap.at(RenderParams::planeSize * x + z); 
+        }
         else if(x-1 < RenderParams::planeSize && z < RenderParams::planeSize)
-            return _heightmap.at(RenderParams::planeSize * (x-1) + z);
-
+        { 
+            value = _heightmap.at(RenderParams::planeSize * (x-1) + z); 
+        }
         else if(x < RenderParams::planeSize && z-1 < RenderParams::planeSize)
-            return _heightmap.at(RenderParams::planeSize * x + (z-1));
-
+        { 
+            value = _heightmap.at(RenderParams::planeSize * x + (z-1)); 
+        }
         else if(x-1 < RenderParams::planeSize && z-1 < RenderParams::planeSize)
-            return _heightmap.at(RenderParams::planeSize * (x-1) + (z-1));
+        { 
+            value = _heightmap.at(RenderParams::planeSize * (x-1) + (z-1)); 
+        }
 
-        return 0;
+        return value;
     }
 }

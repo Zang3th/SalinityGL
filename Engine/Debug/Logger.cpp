@@ -11,10 +11,10 @@ namespace Engine
         el::Loggers::addFlag(el::LoggingFlag::ColoredTerminalOutput);
 
         //Configure logger
-        el::Configurations defaultConf;
-        defaultConf.setToDefault();
-        defaultConf.setGlobally(el::ConfigurationType::Format, "%datetime{%s:%g} [%level] %msg");
-        el::Loggers::reconfigureLogger("default", defaultConf);
+        el::Configurations config;
+        config.setToDefault();
+        config.setGlobally(el::ConfigurationType::Format, "%datetime{%s:%g} [%level] %msg");
+        el::Loggers::reconfigureLogger("default", config);
     }
 
     void Logger::Info(const std::string& action, const std::string& obj, const std::string& params)

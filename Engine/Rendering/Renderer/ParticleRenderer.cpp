@@ -21,7 +21,9 @@ namespace Engine
     ParticleRenderer::~ParticleRenderer()
     {
         for(auto const& p : _particleStorage)
-            delete p;
+        { 
+            delete p; 
+        }
     }
 
     void ParticleRenderer::InitGpuStorage()
@@ -93,16 +95,16 @@ namespace Engine
         {
             //Create and randomize the parameters a bit to deviate the particles
             glm::vec3 pos = _position;
-            glm::vec3 vel = glm::vec3(2.0f * ((Random::GetFloat() - 0.5f) * 2.0f),
-                                     25.0f * ((Random::GetFloat())        * 1.5f),
-                                      2.0f * ((Random::GetFloat() - 0.5f) * 2.0f)) * _speed;
+            glm::vec3 vel = glm::vec3( 2.0f * ((Random::GetFloat() - 0.5f) * 2.0f),
+                                      25.0f * ((Random::GetFloat())        * 1.5f),
+                                       2.0f * ((Random::GetFloat() - 0.5f) * 2.0f)) * _speed;
             float grav = _gravityCompliance;
             float life = _lifeLength + ((Random::GetFloat() - 0.5f) * 4.0f);
             float rot  = 0.0f;
             float size = _size * Random::GetFloat();
 
             //Create particle
-            auto particle = new Particle(pos, vel, grav, life, rot, size, _numberOfRows);
+            auto *particle = new Particle(pos, vel, grav, life, rot, size, _numberOfRows);
 
             //Save the different components
             _particleStorage.push_back(particle);

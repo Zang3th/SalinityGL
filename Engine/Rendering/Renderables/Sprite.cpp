@@ -75,7 +75,9 @@ namespace Engine
 
         //Bind texture
         if(_texture)
-            _texture->Bind();
+        { 
+            _texture->Bind(); 
+        }
 
         //Bind vao and vbo
         _vao->Bind();
@@ -95,7 +97,9 @@ namespace Engine
 
         //Unbind texture
         if(_texture)
-            _texture->Unbind();
+        { 
+            _texture->Unbind(); 
+        }
 
         //Unbind shader
         _shader->Unbind();

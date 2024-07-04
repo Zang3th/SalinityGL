@@ -38,16 +38,10 @@ namespace Engine
 
     void PixelRenderer::Set(const uint32 x, const uint32 y, const glm::vec3& color) const
     {
-        const uint32 x_end = x * _pxSize;
-        const uint32 y_end = y * _pxSize;
-        uint32 x_start = 0;
-        uint32 y_start = 0;
-
-        if(x_start > _pxSize)
-            x_start = x_end - _pxSize;
-
-        if(y_start > _pxSize)
-            y_start = y_end - _pxSize;
+        const uint32 x_end   = x * _pxSize;
+        const uint32 y_end   = y * _pxSize;
+        const uint32 x_start = x_end - _pxSize;
+        const uint32 y_start = y_end - _pxSize;
 
         SetArea(x_start, x_end, y_start, y_end, color);
     }

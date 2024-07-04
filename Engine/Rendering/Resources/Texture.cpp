@@ -10,14 +10,17 @@ namespace Engine
         _imgBuffer = stbi_load(filepath.c_str(), &_width, &_height, &_nrChannels, 0);
         DeactivateTextureFlipOnLoad();
 
-        if(_saveToBuffer)
-        {
-            _backupBuffer = (unsigned char*)malloc(_width * _height * 3);
-            std::memcpy(_backupBuffer, _imgBuffer, _width * _height * 3);
-        }
-
         if(_imgBuffer != nullptr)
         {
+            if(_saveToBuffer)
+            {
+                _backupBuffer = (unsigned char*)malloc(_width * _height * 3);
+                if(_backupBuffer != nullptr)
+                {
+                    std::memcpy(_backupBuffer, _imgBuffer, _width * _height * 3);
+                }
+            }
+
             if(_nrChannels == 1)
             {
                 _format = GL_RED;
@@ -35,7 +38,6 @@ namespace Engine
                 _format = 0;
                 Logger::Error("Failed", "Image-Texture-Format", filepath);
             }
-
 
             if(_format != 0)
             {
@@ -60,7 +62,9 @@ namespace Engine
             }
         }
         else
+        {
             Logger::Error("Failed", "Texture-Load", filepath);
+        }
 
         if(!_saveToBuffer)
         {

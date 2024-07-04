@@ -19,13 +19,21 @@ namespace Engine
             {
                 GLenum format = 0;
                 if(nrChannels == 1)
-                    format = GL_RED;
+                { 
+                    format = GL_RED; 
+                }
                 else if(nrChannels == 3)
-                    format = GL_RGB;
+                { 
+                    format = GL_RGB; 
+                }
                 else if(nrChannels == 4)
-                    format = GL_RGBA;
+                { 
+                    format = GL_RGBA; 
+                }
                 else
-                    Logger::Error("Failed", "Cubemap-Format", faces[i]);
+                { 
+                    Logger::Error("Failed", "Cubemap-Format", faces[i]); 
+                }
 
                 if(format != 0)
                 {
@@ -37,7 +45,9 @@ namespace Engine
                 }
             }
             else
-                Logger::Error("Failed", "Cubemap-Load.", faces[i]);
+            { 
+                Logger::Error("Failed", "Cubemap-Load.", faces[i]); 
+            }
 
             stbi_image_free(localBuffer);
         }

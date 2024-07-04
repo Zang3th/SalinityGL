@@ -31,7 +31,9 @@ namespace Engine
     void RenderManager::CleanUp()
     {
         for(auto const& renderer : _rendererStorage)
-            delete renderer;
+        { 
+            delete renderer; 
+        }
     }
 
     void RenderManager::PrepareFrame()

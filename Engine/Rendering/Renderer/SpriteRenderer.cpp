@@ -31,7 +31,7 @@ namespace Engine
 
     void SpriteRenderer::AddSprite(const glm::vec2& size, const glm::vec2& pos, Texture* texture, Shader* shader)
     {
-        auto sprite = new Sprite(texture, shader, glm::vec3(1.0f), size);
+        auto *sprite = new Sprite(texture, shader, glm::vec3(1.0f), size);
         sprite->ChangePosition(pos);
         _spriteStorage.push_back(sprite);
     }

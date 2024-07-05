@@ -46,20 +46,20 @@ namespace Liq
                 if(ImGui::BeginTabItem("Integrator"))
                 {
                     ImGui::NewLine();
-                    ImGui::RadioButton("Forward Euler", (int*)&Engine::LiquiefiedParams::integratorChoice, Engine::Integrator::ForwardEuler);
-                    ImGui::RadioButton("Backward Euler", (int*)&Engine::LiquiefiedParams::integratorChoice, Engine::Integrator::BackwardEuler);
-                    ImGui::RadioButton("Runge Kutta 2", (int*)&Engine::LiquiefiedParams::integratorChoice, Engine::Integrator::RungeKutta2);
-                    ImGui::RadioButton("Runge Kutta 3", (int*)&Engine::LiquiefiedParams::integratorChoice, Engine::Integrator::RungeKutta3);
+                    ImGui::RadioButton("Forward Euler", (int*)&Engine::LiquefiedParams::integratorChoice, Engine::Integrator::ForwardEuler);
+                    ImGui::RadioButton("Backward Euler", (int*)&Engine::LiquefiedParams::integratorChoice, Engine::Integrator::BackwardEuler);
+                    ImGui::RadioButton("Runge Kutta 2", (int*)&Engine::LiquefiedParams::integratorChoice, Engine::Integrator::RungeKutta2);
+                    ImGui::RadioButton("Runge Kutta 3", (int*)&Engine::LiquefiedParams::integratorChoice, Engine::Integrator::RungeKutta3);
                     ImGui::EndTabItem();
                 }
 
                 if(ImGui::BeginTabItem("Visualization"))
                 {
                     ImGui::NewLine();
-                    ImGui::RadioButton("No visualization", (int*)&Engine::LiquiefiedParams::visualizationChoice, Engine::Visualization::Nothing);
-                    ImGui::RadioButton("Greyscale", (int*)&Engine::LiquiefiedParams::visualizationChoice, Engine::Visualization::Greyscale);
-                    ImGui::RadioButton("BlackBody", (int*)&Engine::LiquiefiedParams::visualizationChoice, Engine::Visualization::BlackBody);
-                    ImGui::RadioButton("ParaView", (int*)&Engine::LiquiefiedParams::visualizationChoice, Engine::Visualization::ParaView);
+                    ImGui::RadioButton("No visualization", (int*)&Engine::LiquefiedParams::visualizationChoice, Engine::Visualization::Nothing);
+                    ImGui::RadioButton("Greyscale", (int*)&Engine::LiquefiedParams::visualizationChoice, Engine::Visualization::Greyscale);
+                    ImGui::RadioButton("BlackBody", (int*)&Engine::LiquefiedParams::visualizationChoice, Engine::Visualization::BlackBody);
+                    ImGui::RadioButton("ParaView", (int*)&Engine::LiquefiedParams::visualizationChoice, Engine::Visualization::ParaView);
                     ImGui::EndTabItem();
                 }
 
@@ -69,7 +69,7 @@ namespace Liq
                     ImGui::Text("Turbine power: ");
                     ImGui::SameLine();
                     ImGui::PushItemWidth(150.0f);
-                    Input_u32("##Input1", &Engine::LiquiefiedParams::turbinePower, 10, 100);
+                    Input_u32("##Input1", &Engine::LiquefiedParams::turbinePower, 10, 100);
                     ImGui::EndTabItem();
                 }
 
@@ -78,7 +78,7 @@ namespace Liq
                 ImGui::EndTabBar();
             }
             // --- Numerical value monitoring
-            if(Engine::LiquiefiedParams::activateDebugging)
+            if(Engine::LiquefiedParams::activateDebugging)
             {
                 ImGui::NewLine();
                 ImGui::Separator();
@@ -143,17 +143,17 @@ namespace Liq
             ImGui::Checkbox("Wireframe Rendering  (W)", &Engine::UIParams::wireframeRendering);
             ImGui::SetCursorPosY(45.0f);
             ImGui::SetCursorPosX(10.0f);
-            ImGui::Checkbox("Pause Simulation (SPACE)", &Engine::LiquiefiedParams::pauseSimulation);
+            ImGui::Checkbox("Pause Simulation (SPACE)", &Engine::LiquefiedParams::pauseSimulation);
             AddVerticalBarDivider(255.0f);
 
             ImGui::SetCursorPosY(10.0f);
             ImGui::SetCursorPosX(275.0f);
-            ImGui::Checkbox("Activate Debugging (A)", &Engine::LiquiefiedParams::activateDebugging);
+            ImGui::Checkbox("Activate Debugging (A)", &Engine::LiquefiedParams::activateDebugging);
             ImGui::SetCursorPosY(45.0f);
             ImGui::SetCursorPosX(275.0f);
             if(ImGui::Button("Reset Simulation (R)"))
             {
-                Engine::LiquiefiedParams::resetSimulation = true;
+                Engine::LiquefiedParams::resetSimulation = true;
             }
             AddVerticalBarDivider(500.0f);
         }

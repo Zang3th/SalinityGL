@@ -12,13 +12,13 @@ namespace Liq
 
     void LiquefiedApp::AddBorderCells() const
     {
-        for(Engine::uint32 x = 0; x < Engine::LiquiefiedParams::SIMULATION_WIDTH; x++)
+        for(Engine::uint32 x = 0; x < Engine::LiquefiedParams::SIMULATION_WIDTH; x++)
         {
-            for(Engine::uint32 y = 0; y < Engine::LiquiefiedParams::SIMULATION_HEIGHT; y++)
+            for(Engine::uint32 y = 0; y < Engine::LiquefiedParams::SIMULATION_HEIGHT; y++)
             {
                 if((x == 0) || (y == 0) ||
-                   (x == Engine::LiquiefiedParams::SIMULATION_WIDTH-1) ||
-                   (y == Engine::LiquiefiedParams::SIMULATION_HEIGHT-1))
+                   (x == Engine::LiquefiedParams::SIMULATION_WIDTH-1) ||
+                   (y == Engine::LiquefiedParams::SIMULATION_HEIGHT-1))
                 {
                     //Add solid cell to simulation grid
                     _fluidSimulator->AddBorderCell(x, y);
@@ -46,8 +46,8 @@ namespace Liq
         //Create grid renderer
         _gridRenderer = new Engine::GridRenderer
         (
-            Engine::LiquiefiedParams::SIMULATION_WIDTH,
-            Engine::LiquiefiedParams::SIMULATION_HEIGHT,
+            Engine::LiquefiedParams::SIMULATION_WIDTH,
+            Engine::LiquefiedParams::SIMULATION_HEIGHT,
             10,
             "GridShader"
         );
@@ -82,21 +82,21 @@ namespace Liq
     {
         glm::vec3 color{0.0f};
 
-        for(Engine::uint32 x = 1; x < Engine::LiquiefiedParams::SIMULATION_WIDTH-1; x++)
+        for(Engine::uint32 x = 1; x < Engine::LiquefiedParams::SIMULATION_WIDTH-1; x++)
         {
-            for(Engine::uint32 y = 1; y < Engine::LiquiefiedParams::SIMULATION_HEIGHT-1; y++)
+            for(Engine::uint32 y = 1; y < Engine::LiquefiedParams::SIMULATION_HEIGHT-1; y++)
             {
                 const float val = _fluidSimulator->GetDensity(x, y);
 
-                if(Engine::LiquiefiedParams::visualizationChoice == Engine::Visualization::Greyscale)
+                if(Engine::LiquefiedParams::visualizationChoice == Engine::Visualization::Greyscale)
                 {
                     color = {val, val, val};
                 }
-                else if(Engine::LiquiefiedParams::visualizationChoice == Engine::Visualization::BlackBody)
+                else if(Engine::LiquefiedParams::visualizationChoice == Engine::Visualization::BlackBody)
                 {
                     color = Engine::Utility::GetColor_BlackBody(val);
                 }
-                else if(Engine::LiquiefiedParams::visualizationChoice == Engine::Visualization::ParaView)
+                else if(Engine::LiquefiedParams::visualizationChoice == Engine::Visualization::ParaView)
                 {
                     color = Engine::Utility::GetColor_ParaView(val);
                 }
@@ -142,14 +142,14 @@ namespace Liq
         }
 
         {
-            if(Engine::LiquiefiedParams::resetSimulation)
+            if(Engine::LiquefiedParams::resetSimulation)
             {
                 _fluidSimulator->Reset();
                 AddBorderCells();
-                Engine::LiquiefiedParams::resetSimulation = false;
+                Engine::LiquefiedParams::resetSimulation = false;
             }
 
-            if(!Engine::LiquiefiedParams::pauseSimulation)
+            if(!Engine::LiquefiedParams::pauseSimulation)
             {
                 //Check if timer elapsed
                 if(_physicsTimer->CheckElapsedAndReset())
@@ -157,7 +157,7 @@ namespace Liq
                     const float dt = (float)Engine::Window::GetDeltaTime_sec();
 
                     //Add a horizontal turbine (initial velocity)
-                   _fluidSimulator->AddHorizonalTurbine(1, 50, (float)Engine::LiquiefiedParams::turbinePower, dt);
+                   _fluidSimulator->AddHorizonalTurbine(1, 50, (float)Engine::LiquefiedParams::turbinePower, dt);
 
                     //Run simulation timestep
                     _fluidSimulator->TimeStep(dt);
@@ -168,7 +168,7 @@ namespace Liq
         {
             Engine::PROFILE_SCOPE("Visualize grid");
 
-            if(Engine::LiquiefiedParams::visualizationChoice != Engine::Visualization::Nothing)
+            if(Engine::LiquefiedParams::visualizationChoice != Engine::Visualization::Nothing)
             {
                 VisualizeSmoke();
                 _gridRenderer->UpdateGpuStorage();
@@ -201,12 +201,12 @@ namespace Liq
             Engine::UIParams::wireframeRendering = !Engine::UIParams::wireframeRendering;
 
         else if(glfwGetKey(Engine::Window::GetWindow(), GLFW_KEY_SPACE) == GLFW_PRESS)
-            Engine::LiquiefiedParams::pauseSimulation = !Engine::LiquiefiedParams::pauseSimulation;
+            Engine::LiquefiedParams::pauseSimulation = !Engine::LiquefiedParams::pauseSimulation;
 
         else if(glfwGetKey(Engine::Window::GetWindow(), GLFW_KEY_R) == GLFW_PRESS)
-            Engine::LiquiefiedParams::resetSimulation = true;
+            Engine::LiquefiedParams::resetSimulation = true;
 
         else if(glfwGetKey(Engine::Window::GetWindow(), GLFW_KEY_A) == GLFW_PRESS)
-            Engine::LiquiefiedParams::activateDebugging = !Engine::LiquiefiedParams::activateDebugging;
+            Engine::LiquefiedParams::activateDebugging = !Engine::LiquefiedParams::activateDebugging;
     }
 }

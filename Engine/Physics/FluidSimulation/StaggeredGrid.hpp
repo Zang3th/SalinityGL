@@ -4,30 +4,30 @@
 
 namespace Engine
 {
-    #define AT(x, y) ((x) * LiquiefiedParams::SIMULATION_HEIGHT + (y))
+    #define AT(x, y) ((x) * LiquefiedParams::SIMULATION_HEIGHT + (y))
     #define SWAP(p0, p1) {float *tmp=p0;p0=p1;p1=tmp;}
 
     struct StaggeredGrid
     {
         private:
             //Horizontal velocity (u-component) is sampled at the centers of the vertical cell faces.
-            float _u[LiquiefiedParams::LIQUID_NUM_CELLS]     = {0.0f};
-            float _u_tmp[LiquiefiedParams::LIQUID_NUM_CELLS] = {0.0f};
+            float _u[LiquefiedParams::LIQUID_NUM_CELLS]     = {0.0f};
+            float _u_tmp[LiquefiedParams::LIQUID_NUM_CELLS] = {0.0f};
 
             //Vertical velocity (v-component) is sampled at the centers of the horizontal cell faces.
-            float _v[LiquiefiedParams::LIQUID_NUM_CELLS]     = {0.0f};
-            float _v_tmp[LiquiefiedParams::LIQUID_NUM_CELLS] = {0.0f};
+            float _v[LiquefiedParams::LIQUID_NUM_CELLS]     = {0.0f};
+            float _v_tmp[LiquefiedParams::LIQUID_NUM_CELLS] = {0.0f};
 
             //b-component set to 0.0 for border cells.
-            float _b[LiquiefiedParams::LIQUID_NUM_CELLS]     = {0.0f};
+            float _b[LiquefiedParams::LIQUID_NUM_CELLS]     = {0.0f};
 
             //Density value for visualization of the flow.
-            float _d[LiquiefiedParams::LIQUID_NUM_CELLS]     = {0.0f};
-            float _d_tmp[LiquiefiedParams::LIQUID_NUM_CELLS] = {0.0f};
+            float _d[LiquefiedParams::LIQUID_NUM_CELLS]     = {0.0f};
+            float _d_tmp[LiquefiedParams::LIQUID_NUM_CELLS] = {0.0f};
 
         public:
-            const uint32 width  = LiquiefiedParams::SIMULATION_WIDTH;
-            const uint32 height = LiquiefiedParams::SIMULATION_HEIGHT;
+            const uint32 width  = LiquefiedParams::SIMULATION_WIDTH;
+            const uint32 height = LiquefiedParams::SIMULATION_HEIGHT;
             const float  h      = 1.0f / (float)height; //Cell height
             const float  h2     = h * 0.5f;
 

@@ -85,7 +85,7 @@ namespace Engine
                     _grid.v[AT(x, y+1)] -= pressure * upperNeigbor;
 
                     //Monitor the pressure and the divergence to make sure that the fluid is incompressible
-                    if(LiquiefiedParams::activateDebugging)
+                    if(LiquefiedParams::activateDebugging)
                     {
                         divergence = _grid.u[AT(x+1, y)] - _grid.u[AT(x, y)] + _grid.v[AT(x, y+1)] - _grid.v[AT(x, y)];
 
@@ -145,7 +145,7 @@ namespace Engine
 
                 // --- Calculate previous x- and y-positions depending on the chosen integrator
 
-                if(LiquiefiedParams::integratorChoice == Integrator::ForwardEuler)
+                if(LiquefiedParams::integratorChoice == Integrator::ForwardEuler)
                 {
                     //Calculate u- and v-Advection for u-component
                     float u = _grid.u[AT(x, y)];
@@ -163,11 +163,11 @@ namespace Engine
                     ForwardEuler(dt, (float)x, h, h2, u, &vx_prev);
                     ForwardEuler(dt, (float)y, h, 0.0f, v, &vy_prev);
                 }
-                else if(LiquiefiedParams::integratorChoice == Integrator::BackwardEuler)
+                else if(LiquefiedParams::integratorChoice == Integrator::BackwardEuler)
                 {
                     //...
                 }
-                else if(LiquiefiedParams::integratorChoice == Integrator::RungeKutta2)
+                else if(LiquefiedParams::integratorChoice == Integrator::RungeKutta2)
                 {
                     //Calculate u- and v-Advection for u-component
                     float u = _grid.u[AT(x, y)];
@@ -211,7 +211,7 @@ namespace Engine
                         ForwardEuler(dt, (float)y, h, 0.0f, k2_v, &vy_prev);
                     }
                 }
-                else if(LiquiefiedParams::integratorChoice == Integrator::RungeKutta3)
+                else if(LiquefiedParams::integratorChoice == Integrator::RungeKutta3)
                 {
                     //...
                 }
@@ -224,7 +224,7 @@ namespace Engine
                 _grid.u_tmp[AT(x, y)] = uAdvect; //u-component (horizontal advection)
                 _grid.v_tmp[AT(x, y)] = vAdvect; //v-component (vertical advection)
 
-                if(LiquiefiedParams::activateDebugging)
+                if(LiquefiedParams::activateDebugging)
                 {
                     //Monitor stability
                     MonitorCFLStability(dt, uAdvect);
@@ -275,16 +275,16 @@ namespace Engine
 
                 // --- Calculate approximated previous x- and y-positions depending on the chosen integrator
 
-                if(LiquiefiedParams::integratorChoice == Integrator::ForwardEuler)
+                if(LiquefiedParams::integratorChoice == Integrator::ForwardEuler)
                 {
                     ForwardEuler(dt, (float)x, h, h2, uAdvect, &x_prev);
                     ForwardEuler(dt, (float)y, h, h2, vAdvect, &y_prev);
                 }
-                else if(LiquiefiedParams::integratorChoice == Integrator::BackwardEuler)
+                else if(LiquefiedParams::integratorChoice == Integrator::BackwardEuler)
                 {
                     //...
                 }
-                else if(LiquiefiedParams::integratorChoice == Integrator::RungeKutta2)
+                else if(LiquefiedParams::integratorChoice == Integrator::RungeKutta2)
                 {
                     //Compute intermediate positions for k2 (corresponds to Forward-Euler with half the step size)
                     ForwardEuler(dt * 0.5f, (float)x, h, h2, uAdvect, &x_prev);
@@ -298,7 +298,7 @@ namespace Engine
                     ForwardEuler(dt, (float)x, h, h2, k2_u, &x_prev);
                     ForwardEuler(dt, (float)y, h, h2, k2_v, &y_prev);
                 }
-                else if(LiquiefiedParams::integratorChoice == Integrator::RungeKutta3)
+                else if(LiquefiedParams::integratorChoice == Integrator::RungeKutta3)
                 {
                     //...
                 }

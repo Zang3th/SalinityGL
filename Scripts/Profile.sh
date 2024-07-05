@@ -5,7 +5,7 @@ PROJECT_ROOT=$(realpath "$SCRIPT_DIR")
 cd "$PROJECT_ROOT" || exit
 
 if [ -z "$1" ]; then
-  echo "Fehler: Kein Argument übergeben. Bitte als erstes Argument die PID angeben." >&2
+  echo "Error: Please enter the PID as a first argument!" >&2
   exit 1
 fi
 

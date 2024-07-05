@@ -8,7 +8,7 @@ namespace Engine
     {
         //Add to normal monitoring
         buffer[_index] = {val, x, y};
-        _index = (_index + 1) % LiquiefiedParams::LIQUID_NUM_CELLS;
+        _index = (_index + 1) % LiquefiedParams::LIQUID_NUM_CELLS;
 
         Log(name, val, x, y);
     }
@@ -38,7 +38,7 @@ namespace Engine
     void Monitoring::Reset()
     {
         _index = 0;
-        std::memset(&buffer[0], 0, LiquiefiedParams::LIQUID_NUM_CELLS);
+        std::memset(&buffer[0], 0, LiquefiedParams::LIQUID_NUM_CELLS);
         _max = FLT_MIN;
         _min = FLT_MAX;
         loggedValues.clear();

@@ -8,8 +8,8 @@
 namespace Engine
 {
     #define GRAVITY   PhysicsParams::GRAVITY
-    #define ITER      LiquiefiedParams::GAUSS_SEIDEL_ITERATIONS
-    #define OVERRELAX LiquiefiedParams::GAUSS_SEIDEL_OVERRELAXATION
+    #define ITER      LiquefiedParams::GAUSS_SEIDEL_ITERATIONS
+    #define OVERRELAX LiquefiedParams::GAUSS_SEIDEL_OVERRELAXATION
 
     class FluidSimulator
     {

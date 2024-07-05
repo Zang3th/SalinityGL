@@ -146,6 +146,8 @@ namespace Engine
         inline static           bool     printDebug            = false;
         inline static           bool     enableSingleStepping  = false;
         inline static           bool     performSingleStep     = false;
+
+        CellSimParams() = delete;
     };
 
     // #######################################################################################################
@@ -168,7 +170,7 @@ namespace Engine
         ParaView  = 3
     };
 
-    struct LiquiefiedParams
+    struct LiquefiedParams
     {
         inline static constexpr uint32        SIMULATION_WIDTH            = 150;
         inline static constexpr uint32        SIMULATION_HEIGHT           = 100;
@@ -181,6 +183,8 @@ namespace Engine
         inline static           bool          activateDebugging           = false;
         inline static           Integrator    integratorChoice            = Integrator::ForwardEuler;
         inline static           Visualization visualizationChoice         = Visualization::Greyscale;
+
+        LiquefiedParams() = delete;
     };
 
     struct LiquefiedDebug

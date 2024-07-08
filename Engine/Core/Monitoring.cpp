@@ -22,17 +22,21 @@ namespace Engine
         if(loggedValues.find(s_max) == loggedValues.end() &&
            loggedValues.find(s_min) == loggedValues.end())
         {
-            loggedValues.emplace(std::pair<std::string, LogFloatXY_t>(s_max, {val, x, y}));
-            loggedValues.emplace(std::pair<std::string, LogFloatXY_t>(s_min, {val, x, y}));
+            loggedValues.emplace(std::pair<std::string, LogFloatXY>(s_max, {val, x, y}));
+            loggedValues.emplace(std::pair<std::string, LogFloatXY>(s_min, {val, x, y}));
             return;
         }
 
         //Else check min and max
         if(val > loggedValues[s_max].val)
+        {
             loggedValues.at(s_max) = {val, x, y};
+        }
 
         if(val < loggedValues[s_min].val)
+        {
             loggedValues.at(s_min) = {val, x, y};
+        }
     }
 
     void Monitoring::Reset()

@@ -33,6 +33,8 @@ Checks: "*,
         -performance-no-int-to-pointer,
         -hicpp-signed-bitwise,
         -altera-struct-pack-align,
+        -bugprone-macro-parentheses,
+        -misc-non-private-member-variables-in-classes,
 "
 WarningsAsErrors: ''
 HeaderFilterRegex: ''

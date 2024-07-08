@@ -27,6 +27,7 @@ namespace Engine
         //Create window title
         _windowName = title;
 
+        //Create version specific string based on the provided definitions
         #ifdef SALINITYGL_ENGINE_VERSION
             std::string versionString = SALINITYGL_ENGINE_VERSION;
         #ifdef SALINITYGL_ENGINE_VERSION_SUFFIX

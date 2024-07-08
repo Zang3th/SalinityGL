@@ -90,16 +90,24 @@ namespace Engine
                         divergence = _grid.u[AT(x+1, y)] - _grid.u[AT(x, y)] + _grid.v[AT(x, y+1)] - _grid.v[AT(x, y)];
 
                         if(pressure < LiquefiedDebug::minPressure.val)
+                        {
                             LiquefiedDebug::minPressure = {pressure, x, y};
+                        }
 
                         if(pressure > LiquefiedDebug::maxPressure.val)
+                        {
                             LiquefiedDebug::maxPressure = {pressure, x, y};
+                        }
 
                         if(divergence < LiquefiedDebug::minDivergence.val)
+                        {
                             LiquefiedDebug::minDivergence = {divergence, x, y};
+                        }
 
                         if(divergence > LiquefiedDebug::maxDivergence.val)
+                        {
                             LiquefiedDebug::maxDivergence = {divergence, x, y};
+                        }
                     }
                 }
             }
@@ -130,7 +138,12 @@ namespace Engine
     {
         const float h  = _grid.h;
         const float h2 = _grid.h2;
-        float uAdvect  = 0.0f, vAdvect = 0.0f, ux_prev = 0.0f, uy_prev = 0.0f, vx_prev = 0.0f, vy_prev = 0.0f;
+        float uAdvect  = 0.0f;
+        float vAdvect  = 0.0f;
+        float ux_prev  = 0.0f;
+        float uy_prev  = 0.0f;
+        float vx_prev  = 0.0f;
+        float vy_prev  = 0.0f;
 
         //Iterate over grid and update all velocities according to the chosen numerical integrator
         for(uint32 x = 1; x < _grid.width-1; x++)
@@ -232,16 +245,24 @@ namespace Engine
 
                     //Monitor velocities
                     if(uAdvect < LiquefiedDebug::minUAdvect.val)
+                    {
                         LiquefiedDebug::minUAdvect = {uAdvect, x, y};
+                    }
 
                     if(uAdvect > LiquefiedDebug::maxUAdvect.val)
+                    {
                         LiquefiedDebug::maxUAdvect = {uAdvect, x, y};
+                    }
 
                     if(vAdvect < LiquefiedDebug::minVAdvect.val)
+                    {
                         LiquefiedDebug::minVAdvect = {vAdvect, x, y};
+                    }
 
                     if(vAdvect > LiquefiedDebug::maxVAdvect.val)
+                    {
                         LiquefiedDebug::maxVAdvect = {vAdvect, x, y};
+                    }
                 }
             }
         }
@@ -320,7 +341,9 @@ namespace Engine
 
         //Save value for debugging purposes
         if(cfl > LiquefiedDebug::cflCondition)
+        {
             LiquefiedDebug::cflCondition = cfl;
+        }
     }
 
     void FluidSimulator::ForwardEuler(const float dt,  const float pos,

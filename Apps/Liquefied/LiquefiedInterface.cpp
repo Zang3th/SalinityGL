@@ -30,9 +30,13 @@ namespace Liq
             {
                 //Print indented
                 if(entry.first[0] == '#')
+                {
                     ImGui::Text("\t%.3fms - %s", entry.second, &entry.first[1]);
+                }
                 else
+                {
                     ImGui::Text("%.3fms - %s", entry.second, entry.first);
+                }
             }
             ImGui::Separator();
             ImGui::NewLine();

@@ -6,7 +6,10 @@ namespace Engine
 
 	void ErrorManager::GLClearError()
 	{
-		while(glGetError() != GL_NO_ERROR);
+		while(glGetError() != GL_NO_ERROR)
+        {
+            // ...
+        }
 	}
 
 	bool ErrorManager::GLLogCall(const char* function, const char* file, uint32 line)

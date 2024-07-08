@@ -18,7 +18,7 @@ namespace Engine
 
         public:
             inline static LogFloatXY buffer[LiquefiedParams::LIQUID_NUM_CELLS] = {};
-            inline static std::map<std::string, LogFloatXY_t> loggedValues = std::map<std::string, LogFloatXY_t>();
+            inline static std::map<std::string, LogFloatXY> loggedValues = std::map<std::string, LogFloatXY>();
 
             Monitoring() = delete;
 

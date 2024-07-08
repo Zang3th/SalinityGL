@@ -73,7 +73,10 @@ namespace Engine
     {
         const bool pressed = ImGui::RadioButton(label, *v == v_button);
         if (pressed)
+        {
             *v = v_button;
+        }
+
         return pressed;
     }
 
@@ -84,7 +87,9 @@ namespace Engine
     bool Interface::Input_u32(const char* label, int32* value, int32 step, int32 step_fast)
     {
         if(*value < 0)
+        {
             *value = 0;
+        }
 
         return Input_i32(label, value, step, step_fast);
     }

@@ -14,7 +14,7 @@ namespace Engine
         private:
             inline static constexpr uint32 COLOR_TABLE_SIZE = 1024;
 
-            inline static constexpr ColorEntry_t BlackBody[COLOR_TABLE_SIZE] =
+            inline static constexpr ColorEntry BlackBody[COLOR_TABLE_SIZE] =
             {
                 {0.0,	0.0,	0.0,	0.0},
                 {0.0009775171065493646,	0.0032501544983122225,	0.000935673862010805,	0.0005242151764927713},
@@ -1042,7 +1042,7 @@ namespace Engine
                 {1.0,	1.0,	1.0,	1.0}
             };
 
-            inline static constexpr ColorEntry_t ParaView[COLOR_TABLE_SIZE] =
+            inline static constexpr ColorEntry ParaView[COLOR_TABLE_SIZE] =
             {
                 {0.0,	0.05639932216773367,	0.056399092153948,	0.4700000908789252},
                 {0.0009775171065493646,	0.05846166649302168,	0.0592199701947625,	0.4718601206666147},

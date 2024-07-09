@@ -82,23 +82,31 @@ namespace Liq
     {
         glm::vec3 color{0.0f};
 
-        for(Engine::uint32 x = 1; x < Engine::LiquefiedParams::SIMULATION_WIDTH-1; x++)
+        for(Engine::uint32 x = 0; x < Engine::LiquefiedParams::SIMULATION_WIDTH; x++)
         {
-            for(Engine::uint32 y = 1; y < Engine::LiquefiedParams::SIMULATION_HEIGHT-1; y++)
+            for(Engine::uint32 y = 0; y < Engine::LiquefiedParams::SIMULATION_HEIGHT; y++)
             {
-                const float val = _fluidSimulator->GetDensity(x, y);
+                //Check for border cell
+                if(_fluidSimulator->GetBorder(x, y) == 0.0f)
+                {
+                    color = {0.5f, 0.5f, 0.5f};
+                }
+                else
+                {
+                    const float val = _fluidSimulator->GetDensity(x, y);
 
-                if(Engine::LiquefiedParams::visualizationChoice == Engine::Visualization::Greyscale)
-                {
-                    color = {val, val, val};
-                }
-                else if(Engine::LiquefiedParams::visualizationChoice == Engine::Visualization::BlackBody)
-                {
-                    color = Engine::Utility::GetColor_BlackBody(val);
-                }
-                else if(Engine::LiquefiedParams::visualizationChoice == Engine::Visualization::ParaView)
-                {
-                    color = Engine::Utility::GetColor_ParaView(val);
+                    if(Engine::LiquefiedParams::visualizationChoice == Engine::Visualization::Greyscale)
+                    {
+                        color = {val, val, val};
+                    }
+                    else if(Engine::LiquefiedParams::visualizationChoice == Engine::Visualization::BlackBody)
+                    {
+                        color = Engine::Utility::GetColor_BlackBody(val);
+                    }
+                    else if(Engine::LiquefiedParams::visualizationChoice == Engine::Visualization::ParaView)
+                    {
+                        color = Engine::Utility::GetColor_ParaView(val);
+                    }
                 }
 
                 _gridRenderer->Set(x, y, color);
@@ -168,16 +176,8 @@ namespace Liq
         {
             Engine::PROFILE_SCOPE("Visualize grid");
 
-            if(Engine::LiquefiedParams::visualizationChoice != Engine::Visualization::Nothing)
-            {
-                VisualizeSmoke();
-                _gridRenderer->UpdateGpuStorage();
-            }
-            else
-            {
-                _gridRenderer->UploadDefaultConfig();
-            }
-
+            VisualizeSmoke();
+            _gridRenderer->UpdateGpuStorage();
             _gridRenderer->Flush(nullptr);
         }
 

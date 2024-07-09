@@ -37,5 +37,6 @@ namespace Engine
             void AddHorizonalTurbine(uint32 x, uint32 y, float power, float dt) const;
 
             [[nodiscard]] float GetDensity(uint32 x, uint32 y) const;
+            [[nodiscard]] float GetBorder(uint32 x, uint32 y) const;
     };
 }

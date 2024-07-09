@@ -59,10 +59,14 @@ namespace Liq
                 if(ImGui::BeginTabItem("Visualization"))
                 {
                     ImGui::NewLine();
-                    ImGui::RadioButton("No visualization", (int*)&Engine::LiquefiedParams::visualizationChoice, Engine::Visualization::Nothing);
                     ImGui::RadioButton("Greyscale", (int*)&Engine::LiquefiedParams::visualizationChoice, Engine::Visualization::Greyscale);
                     ImGui::RadioButton("BlackBody", (int*)&Engine::LiquefiedParams::visualizationChoice, Engine::Visualization::BlackBody);
                     ImGui::RadioButton("ParaView", (int*)&Engine::LiquefiedParams::visualizationChoice, Engine::Visualization::ParaView);
+                    ImGui::NewLine();
+                    ImGui::Separator();
+                    ImGui::NewLine();
+                    ImGui::Checkbox("Display solid cells", &Engine::LiquefiedParams::displaySolidCells);
+                    ImGui::Checkbox("Render sprites", &Engine::LiquefiedParams::renderSprites);
                     ImGui::EndTabItem();
                 }
 
@@ -154,7 +158,7 @@ namespace Liq
             ImGui::Checkbox("Activate Debugging (A)", &Engine::LiquefiedParams::activateDebugging);
             ImGui::SetCursorPosY(45.0f);
             ImGui::SetCursorPosX(275.0f);
-            if(ImGui::Button("Reset Simulation (R)"))
+            if(ImGui::Button("  Reset Simulation (R)  "))
             {
                 Engine::LiquefiedParams::resetSimulation = true;
             }

@@ -395,7 +395,7 @@ namespace Engine
 
     void FluidSimulator::RungeKutta3() const
     {
-    
+        //ToDo: Implement
     }
 
     // ----- Public -----
@@ -450,5 +450,10 @@ namespace Engine
     float FluidSimulator::GetDensity(uint32 x, uint32 y) const
     {
         return _grid.d[AT(x, y)];
+    }
+
+    float FluidSimulator::GetBorder(uint32 x, uint32 y) const
+    {
+        return _grid.b[AT(x, y)];
     }
 }

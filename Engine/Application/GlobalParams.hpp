@@ -157,9 +157,8 @@ namespace Engine
     enum Integrator
     {
         ForwardEuler         = 0,
-        BackwardEuler        = 1,
-        RungeKutta2          = 2,
-        RungeKutta3          = 3,
+        RungeKutta2          = 1,
+        RungeKutta3          = 2,
     };
 
     enum Visualization

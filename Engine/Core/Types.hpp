@@ -40,14 +40,14 @@ namespace Engine
     #define COLOR_GREEN glm::vec3(0.0f, 1.0f, 0.0f)
     #define COLOR_BLUE  glm::vec3(0.0f, 0.0f, 1.0f)
 
-    using LogFloatXY = struct
+    struct LogFloatXY
     {
         float  val;
         uint32 x;
         uint32 y;
     };
 
-    using ColorEntry = struct
+    struct ColorEntry
     {
         float scalar;
         float r;

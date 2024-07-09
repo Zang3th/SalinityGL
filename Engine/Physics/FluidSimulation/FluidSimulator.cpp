@@ -176,10 +176,6 @@ namespace Engine
                     ForwardEuler(dt, (float)x, h, h2, u, &vx_prev);
                     ForwardEuler(dt, (float)y, h, 0.0f, v, &vy_prev);
                 }
-                else if(LiquefiedParams::integratorChoice == Integrator::BackwardEuler)
-                {
-                    //...
-                }
                 else if(LiquefiedParams::integratorChoice == Integrator::RungeKutta2)
                 {
                     //Calculate u- and v-Advection for u-component
@@ -301,10 +297,6 @@ namespace Engine
                     ForwardEuler(dt, (float)x, h, h2, uAdvect, &x_prev);
                     ForwardEuler(dt, (float)y, h, h2, vAdvect, &y_prev);
                 }
-                else if(LiquefiedParams::integratorChoice == Integrator::BackwardEuler)
-                {
-                    //...
-                }
                 else if(LiquefiedParams::integratorChoice == Integrator::RungeKutta2)
                 {
                     //Compute intermediate positions for k2 (corresponds to Forward-Euler with half the step size)
@@ -372,34 +364,6 @@ namespace Engine
         *      These are special cases because we are working on a staggered grid.      */
 
         *prev_pos = pos * h + h2 - dt * vel;
-    }
-
-    void FluidSimulator::BackwardEuler() const
-    {
-       /*       The update rule for Backward-Euler looks like this:                     *
-        *                                                                               *
-        *                            x1 = x0 - dt * f(x1)                               *
-        *                                                                               *
-        *       - x1    := Approximated value at the next timestep.                     *
-        *       - x0    := Value at the current timestep.                               *
-        *       - dt    := The timestep size.                                           *
-        *       - f(x1) := Derivative of f at the point x1 with respect to time.        *
-        *                                                                               *
-        *       f(x1) makes this method implicit because we do not know x1 at the       *
-        *       current moment in time, we were trying to solve for x1!                 *
-        *       So how do we go on about this?!                                         *
-        *                                                                               *
-        *       To solve for x1, we need to employ numerical methods.                   *
-        *       For linear problems, direct algebraic manipulation may suffice.         *
-        *       For nonlinear problems, iterative methods are commonly used.            *
-        *                                                                               *
-        *       With the cost of this additional computational effort comes             *
-        *       the advantage of way higher stability and robustness than with          *
-        *       Forward-Euler.                                                          *
-        *                                                                               *
-        *       Using a nonlinear solver for each step of Backward-Euler:               *
-        *       Source: Cornell University - CS3220 Lecture Notes                       *
-        *       https://www.cs.cornell.edu/~bindel/class/cs3220-s12/lectures.html       */
     }
 
     void FluidSimulator::RungeKutta2(const float dt,  const float pos, const float h,  const float h2,

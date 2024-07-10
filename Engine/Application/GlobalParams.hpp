@@ -179,8 +179,7 @@ namespace Engine
         inline static           bool          pauseSimulation             = true;
         inline static           bool          resetSimulation             = false;
         inline static           bool          activateDebugging           = false;
-        inline static           bool          displaySolidCells           = true;
-        inline static           bool          renderSprites               = false;
+        inline static           bool          renderObjects               = false;
         inline static           Integrator    integratorChoice            = Integrator::ForwardEuler;
         inline static           Visualization visualizationChoice         = Visualization::Greyscale;
 

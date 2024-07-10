@@ -20,7 +20,7 @@ namespace Engine
         //Init color storage
         for(uint32 i = 0; i < _quadAmountTotal; i++)
         {
-            _colorStorage.emplace_back(_defaultColor, _defaultGradientFactor);
+            _colorStorage.emplace_back(_defaultColor);
         }
 
         //Create and bind vao
@@ -30,8 +30,8 @@ namespace Engine
         //Create vbo's, send it data and configure vao
         _vboVert = MakeScope<VertexBuffer>(vertices, sizeof(vertices), GL_STATIC_DRAW);
         _vao->DefineAttributes(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), nullptr);
-        _vboColor = MakeScope<VertexBuffer>(&_colorStorage[0], _colorStorage.size() * 4 * sizeof(float), GL_DYNAMIC_DRAW);
-        _vao->DefineAttributes(1, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), nullptr);
+        _vboColor = MakeScope<VertexBuffer>(&_colorStorage[0], _colorStorage.size() * 3 * sizeof(float), GL_DYNAMIC_DRAW);
+        _vao->DefineAttributes(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
 
         //Set attribute divisors for per instance data
         _vao->AttributeDivisor(1, 1);
@@ -53,7 +53,7 @@ namespace Engine
         const std::string& shader
     )
         :   _gridWidth(width), _gridHeight(height), _quadSize(quadSize), _quadAmountTotal(_gridWidth * _gridHeight),
-            _defaultColor(glm::vec3(0.1f, 0.1f, 0.1f)), _defaultGradientFactor(0.000025f), _shader(ResourceManager::GetShader(shader)),
+            _defaultColor(glm::vec3(0.1f, 0.1f, 0.1f)), _shader(ResourceManager::GetShader(shader)),
             _orthoProj(glm::ortho(0.0f, (float)WindowParams::WIDTH, 0.0f, (float)WindowParams::HEIGHT, -1.0f, 1.0f)),
             _model(glm::scale(glm::mat4(1.0f), glm::vec3(glm::vec2((float)_quadSize), 0.0f)))
     {
@@ -106,7 +106,7 @@ namespace Engine
     void GridRenderer::UpdateGpuStorage() const
     {
         _vboColor->Bind();
-        _vboColor->Update(&_colorStorage[0], _colorStorage.size() * 4 * sizeof(float));
+        _vboColor->Update(&_colorStorage[0], _colorStorage.size() * 3 * sizeof(float));
         _vboColor->Unbind();
     }
 
@@ -117,18 +117,37 @@ namespace Engine
 
     void GridRenderer::Reset(const uint32 x, const uint32 y)
     {
-        _colorStorage.at(x * _gridHeight + y) = glm::vec4(_defaultColor, _defaultGradientFactor);
+        _colorStorage.at(x * _gridHeight + y) = glm::vec3(_defaultColor);
     }
 
-    void GridRenderer::SetConfigAsDefault()
+    void GridRenderer::AddTextureSubsampled(const std::string& texture, const glm::uvec2& pos, const uint32 size)
     {
-        _backupStorage = _colorStorage;
-    }
+        auto* tex = ResourceManager::GetTexture(texture);
+        uint32 width  = tex->GetWidth();
+        uint32 height = tex->GetHeight();
 
-    void GridRenderer::UploadDefaultConfig() const
-    {
-        _vboColor->Bind();
-        _vboColor->Update(&_backupStorage[0], _backupStorage.size() * 4 * sizeof(float));
-        _vboColor->Unbind();
+        if(width != height || width % size != 0 || height % size != 0)
+        {
+            Logger::Error("Texture subsampling", texture, "dimensions or format unsupported!");
+            return;
+        }
+
+        //pxSample stands for the amount of pixels that needs to be sampled in one direction.
+        //F.E. the original image is 512x512 and we want to reduce it to 8x8.
+        //That results in 64x64 pixels that will get sampled for 1 pixel in the new image.
+        //In our case these pixels are cells in the grid.
+        uint32 pxSample = width / size;
+
+        glm::vec3 subsampledColor;
+
+        //Go over the image in pxSample steps
+        for(uint32 x = 0; x < width; x += pxSample)
+        {
+            for(uint32 y = 0; y < height; y += pxSample)
+            {
+                // TODO: Implement
+                // subsampledColor = tex->Subsample(x, y, pxSample);
+            }
+        }
     }
 }

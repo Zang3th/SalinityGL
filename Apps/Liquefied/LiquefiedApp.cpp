@@ -1,4 +1,5 @@
 #include "LiquefiedApp.hpp"
+#include "GlobalParams.hpp"
 
 namespace Liq
 {
@@ -8,6 +9,10 @@ namespace Liq
     {
         //Shader
         Engine::ResourceManager::LoadShader("GridShader", "../Res/Shader/Liquefied/Grid_VS.glsl", "../Res/Shader/Liquefied/Grid_FS.glsl");
+
+        //Textures
+        Engine::ResourceManager::LoadTextureToBuffer("TurbineTexture", "../Res/Assets/Textures/Liquefied/Turbine_512.png");
+        Engine::ResourceManager::LoadTextureToBuffer("ObstacleTexture", "../Res/Assets/Textures/Liquefied/Box_512.png");
     }
 
     void LiquefiedApp::AddBorderCells() const
@@ -22,12 +27,42 @@ namespace Liq
                 {
                     //Add solid cell to simulation grid
                     _fluidSimulator->AddBorderCell(x, y);
-
-                    //Add cell to renderer
-                    _gridRenderer->Set(x, y, glm::vec3(1.0f, 1.0f, 1.0f));
                 }
             }
         }
+    }
+
+    void LiquefiedApp::AddTurbine() const
+    {
+        for(Engine::uint32 x = 0; x < turbineSize; x++)
+        {
+            for(Engine::uint32 y = 0; y < turbineSize; y++)
+            {
+                _fluidSimulator->AddBorderCell(turbinePos.x + x, turbinePos.y + y);
+            }
+        }
+    }
+
+    void LiquefiedApp::AddObstacles() const
+    {
+        for(Engine::uint32 x = 0; x < obstacleSize; x++)
+        {
+            for(Engine::uint32 y = 0; y < obstacleSize; y++)
+            {
+                _fluidSimulator->AddBorderCell(obstaclePos.x + x, obstaclePos.y + y);
+            }
+        }
+    }
+
+    void LiquefiedApp::TurbinePushVelocity(const float dt) const
+    {
+       _fluidSimulator->AddHorizonalTurbine
+        (
+            turbineOutlet.x,
+            turbineOutlet.y,
+            (float)Engine::LiquefiedParams::turbinePower,
+            dt
+        );
     }
 
     bool LiquefiedApp::Init()
@@ -64,9 +99,24 @@ namespace Liq
         _physicsTimer = Engine::MakeScope<Engine::Timer>(16);   //16ms
         _inputTimer   = Engine::MakeScope<Engine::Timer>(100);  //100ms
 
-        //Add border cells to simulation and renderer
+        //Add border cells, turbine and physical obstacles to the simulation
         AddBorderCells();
-        _gridRenderer->SetConfigAsDefault();
+        AddTurbine();
+        AddObstacles();
+
+        //Add sprites/textures to the config of the renderer
+        _gridRenderer->AddTextureSubsampled
+        (
+            "TurbineTexture",
+            turbinePos,
+            turbineSize
+        );
+        // _gridRenderer->AddTextureSubsampled
+        // (
+        //     "obstacleTexture",
+        //     obstaclePos,
+        //     obstacleSize
+        // );
 
         return true;
     }
@@ -78,7 +128,7 @@ namespace Liq
         _inputTimer->Update(dt_msec);
     }
 
-    void LiquefiedApp::VisualizeSmoke() const
+    void LiquefiedApp::RenderSmoke() const
     {
         glm::vec3 color{0.0f};
 
@@ -86,9 +136,15 @@ namespace Liq
         {
             for(Engine::uint32 y = 0; y < Engine::LiquefiedParams::SIMULATION_HEIGHT; y++)
             {
-                //Check for border cell
+                //Check for border cell (could be any type of object/obstacle)
                 if(_fluidSimulator->GetBorder(x, y) == 0.0f)
                 {
+                    if(Engine::LiquefiedParams::renderObjects)
+                    {
+                        continue;
+                    }
+
+                    //Else overwrite objects/sprites/textures with default gray
                     color = {0.5f, 0.5f, 0.5f};
                 }
                 else
@@ -154,6 +210,8 @@ namespace Liq
             {
                 _fluidSimulator->Reset();
                 AddBorderCells();
+                AddTurbine();
+                AddObstacles();
                 Engine::LiquefiedParams::resetSimulation = false;
             }
 
@@ -163,11 +221,7 @@ namespace Liq
                 if(_physicsTimer->CheckElapsedAndReset())
                 {
                     const float dt = (float)Engine::Window::GetDeltaTime_sec();
-
-                    //Add a horizontal turbine (initial velocity)
-                   _fluidSimulator->AddHorizonalTurbine(1, 50, (float)Engine::LiquefiedParams::turbinePower, dt);
-
-                    //Run simulation timestep
+                    TurbinePushVelocity(dt);
                     _fluidSimulator->TimeStep(dt);
                 }
             }
@@ -176,7 +230,7 @@ namespace Liq
         {
             Engine::PROFILE_SCOPE("Visualize grid");
 
-            VisualizeSmoke();
+            RenderSmoke();
             _gridRenderer->UpdateGpuStorage();
             _gridRenderer->Flush(nullptr);
         }

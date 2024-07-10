@@ -65,8 +65,7 @@ namespace Liq
                     ImGui::NewLine();
                     ImGui::Separator();
                     ImGui::NewLine();
-                    ImGui::Checkbox("Display solid cells", &Engine::LiquefiedParams::displaySolidCells);
-                    ImGui::Checkbox("Render sprites", &Engine::LiquefiedParams::renderSprites);
+                    ImGui::Checkbox("Render objects", &Engine::LiquefiedParams::renderObjects);
                     ImGui::EndTabItem();
                 }
 

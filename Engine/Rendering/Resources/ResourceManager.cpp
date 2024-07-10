@@ -13,7 +13,7 @@ namespace Engine
 
     Texture* ResourceManager::LoadTexture(const std::string& name, const std::string& filepath)
     {
-        auto *texture = new Texture(filepath, false);
+        auto *texture = new Texture(filepath, 0, false);
         _textureStorage[name] = texture;
         return texture;
     }
@@ -42,8 +42,8 @@ namespace Engine
         std::string output;
 
         for(auto const& tex : _textureStorage)
-        { 
-            output += (tex.first + "\n"); 
+        {
+            output += (tex.first + "\n");
         }
 
         return output;
@@ -66,8 +66,8 @@ namespace Engine
         std::string output;
 
         for(auto const& shader : _shaderStorage)
-        { 
-            output += (shader.first + "\n"); 
+        {
+            output += (shader.first + "\n");
         }
 
         return output;
@@ -88,13 +88,13 @@ namespace Engine
     void ResourceManager::CleanUp()
     {
         for(auto const& tex : _textureStorage)
-        { 
-            delete tex.second; 
+        {
+            delete tex.second;
         }
 
         for(auto const& shader : _shaderStorage)
-        { 
-            delete shader.second; 
+        {
+            delete shader.second;
         }
     }
 }

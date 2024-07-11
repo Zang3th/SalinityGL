@@ -83,6 +83,17 @@ namespace Engine
         Logger::Info("Created", "Texture", texInfo);
     }
 
+    //Warning: Raw/unsafe accessing of the pixel buffer.
+    //Be sure to check bounds and saved status before!
+    glm::uvec3 Texture::GetPxColorRaw(uint32 x, uint32 y) const
+    {
+        glm::uvec3 colorOut;
+        colorOut.x = *(_imgBuffer + (y * _width * 3) + (x * 3) + 0);
+        colorOut.y = *(_imgBuffer + (y * _width * 3) + (x * 3) + 1);
+        colorOut.z = *(_imgBuffer + (y * _width * 3) + (x * 3) + 2);
+        return colorOut;
+    }
+
     // ----- Public -----
 
     Texture::Texture(const std::string &filepath, uint32 numberOfRows, bool saveToBuffer)
@@ -229,5 +240,31 @@ namespace Engine
     uint32 Texture::GetNumberOfRows() const
     {
         return _numberOfRows;
+    }
+
+    bool Texture::Subsample(uint32 xpos, uint32 ypos, uint32 sampleAmount, glm::uvec3* colorOut) const
+    {
+        if(_saveToBuffer == false)
+        {
+            Logger::Error("Failed", "Subsampling", "Texture wasn't saved");
+            return false;
+        }
+
+        uint32 pxAmount = sampleAmount * sampleAmount;
+        glm::uvec3 totalColor = {0, 0, 0};
+
+        for(uint32 x = 0; x < sampleAmount; x++)
+        {
+            for(uint32 y = 0; y < sampleAmount; y++)
+            {
+                totalColor += GetPxColorRaw(xpos + x, ypos + y);
+            }
+        }
+
+        colorOut->x = totalColor.x / pxAmount;
+        colorOut->y = totalColor.y / pxAmount;
+        colorOut->z = totalColor.z / pxAmount;
+
+        return true;
     }
 }

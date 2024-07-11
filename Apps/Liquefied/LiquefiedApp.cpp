@@ -13,6 +13,7 @@ namespace Liq
         //Textures
         Engine::ResourceManager::LoadTextureToBuffer("TurbineTexture", "../Res/Assets/Textures/Liquefied/Turbine_512.png");
         Engine::ResourceManager::LoadTextureToBuffer("ObstacleTexture", "../Res/Assets/Textures/Liquefied/Box_512.png");
+        Engine::ResourceManager::LoadTextureToBuffer("TestTexture", "../Res/Assets/Textures/Liquefied/Test_8.png");
     }
 
     void LiquefiedApp::AddBorderCells() const
@@ -105,18 +106,19 @@ namespace Liq
         AddObstacles();
 
         //Add sprites/textures to the config of the renderer
-        _gridRenderer->AddTextureSubsampled
-        (
-            "TurbineTexture",
-            turbinePos,
-            turbineSize
-        );
         // _gridRenderer->AddTextureSubsampled
         // (
-        //     "obstacleTexture",
-        //     obstaclePos,
-        //     obstacleSize
+        //     "TurbineTexture",
+        //     turbinePos,
+        //     turbineSize
         // );
+        _gridRenderer->AddTextureSubsampled
+        (
+            // "ObstacleTexture",
+            "TestTexture",
+            obstaclePos,
+            obstacleSize
+        );
 
         return true;
     }

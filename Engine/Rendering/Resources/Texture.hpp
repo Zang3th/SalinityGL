@@ -22,6 +22,7 @@ namespace Engine
 
             void InitFromFile(const std::string& filepath);
             void Create(uint32 width, uint32 height, GLint internalFormat, GLenum format, GLenum type);
+            [[nodiscard]] glm::uvec3 GetPxColorRaw(uint32 x, uint32 y) const;
 
         public:
             explicit Texture(const std::string &filepath, uint32 numberOfRows = 0, bool saveToBuffer = false);
@@ -42,9 +43,10 @@ namespace Engine
             void ResetTextureModification(uint32 x, uint32 y);
             void CommitModifications() const;
 
-            [[nodiscard]] uint32  GetWidth() const;
-            [[nodiscard]] uint32  GetHeight() const;
+            [[nodiscard]] uint32 GetWidth() const;
+            [[nodiscard]] uint32 GetHeight() const;
             [[nodiscard]] uint32 GetTextureID() const;
             [[nodiscard]] uint32 GetNumberOfRows() const;
+            [[nodiscard]] bool   Subsample(uint32 xpos, uint32 ypos, uint32 sampleAmount, glm::uvec3* colorOut) const;
     };
 }

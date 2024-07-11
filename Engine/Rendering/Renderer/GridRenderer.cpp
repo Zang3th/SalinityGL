@@ -128,25 +128,34 @@ namespace Engine
 
         if(width != height || width % size != 0 || height % size != 0)
         {
-            Logger::Error("Texture subsampling", texture, "dimensions or format unsupported!");
+            Logger::Error("Failed", "Subsampling", "Dimensions or format unsupported!");
             return;
         }
 
-        //pxSample stands for the amount of pixels that needs to be sampled in one direction.
+        //sampleAmount stands for the amount of pixels that needs to be sampled in one direction.
         //F.E. the original image is 512x512 and we want to reduce it to 8x8.
         //That results in 64x64 pixels that will get sampled for 1 pixel in the new image.
         //In our case these pixels are cells in the grid.
-        uint32 pxSample = width / size;
+        uint32 sampleAmount = width / size;
 
-        glm::vec3 subsampledColor;
+        glm::uvec3 subsampledColor = {0, 0, 0};
+        bool success = false;
+        uint32 count = 0;
 
         //Go over the image in pxSample steps
-        for(uint32 x = 0; x < width; x += pxSample)
+        for(uint32 x = 0; x < width; x += sampleAmount)
         {
-            for(uint32 y = 0; y < height; y += pxSample)
+            for(uint32 y = 0; y < height; y += sampleAmount)
             {
-                // TODO: Implement
-                // subsampledColor = tex->Subsample(x, y, pxSample);
+                success = tex->Subsample(x, y, sampleAmount, &subsampledColor);
+                if(success)
+                {
+                    Logger::Print("Color " + std::to_string(count) + ": "
+                                           + std::to_string(subsampledColor.x) + ", "
+                                           + std::to_string(subsampledColor.y) + ", "
+                                           + std::to_string(subsampledColor.z));
+                }
+                count++;
             }
         }
     }

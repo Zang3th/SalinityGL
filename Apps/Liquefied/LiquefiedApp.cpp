@@ -13,7 +13,7 @@ namespace Liq
         //Textures
         Engine::ResourceManager::LoadTextureToBuffer("TurbineTexture", "../Res/Assets/Textures/Liquefied/Turbine_512.png");
         Engine::ResourceManager::LoadTextureToBuffer("ObstacleTexture", "../Res/Assets/Textures/Liquefied/Box_512.png");
-        Engine::ResourceManager::LoadTextureToBuffer("TestTexture", "../Res/Assets/Textures/Liquefied/Test_8.png");
+        Engine::ResourceManager::LoadTextureToBuffer("TestTexture", "../Res/Assets/Textures/Liquefied/Test_1C_1G_8Px.png");
     }
 
     void LiquefiedApp::AddBorderCells() const
@@ -147,7 +147,7 @@ namespace Liq
                     }
 
                     //Else overwrite objects/sprites/textures with default gray
-                    color = {0.5f, 0.5f, 0.5f};
+                    // color = {0.5f, 0.5f, 0.5f};
                 }
                 else
                 {
@@ -232,7 +232,7 @@ namespace Liq
         {
             Engine::PROFILE_SCOPE("Visualize grid");
 
-            RenderSmoke();
+            // RenderSmoke();
             _gridRenderer->UpdateGpuStorage();
             _gridRenderer->Flush(nullptr);
         }

@@ -191,6 +191,9 @@ namespace Engine
                 *(_imgBuffer + (y * _width * 3) + (x * 3) + 1) = (unsigned char)(color.y * 255);
                 *(_imgBuffer + (y * _width * 3) + (x * 3) + 2) = (unsigned char)(color.z * 255);
             }
+            {
+                Logger::Error("Failed", "Modification", "Array access out of bounds");
+            }
         }
         else
         {
@@ -207,6 +210,9 @@ namespace Engine
                 *(_imgBuffer + (y * _width * 3) + (x * 3) + 0) = *(_backupBuffer + (y * _width * 3) + (x * 3) + 0);
                 *(_imgBuffer + (y * _width * 3) + (x * 3) + 1) = *(_backupBuffer + (y * _width * 3) + (x * 3) + 1);
                 *(_imgBuffer + (y * _width * 3) + (x * 3) + 2) = *(_backupBuffer + (y * _width * 3) + (x * 3) + 2);
+            }
+            {
+                Logger::Error("Failed", "Modification", "Array access out of bounds");
             }
         }
         else
@@ -250,6 +256,9 @@ namespace Engine
             return false;
         }
 
+        *colorOut = GetPxColorRaw(xpos, ypos);
+        return true;
+
         uint32 pxAmount = sampleAmount * sampleAmount;
         glm::uvec3 totalColor = {0, 0, 0};
 
@@ -257,7 +266,14 @@ namespace Engine
         {
             for(uint32 y = 0; y < sampleAmount; y++)
             {
-                totalColor += GetPxColorRaw(xpos + x, ypos + y);
+                if((int32)(xpos + x) < _width && (int32)(ypos + y)< _height)
+                {
+                    totalColor += GetPxColorRaw(xpos + x, ypos + y);
+                }
+                else
+                {
+                    Logger::Error("Failed", "Subsampling", "Array access out of bounds");
+                }
             }
         }
 

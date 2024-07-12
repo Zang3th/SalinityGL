@@ -1,4 +1,5 @@
 #include "GridRenderer.hpp"
+#include "Utility.hpp"
 
 namespace Engine
 {
@@ -128,7 +129,7 @@ namespace Engine
 
         if(width != height || width % size != 0 || height % size != 0)
         {
-            Logger::Error("Failed", "Subsampling", "Dimensions or format unsupported!");
+            Logger::Error("Failed", "Subsampling", "Dimensions or format unsupported");
             return;
         }
 
@@ -139,10 +140,10 @@ namespace Engine
         uint32 sampleAmount = width / size;
 
         glm::uvec3 subsampledColor = {0, 0, 0};
+        glm::uvec2 gridPos = pos;
         bool success = false;
-        uint32 count = 0;
 
-        //Go over the image in pxSample steps
+        //Go over the image in sampleAmount steps
         for(uint32 x = 0; x < width; x += sampleAmount)
         {
             for(uint32 y = 0; y < height; y += sampleAmount)
@@ -150,13 +151,18 @@ namespace Engine
                 success = tex->Subsample(x, y, sampleAmount, &subsampledColor);
                 if(success)
                 {
-                    Logger::Print("Color " + std::to_string(count) + ": "
-                                           + std::to_string(subsampledColor.x) + ", "
-                                           + std::to_string(subsampledColor.y) + ", "
-                                           + std::to_string(subsampledColor.z));
+                    glm::vec3 color = Utility::TransformVec3uTo3f(subsampledColor);
+                    Logger::Print("Color (" + std::to_string(gridPos.x) + ", "
+                                            + std::to_string(gridPos.y) + ") : "
+                                            + std::to_string(color.x) + ", "
+                                            + std::to_string(color.y) + ", "
+                                            + std::to_string(color.z));
+                    Set(gridPos.x, gridPos.y, color);
                 }
-                count++;
+                gridPos.y++;
             }
+            gridPos.x++;
+            gridPos.y = pos.y; //Reset y-position
         }
     }
 }

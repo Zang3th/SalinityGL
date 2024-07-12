@@ -39,4 +39,13 @@ namespace Engine
         const ColorEntry color = ColorLUT::ParaView[idx];
         return {color.r, color.g, color.b};
     }
+
+    glm::vec3 Utility::TransformVec3uTo3f(const glm::uvec3& vec)
+    {
+        return {
+            (float)vec.x / 255.0f,
+            (float)vec.y / 255.0f,
+            (float)vec.z / 255.0f,
+        };
+    }
 }

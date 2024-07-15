@@ -1,7 +1,7 @@
 # SalinityGL
 
-[![Build](https://github.com/Zang3th/SalinityGL/actions/workflows/build.yml/badge.svg)](https://github.com/Zang3th/SalinityGL/actions/workflows/build.yml)
-[![Static Analysis](https://github.com/Zang3th/SalinityGL/actions/workflows/analyze.yml/badge.svg)](https://github.com/Zang3th/SalinityGL/actions/workflows/analyze.yml)
+[![Build](https://github.com/Zang3th/SalinityGL/actions/workflows/build.yml/badge.svg?branch=liquefied-2d)](https://github.com/Zang3th/SalinityGL/actions/workflows/build.yml)
+[![Static Analysis](https://github.com/Zang3th/SalinityGL/actions/workflows/analyze.yml/badge.svg?branch=liquefied-2d)](https://github.com/Zang3th/SalinityGL/actions/workflows/analyze.yml)
 ![OS](https://img.shields.io/badge/OS-Linux-blue)
 ![Release](https://img.shields.io/badge/Release-v0.1.1-blue)
 

@@ -147,16 +147,6 @@ namespace Engine
         return _initStatus;
     }
 
-    uint32 TextureBuffer::GetWidth() const
-    {
-        return _width;
-    }
-
-    uint32 TextureBuffer::GetHeight() const
-    {
-        return _height;
-    }
-
     unsigned char* TextureBuffer::GetRawData() const
     {
         return _pxBuffer;

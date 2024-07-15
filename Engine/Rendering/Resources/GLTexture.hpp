@@ -1,10 +1,7 @@
 #pragma once
 
-#include "stb_image.hpp"
+#include "TextureBuffer.hpp"
 #include "ErrorManager.hpp"
-#include "glm.hpp"
-
-#include <cstring>
 
 namespace Engine
 {
@@ -17,36 +14,41 @@ namespace Engine
             int32          _width, _height, _nrChannels;
             GLenum         _format;
             uint32         _textureID, _numberOfRows;
-            bool           _saveToBuffer;
-            unsigned char *_imgBuffer, *_backupBuffer;
+            TextureBuffer* _textureBuffer;
+            // bool           _saveToBuffer;
+            // unsigned char *_imgBuffer, *_backupBuffer;
 
-            void InitFromFile(const std::string& filepath);
+            void Init(const std::string& filepath);
             void Create(uint32 width, uint32 height, GLint internalFormat, GLenum format, GLenum type);
-            [[nodiscard]] glm::uvec3 GetPxColorRaw(uint32 x, uint32 y) const;
+            // [[nodiscard]] glm::uvec3 GetPxColorRaw(uint32 x, uint32 y) const;
 
         public:
-            explicit Texture(const std::string &filepath, uint32 numberOfRows = 0, bool saveToBuffer = false);
+            explicit Texture(const std::string &filepath, bool saveBackup, uint32 numberOfRows = 0);
             Texture(int32 width, int32 height, GLint internalFormat, GLenum format, GLenum type);
             ~Texture();
 
             void Bind() const;
             void BindToSlot(uint32 slot) const;
             void Unbind() const;
-            void ActivateTextureFlipOnLoad() const;
-            void DeactivateTextureFlipOnLoad() const;
-            void AddFilterNearest() const;
-            void AddFilterLinear() const;
+            // void ActivateTextureFlipOnLoad() const;
+            // void DeactivateTextureFlipOnLoad() const;
+
+            void AddMinFilterMipmapLinear() const;
+            void AddMinFilterNearest() const;
+            void AddMaxFilterNearest() const;
+            void AddMinFilterLinear() const;
+            void AddMaxFilterLinear() const;
             void AddWrapRepeat() const;
-            void ClampToEdge() const;
+            void AddClampToEdge() const;
             void AddBorderColor() const;
-            void ModifyTexture(uint32 x, uint32 y, const glm::vec3& color);
-            void ResetTextureModification(uint32 x, uint32 y);
-            void CommitModifications() const;
+            // void ModifyTexture(uint32 x, uint32 y, const glm::vec3& color);
+            // void ResetTextureModification(uint32 x, uint32 y);
+            // void CommitModifications() const;
 
             [[nodiscard]] uint32 GetWidth() const;
             [[nodiscard]] uint32 GetHeight() const;
             [[nodiscard]] uint32 GetTextureID() const;
             [[nodiscard]] uint32 GetNumberOfRows() const;
-            [[nodiscard]] bool   Subsample(uint32 xpos, uint32 ypos, uint32 sampleAmount, glm::uvec3* colorOut) const;
+            // [[nodiscard]] bool   Subsample(uint32 xpos, uint32 ypos, uint32 sampleAmount, glm::uvec3* colorOut) const;
     };
 }

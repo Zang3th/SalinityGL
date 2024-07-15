@@ -35,6 +35,7 @@ Checks: "*,
         -altera-struct-pack-align,
         -bugprone-macro-parentheses,
         -misc-non-private-member-variables-in-classes,
+        -fuchsia-overloaded-operator,
 "
 WarningsAsErrors: ''
 HeaderFilterRegex: ''

@@ -1,6 +1,6 @@
 # SalinityGL
 
-[![Build](https://github.com/Zanget3u/GameEngine/actions/workflows/build.yml/badge.svg)](https://github.com/Zanget3u/GameEngine/actions/workflows/build.yml)
+[![Build](https://github.com/Zang3th/SalinityGL/actions/workflows/build.yml/badge.svg)](https://github.com/Zang3th/SalinityGL/actions/workflows/build.yml)
 [![Static Analysis](https://github.com/Zang3th/SalinityGL/actions/workflows/analyze.yml/badge.svg)](https://github.com/Zang3th/SalinityGL/actions/workflows/analyze.yml)
 ![OS](https://img.shields.io/badge/OS-Linux-blue)
 ![Release](https://img.shields.io/badge/Release-v0.1.1-blue)
@@ -32,6 +32,7 @@ SalinityGL is licensed under the [MIT LICENSE](https://github.com/Zang3th/GameEn
     │   ├── Rendering/              # GL stuff, buffers, renderer ...
     │   └── Engine.hpp              # Main header for include in the applications
     ├── Res/                        # Assets, sounds and screenshots
+    ├── Scripts/                    # Scripts for static analysis, profiling and building
     └── Vendor/                     # Third party libraries
 
 ## Base layer functionalities

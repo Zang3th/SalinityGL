@@ -27,7 +27,7 @@ namespace Engine
     // --- Renaming stuff
     using int8   = int8_t;
     using int16  = int16_t;
-    using int32  = int32_t; 
+    using int32  = int32_t;
     using int64  = int64_t;
     using uint8  = uint8_t;
     using uint16 = uint16_t;
@@ -53,5 +53,12 @@ namespace Engine
         float r;
         float g;
         float b;
+    };
+
+    struct PxColor
+    {
+        unsigned char r;
+        unsigned char g;
+        unsigned char b;
     };
 }

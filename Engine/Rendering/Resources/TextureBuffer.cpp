@@ -4,6 +4,16 @@ namespace Engine
 {
     // ----- Private -----
 
+    void TextureBuffer::ActivateTextureFlipOnLoad() const
+    {
+        stbi_set_flip_vertically_on_load(true);
+    }
+
+    void TextureBuffer::DeactivateTextureFlipOnLoad() const
+    {
+        stbi_set_flip_vertically_on_load(false);
+    }
+
     uint32 TextureBuffer::Init(const std::string &filepath)
     {
         uint32 initStatus = EXIT_FAILURE;
@@ -60,6 +70,54 @@ namespace Engine
         return initStatus;
     }
 
+    // ----- Public -----
+
+    TextureBuffer::TextureBuffer(const std::string &filepath, bool saveBackup)
+        :   _initStatus(EXIT_FAILURE), _width(0), _height(0), _channels(0), _format(0),
+            _saveBackup(saveBackup), _pxBuffer(nullptr), _backupBuffer(nullptr)
+    {
+        _initStatus = Init(filepath);
+    }
+
+    TextureBuffer::~TextureBuffer()
+    {
+        stbi_image_free(_pxBuffer);
+        if(_saveBackup)
+        {
+            free(_backupBuffer);
+        }
+    }
+
+    uint32 TextureBuffer::GetInitStatus() const
+    {
+        return _initStatus;
+    }
+
+    uint32 TextureBuffer::GetWidth() const
+    {
+        return _width;
+    }
+
+    uint32 TextureBuffer::GetHeight() const
+    {
+        return _height;
+    }
+
+    uint32 TextureBuffer::GetChannels() const
+    {
+        return _channels;
+    }
+
+    GLenum TextureBuffer::GetFormat() const
+    {
+        return _format;
+    }
+
+    unsigned char* TextureBuffer::GetRawData() const
+    {
+        return _pxBuffer;
+    }
+
     bool TextureBuffer::GetPxColor(uint32 x, uint32 y, PxColor* colorOut) const
     {
         if(x < _width && y < _height)
@@ -112,44 +170,6 @@ namespace Engine
         }
 
         return success;
-    }
-
-    // ----- Public -----
-
-    TextureBuffer::TextureBuffer(const std::string &filepath, bool saveBackup)
-        :   _initStatus(EXIT_FAILURE), _width(0), _height(0), _channels(0), _format(0),
-            _saveBackup(saveBackup), _pxBuffer(nullptr), _backupBuffer(nullptr)
-    {
-        _initStatus = Init(filepath);
-    }
-
-    TextureBuffer::~TextureBuffer()
-    {
-        stbi_image_free(_pxBuffer);
-        if(_saveBackup)
-        {
-            free(_backupBuffer);
-        }
-    }
-
-    void TextureBuffer::ActivateTextureFlipOnLoad() const
-    {
-        stbi_set_flip_vertically_on_load(true);
-    }
-
-    void TextureBuffer::DeactivateTextureFlipOnLoad() const
-    {
-        stbi_set_flip_vertically_on_load(false);
-    }
-
-    uint32 TextureBuffer::GetInitStatus() const
-    {
-        return _initStatus;
-    }
-
-    unsigned char* TextureBuffer::GetRawData() const
-    {
-        return _pxBuffer;
     }
 
     bool TextureBuffer::SubsampleArea(uint32 xpos, uint32 ypos, uint32 sampleAmount, glm::uvec3* colorOut) const

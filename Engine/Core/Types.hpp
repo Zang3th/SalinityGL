@@ -54,4 +54,11 @@ namespace Engine
         float g;
         float b;
     };
+
+    struct PxColor
+    {
+        unsigned char r;
+        unsigned char g;
+        unsigned char b;
+    };
 }

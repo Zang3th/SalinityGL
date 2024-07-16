@@ -8,30 +8,24 @@ namespace Engine
     //Anisotropic filtering is implemented as an extension and isn't included in the OpenGL-Core
     #define GL_TEXTURE_MAX_ANISOTROPY_EXT 0x84FE
 
-    class Texture
+    class GLTexture
     {
         private:
-            int32          _width, _height, _nrChannels;
+            uint32         _initStatus, _width, _height, _channels, _textureID, _numberOfRows;
             GLenum         _format;
-            uint32         _textureID, _numberOfRows;
             TextureBuffer* _textureBuffer;
-            // bool           _saveToBuffer;
-            // unsigned char *_imgBuffer, *_backupBuffer;
 
-            void Init(const std::string& filepath);
-            void Create(uint32 width, uint32 height, GLint internalFormat, GLenum format, GLenum type);
-            // [[nodiscard]] glm::uvec3 GetPxColorRaw(uint32 x, uint32 y) const;
+            [[nodiscard]] uint32 Init(const std::string& filepath, bool saveBackup);
+            [[nodiscard]] uint32 Create(GLint internalFormat, GLenum type);
 
         public:
-            explicit Texture(const std::string &filepath, bool saveBackup, uint32 numberOfRows = 0);
-            Texture(int32 width, int32 height, GLint internalFormat, GLenum format, GLenum type);
-            ~Texture();
+            explicit GLTexture(const std::string& filepath, bool saveBackup, uint32 numberOfRows = 0);
+            GLTexture(uint32 width, uint32 height, GLint internalFormat, GLenum format, GLenum type);
+            ~GLTexture();
 
             void Bind() const;
             void BindToSlot(uint32 slot) const;
             void Unbind() const;
-            // void ActivateTextureFlipOnLoad() const;
-            // void DeactivateTextureFlipOnLoad() const;
 
             void AddMinFilterMipmapLinear() const;
             void AddMinFilterNearest() const;
@@ -40,15 +34,12 @@ namespace Engine
             void AddMaxFilterLinear() const;
             void AddWrapRepeat() const;
             void AddClampToEdge() const;
-            void AddBorderColor() const;
-            // void ModifyTexture(uint32 x, uint32 y, const glm::vec3& color);
-            // void ResetTextureModification(uint32 x, uint32 y);
-            // void CommitModifications() const;
+            void AddBorderColor(const glm::vec4& color) const;
 
-            [[nodiscard]] uint32 GetWidth() const;
-            [[nodiscard]] uint32 GetHeight() const;
-            [[nodiscard]] uint32 GetTextureID() const;
-            [[nodiscard]] uint32 GetNumberOfRows() const;
-            // [[nodiscard]] bool   Subsample(uint32 xpos, uint32 ypos, uint32 sampleAmount, glm::uvec3* colorOut) const;
+            [[nodiscard]] uint32         GetWidth() const;
+            [[nodiscard]] uint32         GetHeight() const;
+            [[nodiscard]] uint32         GetTextureID() const;
+            [[nodiscard]] uint32         GetNumberOfRows() const;
+            [[nodiscard]] TextureBuffer* GetTextureBuffer() const;
     };
 }

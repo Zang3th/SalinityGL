@@ -4,7 +4,7 @@
 #include "glm.hpp"
 #include "gtc/matrix_transform.hpp"
 #include "Shader.hpp"
-#include "Texture.hpp"
+#include "GLTexture.hpp"
 #include "ResourceManager.hpp"
 #include "Renderer.hpp"
 #include "GLRenderSettings.hpp"
@@ -20,7 +20,7 @@ namespace Engine
             uint32              _shadowWidth;
             uint32              _shadowHeight;
             Shader*             _shadowShader;
-            
+
             void StartFrame();
             void EndFrame();
 
@@ -29,7 +29,7 @@ namespace Engine
 
             void Flush(Renderer* sceneRenderer) override;
 
-            [[nodiscard]] Texture* GetDepthTexture() const;
-            [[nodiscard]] glm::mat4 GetLightProjection() const;
+            [[nodiscard]] GLTexture* GetDepthTexture() const;
+            [[nodiscard]] glm::mat4  GetLightProjection() const;
     };
 }

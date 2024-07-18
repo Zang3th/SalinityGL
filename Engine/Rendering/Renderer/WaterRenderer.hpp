@@ -33,9 +33,9 @@ namespace Engine
             WaterRenderer();
 
             void Flush(Renderer* sceneRenderer) override;
-            
-            [[nodiscard]] Texture* GetReflectTexture()      const;
-            [[nodiscard]] Texture* GetRefractTexture()      const;
-            [[nodiscard]] Texture* GetRefractDepthTexture() const;
+
+            [[nodiscard]] GLTexture* GetReflectTexture()      const;
+            [[nodiscard]] GLTexture* GetRefractTexture()      const;
+            [[nodiscard]] GLTexture* GetRefractDepthTexture() const;
     };
 }

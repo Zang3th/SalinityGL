@@ -48,24 +48,24 @@ namespace Engine
             void AddCubemap(const std::array<const char*, 6>& faces, const std::string& shader);
             void AddTerrain
             (
-                uint32 x, uint32 z, float tileSize, const glm::vec3& position, Texture* depthTexture,
-                const std::string& texture, const std::string& colormap, const std::string& heightmap
+                uint32 x, uint32 z, float tileSize, const glm::vec3& position, GLTexture* depthTexture,
+                const std::string& glTexture, const std::string& colormap, const std::string& heightmap
             );
             void AddObject
             (
                 float size, const glm::vec3& rotation, const glm::vec3& position,
-                Texture* depthTexture, const std::string& objName, const std::string& objFilepath
+                GLTexture* depthTexture, const std::string& objName, const std::string& objFilepath
             );
             void AddWater
             (
                 uint32 x, uint32 z, float tileSize, const glm::vec3& position,
                 float waveSpeed, const std::string& dudvMap, const std::string& normalMap,
-                Texture* reflectTex, Texture* refractTex, Texture* refractDepthTex
+                GLTexture* reflectTex, GLTexture* refractTex, GLTexture* refractDepthTex
             );
             void AddPlane
             (
                     uint32 x, uint32 z, float tileSize, const glm::vec3& position,
-                    Texture* depthTexture, const std::optional<const std::string>& texture
+                    GLTexture* depthTexture, const std::optional<const std::string>& glTexture
             );
 
             void SetTerrainShader(const std::string& terrainShader);

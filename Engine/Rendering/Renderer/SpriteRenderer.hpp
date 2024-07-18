@@ -2,7 +2,7 @@
 
 #include "Renderer.hpp"
 #include "glm.hpp"
-#include "Texture.hpp"
+#include "GLTexture.hpp"
 #include "Shader.hpp"
 #include "GLRenderSettings.hpp"
 #include "Sprite.hpp"
@@ -20,6 +20,6 @@ namespace Engine
         public:
             SpriteRenderer();
             void Flush(Renderer* renderer) override;
-            void AddSprite(const glm::vec2& size, const glm::vec2& pos, Texture* texture, Shader* shader);
+            void AddSprite(const glm::vec2& size, const glm::vec2& pos, GLTexture* glTexture, Shader* shader);
     };
 }

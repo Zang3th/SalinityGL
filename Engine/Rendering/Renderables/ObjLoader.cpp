@@ -14,8 +14,8 @@ namespace Engine
         std::string objFullFilepath = baseFilepath + "/" + filename + ".obj";
 
         if(!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, objFullFilepath.c_str(), baseFilepath.c_str()))
-        { 
-            Logger::Error("Failed", "OBJ-Loading", objFullFilepath); 
+        {
+            Logger::Error("Failed", "OBJ-Loading", objFullFilepath);
         }
         else
         {
@@ -29,12 +29,12 @@ namespace Engine
 
         //Additional error checking to catch edge cases
         if(!warn.empty())
-        { 
-            Logger::Warn("Warning", "tinyobj", warn); 
+        {
+            Logger::Warn("Warning", "tinyobj", warn);
         }
         if(!err.empty())
-        { 
-            Logger::Error("Error", "tinyobj", err); 
+        {
+            Logger::Error("Error", "tinyobj", err);
         }
 
         //Iterate over all shapes
@@ -79,8 +79,8 @@ namespace Engine
                 //Load diffuse texture
                 std::string textureFilepath = baseFilepath + "/" + materials[i].diffuse_texname;
                 std::string textureName = filename + "DiffuseTexture";
-                ResourceManager::LoadTexture(textureName, textureFilepath);
-                mesh.textures.push_back(ResourceManager::GetTexture(textureName));
+                ResourceManager::LoadGLTexture(textureName, textureFilepath);
+                mesh.glTextures.push_back(ResourceManager::GetGLTexture(textureName));
                 mesh.gotDiffuseTex = 1;
             }
 
@@ -90,8 +90,8 @@ namespace Engine
                 //Load bump map
                 std::string textureFilepath = baseFilepath + "/" + materials[i].bump_texname;
                 std::string textureName = filename + "NormalTexture";
-                ResourceManager::LoadTexture(textureName, textureFilepath);
-                mesh.textures.push_back(ResourceManager::GetTexture(textureName));
+                ResourceManager::LoadGLTexture(textureName, textureFilepath);
+                mesh.glTextures.push_back(ResourceManager::GetGLTexture(textureName));
                 mesh.gotNormalMap = 1;
             }
 

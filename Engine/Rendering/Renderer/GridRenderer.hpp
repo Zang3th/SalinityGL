@@ -32,6 +32,6 @@ namespace Engine
             void UpdateGpuStorage() const;
             void Set(uint32 x, uint32 y, const glm::vec3& color);
             void Reset(uint32 x, uint32 y);
-            void AddTextureSubsampled(const std::string& texture, const glm::uvec2& pos, uint32 size);
+            void AddTextureBufferSubsampled(const std::string& texBuffer, const glm::uvec2& pos, uint32 size);
     };
 }  // namespace Engine

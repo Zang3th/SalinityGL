@@ -27,10 +27,13 @@ namespace Engine
         _fbo->Bind();
 
         //Create and configure depth texture attachment
-        Texture* depthTexture = _fbo->CreateDepthTextureAttachment("ShadowDepthTexture", _shadowWidth, _shadowHeight);
-        depthTexture->AddFilterNearest();
-        depthTexture->ClampToEdge();
-        depthTexture->AddBorderColor();
+        GLTexture* depthTexture = _fbo->CreateDepthTextureAttachment("ShadowDepthTexture", _shadowWidth, _shadowHeight);
+        depthTexture->Bind();
+        depthTexture->AddMinFilterNearest();
+        depthTexture->AddMaxFilterNearest();
+        depthTexture->AddClampToEdge();
+        depthTexture->AddBorderColor({1.0f, 1.0f, 1.0f, 1.0f});
+        depthTexture->Unbind();
 
         _fbo->Unbind();
 
@@ -46,7 +49,7 @@ namespace Engine
         EndFrame();
     }
 
-    Texture* ShadowRenderer::GetDepthTexture() const
+    GLTexture* ShadowRenderer::GetDepthTexture() const
     {
         return _fbo->GetDepthTexture();
     }

@@ -13,8 +13,9 @@ namespace Engine
         _reflectFBO->CreateDepthBufferAttachment(_reflectionWidth, _reflectionHeight);
 
         //Create and configure texture attachment
-        Texture* reflectTexture = _reflectFBO->CreateTextureAttachment("ReflectionTexture", _reflectionWidth, _reflectionHeight);
-        reflectTexture->AddFilterLinear();
+        GLTexture* reflectTexture = _reflectFBO->CreateTextureAttachment("ReflectionTexture", _reflectionWidth, _reflectionHeight);
+        reflectTexture->AddMinFilterLinear();
+        reflectTexture->AddMaxFilterLinear();
 
         _reflectFBO->Unbind();
     }
@@ -27,10 +28,17 @@ namespace Engine
         _refractFBO->SetColorAttachment0();
 
         //Create and configure texture attachments
-        Texture* refractTexture = _refractFBO->CreateTextureAttachment("RefractionTexture", _refractionWidth, _refractionHeight);
-        refractTexture->AddFilterLinear();
-        Texture* refractDepthTexture = _refractFBO->CreateDepthTextureAttachment("RefractionDepthTexture", _refractionWidth, _refractionHeight);
-        refractDepthTexture->AddFilterLinear();
+        GLTexture* refractTexture = _refractFBO->CreateTextureAttachment("RefractionTexture", _refractionWidth, _refractionHeight);
+        refractTexture->Bind();
+        refractTexture->AddMinFilterLinear();
+        refractTexture->AddMaxFilterLinear();
+        refractTexture->Unbind();
+
+        GLTexture* refractDepthTexture = _refractFBO->CreateDepthTextureAttachment("RefractionDepthTexture", _refractionWidth, _refractionHeight);
+        refractDepthTexture->Bind();
+        refractDepthTexture->AddMinFilterLinear();
+        refractDepthTexture->AddMaxFilterLinear();
+        refractDepthTexture->Unbind();
 
         _refractFBO->Unbind();
     }
@@ -121,17 +129,17 @@ namespace Engine
         GLRenderSettings::DisableClipDistance(GL_CLIP_DISTANCE0);
     }
 
-    Texture* WaterRenderer::GetReflectTexture() const
+    GLTexture* WaterRenderer::GetReflectTexture() const
     {
         return _reflectFBO->GetTexture();
     }
 
-    Texture* WaterRenderer::GetRefractTexture() const
+    GLTexture* WaterRenderer::GetRefractTexture() const
     {
         return _refractFBO->GetTexture();
     }
 
-    Texture* WaterRenderer::GetRefractDepthTexture() const
+    GLTexture* WaterRenderer::GetRefractDepthTexture() const
     {
         return _refractFBO->GetDepthTexture();
     }

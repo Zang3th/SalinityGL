@@ -2,7 +2,7 @@
 
 namespace Engine
 {
-    // ----- Private -----   
+    // ----- Private -----
 
     void Sprite::InitGpuStorage()
     {
@@ -31,7 +31,7 @@ namespace Engine
         _vao->Unbind();
         _vboVert->Unbind();
     }
-    
+
     void Sprite::SetModelMatrix()
     {
         //Create model matrix and apply transformations
@@ -53,11 +53,11 @@ namespace Engine
 
     // ----- Public -----
 
-    Sprite::Sprite(Texture* texture, Shader* shader, const glm::vec3& color, const glm::vec2& size)
+    Sprite::Sprite(GLTexture* glTexture, Shader* shader, const glm::vec3& color, const glm::vec2& size)
         :   _orthoProj(glm::ortho(0.0f, (float)WindowParams::WIDTH, 0.0f, (float)WindowParams::HEIGHT, -1.0f, 1.0f)),
             _model(glm::mat4(1.0f)),
             _color(color),
-            _texture(texture),
+            _glTexture(glTexture),
             _shader(shader),
             _position(glm::vec2(0.0f)),
             _size(size),
@@ -74,9 +74,9 @@ namespace Engine
         _shader->Bind();
 
         //Bind texture
-        if(_texture)
-        { 
-            _texture->Bind(); 
+        if(_glTexture)
+        {
+            _glTexture->Bind();
         }
 
         //Bind vao and vbo
@@ -96,9 +96,9 @@ namespace Engine
         _vao->Unbind();
 
         //Unbind texture
-        if(_texture)
-        { 
-            _texture->Unbind(); 
+        if(_glTexture)
+        {
+            _glTexture->Unbind();
         }
 
         //Unbind shader
@@ -126,13 +126,13 @@ namespace Engine
         SetModelMatrix();
     }
 
-    void Sprite::SetTexture(Texture* texture)
+    void Sprite::SetGLTexture(GLTexture* glTexture)
     {
-        _texture = texture;
+        _glTexture = glTexture;
     }
 
-    Texture* Sprite::GetTexture() const
+    GLTexture* Sprite::GetGLTexture() const
     {
-        return _texture;
+        return _glTexture;
     }
 }

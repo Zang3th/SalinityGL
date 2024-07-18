@@ -8,7 +8,7 @@ namespace Engine
     {
         //Get textures and bind them
         uint8_t slot = 0;
-        for(const auto& tex : *model->GetTextures())
+        for(const auto& tex : *model->GetGLTextures())
         {
             if(tex != nullptr)
                 tex->BindToSlot(slot);
@@ -38,7 +38,7 @@ namespace Engine
         model->UnbindBuffers();
 
         //Unbind textures
-        for(const auto& tex : *model->GetTextures())
+        for(const auto& tex : *model->GetGLTextures())
         {
             tex->Unbind();
         }
@@ -57,7 +57,7 @@ namespace Engine
 
         //Get textures and bind them
         uint8_t slot = 0;
-        for(const auto& tex : *_waterModel->GetTextures())
+        for(const auto& tex : *_waterModel->GetGLTextures())
         {
             tex->BindToSlot(slot++);
         }
@@ -89,7 +89,7 @@ namespace Engine
         _waterModel->UnbindBuffers();
 
         //Unbind textures
-        for(const auto& tex : *_waterModel->GetTextures())
+        for(const auto& tex : *_waterModel->GetGLTextures())
         {
             tex->Unbind();
         }
@@ -215,8 +215,8 @@ namespace Engine
 
     void SceneRenderer::AddTerrain
     (
-        const uint32 x, const uint32 z, const float tileSize, const glm::vec3& position, Texture* depthTexture,
-        const std::string& texture, const std::string& colormap, const std::string& heightmap
+        const uint32 x, const uint32 z, const float tileSize, const glm::vec3& position, GLTexture* depthTexture,
+        const std::string& glTexture, const std::string& colormap, const std::string& heightmap
     )
     {
         //Create terrain mesh
@@ -230,15 +230,15 @@ namespace Engine
         _terrainModel->ChangePosition(position);
 
         //Add textures
-        _terrainModel->AddTexture(ResourceManager::GetTexture(texture));
-        _terrainModel->AddTexture(depthTexture);
-        _terrainModel->AddTexture(ResourceManager::GetTexture(colormap));
+        _terrainModel->AddGLTexture(ResourceManager::GetGLTexture(glTexture));
+        _terrainModel->AddGLTexture(depthTexture);
+        _terrainModel->AddGLTexture(ResourceManager::GetGLTexture(colormap));
     }
 
     void SceneRenderer::AddObject
     (
         const float size, const glm::vec3& rotation, const glm::vec3& position,
-        Texture* depthTexture, const std::string& objName, const std::string& objFilepath
+        GLTexture* depthTexture, const std::string& objName, const std::string& objFilepath
     )
     {
         //Get meshes out of obj-File
@@ -250,7 +250,7 @@ namespace Engine
         {
             auto *objModel = new Model(&mesh);
 
-            objModel->AddTextureToSlot(depthTexture, 1);
+            objModel->AddGLTextureToSlot(depthTexture, 1);
             objModel->ChangeSize(size);
             objModel->ChangeRotation(rotation);
             objModel->ChangePosition(position);
@@ -263,7 +263,7 @@ namespace Engine
     (
         const uint32 x, const uint32 z, const float tileSize, const glm::vec3& position,
         const float waveSpeed, const std::string& dudvMap, const std::string& normalMap,
-        Texture* reflectTex, Texture* refractTex, Texture* refractDepthTex
+        GLTexture* reflectTex, GLTexture* refractTex, GLTexture* refractDepthTex
     )
     {
         //Create plane mesh
@@ -277,11 +277,11 @@ namespace Engine
         _waterModel->ChangePosition(position);
 
         //Add textures (ORDER IMPORTANT!)
-        _waterModel->AddTexture(reflectTex);
-        _waterModel->AddTexture(refractTex);
-        _waterModel->AddTexture(ResourceManager::GetTexture(dudvMap));
-        _waterModel->AddTexture(ResourceManager::GetTexture(normalMap));
-        _waterModel->AddTexture(refractDepthTex);
+        _waterModel->AddGLTexture(reflectTex);
+        _waterModel->AddGLTexture(refractTex);
+        _waterModel->AddGLTexture(ResourceManager::GetGLTexture(dudvMap));
+        _waterModel->AddGLTexture(ResourceManager::GetGLTexture(normalMap));
+        _waterModel->AddGLTexture(refractDepthTex);
 
         //Store other variable(s)
         _waveSpeed = waveSpeed;
@@ -290,7 +290,7 @@ namespace Engine
     void SceneRenderer::AddPlane
     (
         const uint32 x, const uint32 z, const float tileSize, const glm::vec3& position,
-        Texture* depthTexture, const std::optional<const std::string>& texture
+        GLTexture* depthTexture, const std::optional<const std::string>& glTexture
     )
     {
         //Create terrain mesh
@@ -304,13 +304,13 @@ namespace Engine
         _planeModel->ChangePosition(position);
 
         //Add texture(s)
-        if(texture.has_value())
+        if(glTexture.has_value())
         {
-            _planeModel->AddTexture(ResourceManager::GetTexture(*texture));
+            _planeModel->AddGLTexture(ResourceManager::GetGLTexture(*glTexture));
             _planeModel->SetDiffuseTexture();
         }
 
-        _planeModel->AddTextureToSlot(depthTexture, 1);
+        _planeModel->AddGLTextureToSlot(depthTexture, 1);
     }
 
     void SceneRenderer::SetTerrainShader(const std::string& terrainShader)

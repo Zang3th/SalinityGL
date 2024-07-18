@@ -1,3 +1,5 @@
+#pragma once
+
 #include "stb_image.hpp"
 #include "ErrorManager.hpp"
 #include "glm.hpp"

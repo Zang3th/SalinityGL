@@ -15,7 +15,7 @@ namespace GW
             Engine::SpriteRenderer*            _spriteRenderer   = nullptr;
             Engine::Scope<GreenWorldInterface> _interface;
             Engine::Scope<Engine::Audio>       _audio;
-    
+
             void LoadResources() override;
             void AddObjects();
             void AddSprites();
@@ -27,7 +27,7 @@ namespace GW
 
             //Not needed in this app because we only use a general 3D camera controller to handle input.
             void ProcessInput() override {}
-            
+
             [[nodiscard]] bool Init() override;
     };
 }

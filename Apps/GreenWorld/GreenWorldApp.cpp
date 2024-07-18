@@ -17,11 +17,11 @@ namespace GW
         Engine::ResourceManager::LoadShader("SpriteShaderGreyscale", "../Res/Shader/GreenWorld/Sprite_VS.glsl", "../Res/Shader/GreenWorld/SpriteGreyscale_FS.glsl");
 
         //Textures
-        Engine::ResourceManager::LoadTextureAtlas("ParticleTextureAtlas", "../Res/Assets/Textures/GreenWorld/SmokeAtlas.png", 8);
-        Engine::ResourceManager::LoadTexture("TerrainGrassTexture", "../Res/Assets/Textures/GreenWorld/Grass.jpg");
-        Engine::ResourceManager::LoadTexture("TerrainColormap", "../Res/Assets/Textures/GreenWorld/Colormap128.png");
-        Engine::ResourceManager::LoadTexture("WaterDuDvMap", "../Res/Assets/Textures/GreenWorld/DuDvMap.png");
-        Engine::ResourceManager::LoadTexture("WaterNormalMap", "../Res/Assets/Textures/GreenWorld/WaterNormalMap.png");
+        Engine::ResourceManager::LoadGLTextureAtlas("ParticleTextureAtlas", "../Res/Assets/Textures/GreenWorld/SmokeAtlas.png", 8);
+        Engine::ResourceManager::LoadGLTexture("TerrainGrassTexture", "../Res/Assets/Textures/GreenWorld/Grass.jpg");
+        Engine::ResourceManager::LoadGLTexture("TerrainColormap", "../Res/Assets/Textures/GreenWorld/Colormap128.png");
+        Engine::ResourceManager::LoadGLTexture("WaterDuDvMap", "../Res/Assets/Textures/GreenWorld/DuDvMap.png");
+        Engine::ResourceManager::LoadGLTexture("WaterNormalMap", "../Res/Assets/Textures/GreenWorld/WaterNormalMap.png");
 
         //Heightmap
         Engine::ResourceManager::LoadHeightmap("TerrainHeightmap", "../Res/Assets/Textures/GreenWorld/Heightmap128.bmp");
@@ -57,7 +57,7 @@ namespace GW
         _shadowRenderer = new Engine::ShadowRenderer(8192, 8192, glm::ortho(-90.0f, 90.0f, -90.0f, 90.0f, 110.0f, 210.0f), "ShadowCreateShader");
         _sceneRenderer->AddLightProjection(_shadowRenderer->GetLightProjection());
         Engine::RenderManager::Submit(_shadowRenderer);
-    
+
         _waterRenderer  = new Engine::WaterRenderer();
         Engine::RenderManager::Submit(_waterRenderer);
 
@@ -92,7 +92,7 @@ namespace GW
 
         AddObjects();
         AddSprites();
-    
+
         return true;
     }
 

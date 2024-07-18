@@ -101,7 +101,7 @@ namespace GW
             CenterText("Textures:");
             ImGui::Separator();
             ImGui::NewLine();
-            CenterText(Engine::ResourceManager::OutputTextureStorage().c_str());
+            CenterText(Engine::ResourceManager::OutputGLTextureStorage().c_str());
         }
         ImGui::End();
     }

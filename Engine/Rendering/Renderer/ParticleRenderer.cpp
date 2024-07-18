@@ -122,10 +122,10 @@ namespace Engine
     ParticleRenderer::ParticleRenderer
     (
         uint32 count, float size, float speed, float gravityCompliance, float lifeLength,
-        float respawnThreshold, const std::string& textureAtlas, const std::string& shader, const glm::vec3& position
+        float respawnThreshold, const std::string& glTextureAtlas, const std::string& shader, const glm::vec3& position
     )
-        :   _textureAtlas(ResourceManager::GetTexture(textureAtlas)), _shader(ResourceManager::GetShader(shader)),
-            _count(count), _numberOfRows(_textureAtlas->GetNumberOfRows()), _verticeCount(4), _size(size),
+        :   _glTextureAtlas(ResourceManager::GetGLTexture(glTextureAtlas)), _shader(ResourceManager::GetShader(shader)),
+            _count(count), _numberOfRows(_glTextureAtlas->GetNumberOfRows()), _verticeCount(4), _size(size),
             _speed(speed), _gravityCompliance(gravityCompliance), _lifeLength(lifeLength),
             _respawnTreshold(respawnThreshold), _position(position)
     {
@@ -137,8 +137,8 @@ namespace Engine
     ParticleRenderer::~ParticleRenderer()
     {
         for(auto const& p : _particleStorage)
-        { 
-            delete p; 
+        {
+            delete p;
         }
     }
 
@@ -150,7 +150,7 @@ namespace Engine
         _shader->Bind();
 
         //Bind texture
-        _textureAtlas->Bind();
+        _glTextureAtlas->Bind();
 
         //Bind vao and vbo's
         _vao->Bind();
@@ -199,7 +199,7 @@ namespace Engine
         _vao->Unbind();
 
         //Unbind texture
-        _textureAtlas->Unbind();
+        _glTextureAtlas->Unbind();
 
         //Unbind shader
         _shader->Unbind();

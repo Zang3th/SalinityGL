@@ -11,9 +11,9 @@ namespace Liq
         Engine::ResourceManager::LoadShader("GridShader", "../Res/Shader/Liquefied/Grid_VS.glsl", "../Res/Shader/Liquefied/Grid_FS.glsl");
 
         //Textures
-        Engine::ResourceManager::LoadTextureToBuffer("TurbineTexture", "../Res/Assets/Textures/Liquefied/Turbine_512.png");
-        Engine::ResourceManager::LoadTextureToBuffer("ObstacleTexture", "../Res/Assets/Textures/Liquefied/Box_512.png");
-        Engine::ResourceManager::LoadTextureToBuffer("TestTexture", "../Res/Assets/Textures/Liquefied/Test_1C_1G_8Px.png");
+        Engine::ResourceManager::LoadTextureBuffer("TurbineTexture", "../Res/Assets/Textures/Liquefied/Turbine_512.png");
+        Engine::ResourceManager::LoadTextureBuffer("ObstacleTexture", "../Res/Assets/Textures/Liquefied/Box_512.png");
+        Engine::ResourceManager::LoadTextureBuffer("TestTexture", "../Res/Assets/Textures/Liquefied/Test_1C_1G_8Px.png");
     }
 
     void LiquefiedApp::AddBorderCells() const
@@ -112,7 +112,7 @@ namespace Liq
         //     turbinePos,
         //     turbineSize
         // );
-        _gridRenderer->AddTextureSubsampled
+        _gridRenderer->AddTextureBufferSubsampled
         (
             // "ObstacleTexture",
             "TestTexture",

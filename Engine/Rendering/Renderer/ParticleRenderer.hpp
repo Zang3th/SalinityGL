@@ -3,7 +3,7 @@
 #include "Renderer.hpp"
 #include "Types.hpp"
 #include "Particle.hpp"
-#include "Texture.hpp"
+#include "GLTexture.hpp"
 #include "Shader.hpp"
 #include "Camera3D.hpp"
 #include "VertexArray.hpp"
@@ -21,7 +21,7 @@ namespace Engine
             Scope<VertexArray>      _vao;
             Scope<VertexBuffer>     _vboVert, _vboModel, _vboTex, _vboBlend;
 
-            Texture*                _textureAtlas;
+            GLTexture*              _glTextureAtlas;
             Shader*                 _shader;
             uint32                  _count, _numberOfRows, _verticeCount;
             float                   _size, _speed, _gravityCompliance, _lifeLength, _respawnTreshold;
@@ -41,7 +41,7 @@ namespace Engine
             ParticleRenderer
             (
                 uint32 count, float size, float speed, float gravityCompliance, float lifeLength,
-                float respawnThreshold, const std::string& textureAtlas, const std::string& shader, const glm::vec3& position
+                float respawnThreshold, const std::string& glTextureAtlas, const std::string& shader, const glm::vec3& position
             );
             ~ParticleRenderer() override;
 

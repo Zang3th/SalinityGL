@@ -53,7 +53,7 @@ namespace Engine
     Model::Model(const Mesh* mesh)
         :   _model(glm::mat4(1.0f)),
             _position(0.0f),
-            _textures(mesh->textures),
+            _glTextures(mesh->glTextures),
             _verticeCount(mesh->indices.size()),
             _gotDiffuseTex(mesh->gotDiffuseTex), _gotNormalMap(mesh->gotNormalMap),
             _rotationX(0.0f), _rotationY(0.0f), _rotationZ(0.0f),
@@ -82,9 +82,9 @@ namespace Engine
         return _gotNormalMap;
     }
 
-    [[nodiscard]] const std::vector<Texture*>* Model::GetTextures() const
+    [[nodiscard]] const std::vector<GLTexture*>* Model::GetGLTextures() const
     {
-        return &_textures;
+        return &_glTextures;
     }
 
     void Model::BindBuffers() const
@@ -127,22 +127,22 @@ namespace Engine
         SetModelMatrix();
     }
 
-    void Model::AddTexture(Texture* texture)
+    void Model::AddGLTexture(GLTexture* glTexture)
     {
-        _textures.push_back(texture);
+        _glTextures.push_back(glTexture);
     }
 
-    void Model::AddTextureToSlot(Texture* texture, uint32_t slot)
+    void Model::AddGLTextureToSlot(GLTexture* glTexture, uint32_t slot)
     {
-        if(_textures.empty())
+        if(_glTextures.empty())
         {
             for(uint32_t i = 0; i < slot; i++)
             {
-                _textures.push_back(nullptr);
+                _glTextures.push_back(nullptr);
             }
         }
 
-        _textures.insert(_textures.begin() + slot, texture);
+        _glTextures.insert(_glTextures.begin() + slot, glTexture);
     }
 
     void Model::SetDiffuseTexture()

@@ -4,54 +4,73 @@ namespace Engine
 {
     // ----- Public -----
 
-    Texture* ResourceManager::CreateTexture(const std::string& name, const uint32 width, const uint32 height, GLint internalFormat, GLenum format, GLenum type)
+    GLTexture* ResourceManager::LoadGLTexture(const std::string& name, const std::string& filepath)
     {
-        auto *texture = new Texture((int32)width, (int32)height, internalFormat, format, type);
-        _textureStorage[name] = texture;
-        return texture;
+        auto* glTexture = new GLTexture(filepath, false);
+        _glTextureStorage[name] = glTexture ;
+        return glTexture ;
     }
 
-    Texture* ResourceManager::LoadTexture(const std::string& name, const std::string& filepath)
+    GLTexture* ResourceManager::LoadGLTextureAtlas(const std::string& name, const std::string& filepath, uint32 numberOfRows)
     {
-        auto *texture = new Texture(filepath, 0, false);
-        _textureStorage[name] = texture;
-        return texture;
+        auto* glTexture = new GLTexture(filepath, false, numberOfRows);
+        _glTextureStorage[name] = glTexture ;
+        return glTexture ;
     }
 
-    Texture* ResourceManager::LoadTextureToBuffer(const std::string& name, const std::string& filepath)
+    GLTexture* ResourceManager::LoadGLTextureWithBackup(const std::string& name, const std::string& filepath)
     {
-        auto *texture = new Texture(filepath, 0, true);
-        _textureStorage[name] = texture;
-        return texture;
+        auto* glTexture = new GLTexture(filepath, true);
+        _glTextureStorage[name] = glTexture ;
+        return glTexture ;
     }
 
-    Texture* ResourceManager::LoadTextureAtlas(const std::string& name, const std::string& filepath, uint32 numberOfRows)
+    GLTexture* ResourceManager::CreateGLTexture(const std::string& name, const uint32 width, const uint32 height, GLint internalFormat, GLenum format, GLenum type)
     {
-        auto *texture = new Texture(filepath, numberOfRows);
-        _textureStorage[name] = texture;
-        return texture;
+        auto* glTexture = new GLTexture(width, height, internalFormat, format, type);
+        _glTextureStorage[name] = glTexture ;
+        return glTexture;
     }
 
-    Texture* ResourceManager::GetTexture(const std::string& name)
+    GLTexture* ResourceManager::GetGLTexture(const std::string& name)
     {
-        return _textureStorage[name];
+        return _glTextureStorage[name];
     }
 
-    std::string ResourceManager::OutputTextureStorage()
+    std::string ResourceManager::OutputGLTextureStorage()
     {
         std::string output;
 
-        for(auto const& tex : _textureStorage)
+        for(auto const& glTex : _glTextureStorage)
         {
-            output += (tex.first + "\n");
+            output += (glTex .first + "\n");
         }
 
         return output;
     }
 
+    TextureBuffer* ResourceManager::LoadTextureBuffer(const std::string& name, const std::string& filepath)
+    {
+        auto* texBuffer = new TextureBuffer(filepath, false);
+        _texBufferStorage[name] = texBuffer;
+        return texBuffer;
+    }
+
+    TextureBuffer* ResourceManager::LoadTextureBufferWithBackup(const std::string& name, const std::string& filepath)
+    {
+        auto* texBuffer = new TextureBuffer(filepath, true);
+        _texBufferStorage[name] = texBuffer;
+        return texBuffer;
+    }
+
+    TextureBuffer* ResourceManager::GetTextureBuffer(const std::string& name)
+    {
+        return _texBufferStorage[name];
+    }
+
     Shader* ResourceManager::LoadShader(const std::string& name, const std::string& vsFilepath, const std::string& fsFilepath)
     {
-        auto *shader = new Shader(vsFilepath, fsFilepath);
+        auto* shader = new Shader(vsFilepath, fsFilepath);
         _shaderStorage[name] = shader;
         return shader;
     }
@@ -75,7 +94,7 @@ namespace Engine
 
     Heightmap* ResourceManager::LoadHeightmap(const std::string& name, const std::string& filepath)
     {
-        auto *heightmap = new Heightmap(filepath);
+        auto* heightmap = new Heightmap(filepath);
         _heightmapStorage[name] = heightmap;
         return heightmap;
     }
@@ -87,9 +106,14 @@ namespace Engine
 
     void ResourceManager::CleanUp()
     {
-        for(auto const& tex : _textureStorage)
+        for(auto const& glTex : _glTextureStorage)
         {
-            delete tex.second;
+            delete glTex.second;
+        }
+
+        for(auto const& texBuffer : _texBufferStorage)
+        {
+            delete texBuffer .second;
         }
 
         for(auto const& shader : _shaderStorage)

@@ -12,7 +12,7 @@ namespace Engine
     {
         private:
             uint32          _fboID,    _depthBufferID;
-            Texture        *_texture, *_depthTexture;
+            GLTexture      *_texture, *_depthTexture;
 
         public:
             FrameBuffer();
@@ -21,11 +21,11 @@ namespace Engine
             void Bind(uint32 width, uint32 height) const;
             void Unbind() const;
             void SetColorAttachment0();
-            Texture* CreateTextureAttachment(const std::string& name, uint32 width, uint32 height);
-            Texture* CreateDepthTextureAttachment(const std::string& name, uint32 width, uint32 height);
+            GLTexture* CreateTextureAttachment(const std::string& name, uint32 width, uint32 height);
+            GLTexture* CreateDepthTextureAttachment(const std::string& name, uint32 width, uint32 height);
             void CreateDepthBufferAttachment(uint32 width, uint32 height);
             void DeleteColorBufferAttachment() const;
-            [[nodiscard]] Texture* GetTexture() const;
-            [[nodiscard]] Texture* GetDepthTexture() const;
+            [[nodiscard]] GLTexture* GetTexture() const;
+            [[nodiscard]] GLTexture* GetDepthTexture() const;
     };
 }

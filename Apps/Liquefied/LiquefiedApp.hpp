@@ -8,7 +8,8 @@ namespace Liq
     class LiquefiedApp final : public Engine::App
     {
         private:
-            Engine::GridRenderer*                 _gridRenderer = nullptr;
+            Engine::GridRenderer*                 _gridRenderer   = nullptr;
+            Engine::SpriteRenderer*               _spriteRenderer = nullptr;
             Engine::Scope<LiquefiedInterface>     _interface;
             Engine::Scope<Engine::FluidSimulator> _fluidSimulator;
             Engine::Scope<Engine::Timer>          _physicsTimer, _inputTimer;

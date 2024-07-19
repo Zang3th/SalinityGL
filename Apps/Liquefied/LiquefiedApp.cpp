@@ -1,5 +1,6 @@
 #include "LiquefiedApp.hpp"
 #include "GlobalParams.hpp"
+#include "ResourceManager.hpp"
 
 namespace Liq
 {
@@ -9,11 +10,12 @@ namespace Liq
     {
         //Shader
         Engine::ResourceManager::LoadShader("GridShader", "../Res/Shader/Liquefied/Grid_VS.glsl", "../Res/Shader/Liquefied/Grid_FS.glsl");
+        Engine::ResourceManager::LoadShader("SpriteShader", "../Res/Shader/GreenWorld/Sprite_VS.glsl", "../Res/Shader/GreenWorld/Sprite_FS.glsl");
 
         //Textures
-        Engine::ResourceManager::LoadTextureBuffer("TurbineTexture", "../Res/Assets/Textures/Liquefied/Turbine_512.png");
-        Engine::ResourceManager::LoadTextureBuffer("ObstacleTexture", "../Res/Assets/Textures/Liquefied/Box_512.png");
-        Engine::ResourceManager::LoadTextureBuffer("TestTexture", "../Res/Assets/Textures/Liquefied/Test_1C_1G_8Px.png");
+        // Engine::ResourceManager::LoadTextureBuffer("TurbineTexBuf", "../Res/Assets/Textures/Liquefied/Turbine_512.png");
+        // Engine::ResourceManager::LoadTextureBuffer("ObstacleTexBuf", "../Res/Assets/Textures/Liquefied/Box_512.png");
+        Engine::ResourceManager::LoadTextureBuffer("TestTexBuf", "../Res/Assets/Textures/Liquefied/Test_1C_1G_8Px.png");
     }
 
     void LiquefiedApp::AddBorderCells() const
@@ -105,6 +107,19 @@ namespace Liq
         AddTurbine();
         AddObstacles();
 
+        _spriteRenderer = new Engine::SpriteRenderer();
+        Engine::RenderManager::Submit(_spriteRenderer);
+
+        Engine::ResourceManager::CreateGLTextureFromBuffer("TestTexture", Engine::ResourceManager::GetTextureBuffer("TestTexBuf"));
+
+        _spriteRenderer->AddSprite
+        (
+            glm::vec2(200.0f, 200.0f),
+            glm::vec2(10.0f, 800.0f),
+            Engine::ResourceManager::GetGLTexture("TestTexture"),
+            Engine::ResourceManager::GetShader("SpriteShader")
+        );
+
         //Add sprites/textures to the config of the renderer
         // _gridRenderer->AddTextureSubsampled
         // (
@@ -114,8 +129,7 @@ namespace Liq
         // );
         _gridRenderer->AddTextureBufferSubsampled
         (
-            // "ObstacleTexture",
-            "TestTexture",
+            "TestTexBuf",
             obstaclePos,
             obstacleSize
         );
@@ -235,6 +249,7 @@ namespace Liq
             // RenderSmoke();
             _gridRenderer->UpdateGpuStorage();
             _gridRenderer->Flush(nullptr);
+            _spriteRenderer->Flush(nullptr);
         }
 
         {

@@ -4,10 +4,9 @@ namespace Engine
 {
     // ----- Private -----
 
-    uint32 GLTexture::Init(const std::string &filepath, bool saveBackup)
+    uint32 GLTexture::Init()
     {
         uint32 initStatus = EXIT_FAILURE;
-        _textureBuffer = new TextureBuffer(filepath, saveBackup);
 
         if(_textureBuffer->GetInitStatus() == EXIT_SUCCESS)
         {
@@ -33,21 +32,18 @@ namespace Engine
              // Generate mip map
             GLCall(glGenerateMipmap(GL_TEXTURE_2D))
 
-            //Old defaults
-            // GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR))
-            // GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR))
-
             //Activate anisotropic filtering
             GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_LOD_BIAS, 0))
             GLCall(glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 4.0f))
+
             Unbind();
 
-            Logger::Info("Created", "GLTexture", filepath);
+            Logger::Info("Created", "GLTexture", "ID: " + std::to_string(_textureID));
             initStatus = EXIT_SUCCESS;
         }
         else
         {
-            Logger::Error("Failed", "TextureBuffer", filepath);
+            Logger::Error("Failed", "TextureBuffer", "ID: " + std::to_string(_textureID));
         }
 
         return initStatus;
@@ -70,16 +66,24 @@ namespace Engine
 
     // ----- Public -----
 
-    GLTexture::GLTexture(const std::string& filepath, bool saveBackup, uint32 numberOfRows)
-        :   _initStatus(EXIT_FAILURE), _width(0), _height(0), _channels(0),
-            _textureID(0), _numberOfRows(numberOfRows), _format(0), _textureBuffer(nullptr)
+    GLTexture::GLTexture(const TextureBuffer* texBuffer)
+        :   _initStatus(EXIT_FAILURE), _width(0), _height(0), _channels(0), _textureID(0),
+            _numberOfRows(0), _format(0), _ownsTexBufPointer(false), _textureBuffer(texBuffer)
     {
-        _initStatus = Init(filepath, saveBackup);
+        _initStatus = Init();
+    }
+
+    GLTexture::GLTexture(const std::string& filepath, bool saveBackup, uint32 numberOfRows)
+        :   _initStatus(EXIT_FAILURE), _width(0), _height(0), _channels(0), _textureID(0),
+            _numberOfRows(numberOfRows), _format(0), _ownsTexBufPointer(true), _textureBuffer(nullptr)
+    {
+        _textureBuffer = new TextureBuffer(filepath, saveBackup);
+        _initStatus = Init();
     }
 
     GLTexture::GLTexture(uint32 width, uint32 height, GLint internalFormat, GLenum format, GLenum type)
-        :   _initStatus(EXIT_FAILURE), _width(width), _height(height), _channels(0),
-            _textureID(0), _numberOfRows(0), _format(format),  _textureBuffer(nullptr)
+        :   _initStatus(EXIT_FAILURE), _width(width), _height(height), _channels(0), _textureID(0),
+            _numberOfRows(0), _format(format), _ownsTexBufPointer(false), _textureBuffer(nullptr)
     {
         _initStatus = Create(internalFormat, type);
     }
@@ -88,7 +92,7 @@ namespace Engine
     {
         GLCall(glDeleteTextures(1, &_textureID))
 
-        if(_textureBuffer != nullptr)
+        if(_ownsTexBufPointer == true)
         {
             delete _textureBuffer;
         }
@@ -173,7 +177,7 @@ namespace Engine
         return _numberOfRows;
     }
 
-    TextureBuffer* GLTexture::GetTextureBuffer() const
+    const TextureBuffer* GLTexture::GetTextureBuffer() const
     {
         return _textureBuffer;
     }

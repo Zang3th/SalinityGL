@@ -175,7 +175,6 @@ namespace Engine
     void SceneRenderer::FlushCubemap()
     {
         GLRenderSettings::SetCullFace(GL_FRONT);
-        GLRenderSettings::DisableWireframe();
         RenderStatistics::drawnVertices += _cubemap->Draw(_perspProj, Camera3D::GetViewMatrix());
         RenderStatistics::drawCalls++;
         RenderStatistics::cubemapPasses++;

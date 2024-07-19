@@ -1,4 +1,5 @@
 #include "GreenWorldApp.hpp"
+#include "GLRenderSettings.hpp"
 
 namespace GW
 {
@@ -261,7 +262,9 @@ namespace GW
 
             if(Engine::UIParams::debugSprites)
             {
+                Engine::GLRenderSettings::DisableCulling();
                 _spriteRenderer->Flush(nullptr);
+                Engine::GLRenderSettings::EnableCulling();
             }
         }
 

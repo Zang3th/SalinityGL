@@ -24,6 +24,7 @@ namespace Engine
             static GLTexture* LoadGLTextureAtlas(const std::string& name, const std::string& filepath, uint32 numberOfRows);
             static GLTexture* LoadGLTextureWithBackup(const std::string& name, const std::string& filepath);
             static GLTexture* CreateGLTexture(const std::string& name, uint32 width, uint32 height, GLint internalFormat, GLenum format, GLenum type);
+            static GLTexture* CreateGLTextureFromBuffer(const std::string& name, const TextureBuffer* texBuffer);
             static GLTexture* GetGLTexture(const std::string& name);
             static std::string OutputGLTextureStorage();
 

@@ -179,13 +179,13 @@ namespace Engine
         PxColor pxColor= {0, 0, 0};
 
         // For debug purposes:
-        // if(GetPxColor(xpos, ypos, &pxColor))
-        // {
-        //     colorOut->x += pxColor.r;
-        //     colorOut->y += pxColor.g;
-        //     colorOut->z += pxColor.b;
-        //     return success;
-        // }
+        if(GetPxColor(xpos, ypos, &pxColor))
+        {
+            colorOut->x = pxColor.r;
+            colorOut->y = pxColor.g;
+            colorOut->z = pxColor.b;
+            return success;
+        }
 
         for(uint32 x = 0; x < sampleAmount; x++)
         {

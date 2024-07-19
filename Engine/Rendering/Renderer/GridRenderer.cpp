@@ -124,45 +124,48 @@ namespace Engine
     void GridRenderer::AddTextureBufferSubsampled(const std::string& texBuffer, const glm::uvec2& pos, const uint32 size)
     {
         auto* textureBuffer = ResourceManager::GetTextureBuffer(texBuffer);
-        // uint32 width  = tex->GetWidth();
-        // uint32 height = tex->GetHeight();
-        //
-        // if(width != height || width % size != 0 || height % size != 0)
-        // {
-        //     Logger::Error("Failed", "Subsampling", "Dimensions or format unsupported");
-        //     return;
-        // }
-        //
-        // //sampleAmount stands for the amount of pixels that needs to be sampled in one direction.
-        // //F.E. the original image is 512x512 and we want to reduce it to 8x8.
-        // //That results in 64x64 pixels that will get sampled for 1 pixel in the new image.
-        // //In our case these pixels are cells in the grid.
-        // uint32 sampleAmount = width / size;
-        //
-        // glm::uvec3 subsampledColor = {0, 0, 0};
-        // glm::uvec2 gridPos = pos;
-        // bool success = false;
-        //
-        // //Go over the image in sampleAmount steps
-        // for(uint32 x = 0; x < width; x += sampleAmount)
-        // {
-        //     for(uint32 y = 0; y < height; y += sampleAmount)
-        //     {
-        //         success = tex->Subsample(x, y, sampleAmount, &subsampledColor);
-        //         if(success)
-        //         {
-        //             glm::vec3 color = Utility::TransformVec3uTo3f(subsampledColor);
-        //             Logger::Print("Color (" + std::to_string(gridPos.x) + ", "
-        //                                     + std::to_string(gridPos.y) + ") : "
-        //                                     + std::to_string(color.x) + ", "
-        //                                     + std::to_string(color.y) + ", "
-        //                                     + std::to_string(color.z));
-        //             Set(gridPos.x, gridPos.y, color);
-        //         }
-        //         gridPos.y++;
-        //     }
-        //     gridPos.x++;
-        //     gridPos.y = pos.y; //Reset y-position
-        // }
+        uint32 width  = textureBuffer->GetWidth();
+        uint32 height = textureBuffer->GetHeight();
+
+        if(width != height || width % size != 0 || height % size != 0)
+        {
+            Logger::Error("Failed", "Subsampling", "Dimensions or format unsupported");
+            return;
+        }
+
+        //sampleAmount stands for the amount of pixels that needs to be sampled in one direction.
+        //F.E. the original image is 512x512 and we want to reduce it to 8x8.
+        //That results in 64x64 pixels that will get sampled for 1 pixel in the new image.
+        //In our case these pixels are cells in the grid.
+        uint32 sampleAmount = width / size;
+
+        glm::uvec2 gridPos = pos;
+        bool success = false;
+
+        //Go over the image in sampleAmount steps
+        for(uint32 x = 0; x < width; x += sampleAmount)
+        {
+            for(uint32 y = 0; y < height; y += sampleAmount)
+            {
+                glm::uvec3 subsampledColor = {0, 0, 0};
+                success = textureBuffer->SubsampleArea(x, y, sampleAmount, &subsampledColor);
+
+                if(success)
+                {
+                    glm::vec3 color = Utility::TransformVec3uTo3f(subsampledColor);
+                    Logger::Print("Color (" + std::to_string(gridPos.x) + ", "
+                                            + std::to_string(gridPos.y) + ") : "
+                                            + std::to_string(color.x) + ", "
+                                            + std::to_string(color.y) + ", "
+                                            + std::to_string(color.z));
+                    Set(gridPos.x, gridPos.y, color);
+                }
+
+                gridPos.y++;
+            }
+
+            gridPos.x++;
+            gridPos.y = pos.y; //Reset y-position
+        }
     }
 }

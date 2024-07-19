@@ -7,34 +7,47 @@ namespace Engine
     GLTexture* ResourceManager::LoadGLTexture(const std::string& name, const std::string& filepath)
     {
         auto* glTexture = new GLTexture(filepath, false);
-        _glTextureStorage[name] = glTexture ;
+        _glTextureStorage[name] = glTexture;
         return glTexture ;
     }
 
     GLTexture* ResourceManager::LoadGLTextureAtlas(const std::string& name, const std::string& filepath, uint32 numberOfRows)
     {
         auto* glTexture = new GLTexture(filepath, false, numberOfRows);
-        _glTextureStorage[name] = glTexture ;
+        _glTextureStorage[name] = glTexture;
         return glTexture ;
     }
 
     GLTexture* ResourceManager::LoadGLTextureWithBackup(const std::string& name, const std::string& filepath)
     {
         auto* glTexture = new GLTexture(filepath, true);
-        _glTextureStorage[name] = glTexture ;
+        _glTextureStorage[name] = glTexture;
         return glTexture ;
     }
 
     GLTexture* ResourceManager::CreateGLTexture(const std::string& name, const uint32 width, const uint32 height, GLint internalFormat, GLenum format, GLenum type)
     {
         auto* glTexture = new GLTexture(width, height, internalFormat, format, type);
-        _glTextureStorage[name] = glTexture ;
+        _glTextureStorage[name] = glTexture;
+        return glTexture;
+    }
+
+    GLTexture* ResourceManager::CreateGLTextureFromBuffer(const std::string& name, const TextureBuffer* texBuffer)
+    {
+        auto* glTexture = new GLTexture(texBuffer);
+        _glTextureStorage[name] = glTexture;
         return glTexture;
     }
 
     GLTexture* ResourceManager::GetGLTexture(const std::string& name)
     {
-        return _glTextureStorage[name];
+        auto iter = _glTextureStorage.find(name);
+        if(iter == _glTextureStorage.end())
+        {
+            Logger::Error("Failed", "GetGLTexture", name);
+            return nullptr;
+        }
+        return iter->second;
     }
 
     std::string ResourceManager::OutputGLTextureStorage()
@@ -43,7 +56,7 @@ namespace Engine
 
         for(auto const& glTex : _glTextureStorage)
         {
-            output += (glTex .first + "\n");
+            output += (glTex.first + "\n");
         }
 
         return output;
@@ -65,7 +78,13 @@ namespace Engine
 
     TextureBuffer* ResourceManager::GetTextureBuffer(const std::string& name)
     {
-        return _texBufferStorage[name];
+        auto iter = _texBufferStorage.find(name);
+        if(iter == _texBufferStorage.end())
+        {
+            Logger::Error("Failed", "GetTextureBuffer", name);
+            return nullptr;
+        }
+        return iter->second;
     }
 
     Shader* ResourceManager::LoadShader(const std::string& name, const std::string& vsFilepath, const std::string& fsFilepath)
@@ -77,7 +96,13 @@ namespace Engine
 
     Shader* ResourceManager::GetShader(const std::string& name)
     {
-        return _shaderStorage[name];
+        auto iter = _shaderStorage.find(name);
+        if(iter == _shaderStorage.end())
+        {
+            Logger::Error("Failed", "GetShader", name);
+            return nullptr;
+        }
+        return iter->second;
     }
 
     std::string ResourceManager::OutputShaderStorage()
@@ -101,7 +126,13 @@ namespace Engine
 
     Heightmap* ResourceManager::GetHeightmap(const std::string& name)
     {
-        return _heightmapStorage[name];
+        auto iter = _heightmapStorage.find(name);
+        if(iter == _heightmapStorage.end())
+        {
+            Logger::Error("Failed", "GetHeightmap", name);
+            return nullptr;
+        }
+        return iter->second;
     }
 
     void ResourceManager::CleanUp()
@@ -113,7 +144,7 @@ namespace Engine
 
         for(auto const& texBuffer : _texBufferStorage)
         {
-            delete texBuffer .second;
+            delete texBuffer.second;
         }
 
         for(auto const& shader : _shaderStorage)

@@ -11,10 +11,6 @@ namespace Engine
 
     void SpriteRenderer::Flush(Renderer* renderer)
     {
-        GLRenderSettings::DisableWireframe();
-        GLRenderSettings::DisableCulling();
-
-        //Render sprites
         for(const auto& sprite : _spriteStorage)
         {
             RenderStatistics::drawnVertices += sprite->Draw();
@@ -23,8 +19,6 @@ namespace Engine
 
         //Increase render pass counter
         RenderStatistics::spritePasses++;
-
-        GLRenderSettings::EnableCulling();
     }
 
     void SpriteRenderer::AddSprite(const glm::vec2& size, const glm::vec2& pos, GLTexture* glTexture, Shader* shader)

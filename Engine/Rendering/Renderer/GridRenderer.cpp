@@ -18,10 +18,11 @@ namespace Engine
             1.0f, 0.0f
         };
 
-        //Init color storage
+        //Init storage
         for(uint32 i = 0; i < _quadAmountTotal; i++)
         {
-            _colorStorage.emplace_back(_defaultColor);
+            _colorStorage.emplace_back(0.0f);
+            _backupStorage.emplace_back(0.0f);
         }
 
         //Create and bind vao
@@ -54,13 +55,26 @@ namespace Engine
         const std::string& shader
     )
         :   _gridWidth(width), _gridHeight(height), _quadSize(quadSize), _quadAmountTotal(_gridWidth * _gridHeight),
-            _defaultColor(glm::vec3(0.1f, 0.1f, 0.1f)), _shader(ResourceManager::GetShader(shader)),
+            _shader(ResourceManager::GetShader(shader)), _defaultColor(0.0f),
             _orthoProj(glm::ortho(0.0f, (float)WindowParams::WIDTH, 0.0f, (float)WindowParams::HEIGHT, -1.0f, 1.0f)),
             _model(glm::scale(glm::mat4(1.0f), glm::vec3(glm::vec2((float)_quadSize), 0.0f)))
     {
         Logger::Info("Created", "Renderer", __func__);
+
         _colorStorage.reserve(_quadAmountTotal);
+        _backupStorage.reserve(_quadAmountTotal);
+
         InitGpuStorage();
+    }
+
+    void GridRenderer::SetConfigAsDefault()
+    {
+        _backupStorage = _colorStorage;
+    }
+
+    void GridRenderer::SetDefaultColor(const glm::vec3& color)
+    {
+        _defaultColor = color;
     }
 
     void GridRenderer::Flush(Renderer* renderer)
@@ -84,7 +98,6 @@ namespace Engine
         _vboColor->Bind();
 
         //Set uniforms
-        _shader->SetUniformVec3f("color", _defaultColor);
         _shader->SetUniformMat4f("projection", _orthoProj);
         _shader->SetUniformMat4f("model", _model);
 
@@ -116,9 +129,20 @@ namespace Engine
         _colorStorage.at(x * _gridHeight + y) = glm::vec3(color);
     }
 
+    void GridRenderer::SetArea(const glm::uvec2& pos, uint32 size, const glm::vec3& color)
+    {
+        for(uint32 x = pos.x; x < pos.x + size; x++)
+        {
+            for(uint32 y = pos.y; y < pos.y + size; y++)
+            {
+                Set(x, y, color);
+            }
+        }
+    }
+
     void GridRenderer::Reset(const uint32 x, const uint32 y)
     {
-        _colorStorage.at(x * _gridHeight + y) = glm::vec3(_defaultColor);
+        _colorStorage.at(x * _gridHeight + y) = _backupStorage.at(x * _gridHeight + y);
     }
 
     void GridRenderer::AddTextureBufferSubsampled(const std::string& texBuffer, const glm::uvec2& pos, const uint32 size)
@@ -132,6 +156,9 @@ namespace Engine
             Logger::Error("Failed", "Subsampling", "Dimensions or format unsupported");
             return;
         }
+
+        //Set texture area to default color
+        SetArea(pos, size, _defaultColor);
 
         //sampleAmount stands for the amount of pixels that needs to be sampled in one direction.
         //F.E. the original image is 512x512 and we want to reduce it to 8x8.
@@ -152,13 +179,7 @@ namespace Engine
 
                 if(success)
                 {
-                    glm::vec3 color = Utility::TransformVec3uTo3f(subsampledColor);
-                    Logger::Print("Color (" + std::to_string(gridPos.x) + ", "
-                                            + std::to_string(gridPos.y) + ") : "
-                                            + std::to_string(color.x) + ", "
-                                            + std::to_string(color.y) + ", "
-                                            + std::to_string(color.z));
-                    Set(gridPos.x, gridPos.y, color);
+                    Set(gridPos.x, gridPos.y, Utility::TransformVec3uTo3f(subsampledColor));
                 }
 
                 gridPos.y++;

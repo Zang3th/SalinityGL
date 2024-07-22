@@ -129,10 +129,10 @@ The engine and the demo applications are compiled separately. The engine is comp
 
 ## Releases
 
-| **Version**                                                        | **Date**   | **Commit [Count / ID]** | **Lines of code [Apps / Engine]** | **Notes**                               |
-|--------------------------------------------------------------------|------------|-------------------------|-----------------------------------|-----------------------------------------|
-| [0.1.1](https://github.com/Zang3th/GameEngine/releases/tag/v0.1.1) | 14.01.2023 | [255 / d425a33]         | [480 / 4250]                      | Completion of the *GreenWorld* demo app |
-| [0.1.0](https://github.com/Zang3th/GameEngine/releases/tag/v0.1.0) | 11.06.2022 | [229 / 218a55e]         | [575 / 4110]                      | First official release                  |
+| **Version**                                                        | **Date**   | **Commit** <br> [Count / ID] | **Lines of code** <br> [Apps / Engine] | **Notes**                               |
+|:------------------------------------------------------------------:|:----------:|:----------------------------:|:--------------------------------------:|:---------------------------------------:|
+| [0.1.1](https://github.com/Zang3th/GameEngine/releases/tag/v0.1.1) | 14.01.2023 | [255 / d425a33]              | [480 / 4250]                           | Completion of the *GreenWorld* demo app |
+| [0.1.0](https://github.com/Zang3th/GameEngine/releases/tag/v0.1.0) | 11.06.2022 | [229 / 218a55e]              | [575 / 4110]                           | First official release                  |
 
 - 07/2021 - 09/2021: Rewrite of the engine core
 - 01/2020 - 09/2020: Some very early projects (still under Windows)
@@ -157,7 +157,7 @@ I always work *on and off* on this project, but I try to make more regular relea
 **Thanks to all the creators and contributors of these projects!**
 
 | **Library**                                                          | **Version** | **Commit** | **Updated in Engine** | **Functionality**           |
-|--------------------------------------------------------------------- |-------------|------------|-----------------------|-----------------------------|
+|:--------------------------------------------------------------------:|:-----------:|:----------:|:---------------------:|:---------------------------:|
 | [GLFW](https://github.com/glfw/glfw)                                 | 3.4.0       | 7b6aead    | 13.04.2024            | Window and input management |
 | [glad](https://github.com/Dav1dde/glad)                              | 2.0.6       | 658f48e    | 13.04.2024            | OpenGL function loading     |
 | [imgui](https://github.com/ocornut/imgui)                            | 1.90.4      | 277ae93    | 13.04.2024            | GUI                         |

@@ -176,15 +176,6 @@ namespace Engine
         uint32 pxAmount = sampleAmount * sampleAmount;
         PxColor pxColor= {0, 0, 0};
 
-        // For debug purposes:
-        if(GetPxColor(xpos, ypos, &pxColor))
-        {
-            colorOut->x = pxColor.r;
-            colorOut->y = pxColor.g;
-            colorOut->z = pxColor.b;
-            return success;
-        }
-
         for(uint32 x = 0; x < sampleAmount; x++)
         {
             for(uint32 y = 0; y < sampleAmount; y++)

@@ -9,24 +9,26 @@ namespace Liq
     {
         private:
             Engine::GridRenderer*                 _gridRenderer   = nullptr;
-            Engine::SpriteRenderer*               _spriteRenderer = nullptr;
+
             Engine::Scope<LiquefiedInterface>     _interface;
             Engine::Scope<Engine::FluidSimulator> _fluidSimulator;
             Engine::Scope<Engine::Timer>          _physicsTimer, _inputTimer;
-            const glm::uvec2  turbinePos    = {1, 50};
-            const glm::uint32 turbineSize   = 8;
-            const glm::uvec2  turbineOutlet =
+
+            const glm::vec3   _defaultColor  = {0.5f, 0.5f, 0.5f};
+            const glm::uvec2  _turbinePos    = {1, 35};
+            const glm::uint32 _turbineSize   = 32;
+            const glm::uvec2  _turbineOutlet =
             {
-                turbinePos.x + turbineSize,
-                turbinePos.y + turbineSize / 2
+                _turbinePos.x + _turbineSize,
+                _turbinePos.y + _turbineSize / 2
             };
-            const glm::uvec2  obstaclePos   = {50, 50};
-            const glm::uint32 obstacleSize  = 4;
+            const glm::uvec2  _obstaclePos   = {70, 45};
+            const glm::uint32 _obstacleSize  = 16;
 
             void LoadResources()               override;
             void AddBorderCells()              const;
             void AddTurbine()                  const;
-            void AddObstacles()                const;
+            void AddObstacle()                 const;
             void TurbinePushVelocity(float dt) const;
             void UpdateTimer()                 const;
             void RenderSmoke()                 const;

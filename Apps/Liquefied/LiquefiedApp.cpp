@@ -13,9 +13,8 @@ namespace Liq
         Engine::ResourceManager::LoadShader("SpriteShader", "../Res/Shader/GreenWorld/Sprite_VS.glsl", "../Res/Shader/GreenWorld/Sprite_FS.glsl");
 
         //Textures
-        // Engine::ResourceManager::LoadTextureBuffer("TurbineTexBuf", "../Res/Assets/Textures/Liquefied/Turbine_512.png");
-        // Engine::ResourceManager::LoadTextureBuffer("ObstacleTexBuf", "../Res/Assets/Textures/Liquefied/Box_512.png");
-        Engine::ResourceManager::LoadTextureBuffer("TestTexBuf", "../Res/Assets/Textures/Liquefied/Test_1C_4Px.png");
+        Engine::ResourceManager::LoadTextureBuffer("TurbineTexBuf", "../Res/Assets/Textures/Liquefied/Turbine_512.png");
+        Engine::ResourceManager::LoadTextureBuffer("BoxTexBuf", "../Res/Assets/Textures/Liquefied/Box_512.png");
     }
 
     void LiquefiedApp::AddBorderCells() const
@@ -30,6 +29,7 @@ namespace Liq
                 {
                     //Add solid cell to simulation grid
                     _fluidSimulator->AddBorderCell(x, y);
+                    _gridRenderer->Set(x, y, _defaultColor);
                 }
             }
         }
@@ -37,22 +37,24 @@ namespace Liq
 
     void LiquefiedApp::AddTurbine() const
     {
-        for(Engine::uint32 x = 0; x < turbineSize; x++)
+        for(Engine::uint32 x = 0; x < _turbineSize; x++)
         {
-            for(Engine::uint32 y = 0; y < turbineSize; y++)
+            for(Engine::uint32 y = 0; y < _turbineSize; y++)
             {
-                _fluidSimulator->AddBorderCell(turbinePos.x + x, turbinePos.y + y);
+                _fluidSimulator->AddBorderCell(_turbinePos.x + x, _turbinePos.y + y);
+                _gridRenderer->Set(_turbinePos.x + x, _turbinePos.y + y, _defaultColor);
             }
         }
     }
 
-    void LiquefiedApp::AddObstacles() const
+    void LiquefiedApp::AddObstacle() const
     {
-        for(Engine::uint32 x = 0; x < obstacleSize; x++)
+        for(Engine::uint32 x = 0; x < _obstacleSize; x++)
         {
-            for(Engine::uint32 y = 0; y < obstacleSize; y++)
+            for(Engine::uint32 y = 0; y < _obstacleSize; y++)
             {
-                _fluidSimulator->AddBorderCell(obstaclePos.x + x, obstaclePos.y + y);
+                _fluidSimulator->AddBorderCell(_obstaclePos.x + x, _obstaclePos.y + y);
+                _gridRenderer->Set(_obstaclePos.x + x, _obstaclePos.y + y, _defaultColor);
             }
         }
     }
@@ -61,8 +63,8 @@ namespace Liq
     {
        _fluidSimulator->AddHorizonalTurbine
         (
-            turbineOutlet.x,
-            turbineOutlet.y,
+            _turbineOutlet.x,
+            _turbineOutlet.y,
             (float)Engine::LiquefiedParams::turbinePower,
             dt
         );
@@ -89,6 +91,7 @@ namespace Liq
             10,
             "GridShader"
         );
+        _gridRenderer->SetDefaultColor(_defaultColor);
         Engine::RenderManager::Submit(_gridRenderer);
 
         //Create UI
@@ -105,38 +108,23 @@ namespace Liq
         //Add border cells, turbine and physical obstacles to the simulation
         AddBorderCells();
         AddTurbine();
-        AddObstacles();
+        AddObstacle();
 
-        _spriteRenderer = new Engine::SpriteRenderer();
-        Engine::RenderManager::Submit(_spriteRenderer);
-
-        auto* tex = Engine::ResourceManager::CreateGLTextureFromBuffer("TestTexture", Engine::ResourceManager::GetTextureBuffer("TestTexBuf"));
-        tex->Bind();
-        tex->AddMinFilterNearest();
-        tex->AddMaxFilterNearest();
-        tex->Unbind();
-
-        _spriteRenderer->AddSprite
-        (
-            glm::vec2(64.0f, 64.0f),
-            glm::vec2(10.0f, 700.0f),
-            Engine::ResourceManager::GetGLTexture("TestTexture"),
-            Engine::ResourceManager::GetShader("SpriteShader")
-        );
-
-        //Add sprites/textures to the config of the renderer
-        // _gridRenderer->AddTextureSubsampled
-        // (
-        //     "TurbineTexture",
-        //     turbinePos,
-        //     turbineSize
-        // );
+        //Add sprites/textures to the config of the grid renderer
         _gridRenderer->AddTextureBufferSubsampled
         (
-            "TestTexBuf",
-            obstaclePos,
-            obstacleSize
+            "TurbineTexBuf",
+            _turbinePos,
+            _turbineSize
         );
+        _gridRenderer->AddTextureBufferSubsampled
+        (
+            "BoxTexBuf",
+            _obstaclePos,
+            _obstacleSize
+        );
+
+        _gridRenderer->SetConfigAsDefault();
 
         return true;
     }
@@ -161,11 +149,12 @@ namespace Liq
                 {
                     if(Engine::LiquefiedParams::renderObjects)
                     {
+                        _gridRenderer->Reset(x, y);
                         continue;
                     }
 
-                    //Else overwrite objects/sprites/textures with default gray
-                    // color = {0.5f, 0.5f, 0.5f};
+                    //Overwrite objects/sprites/textures with default gray
+                    color = {0.0f, 0.0f, 0.0f};
                 }
                 else
                 {
@@ -231,7 +220,7 @@ namespace Liq
                 _fluidSimulator->Reset();
                 AddBorderCells();
                 AddTurbine();
-                AddObstacles();
+                AddObstacle();
                 Engine::LiquefiedParams::resetSimulation = false;
             }
 
@@ -250,10 +239,9 @@ namespace Liq
         {
             Engine::PROFILE_SCOPE("Visualize grid");
 
-            // RenderSmoke();
+            RenderSmoke();
             _gridRenderer->UpdateGpuStorage();
             _gridRenderer->Flush(nullptr);
-            _spriteRenderer->Flush(nullptr);
         }
 
         {

@@ -8,6 +8,11 @@ namespace Engine
     {
         _rendererStorage.clear();
         _rendererStorage.reserve(10);
+
+        //OpenGL-Rendersettings
+        GLRenderSettings::EnableBlending();
+        GLRenderSettings::SetBlendFunc(GL_ONE_MINUS_SRC_ALPHA);
+
         _initialized = true;
     }
 

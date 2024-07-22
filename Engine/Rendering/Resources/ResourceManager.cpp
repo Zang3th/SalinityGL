@@ -6,35 +6,43 @@ namespace Engine
 
     GLTexture* ResourceManager::LoadGLTexture(const std::string& name, const std::string& filepath)
     {
-        auto* glTexture = new GLTexture(filepath, false);
+        auto* glTexture = new GLTexture(name, filepath, false);
+        glTexture->Bind();
+        glTexture->AddMipmapLinear();
+        glTexture->AddAnisotropicFilter(4.0f);
+        glTexture->Unbind();
         _glTextureStorage[name] = glTexture;
         return glTexture ;
     }
 
     GLTexture* ResourceManager::LoadGLTextureAtlas(const std::string& name, const std::string& filepath, uint32 numberOfRows)
     {
-        auto* glTexture = new GLTexture(filepath, false, numberOfRows);
+        auto* glTexture = new GLTexture(name, filepath, false, numberOfRows);
+        glTexture->Bind();
+        glTexture->AddMipmapLinear();
+        glTexture->AddAnisotropicFilter(4.0f);
+        glTexture->Unbind();
         _glTextureStorage[name] = glTexture;
         return glTexture ;
     }
 
     GLTexture* ResourceManager::LoadGLTextureWithBackup(const std::string& name, const std::string& filepath)
     {
-        auto* glTexture = new GLTexture(filepath, true);
+        auto* glTexture = new GLTexture(name, filepath, true);
         _glTextureStorage[name] = glTexture;
         return glTexture ;
     }
 
     GLTexture* ResourceManager::CreateGLTexture(const std::string& name, const uint32 width, const uint32 height, GLint internalFormat, GLenum format, GLenum type)
     {
-        auto* glTexture = new GLTexture(width, height, internalFormat, format, type);
+        auto* glTexture = new GLTexture(name, width, height, internalFormat, format, type);
         _glTextureStorage[name] = glTexture;
         return glTexture;
     }
 
     GLTexture* ResourceManager::CreateGLTextureFromBuffer(const std::string& name, const TextureBuffer* texBuffer)
     {
-        auto* glTexture = new GLTexture(texBuffer);
+        auto* glTexture = new GLTexture(name, texBuffer);
         _glTextureStorage[name] = glTexture;
         return glTexture;
     }

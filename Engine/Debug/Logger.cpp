@@ -20,28 +20,28 @@ namespace Engine
     void Logger::Info(const std::string& action, const std::string& obj, const std::string& params)
     {
         LOG(INFO) << " | " << FileManager::PadString(action, 8)
-                  << " | " << FileManager::PadString(obj, 12)
+                  << " | " << FileManager::PadString(obj, 13)
                   << " | " << params;
     }
 
     void Logger::Warn(const std::string& action, const std::string&obj, const std::string& params)
     {
         LOG(WARNING) << " | " << FileManager::PadString(action, 8)
-                     << " | " << FileManager::PadString(obj, 12)
+                     << " | " << FileManager::PadString(obj, 13)
                      << " | " << params;
     }
 
     void Logger::Error(const std::string& action, const std::string& obj, const std::string& params)
     {
         LOG(ERROR) << "| "  << FileManager::PadString(action, 8)
-                   << " | " << FileManager::PadString(obj, 12)
+                   << " | " << FileManager::PadString(obj, 13)
                    << " | " << params;
     }
 
     void Logger::Trace(const std::string& action, const std::string& obj, const std::string& params)
     {
         LOG(TRACE) << "| "  << FileManager::PadString(action, 8)
-                   << " | " << FileManager::PadString(obj, 12)
+                   << " | " << FileManager::PadString(obj, 13)
                    << " | " << params;
     }
 

@@ -15,7 +15,7 @@ namespace Liq
         //Textures
         // Engine::ResourceManager::LoadTextureBuffer("TurbineTexBuf", "../Res/Assets/Textures/Liquefied/Turbine_512.png");
         // Engine::ResourceManager::LoadTextureBuffer("ObstacleTexBuf", "../Res/Assets/Textures/Liquefied/Box_512.png");
-        Engine::ResourceManager::LoadTextureBuffer("TestTexBuf", "../Res/Assets/Textures/Liquefied/Test_1C_1G_8Px.png");
+        Engine::ResourceManager::LoadTextureBuffer("TestTexBuf", "../Res/Assets/Textures/Liquefied/Test_1C_4Px.png");
     }
 
     void LiquefiedApp::AddBorderCells() const
@@ -110,12 +110,16 @@ namespace Liq
         _spriteRenderer = new Engine::SpriteRenderer();
         Engine::RenderManager::Submit(_spriteRenderer);
 
-        Engine::ResourceManager::CreateGLTextureFromBuffer("TestTexture", Engine::ResourceManager::GetTextureBuffer("TestTexBuf"));
+        auto* tex = Engine::ResourceManager::CreateGLTextureFromBuffer("TestTexture", Engine::ResourceManager::GetTextureBuffer("TestTexBuf"));
+        tex->Bind();
+        tex->AddMinFilterNearest();
+        tex->AddMaxFilterNearest();
+        tex->Unbind();
 
         _spriteRenderer->AddSprite
         (
-            glm::vec2(200.0f, 200.0f),
-            glm::vec2(10.0f, 800.0f),
+            glm::vec2(64.0f, 64.0f),
+            glm::vec2(10.0f, 700.0f),
             Engine::ResourceManager::GetGLTexture("TestTexture"),
             Engine::ResourceManager::GetShader("SpriteShader")
         );

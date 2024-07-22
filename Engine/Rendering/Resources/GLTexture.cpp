@@ -28,22 +28,14 @@ namespace Engine
                                 _format,
                                 GL_UNSIGNED_BYTE,
                                 _textureBuffer->GetRawData()))
-
-             // Generate mip map
-            GLCall(glGenerateMipmap(GL_TEXTURE_2D))
-
-            //Activate anisotropic filtering
-            GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_LOD_BIAS, 0))
-            GLCall(glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 4.0f))
-
             Unbind();
 
-            Logger::Info("Created", "GLTexture", "ID: " + std::to_string(_textureID));
+            Logger::Info("Created", "GLTexture", _name + " (Texture-ID: " + std::to_string(_textureID) + ")");
             initStatus = EXIT_SUCCESS;
         }
         else
         {
-            Logger::Error("Failed", "TextureBuffer", "ID: " + std::to_string(_textureID));
+            Logger::Error("Failed", "GLTexture", _name + " (Texture-ID: " + std::to_string(_textureID) + ")");
         }
 
         return initStatus;
@@ -56,33 +48,33 @@ namespace Engine
         GLCall(glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, _width, _height, 0, _format, type, nullptr))
         Unbind();
 
-        std::string texInfo = "( X: " + std::to_string(_width)  +
+        std::string texInfo = " (X: " + std::to_string(_width)  +
                               ", Y: " + std::to_string(_height) +
-                              ", Channels: " + std::to_string(_channels) + " )";
-        Logger::Info("Created", "GLTexture", texInfo);
+                              ", Channels: " + std::to_string(_channels) + ")";
+        Logger::Info("Created", "GLTexture", _name + texInfo);
 
         return EXIT_SUCCESS;
     }
 
     // ----- Public -----
 
-    GLTexture::GLTexture(const TextureBuffer* texBuffer)
-        :   _initStatus(EXIT_FAILURE), _width(0), _height(0), _channels(0), _textureID(0),
+    GLTexture::GLTexture(std::string name, const TextureBuffer* texBuffer)
+        :   _name(std::move(name)), _initStatus(EXIT_FAILURE), _width(0), _height(0), _channels(0), _textureID(0),
             _numberOfRows(0), _format(0), _ownsTexBufPointer(false), _textureBuffer(texBuffer)
     {
         _initStatus = Init();
     }
 
-    GLTexture::GLTexture(const std::string& filepath, bool saveBackup, uint32 numberOfRows)
-        :   _initStatus(EXIT_FAILURE), _width(0), _height(0), _channels(0), _textureID(0),
+    GLTexture::GLTexture(std::string name, const std::string& filepath, bool saveBackup, uint32 numberOfRows)
+        :   _name(std::move(name)), _initStatus(EXIT_FAILURE), _width(0), _height(0), _channels(0), _textureID(0),
             _numberOfRows(numberOfRows), _format(0), _ownsTexBufPointer(true), _textureBuffer(nullptr)
     {
         _textureBuffer = new TextureBuffer(filepath, saveBackup);
         _initStatus = Init();
     }
 
-    GLTexture::GLTexture(uint32 width, uint32 height, GLint internalFormat, GLenum format, GLenum type)
-        :   _initStatus(EXIT_FAILURE), _width(width), _height(height), _channels(0), _textureID(0),
+    GLTexture::GLTexture(std::string name, uint32 width, uint32 height, GLint internalFormat, GLenum format, GLenum type)
+        :   _name(std::move(name)), _initStatus(EXIT_FAILURE), _width(width), _height(height), _channels(0), _textureID(0),
             _numberOfRows(0), _format(format), _ownsTexBufPointer(false), _textureBuffer(nullptr)
     {
         _initStatus = Create(internalFormat, type);
@@ -115,9 +107,19 @@ namespace Engine
         GLCall(glBindTexture(GL_TEXTURE_2D, 0))
     }
 
-    void GLTexture::AddMinFilterMipmapLinear() const
+    void GLTexture::AddMipmapLinear() const
     {
+        GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_LOD_BIAS, 0))
         GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR))
+        GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR))
+        GLCall(glGenerateMipmap(GL_TEXTURE_2D))
+
+        Logger::Info("Added", "Mipmap", "Texture-ID: " + std::to_string(_textureID));
+    }
+
+    void GLTexture::AddAnisotropicFilter(const float strength) const
+    {
+        GLCall(glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, strength))
     }
 
     void GLTexture::AddMinFilterNearest() const

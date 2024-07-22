@@ -113,7 +113,7 @@ namespace Engine
 
     void GridRenderer::Set(const uint32 x, const uint32 y, const glm::vec3& color)
     {
-        _colorStorage.at(x * _gridHeight + y) = glm::vec4(color, 0.0f);
+        _colorStorage.at(x * _gridHeight + y) = glm::vec3(color);
     }
 
     void GridRenderer::Reset(const uint32 x, const uint32 y)

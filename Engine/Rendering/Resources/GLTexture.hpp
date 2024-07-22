@@ -11,6 +11,7 @@ namespace Engine
     class GLTexture
     {
         private:
+            const std::string    _name;
             uint32               _initStatus, _width, _height, _channels, _textureID, _numberOfRows;
             GLenum               _format;
             bool                 _ownsTexBufPointer;
@@ -20,16 +21,25 @@ namespace Engine
             [[nodiscard]] uint32 Create(GLint internalFormat, GLenum type);
 
         public:
-            explicit GLTexture(const TextureBuffer* texBuffer);
-            explicit GLTexture(const std::string& filepath, bool saveBackup, uint32 numberOfRows = 0);
-            GLTexture(uint32 width, uint32 height, GLint internalFormat, GLenum format, GLenum type);
+            explicit GLTexture(std::string name, const TextureBuffer* texBuffer);
+            explicit GLTexture(std::string name,
+                               const std::string& filepath,
+                               bool saveBackup,
+                               uint32 numberOfRows = 0);
+            GLTexture(std::string name,
+                      uint32 width,
+                      uint32 height,
+                      GLint internalFormat,
+                      GLenum format,
+                      GLenum type);
             ~GLTexture();
 
             void Bind() const;
             void BindToSlot(uint32 slot) const;
             void Unbind() const;
 
-            void AddMinFilterMipmapLinear() const;
+            void AddMipmapLinear() const;
+            void AddAnisotropicFilter(float strength) const;
             void AddMinFilterNearest() const;
             void AddMaxFilterNearest() const;
             void AddMinFilterLinear() const;

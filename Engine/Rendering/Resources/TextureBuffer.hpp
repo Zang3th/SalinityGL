@@ -36,5 +36,7 @@ namespace Engine
             [[nodiscard]] bool           SetPxColor(uint32 x, uint32 y, const PxColor& color) const;
             [[nodiscard]] bool           ResetPxColor(uint32 x, uint32 y) const;
             [[nodiscard]] bool           SubsampleArea(uint32 xpos, uint32 ypos, uint32 sampleAmount, glm::uvec3* colorOut) const;
+
+            void PrintAllValues() const;
     };
 }

@@ -33,7 +33,7 @@ namespace Engine
                 }
                 else
                 {
-                    Logger::Error("Failed", "malloc", filepath);
+                    Logger::Error("Failed", "Texturebuffer", "malloc (" + filepath + ")");
                 }
             }
 
@@ -52,19 +52,20 @@ namespace Engine
             else
             {
                 _format = 0;
-                Logger::Error("Failed", "Texture-Format", filepath);
+                Logger::Error("Failed", "Texturebuffer", "Format (" + filepath + ")");
             }
 
-            Logger::Info("Loaded", "Texture", filepath);
-            std::string texInfo = "( X: " + std::to_string(_width)  +
+            Logger::Info("Loaded", "Texturebuffer", filepath);
+            std::string texInfo = "(X: " + std::to_string(_width)  +
                                   ", Y: " + std::to_string(_height) +
-                                  ", Channels: " + std::to_string(_channels) + " )";
+                                  ", Channels: " + std::to_string(_channels) +
+                                  ", Format: " + std::to_string(_format) + ")";
             Logger::Info("", "", texInfo);
             initStatus = EXIT_SUCCESS;
         }
         else
         {
-            Logger::Error("Failed", "Texture-Load", filepath);
+            Logger::Error("Failed", "Texturebuffer", "Loading (" + filepath + ")");
         }
 
         return initStatus;
@@ -122,9 +123,9 @@ namespace Engine
     {
         if(x < _width && y < _height)
         {
-            colorOut->r = *(_pxBuffer + (y * _width * 3) + (x * 3) + 0);
-            colorOut->g = *(_pxBuffer + (y * _width * 3) + (x * 3) + 1);
-            colorOut->b = *(_pxBuffer + (y * _width * 3) + (x * 3) + 2);
+            colorOut->r = *(_pxBuffer + (y * _width * _channels) + (x * _channels) + 0);
+            colorOut->g = *(_pxBuffer + (y * _width * _channels) + (x * _channels) + 1);
+            colorOut->b = *(_pxBuffer + (y * _width * _channels) + (x * _channels) + 2);
             return true;
         }
 
@@ -136,9 +137,9 @@ namespace Engine
     {
         if(x < _width && y < _height)
         {
-            *(_pxBuffer + (y * _width * 3) + (x * 3) + 0) = color.r;
-            *(_pxBuffer + (y * _width * 3) + (x * 3) + 1) = color.g;
-            *(_pxBuffer + (y * _width * 3) + (x * 3) + 2) = color.b;
+            *(_pxBuffer + (y * _width * _channels) + (x * _channels) + 0) = color.r;
+            *(_pxBuffer + (y * _width * _channels) + (x * _channels) + 1) = color.g;
+            *(_pxBuffer + (y * _width * _channels) + (x * _channels) + 2) = color.b;
             return true;
         }
 
@@ -210,4 +211,23 @@ namespace Engine
 
         return success;
     }
-}
+
+    void TextureBuffer::PrintAllValues() const
+    {
+        for(uint32 x = 0; x < _width; x++)
+        {
+            for(uint32 y = 0; y < _height; y++)
+            {
+                PxColor color = {0, 0, 0};
+                if(GetPxColor(x, y, &color))
+                {
+                    Logger::Print("Color (" + std::to_string(x) + ", "
+                                            + std::to_string(y) + ") : "
+                                            + std::to_string(color.r) + ", "
+                                            + std::to_string(color.g) + ", "
+                                            + std::to_string(color.b));
+                }
+            }
+        }
+    }
+}  // namespace Engine

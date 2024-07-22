@@ -37,6 +37,7 @@ namespace Engine
             void Bind() const;
             void BindToSlot(uint32 slot) const;
             void Unbind() const;
+            void UploadModifiedBuffer() const;
 
             void AddMipmapLinear() const;
             void AddAnisotropicFilter(float strength) const;

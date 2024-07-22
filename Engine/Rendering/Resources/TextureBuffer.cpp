@@ -133,13 +133,13 @@ namespace Engine
         return false;
     }
 
-    bool TextureBuffer::SetPxColor(uint32 x, uint32 y, const PxColor& color) const
+    bool TextureBuffer::SetPxColor(uint32 x, uint32 y, const PxColor& colorIn) const
     {
         if(x < _width && y < _height)
         {
-            *(_pxBuffer + (y * _width * _channels) + (x * _channels) + 0) = color.r;
-            *(_pxBuffer + (y * _width * _channels) + (x * _channels) + 1) = color.g;
-            *(_pxBuffer + (y * _width * _channels) + (x * _channels) + 2) = color.b;
+            *(_pxBuffer + (y * _width * _channels) + (x * _channels) + 0) = colorIn.r;
+            *(_pxBuffer + (y * _width * _channels) + (x * _channels) + 1) = colorIn.g;
+            *(_pxBuffer + (y * _width * _channels) + (x * _channels) + 2) = colorIn.b;
             return true;
         }
 
@@ -149,20 +149,17 @@ namespace Engine
 
     bool TextureBuffer::ResetPxColor(uint32 x, uint32 y) const
     {
-        bool success = false;
-
         if(_saveBackup)
         {
-            if(x < _width && y < _height)
+            const PxColor color = {
+                *(_backupBuffer + (y * _width * _channels) + (x * _channels) + 0),
+                *(_backupBuffer + (y * _width * _channels) + (x * _channels) + 1),
+                *(_backupBuffer + (y * _width * _channels) + (x * _channels) + 2)
+            };
+
+            if(SetPxColor(x, y, color))
             {
-                *(_pxBuffer + (y * _width * 3) + (x * 3) + 0) = *(_backupBuffer + (y * _width * 3) + (x * 3) + 0);
-                *(_pxBuffer + (y * _width * 3) + (x * 3) + 1) = *(_backupBuffer + (y * _width * 3) + (x * 3) + 1);
-                *(_pxBuffer + (y * _width * 3) + (x * 3) + 2) = *(_backupBuffer + (y * _width * 3) + (x * 3) + 2);
-                success = true;
-            }
-            else
-            {
-                Logger::Error("Failed", "ResetPxColor", "Array out of bounds");
+                return true;
             }
         }
         else
@@ -170,7 +167,7 @@ namespace Engine
             Logger::Error("Failed", "ResetPxColor", "No backup buffer");
         }
 
-        return success;
+        return false;
     }
 
     bool TextureBuffer::SubsampleArea(uint32 xpos, uint32 ypos, uint32 sampleAmount, glm::uvec3* colorOut) const

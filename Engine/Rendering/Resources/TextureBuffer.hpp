@@ -33,7 +33,7 @@ namespace Engine
             [[nodiscard]] GLenum         GetFormat() const;
             [[nodiscard]] unsigned char* GetRawData() const;
             [[nodiscard]] bool           GetPxColor(uint32 x, uint32 y, PxColor* colorOut) const;
-            [[nodiscard]] bool           SetPxColor(uint32 x, uint32 y, const PxColor& color) const;
+            [[nodiscard]] bool           SetPxColor(uint32 x, uint32 y, const PxColor& colorIn) const;
             [[nodiscard]] bool           ResetPxColor(uint32 x, uint32 y) const;
             [[nodiscard]] bool           SubsampleArea(uint32 xpos, uint32 ypos, uint32 sampleAmount, glm::uvec3* colorOut) const;
 

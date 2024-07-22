@@ -11,10 +11,10 @@ namespace Engine
         if(_textureBuffer->GetInitStatus() == EXIT_SUCCESS)
         {
             //Save internal parameters
-            _width = _textureBuffer->GetWidth();
-            _height = _textureBuffer->GetHeight();
+            _width    = _textureBuffer->GetWidth();
+            _height   = _textureBuffer->GetHeight();
             _channels = _textureBuffer->GetChannels();
-            _format = _textureBuffer->GetFormat();
+            _format   = _textureBuffer->GetFormat();
 
             //Create texture from buffer
             GLCall(glGenTextures(1, &_textureID))
@@ -105,6 +105,21 @@ namespace Engine
     void GLTexture::Unbind() const
     {
         GLCall(glBindTexture(GL_TEXTURE_2D, 0))
+    }
+
+    void GLTexture::UploadModifiedBuffer() const
+    {
+        Bind();
+        GLCall(glTexSubImage2D(GL_TEXTURE_2D,
+                               0,
+                               0,
+                               0,
+                               _width,
+                               _height,
+                               _format,
+                               GL_UNSIGNED_BYTE,
+                               _textureBuffer->GetRawData()));
+        Unbind();
     }
 
     void GLTexture::AddMipmapLinear() const

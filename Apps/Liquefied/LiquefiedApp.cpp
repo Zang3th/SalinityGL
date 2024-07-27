@@ -37,24 +37,56 @@ namespace Liq
 
     void LiquefiedApp::AddTurbine() const
     {
+        //Init with object (pixel perfect) with a subsampled texture
+        _gridRenderer->AddTextureBufferSubsampled
+        (
+            "TurbineTexBuf",
+            _turbinePos,
+            _turbineSize
+        );
+
+        //Get vector with empty cells (corresponding pixel with alpha channel value == 0)
+        auto emptyCellVec = _gridRenderer->GetEmptyCells();
+
         for(Engine::uint32 x = 0; x < _turbineSize; x++)
         {
             for(Engine::uint32 y = 0; y < _turbineSize; y++)
             {
-                _fluidSimulator->AddBorderCell(_turbinePos.x + x, _turbinePos.y + y);
-                _gridRenderer->Set(_turbinePos.x + x, _turbinePos.y + y, _defaultColor);
+                Engine::GridPos gridPos = {_turbinePos.x + x, _turbinePos.y + y};
+
+                //If cell is not empty (aka not in the vector), add a border cell to the simulation
+                if(std::find(emptyCellVec.begin(), emptyCellVec.end(), gridPos) == emptyCellVec.end())
+                {
+                    _fluidSimulator->AddBorderCell(_turbinePos.x + x, _turbinePos.y + y);
+                }
             }
         }
     }
 
     void LiquefiedApp::AddObstacle() const
     {
+        //Init with object (pixel perfect) with a subsampled texture
+        _gridRenderer->AddTextureBufferSubsampled
+        (
+            "BoxTexBuf",
+            _obstaclePos,
+            _obstacleSize
+        );
+
+        //Get vector with empty cells (corresponding pixel with alpha channel value == 0)
+        auto emptyCellVec = _gridRenderer->GetEmptyCells();
+
         for(Engine::uint32 x = 0; x < _obstacleSize; x++)
         {
             for(Engine::uint32 y = 0; y < _obstacleSize; y++)
             {
-                _fluidSimulator->AddBorderCell(_obstaclePos.x + x, _obstaclePos.y + y);
-                _gridRenderer->Set(_obstaclePos.x + x, _obstaclePos.y + y, _defaultColor);
+                Engine::GridPos gridPos = {_obstaclePos.x + x, _obstaclePos.y + y};
+
+                //If cell is not empty (aka not in the vector), add a border cell to the simulation
+                if(std::find(emptyCellVec.begin(), emptyCellVec.end(), gridPos) == emptyCellVec.end())
+                {
+                    _fluidSimulator->AddBorderCell(_obstaclePos.x + x, _obstaclePos.y + y);
+                }
             }
         }
     }
@@ -110,22 +142,6 @@ namespace Liq
         AddTurbine();
         AddObstacle();
 
-        //Add sprites/textures to the config of the grid renderer
-        _gridRenderer->AddTextureBufferSubsampled
-        (
-            "TurbineTexBuf",
-            _turbinePos,
-            _turbineSize
-        );
-        _gridRenderer->AddTextureBufferSubsampled
-        (
-            "BoxTexBuf",
-            _obstaclePos,
-            _obstacleSize
-        );
-
-        _gridRenderer->SetConfigAsDefault();
-
         return true;
     }
 
@@ -144,19 +160,8 @@ namespace Liq
         {
             for(Engine::uint32 y = 0; y < Engine::LiquefiedParams::SIMULATION_HEIGHT; y++)
             {
-                //Check for border cell (could be any type of object/obstacle)
-                if(_fluidSimulator->GetBorder(x, y) == 0.0f)
-                {
-                    if(Engine::LiquefiedParams::renderObjects)
-                    {
-                        _gridRenderer->Reset(x, y);
-                        continue;
-                    }
-
-                    //Overwrite objects/sprites/textures with default gray
-                    color = {0.0f, 0.0f, 0.0f};
-                }
-                else
+                //Check for non border cell
+                if(_fluidSimulator->GetBorder(x, y) != 0.0f)
                 {
                     const float val = _fluidSimulator->GetDensity(x, y);
 
@@ -172,9 +177,10 @@ namespace Liq
                     {
                         color = Engine::Utility::GetColor_ParaView(val);
                     }
+
+                    _gridRenderer->Set(x, y, color);
                 }
 
-                _gridRenderer->Set(x, y, color);
             }
         }
     }

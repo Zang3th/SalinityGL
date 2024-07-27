@@ -52,7 +52,6 @@ namespace Liq
                     ImGui::NewLine();
                     ImGui::RadioButton("Forward Euler", (int*)&Engine::LiquefiedParams::integratorChoice, Engine::Integrator::ForwardEuler);
                     ImGui::RadioButton("Runge Kutta 2", (int*)&Engine::LiquefiedParams::integratorChoice, Engine::Integrator::RungeKutta2);
-                    ImGui::RadioButton("Runge Kutta 3", (int*)&Engine::LiquefiedParams::integratorChoice, Engine::Integrator::RungeKutta3);
                     ImGui::EndTabItem();
                 }
 
@@ -62,10 +61,6 @@ namespace Liq
                     ImGui::RadioButton("Greyscale", (int*)&Engine::LiquefiedParams::visualizationChoice, Engine::Visualization::Greyscale);
                     ImGui::RadioButton("BlackBody", (int*)&Engine::LiquefiedParams::visualizationChoice, Engine::Visualization::BlackBody);
                     ImGui::RadioButton("ParaView", (int*)&Engine::LiquefiedParams::visualizationChoice, Engine::Visualization::ParaView);
-                    ImGui::NewLine();
-                    ImGui::Separator();
-                    ImGui::NewLine();
-                    ImGui::Checkbox("Render objects", &Engine::LiquefiedParams::renderObjects);
                     ImGui::EndTabItem();
                 }
 

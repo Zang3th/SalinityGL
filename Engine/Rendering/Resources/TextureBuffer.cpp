@@ -126,6 +126,8 @@ namespace Engine
             colorOut->r = *(_pxBuffer + (y * _width * _channels) + (x * _channels) + 0);
             colorOut->g = *(_pxBuffer + (y * _width * _channels) + (x * _channels) + 1);
             colorOut->b = *(_pxBuffer + (y * _width * _channels) + (x * _channels) + 2);
+            colorOut->a = *(_pxBuffer + (y * _width * _channels) + (x * _channels) + 3);
+
             return true;
         }
 
@@ -140,6 +142,8 @@ namespace Engine
             *(_pxBuffer + (y * _width * _channels) + (x * _channels) + 0) = colorIn.r;
             *(_pxBuffer + (y * _width * _channels) + (x * _channels) + 1) = colorIn.g;
             *(_pxBuffer + (y * _width * _channels) + (x * _channels) + 2) = colorIn.b;
+            *(_pxBuffer + (y * _width * _channels) + (x * _channels) + 3) = colorIn.a;
+
             return true;
         }
 
@@ -154,7 +158,8 @@ namespace Engine
             const PxColor color = {
                 *(_backupBuffer + (y * _width * _channels) + (x * _channels) + 0),
                 *(_backupBuffer + (y * _width * _channels) + (x * _channels) + 1),
-                *(_backupBuffer + (y * _width * _channels) + (x * _channels) + 2)
+                *(_backupBuffer + (y * _width * _channels) + (x * _channels) + 2),
+                *(_backupBuffer + (y * _width * _channels) + (x * _channels) + 3),
             };
 
             if(SetPxColor(x, y, color))
@@ -174,7 +179,16 @@ namespace Engine
     {
         bool success = true;
         uint32 pxAmount = sampleAmount * sampleAmount;
-        PxColor pxColor= {0, 0, 0};
+        PxColor pxColor= {0, 0, 0, 0};
+
+        //Check for empty pixel
+        if(GetPxColor(xpos, ypos, &pxColor))
+        {
+            if(pxColor.a == 0)
+            {
+                return false;
+            }
+        }
 
         for(uint32 x = 0; x < sampleAmount; x++)
         {
@@ -206,14 +220,15 @@ namespace Engine
         {
             for(uint32 y = 0; y < _height; y++)
             {
-                PxColor color = {0, 0, 0};
+                PxColor color = {0, 0, 0, 0};
                 if(GetPxColor(x, y, &color))
                 {
                     Logger::Print("Color (" + std::to_string(x) + ", "
                                             + std::to_string(y) + ") : "
                                             + std::to_string(color.r) + ", "
                                             + std::to_string(color.g) + ", "
-                                            + std::to_string(color.b));
+                                            + std::to_string(color.b) + ", "
+                                            + std::to_string(color.a));
                 }
             }
         }

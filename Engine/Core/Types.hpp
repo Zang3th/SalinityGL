@@ -60,5 +60,21 @@ namespace Engine
         unsigned char r;
         unsigned char g;
         unsigned char b;
+        unsigned char a;
+    };
+
+    struct GridPos
+    {
+        uint32 x;
+        uint32 y;
+
+        GridPos(uint32 xpos, uint32 ypos)
+            : x(xpos), y(ypos)
+        {}
+
+        inline bool operator==(const GridPos& comp) const
+        {
+            return (x == comp.x) && (y == comp.y);
+        }
     };
 }

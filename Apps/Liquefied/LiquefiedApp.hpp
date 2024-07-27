@@ -15,7 +15,7 @@ namespace Liq
             Engine::Scope<Engine::Timer>          _physicsTimer, _inputTimer;
 
             const glm::vec3   _defaultColor  = {0.5f, 0.5f, 0.5f};
-            const glm::uvec2  _turbinePos    = {1, 35};
+            const glm::uvec2  _turbinePos    = {0, 35};
             const glm::uint32 _turbineSize   = 32;
             const glm::uvec2  _turbineOutlet =
             {

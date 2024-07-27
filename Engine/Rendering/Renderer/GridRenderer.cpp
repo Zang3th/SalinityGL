@@ -22,7 +22,6 @@ namespace Engine
         for(uint32 i = 0; i < _quadAmountTotal; i++)
         {
             _colorStorage.emplace_back(0.0f);
-            _backupStorage.emplace_back(0.0f);
         }
 
         //Create and bind vao
@@ -62,14 +61,8 @@ namespace Engine
         Logger::Info("Created", "Renderer", __func__);
 
         _colorStorage.reserve(_quadAmountTotal);
-        _backupStorage.reserve(_quadAmountTotal);
 
         InitGpuStorage();
-    }
-
-    void GridRenderer::SetConfigAsDefault()
-    {
-        _backupStorage = _colorStorage;
     }
 
     void GridRenderer::SetDefaultColor(const glm::vec3& color)
@@ -140,11 +133,6 @@ namespace Engine
         }
     }
 
-    void GridRenderer::Reset(const uint32 x, const uint32 y)
-    {
-        _colorStorage.at(x * _gridHeight + y) = _backupStorage.at(x * _gridHeight + y);
-    }
-
     void GridRenderer::AddTextureBufferSubsampled(const std::string& texBuffer, const glm::uvec2& pos, const uint32 size)
     {
         auto* textureBuffer = ResourceManager::GetTextureBuffer(texBuffer);
@@ -181,6 +169,10 @@ namespace Engine
                 {
                     Set(gridPos.x, gridPos.y, Utility::TransformVec3uTo3f(subsampledColor));
                 }
+                else
+                {
+                    _emptyCells.emplace_back(gridPos.x, gridPos.y);
+                }
 
                 gridPos.y++;
             }
@@ -188,5 +180,10 @@ namespace Engine
             gridPos.x++;
             gridPos.y = pos.y; //Reset y-position
         }
+    }
+
+    std::vector<GridPos> GridRenderer::GetEmptyCells() const
+    {
+        return _emptyCells;
     }
 }

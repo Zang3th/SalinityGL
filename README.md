@@ -84,8 +84,8 @@ Nature scene with water rendering, normal mapped objects, and a particle system 
 
 2D Eulerian Fluid Simulation on the CPU.
 
-![Liquefied_color1](Res/Screenshots/Liquefied/Screenshot_Liq_007-1.png)
-![Liquefied_color2](Res/Screenshots/Liquefied/Screenshot_Liq_007-2.png)
+![Liquefied_color1](Res/Screenshots/Liquefied/Screenshot_Liq_008-1.png)
+![Liquefied_color2](Res/Screenshots/Liquefied/Screenshot_Liq_008-2.png)
 
 ## Building and compiling
 

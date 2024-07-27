@@ -8,6 +8,8 @@
 #include "GlobalParams.hpp"
 #include "ResourceManager.hpp"
 
+#include <vector>
+
 namespace Engine
 {
     class GridRenderer final : public Renderer
@@ -21,20 +23,21 @@ namespace Engine
             Scope<VertexBuffer> _vboVert, _vboColor;
             glm::mat4           _orthoProj, _model;
 
-            std::vector<glm::vec3> _colorStorage, _backupStorage;
+            std::vector<glm::vec3> _colorStorage;
+            std::vector<GridPos>   _emptyCells;
 
             void InitGpuStorage();
 
         public:
             GridRenderer(uint32 width, uint32 height, uint32 quadSize, const std::string& shader);
 
-            void SetConfigAsDefault();
             void SetDefaultColor(const glm::vec3& color);
             void Flush(Renderer* renderer) override;
             void UpdateGpuStorage() const;
             void Set(uint32 x, uint32 y, const glm::vec3& color);
             void SetArea(const glm::uvec2& pos, uint32 size, const glm::vec3& color);
-            void Reset(uint32 x, uint32 y);
             void AddTextureBufferSubsampled(const std::string& texBuffer, const glm::uvec2& pos, uint32 size);
+
+            [[nodiscard]] std::vector<GridPos> GetEmptyCells() const;
     };
 }  // namespace Engine

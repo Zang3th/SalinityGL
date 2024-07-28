@@ -28,7 +28,7 @@ SalinityGL is licensed under the [MIT LICENSE](https://github.com/Zang3th/GameEn
     │   ├── Application/            # Application and interface stuff
     │   ├── Core/                   # Utilities and core engine functionalities
     │   ├── Debug/                  # Logging and error handling
-        ├── Physics/                # Code for cellular automata and fluid simulation
+    │   ├── Physics/                # Code for cellular automata and fluid simulation
     │   ├── Rendering/              # GL stuff, buffers, renderer ...
     │   └── Engine.hpp              # Main header for include in the applications
     ├── Res/                        # Assets, sounds and screenshots
@@ -134,6 +134,7 @@ The engine and the demo applications are compiled separately. The engine is comp
 
 | **Version**                                                        | **Date**   | **Commit** <br> [Count / ID] | **Lines of code** <br> [Apps / Engine] | **Notes**                               |
 |:------------------------------------------------------------------:|:----------:|:----------------------------:|:--------------------------------------:|:---------------------------------------:|
+| [0.2.0](https://github.com/Zang3th/SalinityGL/releases/tag/v0.2.0) | 28.07.2024 | [373 / 7bbc453]              | [1690 / 8990]                          | Completion of the *Liquefied* demo app  |
 | [0.1.1](https://github.com/Zang3th/SalinityGL/releases/tag/v0.1.1) | 14.01.2023 | [255 / d425a33]              | [480 / 4250]                           | Completion of the *GreenWorld* demo app |
 | [0.1.0](https://github.com/Zang3th/SalinityGL/releases/tag/v0.1.0) | 11.06.2022 | [229 / 218a55e]              | [575 / 4110]                           | First official release                  |
 

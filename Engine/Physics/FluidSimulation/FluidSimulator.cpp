@@ -366,9 +366,8 @@ namespace Engine
         *prev_pos = pos * h + h2 - dt * vel;
     }
 
-    void FluidSimulator::RungeKutta2(const float dt,  const float pos, const float h,  const float h2,
-                                     const float vel, const float dx,  const float dy, float* prev_pos) const
-    {
+    // void FluidSimulator::RungeKutta2( ... )
+    // {
         /*      We wrote the update rule for Forward-Euler above like this:             *
         *                                                                               *
         *                        x1 = x0 - dt * f(x0)                                   *
@@ -390,13 +389,8 @@ namespace Engine
         *                       k2    = f(t_n - h/2, y_n - h/2 * k1)                    *
         *                       y_n+1 = y_n - h * k2                                    */
 
-        //ToDo: Implement
-    }
-
-    void FluidSimulator::RungeKutta3() const
-    {
-        //ToDo: Implement
-    }
+        // Currently implemented using multiple steps of forward euler
+    // }
 
     // ----- Public -----
 

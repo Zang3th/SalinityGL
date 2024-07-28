@@ -155,7 +155,6 @@ namespace Engine
         uint32 sampleAmount = width / size;
 
         glm::uvec2 gridPos = pos;
-        bool success = false;
 
         //Go over the image in sampleAmount steps
         for(uint32 x = 0; x < width; x += sampleAmount)
@@ -163,7 +162,7 @@ namespace Engine
             for(uint32 y = 0; y < height; y += sampleAmount)
             {
                 glm::uvec3 subsampledColor = {0, 0, 0};
-                success = textureBuffer->SubsampleArea(x, y, sampleAmount, &subsampledColor);
+                bool success = textureBuffer->SubsampleArea(x, y, sampleAmount, &subsampledColor);
 
                 if(success)
                 {

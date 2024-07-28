@@ -3,7 +3,7 @@
 [![Build](https://github.com/Zang3th/SalinityGL/actions/workflows/build.yml/badge.svg?branch=liquefied-2d)](https://github.com/Zang3th/SalinityGL/actions/workflows/build.yml)
 [![Static Analysis](https://github.com/Zang3th/SalinityGL/actions/workflows/analyze.yml/badge.svg?branch=liquefied-2d)](https://github.com/Zang3th/SalinityGL/actions/workflows/analyze.yml)
 ![OS](https://img.shields.io/badge/OS-Linux-blue)
-![Release](https://img.shields.io/badge/Release-v0.1.1-blue)
+![Release](https://img.shields.io/badge/Release-v0.2.0-blue)
 
 ## Introduction
 
@@ -23,12 +23,12 @@ SalinityGL is licensed under the [MIT LICENSE](https://github.com/Zang3th/GameEn
     ├── Apps/                       # Demo applications
     │   ├── GreenWorld/             # 3D nature scene
     │   └── CellSim/                # 3D Cellular Automata System (on hold) ⌛
-    │   └── Liquefied/              # 2D Eulerian Fluid Simulation (in development) 🔥
+    │   └── Liquefied/              # 2D Eulerian Fluid Simulation
     ├── Engine/
     │   ├── Application/            # Application and interface stuff
     │   ├── Core/                   # Utilities and core engine functionalities
     │   ├── Debug/                  # Logging and error handling
-        ├── Phyics/                 # Code for cellular automata and fluid simulation
+        ├── Physics/                # Code for cellular automata and fluid simulation
     │   ├── Rendering/              # GL stuff, buffers, renderer ...
     │   └── Engine.hpp              # Main header for include in the applications
     ├── Res/                        # Assets, sounds and screenshots
@@ -39,7 +39,7 @@ SalinityGL is licensed under the [MIT LICENSE](https://github.com/Zang3th/GameEn
 
 - Thin OpenGL-Wrapping
   - VAO, VBO, IBO, FBO
-  - Resource management (shaders, textures)
+  - Resource loading and management (shaders, textures)
   - Error handling
 - Window creation
   - UI
@@ -57,10 +57,13 @@ SalinityGL is licensed under the [MIT LICENSE](https://github.com/Zang3th/GameEn
     - Normal mapping
   - Water rendering
   - Instanced rendering
-    - Flexible 2D particle system
+    - 2D particle system
       - Smoke
-    - Cellular Automata System (very primitive)
     - Grid-Rendering
+  - Dynamic texture subsampling
+- Physics
+  - Cellular Automata System (very primitive)
+  - Eulerian Fluid Simulation
 - File management
 - Profiling
 - Audio
@@ -80,7 +83,7 @@ Nature scene with water rendering, normal mapped objects, and a particle system 
 
 ![CellSim](Res/Screenshots/CellSim/Screenshot_CS_011.png)
 
-### Liquefied (in development)
+### Liquefied
 
 2D Eulerian Fluid Simulation on the CPU.
 
@@ -94,7 +97,7 @@ The engine and the demo applications are compiled separately. The engine is comp
 ### What you need
 
 - Linux
-  - Tested with Ubuntu 16.04 - 22.04
+  - Tested with Ubuntu 16.04 - 24.04
 - C++17 compiler
   - Tested Clang and GCC
 - CMake 3.20 or newer
@@ -131,8 +134,8 @@ The engine and the demo applications are compiled separately. The engine is comp
 
 | **Version**                                                        | **Date**   | **Commit** <br> [Count / ID] | **Lines of code** <br> [Apps / Engine] | **Notes**                               |
 |:------------------------------------------------------------------:|:----------:|:----------------------------:|:--------------------------------------:|:---------------------------------------:|
-| [0.1.1](https://github.com/Zang3th/GameEngine/releases/tag/v0.1.1) | 14.01.2023 | [255 / d425a33]              | [480 / 4250]                           | Completion of the *GreenWorld* demo app |
-| [0.1.0](https://github.com/Zang3th/GameEngine/releases/tag/v0.1.0) | 11.06.2022 | [229 / 218a55e]              | [575 / 4110]                           | First official release                  |
+| [0.1.1](https://github.com/Zang3th/SalinityGL/releases/tag/v0.1.1) | 14.01.2023 | [255 / d425a33]              | [480 / 4250]                           | Completion of the *GreenWorld* demo app |
+| [0.1.0](https://github.com/Zang3th/SalinityGL/releases/tag/v0.1.0) | 11.06.2022 | [229 / 218a55e]              | [575 / 4110]                           | First official release                  |
 
 - 07/2021 - 09/2021: Rewrite of the engine core
 - 01/2020 - 09/2020: Some very early projects (still under Windows)
@@ -143,9 +146,7 @@ I always work *on and off* on this project, but I try to make more regular relea
 
 ### Release preview
 
-- v0.2.0: Completion of the base foundation of the *Liquefied* app
-- v0.2.1: Multithreading and visual improvements to the *Liquefied* app
-- v0.2.2: Compute Shader implementation of the *Liquefied* app
+- v0.2.1: Multithreading and Compute Shader implementation of the *Liquefied* app
 
 ### Backlog
 

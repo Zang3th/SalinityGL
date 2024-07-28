@@ -1,7 +1,7 @@
 # SalinityGL
 
-[![Build](https://github.com/Zang3th/SalinityGL/actions/workflows/build.yml/badge.svg?branch=liquefied-2d)](https://github.com/Zang3th/SalinityGL/actions/workflows/build.yml)
-[![Static Analysis](https://github.com/Zang3th/SalinityGL/actions/workflows/analyze.yml/badge.svg?branch=liquefied-2d)](https://github.com/Zang3th/SalinityGL/actions/workflows/analyze.yml)
+[![Build](https://github.com/Zang3th/SalinityGL/actions/workflows/build.yml/badge.svg)](https://github.com/Zang3th/SalinityGL/actions/workflows/build.yml)
+[![Static Analysis](https://github.com/Zang3th/SalinityGL/actions/workflows/analyze.yml/badge.svg)](https://github.com/Zang3th/SalinityGL/actions/workflows/analyze.yml)
 ![OS](https://img.shields.io/badge/OS-Linux-blue)
 ![Release](https://img.shields.io/badge/Release-v0.2.0-blue)
 
@@ -9,13 +9,13 @@
 
 SalinityGL is an OpenGL baselayer library for creating (2D/3D) visualization applications. The goal is to create a library that is easy to use and lightweight. SalinityGL provides a thin OpenGL abstraction layer and some basic helper functions to support the process of building rendering applications.
 
-SalinityGL is written in C++17 with OpenGL 4.5. Currently, only Linux is supported. To get started, take a look at the [building and compiling](https://github.com/Zang3th/GameEngine/tree/master#building-and-compiling) section.
+SalinityGL is written in C++17 with OpenGL 4.5. Currently, only Linux is supported. To get started, take a look at the [building and compiling](https://github.com/Zang3th/SalinityGL/tree/master#building-and-compiling) section.
 
-During development, several [demo applications](https://github.com/Zang3th/GameEngine/tree/master#demo-applications) were created to test the engine's capabilities. These apps are built and compiled separately from the engine core, but a global parameter file is maintained for the configuration of some *app-to-engine* settings.
+During development, several [demo applications](https://github.com/Zang3th/SalinityGL/tree/master#demo-applications) were created to test the engine's capabilities. These apps are built and compiled separately from the engine core, but a global parameter file is maintained for the configuration of some *app-to-engine* settings.
 
 The development of this library also serves my educational purposes.
 
-SalinityGL is licensed under the [MIT LICENSE](https://github.com/Zang3th/GameEngine/blob/master/LICENSE).
+SalinityGL is licensed under the [MIT LICENSE](https://github.com/Zang3th/SalinityGL/blob/master/LICENSE).
 
 ## Project structure
 
@@ -92,7 +92,7 @@ Nature scene with water rendering, normal mapped objects, and a particle system 
 
 ## Building and compiling
 
-The engine and the demo applications are compiled separately. The engine is compiled into a static library and then included in the demo applications' binary. All external libraries ([Vendor/](https://github.com/Zang3th/GameEngine/tree/master/Vendor)) are getting directly included (via source) into the engine and need no separate install. The only exception is GLFW, which gets linked dynamically (.so file is provided).
+The engine and the demo applications are compiled separately. The engine is compiled into a static library and then included in the demo applications' binary. All external libraries ([Vendor/](https://github.com/Zang3th/SalinityGL/tree/master/Vendor)) are getting directly included (via source) into the engine and need no separate install. The only exception is GLFW, which gets linked dynamically (.so file is provided).
 
 ### What you need
 

@@ -5,6 +5,7 @@
 #include "Types.hpp"
 #include "GlobalParams.hpp"
 #include "GLRenderSettings.hpp"
+#include "Benchmark.hpp"
 
 #include <string>
 
@@ -15,8 +16,8 @@ namespace Engine
         private:
             inline static GLFWwindow* _window        = nullptr;
             inline static std::string _windowName    = std::string();
-            inline static double      _deltaTime_sec = double();
-            inline static double      _lastFrame     = double();
+            inline static double      _dt_sec        = double();
+            inline static double      _lastTime_sec  = double();
             inline static double      _dtAccumulated = double();
             inline static double      _fpsAvg        = double();
             inline static uint32      _frameCounter  = uint32();

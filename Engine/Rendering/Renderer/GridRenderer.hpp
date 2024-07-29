@@ -7,6 +7,7 @@
 #include "GLRenderSettings.hpp"
 #include "GlobalParams.hpp"
 #include "ResourceManager.hpp"
+#include "Utility.hpp"
 
 #include <vector>
 

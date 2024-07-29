@@ -16,7 +16,7 @@ namespace Engine
 
         return string;
     }
-    
+
     std::string FileManager::FileToString(const std::string& filepath)
     {
         std::ifstream file(filepath);
@@ -41,5 +41,5 @@ namespace Engine
 
             return "FILE_ERROR";
         }
-    }    
+    }
 }

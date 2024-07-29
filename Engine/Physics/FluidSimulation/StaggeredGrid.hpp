@@ -11,19 +11,19 @@ namespace Engine
     {
         private:
             //Horizontal velocity (u-component) is sampled at the centers of the vertical cell faces.
-            float _u[LiquefiedParams::LIQUID_NUM_CELLS]     = {0.0f};
-            float _u_tmp[LiquefiedParams::LIQUID_NUM_CELLS] = {0.0f};
+            float _u[LiquefiedParams::SIMULATION_NUM_CELLS]     = {0.0f};
+            float _u_tmp[LiquefiedParams::SIMULATION_NUM_CELLS] = {0.0f};
 
             //Vertical velocity (v-component) is sampled at the centers of the horizontal cell faces.
-            float _v[LiquefiedParams::LIQUID_NUM_CELLS]     = {0.0f};
-            float _v_tmp[LiquefiedParams::LIQUID_NUM_CELLS] = {0.0f};
+            float _v[LiquefiedParams::SIMULATION_NUM_CELLS]     = {0.0f};
+            float _v_tmp[LiquefiedParams::SIMULATION_NUM_CELLS] = {0.0f};
 
             //b-component set to 0.0 for border cells.
-            float _b[LiquefiedParams::LIQUID_NUM_CELLS]     = {0.0f};
+            float _b[LiquefiedParams::SIMULATION_NUM_CELLS]     = {0.0f};
 
             //Density value for visualization of the flow.
-            float _d[LiquefiedParams::LIQUID_NUM_CELLS]     = {0.0f};
-            float _d_tmp[LiquefiedParams::LIQUID_NUM_CELLS] = {0.0f};
+            float _d[LiquefiedParams::SIMULATION_NUM_CELLS]     = {0.0f};
+            float _d_tmp[LiquefiedParams::SIMULATION_NUM_CELLS] = {0.0f};
 
         public:
             const uint32 width  = LiquefiedParams::SIMULATION_WIDTH;

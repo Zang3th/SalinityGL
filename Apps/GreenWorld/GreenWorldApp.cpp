@@ -1,5 +1,4 @@
 #include "GreenWorldApp.hpp"
-#include "GLRenderSettings.hpp"
 
 namespace GW
 {

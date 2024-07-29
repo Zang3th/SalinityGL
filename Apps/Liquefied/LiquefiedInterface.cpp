@@ -1,4 +1,5 @@
 #include "LiquefiedInterface.hpp"
+#include "GlobalParams.hpp"
 
 namespace Liq
 {
@@ -21,6 +22,9 @@ namespace Liq
             ImGui::Separator();
             ImGui::Text("Draw calls:     %d", Engine::RenderStatistics::drawCalls);
             ImGui::Text("Drawn vertices: %d", Engine::RenderStatistics::drawnVertices);
+            ImGui::Text("Simulation width:  %d", Engine::LiquefiedParams::SIMULATION_WIDTH);
+            ImGui::Text("Simulation height: %d", Engine::LiquefiedParams::SIMULATION_HEIGHT);
+            ImGui::Text("Number of cells:   %d", Engine::LiquefiedParams::SIMULATION_NUM_CELLS);
             ImGui::Separator();
 
             // --- Profiling/Timing-Results
@@ -157,6 +161,14 @@ namespace Liq
                 Engine::LiquefiedParams::resetSimulation = true;
             }
             AddVerticalBarDivider(500.0f);
+
+            ImGui::SetCursorPosY(10.0f);
+            ImGui::SetCursorPosX(520.0f);
+            if(ImGui::Button("Run Benchmark (B)"))
+            {
+                Engine::UIParams::runBenchmark = true;
+            }
+            AddVerticalBarDivider(685.0f);
         }
         ImGui::End();
     }

@@ -1,5 +1,4 @@
 #include "GridRenderer.hpp"
-#include "Utility.hpp"
 
 namespace Engine
 {

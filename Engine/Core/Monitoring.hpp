@@ -17,7 +17,7 @@ namespace Engine
             inline static float  _min   = FLT_MAX;
 
         public:
-            inline static LogFloatXY buffer[LiquefiedParams::LIQUID_NUM_CELLS] = {};
+            inline static LogFloatXY buffer[LiquefiedParams::SIMULATION_NUM_CELLS] = {};
             inline static std::map<std::string, LogFloatXY> loggedValues = std::map<std::string, LogFloatXY>();
 
             Monitoring() = delete;

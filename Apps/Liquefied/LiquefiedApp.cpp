@@ -1,6 +1,5 @@
 #include "LiquefiedApp.hpp"
 #include "GlobalParams.hpp"
-#include "ResourceManager.hpp"
 
 namespace Liq
 {
@@ -268,6 +267,9 @@ namespace Liq
     {
         if(glfwGetKey(Engine::Window::GetWindow(), GLFW_KEY_W) == GLFW_PRESS)
             Engine::UIParams::wireframeRendering = !Engine::UIParams::wireframeRendering;
+
+        else if(glfwGetKey(Engine::Window::GetWindow(), GLFW_KEY_B) == GLFW_PRESS)
+            Engine::UIParams::runBenchmark = !Engine::UIParams::runBenchmark;
 
         else if(glfwGetKey(Engine::Window::GetWindow(), GLFW_KEY_SPACE) == GLFW_PRESS)
             Engine::LiquefiedParams::pauseSimulation = !Engine::LiquefiedParams::pauseSimulation;

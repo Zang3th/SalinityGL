@@ -1,4 +1,5 @@
 #include "Window.hpp"
+#include "GlobalParams.hpp"
 
 namespace Engine
 {
@@ -79,22 +80,35 @@ namespace Engine
 
     void Window::CalcFrametime()
     {
-        //Calculate frametime
-        const double currentFrame = glfwGetTime();
-        _deltaTime_sec = currentFrame - _lastFrame;
-        _lastFrame = currentFrame;
+        //Get current time
+        const double currTime_sec = glfwGetTime();
 
-        //Accumulate to average the fps
+        //Calculate delta
+        _dt_sec       = currTime_sec - _lastTime_sec;
+        _lastTime_sec = currTime_sec;
+
+        //Accumulate for averaging
         _frameCounter++;
-        _dtAccumulated += _deltaTime_sec;
+        _dtAccumulated += _dt_sec;
 
-        if(_frameCounter > 160)
+        if(_frameCounter > 180)
         {
             _fpsAvg = 1 / (_dtAccumulated / _frameCounter);
 
             //Reset
-            _frameCounter = 0;
+            _frameCounter  = 0;
             _dtAccumulated = 0.0f;
+        }
+
+        //Check and run benchmark for 10 seconds
+        if(UIParams::runBenchmark == true)
+        {
+            if(Benchmark::IsRunning() == false)
+            {
+                Benchmark::Start(_windowName, 10000);
+            }
+
+            Benchmark::AddFrame(_dt_sec * 1000);
         }
     }
 
@@ -129,12 +143,12 @@ namespace Engine
 
     double Window::GetDeltaTime_sec()
     {
-        return _deltaTime_sec;
+        return _dt_sec;
     }
 
     double Window::GetDeltaTime_msec()
     {
-        return _deltaTime_sec * 1000.0f;
+        return _dt_sec * 1000.0f;
     }
 
     double Window::GetFps()
